@@ -1,0 +1,37 @@
+<div class="media">
+    <a class="pull-left thumbnail" {% if include.group.url %} href="{{ include.group.url }}" {% endif %}>
+        <img src="/img/groups/{{ include.group.img }}.png" alt="" style="max-width:100px; height:auto;"/>
+    </a>
+  <div class="media-body">
+    <!-- citation -->
+    <strong>{{ include.group.title }}</strong><br/>
+    <!-- 
+    {% if include.group.people %}Organisers: {{ include.group.people }}.{% endif %}
+    <br/>
+    {% if include.group.note %}<i>{{ include.group.note }}</i>{% endif %}
+    -->
+    <!-- abstract -->
+    {% if include.group.abstract %}
+      <a data-toggle="modal" href="#abstract{{ include.group.uid }}" class="label label-default">abstract</a>
+      <!-- Modal -->
+      <div class="modal fade" id="abstract{{ include.group.uid }}" tabindex="-1" role="dialog" aria-hidden="true"> <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+              <h4 class="modal-title">{{ include.group.title }} | Abstract</h4>
+            </div>
+            <div class="modal-body">
+              {{ include.group.abstract | markdownify }}
+            </div>
+          </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+      </div><!-- /.modal -->
+    {% endif %}
+    {% if include.group.subscribe %}
+      <a href="{{ include.group.subscribe }}" class="label label-info">subscribe</a>
+    {% endif %}
+
+
+
+  </div>
+</div>

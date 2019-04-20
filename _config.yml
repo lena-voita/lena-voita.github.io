@@ -1,0 +1,18 @@
+# Site settings
+exclude: [README.md]
+title: My Name
+email: mye@ma.il
+github: todo
+scholar_id: EcN9o7kAAAAJ
+description: > # this symbol means ignore newlines until "baseurl:"
+    Here you will find details about my work.
+baseurl: "" # keep blank unless you're using sub-paths
+url: "http://TODO.github.io" # the base hostname & protocol for your site
+#paginate: 3
+
+# you can also declare arbitrary key-value data here
+my_variable_name: my_value
+
+
+# Build settings
+markdown: kramdown

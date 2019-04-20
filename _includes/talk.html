@@ -1,0 +1,113 @@
+<div class="media">
+  <div class="media-body">
+    <!-- citation -->
+    <strong>{{ include.talk.title }} </strong><br/>
+    {% if include.talk.event %}
+    <small><i>{{ include.talk.event }}</i></small><br/>
+    {% endif %}
+
+    <!--
+    {% if include.talk.about %}
+    <span> {{ include.talk.about | markdownify }} </span>
+    {% endif %}
+    -->
+    
+    <!-- about -->
+    {% if include.talk.about %}
+      <a data-toggle="modal" href="#about{{ include.talk.img }}" class="label label-default">About</a>
+      <!-- Modal -->
+      <div class="modal fade" id="about{{ include.talk.img }}" tabindex="-1" role="dialog" aria-hidden="true"> <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+              <h4 class="modal-title">{{ include.talk.title }}</h4>
+            </div>
+            <div class="modal-body">
+              {{ include.talk.about | markdownify }}
+            </div>
+          </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+      </div><!-- /.modal -->
+    {% endif %}
+    
+    <!-- tour -->
+    {% if include.talk.tour %}
+      <a data-toggle="modal" href="#tour{{ include.talk.img }}" class="label label-default">Tour</a>
+      <!-- Modal -->
+      <div class="modal fade" id="tour{{ include.talk.img }}" tabindex="-1" role="dialog" aria-hidden="true"> <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+              <h4 class="modal-title">{{ include.talk.title }}</h4>
+            </div>
+            <div class="modal-body">
+              {{ include.talk.tour | markdownify }}
+            </div>
+          </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+      </div><!-- /.modal -->
+    {% endif %}
+
+    <!-- abstract -->
+    {% if include.talk.abstract %}
+      <a data-toggle="modal" href="#abstract{{ include.talk.img }}" class="label label-default">Abstract</a>
+      <!-- Modal -->
+      <div class="modal fade" id="abstract{{ include.talk.img }}" tabindex="-1" role="dialog" aria-hidden="true"> <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+              <h4 class="modal-title">{{ include.talk.title }}</h4>
+            </div>
+            <div class="modal-body">
+              {{ include.talk.abstract | markdownify }}
+            </div>
+          </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+      </div><!-- /.modal -->
+    {% endif %}
+    
+    {% if include.talk.schedule %}
+      <a data-toggle="modal" href="#schedule{{ include.talk.img }}" class="label label-default">Schedule</a>
+      <!-- Modal -->
+      <div class="modal fade" id="schedule{{ include.talk.img }}" tabindex="-1" role="dialog" aria-hidden="true"> <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+              <h4 class="modal-title">{{ include.talk.title }}</h4>
+            </div>
+            <div class="modal-body">
+              {{ include.talk.schedule | markdownify }}
+            </div>
+          </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+      </div><!-- /.modal -->
+    {% endif %}
+
+    {% if include.talk.slides %}
+      <a href="{{ include.talk.slides }}" class="label label-info">Slides</a>
+    {% endif %}
+
+    {% if include.talk.video %}
+    <a href="{{ include.talk.video }}" class="label label-info">Video</a>
+    {% endif %}
+
+    <!-- amendments -->
+
+    {% if include.talk.errata %}
+    <div class="modal fade" id="errata{{ include.talk.img }}" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title">Errata | {{ include.talk.title }}</h4>
+          </div>
+          <div class="modal-body">
+            {{ include.talk.errata }}
+          </div>
+        </div>
+      </div>
+    </div>
+    <a data-toggle="modal" href="#errata{{ include.talk.img }}" class="label label-danger">Errata</a>&nbsp;
+    {% endif %}
+  </div>
+</div>

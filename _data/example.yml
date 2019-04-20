@@ -1,0 +1,23 @@
+-
+  layout: person
+  selected: y
+  institution: example1
+  img: http://www.alessiaolivari.com/wp-content/uploads/2016/01/FOX.gif
+  name: Vasily Pupkin The First
+  url: https://research.yandex.com/people/102794
+  about: >
+    this is a fox
+  extra: >
+    Extra Text 1
+-
+  layout: person
+  selected: y
+  institution: example2
+  img: https://i.pinimg.com/originals/2d/b6/fd/2db6fde4746de9524a49b846e3a1d841.jpg
+  name: Vasily Pupkin The Second
+  url: http://staffwww.dcs.shef.ac.uk/people/L.Specia/
+  github: github name
+  about: >
+    this is a hedgehog
+  extra: >
+    Extra text 2

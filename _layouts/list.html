@@ -1,0 +1,50 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>{{ page.title }}</title>
+
+    <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="css/bootstrap-glyphicons.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- MathJax -->
+    <script type="text/javascript"
+      src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+    </script>
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  {% include head.html %}
+  <body>
+    {% include header.html %}
+    <!-- JavaScript plugins (requires jQuery) -->
+    <script src="//code.jquery.com/jquery.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed --!>
+    <script src="js/bootstrap.min.js"></script>
+
+    <div class="page-content">
+      <div class="row">
+        <div class="wrapper">
+          {{ content }}
+        </div>
+      </div>
+    </div>
+  <footer class="text-center text-muted">
+    <hr/>
+    Last updated {{ site.time | date: "%B %d, %Y" }}.<br/>
+    <!--Created with
+    <a href="http://git-scm.com/">git</a>,
+    <a href="http://jekyllrb.com">jekyll</a>,
+    <a href="http://getbootstrap.com/">bootstrap</a>,
+    and <a href="http://www.vim.org/">vim</a>.<br/>
+    Feel free to reuse the
+    <a href="https://github.com/alopez/alopez.github.com">source code</a>.<br/>
+    Mirrors: <a href="http://www.cs.jhu.edu/~alopez/">cs.jhu.edu</a>,
+    <a href="http://alopez.github.io/">github.io</a>
+    <br/><br/>-->
+    </footer>
+  </body>
+</html>

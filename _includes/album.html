@@ -1,0 +1,43 @@
+<div class="media">
+  <a class="pull-left thumbnail" {% if include.album.url %} href="{{ include.album.url }}" {% endif %}>
+    <img src="/img/albums/{{ include.album.img }}.png" alt=""/>
+</a>
+  <div class="media-body">
+
+    <strong>{{ include.album.title }}</strong>
+    ({{ include.album.artist }})
+    <img src="/img/ico/{{ include.album.country }}.png" alt=""/>
+
+    <br/>
+
+    <span data-toggle="modal" class="label label-default">{{ include.album.year }}</span>
+
+    {% if include.album.extra %}
+    <a data-toggle="modal" href="#extra{{ include.album.img }}" class="label label-warning">extra</a>
+    <!-- Modal -->
+    <div class="modal fade" id="extra{{ include.album.img }}" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title">{{ include.album.title }}</h4>
+          </div>
+          <div class="modal-body">
+            {{ include.album.extra }}
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+    {% endif %}
+
+    <!-- quick links -->
+
+    <!-- about -->
+    {% if include.album.about %}
+    <div class="modal-body">
+      {{ include.album.about }}
+    </div>
+    {% endif %}
+
+  </div>
+</div>

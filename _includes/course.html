@@ -1,0 +1,45 @@
+<div class="media">
+    <a class="pull-left thumbnail" {% if include.course.doc-url %} href="{{ include.course.doc-url }}" {% endif %}>
+        <img src="/img/course/{{ include.course.img }}.png" alt="" style="max-width:90px; height:auto;"/>
+    </a>
+  <div class="media-body">
+    <!-- citation -->
+    {% if include.course.institution %}
+    <img src="/img/ico/{{ include.course.institution }}.png" alt=""/>
+    {% endif %}
+    <strong>{{ include.course.title }} </strong><br/>
+    <!-- abstract -->
+    {% if include.course.abstract %}
+      <a data-toggle="modal" href="#abstract{{ include.course.img }}" class="label label-default">overview</a>
+      <!-- Modal -->
+      <div class="modal fade" id="abstract{{ include.course.img }}" tabindex="-1" role="dialog" aria-hidden="true"> <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+              <h4 class="modal-title">{{ include.course.title }}</h4>
+            </div>
+            <div class="modal-body">
+              {{ include.course.abstract | markdownify }}
+            </div>
+          </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+      </div><!-- /.modal -->
+    {% endif %}
+    {% if include.course.github %}
+    <a href="https://github.com/{{ include.course.github }}">
+      <img src="/img/ico/github.png" alt=""/>
+    </a>
+    {% endif %}
+    {% if include.course.event %}
+    <small><i>{{ include.course.event }}</i></small><br/>
+    {% endif %}
+    
+    
+    {% if include.course.about %}
+    <span> {{ include.course.about | markdownify }} </span>
+    {% endif %}
+
+    
+
+  </div>
+</div>

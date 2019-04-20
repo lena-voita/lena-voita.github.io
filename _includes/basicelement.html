@@ -1,0 +1,129 @@
+<div class="media">
+  <div class="media-body">
+    <!-- citation -->
+    {% if include.paper.logo %}<img src="/img/ico/{{ include.paper.logo }}.png" alt=""/>{% endif %}
+    {% if include.paper.doc-url %}
+        <a href="{{ include.paper.doc-url }}">{{ include.paper.title }}</a><br/>
+    {% else %}
+        <font color="darkgray">{{ include.paper.title }}</font><br/>
+    {% endif %}
+    {% if include.paper.authors %}{{ include.paper.authors }}.{% endif %}
+    {% case include.paper.paper-type %}
+      {% when "inproceedings" %}
+        In
+        {% if include.paper.booktitle-url %}
+          <a href="{{ include.paper.booktitle-url}}">
+            <span class="glyphicon glyphicon-globe"></span>
+          </a>
+        {% endif %}
+          <i>{{ include.paper.booktitle }}</i>,
+        {% if include.paper.pages %}pages {{ include.paper.pages }},{% endif %}
+      {% when "article" %}
+        In
+        {% if include.paper.journal-url %}
+          <a href="{{ include.paper.journal-url }}">
+            <span class="glyphicon glyphicon-globe"></span>
+          </a>
+        {% endif %}
+          <i>{{ include.paper.journal }}</i>,
+            {% if include.paper.volume %}{{ include.paper.volume }}{% endif %}{% if include.paper.number %}({{ include.paper.number }}){% endif %}
+            {% if include.paper.article%}: Article {{ include.paper.article}},{% endif %}
+            {% if include.paper.pages %}: pages {{ include.paper.pages }},{% endif %}
+      {% when "thesis" %}
+        PhD thesis, {{ include.paper.institution }}.
+      {% when "pre-print" %}
+        Pre-print: {{ include.paper.booktitle }}.
+    {% endcase %}
+    {{ include.paper.year }}.
+    {% if include.paper.note %}<i>{{ include.paper.note }}</i>{% endif %}
+    <br/>
+
+    <!-- abstract -->
+    {% if include.paper.abstract %}
+      <a data-toggle="modal" href="#abstract{{ include.paper.img }}" class="label label-default">Abstract</a>
+      <!-- Modal -->
+      <div class="modal fade" id="abstract{{ include.paper.img }}" tabindex="-1" role="dialog" aria-hidden="true"> <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+              <h4 class="modal-title">{{ include.paper.title }}</h4>
+            </div>
+            <div class="modal-body">
+              {{ include.paper.abstract }}
+            </div>
+          </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+      </div><!-- /.modal -->
+    {% endif %}
+
+    <!-- bibtex -->
+    {% if include.paper.bibtex %}
+      <!-- Modal -->
+      <div class="modal fade" id="bibtex{{ include.paper.img }}" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+              <h4 class="modal-title">Bibtex | {{ include.paper.title }}</h4>
+            </div>
+            <div class="modal-body">
+              <pre>{{ include.paper.bibtex }}</pre>
+            </div>
+          </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+      </div><!-- /.modal -->
+      <a data-toggle="modal" href="#bibtex{{ include.paper.img }}" class="label label-default">Bibtex</a>&nbsp;
+    {% endif %}
+
+    <!-- resources -->
+    <!-- draft/slides/poster/talk -->
+
+    {% if include.paper.draft %}
+    <a href="{{ include.paper.draft }}" class="label label-info">Draft</a>
+    {% endif %}
+    
+    {% if include.paper.arxiv %}
+    <a href="{{ include.paper.arxiv }}" class="label label-info">arXiv</a>
+    {% endif %}
+
+    {% if include.paper.slides %}
+      <a href="{{ include.paper.slides }}" class="label label-info">Slides</a>
+    {% endif %}
+
+    {% if include.paper.poster %}
+    <a href="{{ include.paper.poster }}" class="label label-info">Poster</a>
+    {% endif %}
+
+    {% if include.paper.talk %}
+    <a href="{{ include.paper.talk }}" class="label label-info">Talk</a>
+    {% endif %}
+
+    <!-- code and data -->
+    {% if include.paper.code %}
+      <a href="{{ include.paper.code }}" class="label label-info">Code</a>
+    {% endif %}
+
+    {% if include.paper.data %}
+    <a href="{{ include.paper.data }}" class="label label-info">Data</a>
+    {% endif %}
+
+    <!-- amendments -->
+
+    {% if include.paper.errata %}
+    <div class="modal fade" id="errata{{ include.paper.img }}" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title">Errata | {{ include.paper.title }}</h4>
+          </div>
+          <div class="modal-body">
+            {{ include.paper.errata }}
+          </div>
+        </div>
+      </div>
+    </div>
+    <a data-toggle="modal" href="#errata{{ include.paper.img }}" class="label label-danger">Errata</a>&nbsp;
+    {% endif %}
+  </div>
+</div>
