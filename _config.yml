@@ -11,9 +11,16 @@ url: "http://lena-voita.github.io" # the base hostname & protocol for your site
 #paginate: 3
 
 # you can also declare arbitrary key-value data here
-uva_url: "https://www.illc.uva.nl/People/show_person.php?Person_id=Voita+E."
-edn_nlp_url: "https://edinburghnlp.inf.ed.ac.uk/index.php/people/"
-yandex_research_url: "https://research.yandex.com/people/"
+uva_url_lena: "https://www.illc.uva.nl/People/show_person.php?Person_id=Voita+E."
+uva_url_main: "https://www.illc.uva.nl"
+edn_nlp_people: "https://edinburghnlp.inf.ed.ac.uk/index.php/people/"
+edn_nlp_main: "http://edinburghnlp.inf.ed.ac.uk"
+school_of_informatics: "https://www.ed.ac.uk/informatics"
+yandex_research_people: "https://research.yandex.com/people/"
+yandex_research_main: "https://research.yandex.com"
+
+ivan_page: "http://ivan-titov.org"
+rico_page: "http://homepages.inf.ed.ac.uk/rsennric/"
 
 
 # Build settings
