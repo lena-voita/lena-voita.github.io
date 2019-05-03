@@ -27,3 +27,34 @@
         location = 	"Melbourne, Australia",
         url = 	"http://aclweb.org/anthology/P18-1117"
     }
+
+ layout: paper
+  paper-type: inproceedings
+  selected: y
+  year: 2018
+  img:
+  title: "A Large-Scale Test Set for the Evaluation of Context-Aware Pronoun Translation in Neural Machine Translation"
+  authors: "Mathias M{\"u}ller, Annette Rios, Elena Voita and Rico Sennrich"
+  doc-url: //aclweb.org/anthology/W18-6307
+  arxiv:
+  appendix:
+  code:
+  slides:
+  booktitle: "Proceedings of WMT 2018: Research Papers"
+  abstract: >
+    The translation of pronouns presents a special challenge to machine translation to this day, since it often requires context outside the current sentence. Recent work on models that have access to information across sentence boundaries has seen only moderate improvements in terms of automatic evaluation metrics such as BLEU. However, metrics that quantify the overall translation quality are ill-equipped to measure gains from additional context. We argue that a different kind of evaluation is needed to assess how well models translate inter-sentential phenomena such as pronouns. This paper therefore presents a test suite of contrastive translations focused specifically on the translation of pronouns. Furthermore, we perform experiments with several context-aware models. We show that, while gains in BLEU are moderate for those systems, they outperform baselines by a large margin in terms of accuracy on our contrastive test set. Our experiments also show the effectiveness of parameter tying for multi-encoder architectures.
+  bibtex: >
+    @inproceedings{muller-etal-2018-large,
+    title = "A Large-Scale Test Set for the Evaluation of Context-Aware Pronoun Translation in Neural Machine Translation",
+    author = {M{\"u}ller, Mathias  and
+      Rios, Annette  and
+      Voita, Elena  and
+      Sennrich, Rico},
+    booktitle = "Proceedings of the Third Conference on Machine Translation: Research Papers",
+    month = oct,
+    year = "2018",
+    address = "Belgium, Brussels",
+    publisher = "Association for Computational Linguistics",
+    url = "https://www.aclweb.org/anthology/W18-6307",
+    pages = "61--72",
+}
