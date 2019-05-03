@@ -12,6 +12,6 @@ I am also a __Ph.D. candidate__ at the [Institute for Logic, Language and Comput
 
 ## <span style="color:darkblue">News </span>
 
-* 03/2019 We are happy to host [Wilker Aziz](http://wilkeraziz.github.io) and Mirella Lapata at [Yandex NLP week](https://yandex.com/company/blog/nlp-week-2019). More information is [here](https://academy.yandex.ru/events/data_analysis/NLP_week/), video and materials are [here](https://yandexdataschool.ru/edu-process/nlp-week)
+* 03/2019 We are happy to host [Wilker Aziz](http://wilkeraziz.github.io) and Mirella Lapata at [Yandex NLP week](https://yandex.com/company/blog/nlp-week-2019)! More information is [here](https://academy.yandex.ru/events/data_analysis/NLP_week/), video and materials are [here](https://yandexdataschool.ru/edu-process/nlp-week)
 * 09/2018 We are launching a new [NLP course](https://github.com/yandexdataschool/nlp_course) at the Yandex School of Data Analysis!
-* 04/2018 Our paper [Context-Aware Neural Machine Translation Learns Anaphora Resolution](https://arxiv.org/pdf/1805.10163.pdf) has been __accepted to ACL 2018__ and selected for an __oral__ presentation.
+* 04/2018 Our paper [Context-Aware Neural Machine Translation Learns Anaphora Resolution](https://arxiv.org/pdf/1805.10163.pdf) has been _accepted to ACL 2018_ and selected for an _oral_ presentation.
