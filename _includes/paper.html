@@ -4,7 +4,7 @@
   </a>
   <div class="media-body">
     <!-- citation -->
-    {% if include.paper.logo %}<img src="/img/ico/{{ include.paper.logo }}.png" alt=""/>{% endif %}
+    {% if include.paper.logo %}<img src="/img/papers/{{ include.paper.logo }}" alt=""/>{% endif %}
     <strong>{{ include.paper.title }}</strong><br/>
     {% if include.paper.authors %}{{ include.paper.authors }}.{% endif %}
     {% case include.paper.paper-type %}
