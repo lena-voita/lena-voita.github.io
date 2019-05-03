@@ -1,5 +1,5 @@
 # Site settings
-exclude: [README.md,example1.md]
+exclude: [README.md,example1.md,example2.md]
 title: Lena Voita
 email: lena-voita@yandex-team.ru
 github: lena-voita
