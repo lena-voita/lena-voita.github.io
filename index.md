@@ -9,6 +9,7 @@ I am a __researcher__ at [Yandex Research]({{site.yandex_research_main}}) workin
 
 I am also a __Ph.D. candidate__ at the [Institute for Logic, Language and Computation (ILLC)]({{site.uva_url_main}}) at the University of Amsterdam. Often I visit the [School of Informatics]({{site.school_of_informatics}}) at the University of Edinburgh, and I am part of the [EdinburghNLP]({{site.edn_nlp_main}}) group. I'm very happy to be supervised by [Ivan Titov]({{site:ivan_page}}) and [Rico Sennrich]({{site.rico_page}}).
 
+I teach NLP at the [Yandex School of Data Analysis](https://yandexdataschool.com).
 
 ## <span style="color:darkblue">News </span>
 
