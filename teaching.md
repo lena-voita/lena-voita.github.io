@@ -4,7 +4,7 @@ title: Teaching & Supervising
 menu: yes
 ---
 
-## <span style="color:darkblue"> My team at Yandex </span>
+## <span style="color:darkblue"> Students & Interns </span>
 I supervise undergraduate/master students in the scope of
 [Yandex Academic Supervision Program](https://yandex.ru/jobs/vacancies/research/scientific_leadership_prog/), and NLP research interns at [Yandex Research]({{site.yandex_research_main}})
 
