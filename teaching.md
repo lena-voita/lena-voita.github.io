@@ -1,5 +1,5 @@
 ---
-layout: photolist
+layout: default
 title: Teaching & Supervising
 menu: yes
 ---
@@ -9,8 +9,8 @@ I supervise undergraduate/master students in the scope of
 [Yandex Academic Supervision Program](https://yandex.ru/jobs/vacancies/research/scientific_leadership_prog/), and NLP research interns at [Yandex Research]({{site.yandex_research_main}})
 
 The team:
-* Fedor Moiseev, <p style="color:gray">December 2018-current (Yandex Academic Supervision Program)</p>
-* Dmitriy Emelyanenko, <p style="color:gray">March 2019-current (Yandex Academic Supervision Program)</p>
+* Fedor Moiseev, <span style="color:gray">December 2018-current (Yandex Academic Supervision Program)</span>
+* Dmitriy Emelyanenko, <span style="color:gray">March 2019-current (Yandex Academic Supervision Program)</span>
 * __you?__ Apply [here](https://yandex.ru/jobs/vacancies/research/scientific_leadership_prog/) for Yandex Academic Supervision Program or [here](https://yandex.com/jobs/vacancies/research/intern_researcher_eng) for NLP research internship
 
 
