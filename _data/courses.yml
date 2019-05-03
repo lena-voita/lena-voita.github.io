@@ -5,8 +5,8 @@
   event: 2018-present
   img: nlp_course.png
   title: Natural Language Processing
-  doc-url:
-  institution: ysda.jpg
+  doc-url: https://github.com/yandexdataschool/nlp_course
+  institution: ysda.png
   github: https://github.com/yandexdataschool/nlp_course
   abstract: |
     I coordinate and teach Natural Language Processing together with my colleagues from the Yandex Translate team David Talbot, Boris Kovarsky, Sergey Gubanov and Alexander Panin. This is a second-year course offered to Master-level students at the Yandex School of Data Analysis.
