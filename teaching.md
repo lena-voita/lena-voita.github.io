@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: photolist
 title: Teaching & Supervising
 menu: yes
 ---
