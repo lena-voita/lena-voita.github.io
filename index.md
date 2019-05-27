@@ -15,7 +15,7 @@ I teach NLP at the [Yandex School of Data Analysis](https://yandexdataschool.com
 
 * Two papers _accepted to ACL 2019_:
 
-[Analyzing Multi-Head Self-Attention: Specialized Heads Do the Heavy Lifting, the Rest Can Be Pruned]()
+[Analyzing Multi-Head Self-Attention: Specialized Heads Do the Heavy Lifting, the Rest Can Be Pruned](https://arxiv.org/abs/1905.09418)
 
 [When a Good Translation is Wrong in Context: Context-Aware Machine Translation Improves on Deixis, Ellipsis, and Lexical Cohesion](https://arxiv.org/abs/1905.05979)
 * 03/2019 We are happy to host [Wilker Aziz](http://wilkeraziz.github.io) and Mirella Lapata at [Yandex NLP week](https://yandex.com/company/blog/nlp-week-2019)! More information is [here](https://academy.yandex.ru/events/data_analysis/NLP_week/), video and materials are [here](https://yandexdataschool.ru/edu-process/nlp-week)
