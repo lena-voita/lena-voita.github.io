@@ -3,25 +3,6 @@
   paper-type: inproceedings
   selected: y
   year: 2019
-  img: acl19_ctx-min.png
-  title: "When a Good Translation is Wrong in Context: Context-Aware Machine Translation Improves on Deixis, Ellipsis, and Lexical Cohesion"
-  authors: "Elena Voita, Rico Sennrich and Ivan Titov"
-  doc-url:
-  arxiv: //arxiv.org/abs/1905.05979
-  appendix:
-  booktitle: "Proceedings of ACL"
-  slides:
-  abstract: >
-      Though machine translation errors caused by the lack of context beyond one sentence have long been acknowledged, the development of context-aware NMT systems is hampered by several problems. Firstly, standard metrics are not sensitive to improvements in consistency in document-level translations. Secondly, previous work on context-aware NMT assumed that the sentence-aligned parallel data consisted of complete documents while in most practical scenarios such document-level data constitutes only a fraction of the available parallel data. To address the first issue, we perform a human study on an English-Russian subtitles dataset and identify deixis, ellipsis and lexical cohesion as three main sources of inconsistency. We then create test sets targeting these phenomena. To address the second shortcoming, we consider a set-up in which a much larger amount of sentence-level data is available compared to that aligned at the document level. We introduce a model that is suitable for this scenario and demonstrate major gains over a context-agnostic baseline on our new benchmarks without sacrificing performance as measured with BLEU.
-  bibtex: >
-
-    }
-
--
-  layout: paper
-  paper-type: inproceedings
-  selected: y
-  year: 2019
   img: acl19_heads-min.png
   title: "Analyzing Multi-Head Self-Attention: Specialized Heads Do the Heavy Lifting, the Rest Can Be Pruned"
   authors: "Elena Voita, David Talbot, Fedor Moiseev, Rico Sennrich and Ivan Titov"
@@ -37,3 +18,21 @@
     }
 
 -
+  layout: paper
+  paper-type: inproceedings
+  selected: y
+  year: 2019
+  img: acl19_ctx-min.png
+  title: "When a Good Translation is Wrong in Context: Context-Aware Machine Translation Improves on Deixis, Ellipsis, and Lexical Cohesion"
+  authors: "Elena Voita, Rico Sennrich and Ivan Titov"
+  doc-url:
+  arxiv: //arxiv.org/abs/1905.05979
+  appendix:
+  booktitle: "Proceedings of ACL"
+  slides:
+  abstract: >
+      Though machine translation errors caused by the lack of context beyond one sentence have long been acknowledged, the development of context-aware NMT systems is hampered by several problems. Firstly, standard metrics are not sensitive to improvements in consistency in document-level translations. Secondly, previous work on context-aware NMT assumed that the sentence-aligned parallel data consisted of complete documents while in most practical scenarios such document-level data constitutes only a fraction of the available parallel data. To address the first issue, we perform a human study on an English-Russian subtitles dataset and identify deixis, ellipsis and lexical cohesion as three main sources of inconsistency. We then create test sets targeting these phenomena. To address the second shortcoming, we consider a set-up in which a much larger amount of sentence-level data is available compared to that aligned at the document level. We introduce a model that is suitable for this scenario and demonstrate major gains over a context-agnostic baseline on our new benchmarks without sacrificing performance as measured with BLEU.
+  bibtex: >
+
+    }
+
