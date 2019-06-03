@@ -22,7 +22,7 @@
   paper-type: inproceedings
   selected: y
   year: 2019
-  img: acl19_ctx-min.png
+  img: acl19_ctx.png
   title: "When a Good Translation is Wrong in Context: Context-Aware Machine Translation Improves on Deixis, Ellipsis, and Lexical Cohesion"
   authors: "Elena Voita, Rico Sennrich and Ivan Titov"
   doc-url:
