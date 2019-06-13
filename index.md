@@ -3,7 +3,7 @@ layout: default
 ---
 
 <!-- (comment) the image below can be found in img folder of this very project-->
-![i_am_a_fox](/img/people/lena-min.png){: style="float: right; margin: 0px 20px; width: 204px; height: 240px" }
+![i_am_a_fox](./img/people/lena-min.png){: style="float: right; margin: 0px 20px; width: 204px; height: 240px" }
 
 I am a __researcher__ at [Yandex Research]({{site.yandex_research_main}}) working on __Natural Language Processing__. My research focuses on Neural Machine Translation, and I work closely with the [Yandex Translate](https://translate.yandex.com) team.
 
