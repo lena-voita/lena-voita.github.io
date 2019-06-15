@@ -3,11 +3,11 @@ layout: default
 ---
 
 <!-- (comment) the image below can be found in img folder of this very project-->
-<!-- ![i_am_a_fox](./img/people/lena-min.png){: style="float: right; margin: 0px 20px; width: 204px; height: 240px" } -->
+![i_am_a_fox](./img/people/lena-min.png){: style="float: right; margin: 0px 20px; width: 204px; height: 240px" }
 
 
-<a onMouseOver="document.readmore_1.src='/img/people/foxie.jpeg';" onMouseOut="document.readmore_1.src='/img/people/lena-min.png';">
-<img src="/img/people/lena-min.png" name="readmore_1" width=204px height=240px></a>
+<!-- <a href= onMouseOver="document.readmore_1.src='/img/people/foxie.jpeg';" onMouseOut="document.readmore_1.src='/img/people/lena-min.png';">
+<img src="/img/people/lena-min.png" name="readmore_1" width=204px height=240px></a> -->
 
 
 
