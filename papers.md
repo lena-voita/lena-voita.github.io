@@ -2,6 +2,7 @@
 layout: photolist
 title: Publications
 menu: yes
+order: 2
 ---
 
 {% assign hashes = (site.data.papers) %}

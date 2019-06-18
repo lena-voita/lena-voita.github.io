@@ -2,6 +2,7 @@
 layout: photolist
 title: Teaching & Supervising
 menu: yes
+order: 3
 ---
 
 ## <span style="color:darkblue"> Students & Interns </span>

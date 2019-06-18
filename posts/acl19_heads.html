@@ -1,0 +1,461 @@
+---
+layout: post
+title: The Story of Heads
+---
+
+<a class="float-right">
+    <img src="../img/paper/acl19_heads-min.png" alt="" style="max-width:300px; height:auto; float: right"/>
+</a>
+
+This is a post for the ACL 2019 paper
+    <a href="https://arxiv.org/abs/1905.09418">
+            Analyzing Multi-Head Self-Attention: Specialized Heads Do the Heavy Lifting, the Rest Can Be Pruned.
+    </a>
+
+<br/>
+<br/>
+From this post, you will learn:
+<ul>
+  <li>how we evaluate the importance of attention heads in Transformer</li>
+  <li>which functions the most important encoder heads perform</li>
+  <li>how we prune the vast majority of attention heads in Transformer without seriously affecting quality</li>
+    <li>which types of model attention (encoder self-attention, decoder self-attention or decoder-encoder attention)
+        are most sensitive to the number of attention heads and on which layers </li>
+</ul>
+
+
+
+<a class="pull-right" href="https://arxiv.org/abs/1905.09418" onMouseOver="document.readpaper.src='../resources/posts/buttons/button_read_paper_push-min.png';" onMouseOut="document.readpaper.src='../resources/posts/buttons/button_read_paper-min.png';">
+<img src="../resources/posts/buttons/button_read_paper-min.png" name="readpaper" width=120px class="pull-right"></a>
+<a class="pull-right" href="https://github.com/lena-voita/the-story-of-heads" onMouseOver="document.viewcode.src='../resources/posts/buttons/button_view_code_push-min.png';" onMouseOut="document.viewcode.src='../resources/posts/buttons/button_view_code-min.png';">
+<img src="../resources/posts/buttons/button_view_code-min.png" name="viewcode" width=120px></a>
+
+<br/>
+<p></p>
+<hr>
+
+<h2>Heads Importance</h2>
+
+Previous work analyzing how representations are formed by the Transformer’s multi-head attention mechanism haven't
+taken into account the varying importance of different heads. Also, this obscures the
+roles played by individual heads which, as we will show later, influence the generated translations to differing extents.
+<br/><br/>
+
+<img src="../resources/posts/acl19_heads/confidence-min.png" width="250" style="float:right">
+One naive characteristic of a head importance might be it's confidence. We define the “confidence” of a head as the average
+of its maximum attention weight excluding the end of sentence
+symbol.
+A confident head is one that usually assigns a high proportion of its attention to a single token. Intuitively,
+we might expect confident heads to be important to the translation task.
+<br/> Figure shows confidence of all heads in the model. We see, that there are a few heads which are extremely confident:
+on average, they assign more than 80% of their attention mass to a single token.
+<br/><br/>
+
+
+
+
+
+<img src="../resources/posts/acl19_heads/lrp_cat-min.png" width="350" style="float:right">
+
+While confidence is a really simple heuristic, we want to evaluate a head importance in a more reliable way.
+For this, we use <a href="https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0130140">
+  Layerwise Relevance Propagation (LRP). </a><br/>
+LRP was originally designed to compute the contributions of
+single pixels to predictions of image classifiers.  It back-propagates relevance
+recursively from the output layer to the input layer as shown on the illustration
+(the illustration is taken from <a href="http://danshiebler.com/2017-04-16-deep-taylor-lrp/"> this cool post</a>).
+To propagate the prediction
+back, LRP relies on a conservation principle. Intuitively, this means that total contribution of neurons at each layer is constant.
+<br/><br/>
+
+We adapt LRP to the Transformer model to calculate
+relevance that measures the association degree between two arbitrary neurons in neural networks.
+The way we use LRP here is different from using attribution methods in computer vision in two important aspects:
+<ul>
+  <li>we evaluate a neuron/network part importance, not input element (pixel or token), </li>
+  <li>we evaluate the importance on average, not for a single prediction.</li>
+</ul>
+
+Since we are interested only in heads relevance, we do not propagate till input variables and stop at the neurons
+of the encoder layer of interest. In our experiments, we compute relative contribution of each head to the network
+predictions. For this, we evaluate contribution of neurons in each head to the top-1 logit
+predicted by the model. Head relevance for a given prediction is computed as the sum of relevances of its
+neurons, normalized over heads in a layer. The final relevance of a head is its average relevance, where
+average is taken over all generation steps for a development set. This enables us to evaluate a head importance
+for the whole model, not for a single generation step.
+<br/><br/>
+
+<img src="../resources/posts/acl19_heads/lrp_confidence-min.png" width="400" style="float:right">
+The results of LRP and confidence for the same model are shown in figure (in each layer, heads are sorted by their relevance).
+In each layer, LRP ranks a small number of heads as much more
+important than all others.
+Also, we see that the relevance of a head as
+computed by LRP agrees to a reasonable extent with its confidence. The only clear exception to this pattern
+is the head judged by LRP to be the most important in the first layer. It is the most relevant head in the first
+layer but its average maximum attention weight is low. We will discuss this head further when characterizing heads functions.
+<br/><br/>
+
+
+<h2>Head Functions</h2>
+<!-- the next two lines are inserted once per page even if there are several shtukovinas,
+     the rest is one-per-shtukovina; read more: https://flickity.metafizzy.co/options.html -->
+<link rel="stylesheet" href="https://unpkg.com/flickity@2/dist/flickity.min.css" media="screen">
+<script src="https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js"></script>
+
+
+We now turn to investigating whether heads play consistent and interpretable roles within the model.
+We examined some attention matrices paying particular attention to heads ranked highly by LRP and
+identified three functions which heads might be playing.
+<br/><br/>
+
+<div class="carousel"
+     style="float:right; width:50%; margin-top:10px; margin-bottom:30px; margin-left:10px"
+  data-flickity='{ "imagesLoaded": true, "percentPosition": true}'>
+  <div class="carousel-cell" style="width:100%"><center>
+    <img height="200" src="../resources/posts/acl19_heads/position_head/wmt_en_de_prev-min.png"/>
+      <p>Model trained on WMT EN-DE</p>
+  </center></div>
+    <div class="carousel-cell" style="width:100%"><center>
+    <img height="200" src="../resources/posts/acl19_heads/position_head/wmt_en_de_next-min.png"/>
+      <p>Model trained on WMT EN-DE</p>
+  </center></div>
+
+
+    <div class="carousel-cell" style="width:100%"><center>
+    <img height="200" src="../resources/posts/acl19_heads/position_head/wmt_en_fr_prev-min.png"/>
+      <p>Model trained on WMT EN-FR</p>
+  </center></div>
+    <div class="carousel-cell" style="width:100%"><center>
+    <img height="200" src="../resources/posts/acl19_heads/position_head/wmt_en_fr_next-min.png"/>
+      <p>Model trained on WMT EN-FR</p>
+  </center></div>
+
+
+    <div class="carousel-cell" style="width:100%"><center>
+    <img height="200" src="../resources/posts/acl19_heads/position_head/wmt_en_ru_prev-min.png"/>
+      <p>Model trained on WMT EN-RU</p>
+  </center></div>
+    <div class="carousel-cell" style="width:100%"><center>
+    <img height="200" src="../resources/posts/acl19_heads/position_head/wmt_en_ru_next-min.png"/>
+      <p>Model trained on WMT EN-RU</p>
+  </center></div>
+
+
+    <div class="carousel-cell" style="width:100%"><center>
+    <img height="200" src="../resources/posts/acl19_heads/position_head/subs_en_ru_prev-min.png"/>
+      <p>Model trained on OpenSubtitles EN-RU</p>
+  </center></div>
+    <div class="carousel-cell" style="width:100%"><center>
+    <img height="200" src="../resources/posts/acl19_heads/position_head/subs_en_ru_next-min.png"/>
+      <p>Model trained on OpenSubtitles EN-RU</p>
+  </center></div>
+
+</div>
+
+<strong>Positional heads</strong>
+<br/>
+We refer to a head as “positional” if at least 90% of the time its maximum attention weight
+is assigned to a specific relative position (in practice either -1 or +1, i.e. attention to adjacent tokens).
+<br/><br/><br/>
+
+
+<div class="carousel"
+     style="float:right; width:50%; margin-top:10px; margin-bottom:30px; margin-left:10px"
+  data-flickity='{ "imagesLoaded": true, "percentPosition": true}'>
+  <div class="carousel-cell" style="width:100%"><center>
+    <img height="200" src="../resources/posts/acl19_heads/syntactic_head/subs_en_ru_sv_1-min.png"/>
+      <p> subject-> verb</p>
+  </center></div>
+    <div class="carousel-cell" style="width:100%"><center>
+    <img height="200" src="../resources/posts/acl19_heads/syntactic_head/subs_en_ru_vs_1-min.png"/>
+      <p> verb -> subject</p>
+  </center></div>
+
+
+    <div class="carousel-cell" style="width:100%"><center>
+    <img height="200" src="../resources/posts/acl19_heads/syntactic_head/subs_en_ru_sv_2-min.png"/>
+      <p> subject-> verb</p>
+  </center></div>
+    <div class="carousel-cell" style="width:100%"><center>
+    <img height="200" src="../resources/posts/acl19_heads/syntactic_head/subs_en_ru_vs_2-min.png"/>
+      <p> verb -> subject</p>
+  </center></div>
+  <div class="carousel-cell" style="width:100%"><center>
+    <img height="200" src="../resources/posts/acl19_heads/syntactic_head/subs_en_ru_vs_3-min.png"/>
+      <p> verb -> subject</p>
+  </center></div>
+
+
+  <div class="carousel-cell" style="width:100%"><center>
+    <img height="200" src="../resources/posts/acl19_heads/syntactic_head/wmt_en_ru_ov_2-min.png"/>
+      <p> object -> verb</p>
+  </center></div>
+  <div class="carousel-cell" style="width:100%"><center>
+    <img height="200" src="../resources/posts/acl19_heads/syntactic_head/wmt_en_ru_vo_2-min.png"/>
+      <p> verb -> object</p>
+  </center></div>
+
+    <div class="carousel-cell" style="width:100%"><center>
+    <img height="200" src="../resources/posts/acl19_heads/syntactic_head/subs_en_ru_ov_1-min.png"/>
+      <p> object -> verb</p>
+  </center></div>
+
+</div>
+
+<strong>Syntactic heads</strong>
+<br/>
+We hypothesize that, when used to perform translation, the Transformer’s encoder may be responsible
+for disambiguating the syntactic structure of the source sentence. We therefore wish to know whether
+a head attends to tokens corresponding to any of the major syntactic relations in a sentence.
+In our analysis, we looked at nominal subject (nsubj),
+direct object (dobj), adjectival modifier (amod) and adverbial modifier (advmod) relations.
+
+We calculate for each head how often it assigns its maximum attention weight
+(excluding EOS) to a token with which it is in one of the aforementioned dependency relations.
+
+We dp so by comparing its attention weights to a predicted by <a href="https://aclweb.org/anthology/P14-5010">CoreNLP </a>
+dependency structure on a large number of held-out sentences.
+<br/>
+For more details, read <a href="https://arxiv.org/pdf/1905.09418.pdf">the paper.</a>
+<br/>
+
+
+<div class="carousel"
+     style="float:right; width:50%; margin-top:10px; margin-bottom:30px; margin-left:10px"
+  data-flickity='{ "imagesLoaded": true, "percentPosition": true}'>
+  <div class="carousel-cell" style="width:100%"><center>
+    <img height="200" src="../resources/posts/acl19_heads/topic_head/wmt_en_de_1-min.png"/>
+      <p>Model trained on WMT EN-DE</p>
+  </center></div>
+    <div class="carousel-cell" style="width:100%"><center>
+    <img height="200" src="../resources/posts/acl19_heads/topic_head/wmt_en_de_2-min.png"/>
+      <p>Model trained on WMT EN-DE</p>
+  </center></div>
+    <div class="carousel-cell" style="width:100%"><center>
+    <img height="200" src="../resources/posts/acl19_heads/topic_head/wmt_en_de_3-min.png"/>
+      <p>Model trained on WMT EN-DE</p>
+  </center></div>
+
+    <div class="carousel-cell" style="width:100%"><center>
+    <img height="200" src="../resources/posts/acl19_heads/topic_head/wmt_en_fr_1-min.png"/>
+      <p>Model trained on WMT EN-FR</p>
+  </center></div>
+    <div class="carousel-cell" style="width:100%"><center>
+    <img height="200" src="../resources/posts/acl19_heads/topic_head/wmt_en_fr_2-min.png"/>
+      <p>Model trained on WMT EN-FR</p>
+  </center></div>
+    <div class="carousel-cell" style="width:100%"><center>
+    <img height="200" src="../resources/posts/acl19_heads/topic_head/wmt_en_fr_3-min.png"/>
+      <p>Model trained on WMT EN-FR</p>
+  </center></div>
+
+    <div class="carousel-cell" style="width:100%"><center>
+    <img height="200" src="../resources/posts/acl19_heads/topic_head/wmt_en_ru_1-min.png"/>
+      <p>Model trained on WMT EN-RU</p>
+  </center></div>
+    <div class="carousel-cell" style="width:100%"><center>
+    <img height="200" src="../resources/posts/acl19_heads/topic_head/wmt_en_ru_2-min.png"/>
+      <p>Model trained on WMT EN-RU</p>
+  </center></div>
+    <div class="carousel-cell" style="width:100%"><center>
+    <img height="200" src="../resources/posts/acl19_heads/topic_head/wmt_en_ru_3-min.png"/>
+      <p>Model trained on WMT EN-RU</p>
+  </center></div>
+    <div class="carousel-cell" style="width:100%"><center>
+    <img height="200" src="../resources/posts/acl19_heads/topic_head/wmt_en_ru_4-min.png"/>
+      <p>Model trained on WMT EN-RU</p>
+  </center></div>
+
+    <div class="carousel-cell" style="width:100%"><center>
+    <img height="200" src="../resources/posts/acl19_heads/topic_head/subs_en_ru_1-min.png"/>
+      <p>Model trained on OpenSubtitles EN-RU</p>
+  </center></div>
+    <div class="carousel-cell" style="width:100%"><center>
+    <img height="200" src="../resources/posts/acl19_heads/topic_head/subs_en_ru_2-min.png"/>
+      <p>Model trained on OpenSubtitles EN-RU</p>
+  </center></div>
+    <div class="carousel-cell" style="width:100%"><center>
+    <img height="200" src="../resources/posts/acl19_heads/topic_head/subs_en_ru_3-min.png"/>
+      <p>Model trained on OpenSubtitles EN-RU</p>
+  </center></div>
+
+  <!--<div class="carousel-cell" style="width:66%"><center>
+    <img height="400" src="https://i.imgur.com/qeHCqC3.jpg" alt="also a fox"/>
+  </center></div>
+  <div class="carousel-cell" style="width:66%"><center>
+     <img height="360" src="https://tinyurl.com/final-fox" alt="yep, still a fox"/>
+     <p>this is an annotated fox</p>
+  </center></div> -->
+</div>
+
+<br/>
+<strong>Rare tokens</strong>
+<br/>
+For all models, we find a head pointing to the least frequent tokens in a sentence. For models trained
+on OpenSubtitles, among sentences where the least frequent token in a sentence is not in the top-500
+most frequent tokens, this head points to the rarest token in 66% of cases, and to one of the two
+least frequent tokens in 83% of cases. For models trained on WMT, this head points to one of the
+two least frequent tokens in more than 50% of such cases.
+<br/><br/>
+
+
+
+<img src="../resources/posts/acl19_heads/heads_functions/functions_ru_de_fr_with_notation.png" width="400" style="float:right">
+
+Let's now look at how these functions correspond to the importancies evaluated earlier.
+As can be seen, the positional heads correspond to a large extent to the most important heads as ranked by LRP.
+In each model, there are several heads tracking syntactic relations, and these heads are also judged to be important by LRP.
+In all models, we find that one head in the first layer is
+judged to be much more important to the model’s predictions than any other heads in this layer. Interestingly,
+this turns out to be the head attending to rare tokens.
+
+
+
+<br/><br/>
+
+<h2>Pruning Attention Heads</h2>
+
+We have identified certain functions of the most relevant heads at each layer and showed that to a large extent
+they are interpretable. What of the remaining heads? Are they redundant to translation quality or do they play
+equally vital but simply less easily defined roles? We introduce a method for pruning attention heads to try to answer
+these questions.
+<br/><br/>
+
+<h3>Method</h3>
+
+In the standard Transformer, results of different attention heads in a layer are concatenated:
+<center>
+<img src="../resources/posts/acl19_heads/multihead_attn-min.png" width="350">.
+</center>
+
+We would like to disable less important heads completely, i.e. ideally apply L0 regularization to the number of heads.
+We modify the original Transformer architecture by multiplying the representation computed by each
+<img src="../resources/posts/acl19_heads/head_i-min.png" width="45"> by a scalar
+gate <img src="../resources/posts/acl19_heads/g_i-min.png" width="18">:
+<center>
+    <img src="../resources/posts/acl19_heads/multihead_attn_gates-min.png" width="360">.
+</center>
+</br>
+
+<iframe frameborder="0" width="350" height="360" src="../resources/posts/acl19_heads/concrete_min.html" style="float:right"></iframe>
+
+<br/>
+Unlike usual gates, <img src="../resources/posts/acl19_heads/g_i-min.png" width="18"> are parameters
+specific to heads and are independent of the input (i.e. the sentence). Each gate
+<img src="../resources/posts/acl19_heads/g_i-min.png" width="18"> is a random variable
+drawn independently from a head-specific <a href="https://openreview.net/pdf?id=H1Y8hhg0b">Hard Concrete distribution</a>.
+The distributions have non-zero probability mass at 0 and 1; look at the illustration. You can play with the distribution
+parameters and see how the distribution is changing. The parameter log(α) is optimized in training.
+<br/>
+<br/>
+
+We use the sum of the probabilities of heads being non-zero (<img src="../resources/posts/acl19_heads/l_c-min.png" width="23">) as a stochastic relaxation of the non-differentiable L0 norm. The resulting training objective is:
+<br/>
+<img src="../resources/posts/acl19_heads/loss-min.png" width="145">.
+<br/><br/>
+
+<img src="../resources/posts/acl19_heads/enc_head_gif_delay7-min.gif" height="250" width="320"
+     style="float:right; margin-top:5px; margin-bottom:10px; margin-left:15px">
+
+By varying the coefficient λ in the optimized objective, we obtain models with different numbers of retained heads.
+On the gif is shown how the probabilities of encoder heads being completely closed
+(<img src="../resources/posts/acl19_heads/p_gi0-min.png" width="90">) change in training
+for different values of λ (pruning starts from a converged model). White color denotes
+<img src="../resources/posts/acl19_heads/p_gi0_1-min.png" width="135">, which means that
+a head is completely removed from the model.
+(Gif is for model trained on EN-RU WMT. For other datasets, values of λ can be different.)
+
+<br/><br/>
+
+We observe that the model converges to solutions where gates are either almost completely closed or completely open.
+This means that at test time we can treat the model as a standard Transformer and use only a subset of heads.
+<br/><br/>
+
+<h3>BLEU score</h3>
+<h4>Encoder heads</h4>
+
+First, let's look how the translation quality is affected by pruning attention heads. The figure below shows BLEU score as a
+function of number of retained <strong>encoder heads</strong> (EN-RU). Regularization applied by fine-tuning trained model.
+<br/>
+<img src="../resources/posts/acl19_heads/heads_dying_enc_bleu_linear_x.png" width="600"
+style="margin-left:40px">
+<br/>
+Surprisingly, for OpenSubtitles, we lose only 0.25 BLEU when we prune all but 4 heads out of 48. For the more complex
+WMT task, 10 heads in the encoder are sufficient to stay within 0.15 BLEU of the full model.
+<br/>
+<br/>
+<h4>All heads</h4>
+
+<img src="../resources/posts/acl19_heads/bleu_all_attns-min.png" width="320"
+     style="float:right; margin-top:5px; margin-bottom:10px; margin-left:15px">
+Results of experiments pruning heads in all attention layers are provided in table.
+For all models, we can prune more than half of all attention heads and lose no more than 0.25 BLEU.
+<br/><br/>
+In the rightmost column we provide BLEU scores for models trained with exactly
+the same number and configuration of heads in each layer as the corresponding pruned models but starting from a random
+initialization of parameters. Here the degradation in translation quality is more significant than for pruned models with
+the same number of heads. This agrees with the observations made in works on model compression: sparse architectures
+learned through pruning cannot be trained from scratch to the same test set performance as a model trained with joint
+sparsification and optimization. See for example <a href="https://arxiv.org/abs/1710.01878"> Zhu and Gupta, 2017</a> or
+<a href="https://arxiv.org/abs/1902.09574"> Gale et al., 2019</a>.
+<br/><br/>
+
+<h3>Pruning for analysis</h3>
+<h4>Functions of retained encoder heads</h4>
+
+<img src="../img/paper/acl19_heads-min.png" width="400"
+     style="float:right; margin-top:5px; margin-bottom:10px; margin-left:15px">
+The figure shows functions of encoder heads retained after pruning. Each column represents all
+remaining heads after varying amount of pruning; heads color-coded for their function in a pruned model.
+Some
+heads can perform several functions (e.g., s → v and v → o); in this case the number of functions is shown.
+<br/><br/>
+Note that the model with 17 heads retains heads with all the functions that we identified previously,
+even though 2⁄3 of the heads have been pruned.
+This indicates that these functions are indeed the most important. Furthermore, when we have fewer heads in the model,
+some functions “drift” to other heads: for example, we see positional heads starting to track syntactic dependencies;
+hence some heads are assigned more than one color at certain stages.
+<br/><br/>
+
+<h4>Importance of attention types</h4>
+
+<img src="../resources/posts/acl19_heads/heads_dying_by_attn_type_both-min.png" width="450"
+     style="float:right; margin-top:5px; margin-bottom:10px; margin-left:15px">
+Here is shown the number of retained heads for each attention type at different pruning rates. We can see that the
+model prefers to prune encoder self-attention heads first, while decoder-encoder attention heads appear to be the
+most important for both datasets.
+The importance of decoder self-attention heads, which function primarily as a target side language model,
+varies across domains.
+<br/><br/>
+
+<img src="../resources/posts/acl19_heads/heads_dying_decoder-min.png" width="450"
+     style="float:right; margin-top:5px; margin-bottom:10px; margin-left:15px">
+Here is shown the number of active self-attention and decoder-encoder attention heads at different layers
+in the decoder for models with different sparsity rate (to reduce noise, we plot the sum of heads remaining
+in pairs of adjacent layers). Self-attention heads are retained more readily in the lower
+layers, while decoder-encoder attention heads are retained in the higher layers. This suggests that lower layers
+of the Transformer’s decoder are mostly responsible for language modeling, while higher layers are mostly responsible
+for conditioning on the source sentence.
+<br/><br/>
+
+
+<h2>Conclusions</h2>
+
+We evaluate the contribution made by individual attention heads to Transformer model performance on translation.
+We use layer-wise relevance propagation to show that the relative contribution of heads varies: only a
+small subset of heads appear to be important for the translation task. Important heads have one or more
+interpretable functions in the model, including attending to adjacent words and tracking specific syntactic relations.
+To determine if the remaining less-interpretable heads are crucial to the model’s performance, we introduce a new
+approach to pruning attention heads. We observe that specialized heads are the last to be pruned, confirming their
+importance directly. Moreover, the
+vast majority of heads, especially the encoder self-attention heads, can be removed without seriously affecting
+performance. In future work, we would like to investigate how our pruning method compares to alternative methods
+of model compression in NMT.
+<br/><br/>
+
+Want to know more?
+
+<a class="pull-right" href="https://arxiv.org/abs/1905.09418" onMouseOver="document.readpaper2.src='../resources/posts/buttons/button_read_paper_push-min.png';" onMouseOut="document.readpaper2.src='../resources/posts/buttons/button_read_paper-min.png';">
+<img src="../resources/posts/buttons/button_read_paper-min.png" name="readpaper2" width=120px class="pull-right"></a>
+<a class="pull-right" href="https://github.com/lena-voita/the-story-of-heads" onMouseOver="document.viewcode2.src='../resources/posts/buttons/button_view_code_push-min.png';" onMouseOut="document.viewcode2.src='../resources/posts/buttons/button_view_code-min.png';">
+<img src="../resources/posts/buttons/button_view_code-min.png" name="viewcode2" width=120px></a>
