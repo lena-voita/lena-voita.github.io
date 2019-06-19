@@ -36,16 +36,18 @@ From this post, you will learn:
 
 <h2>Heads Importance</h2>
 
-Previous work analyzing how representations are formed by the Transformer’s multi-head attention mechanism haven't
+Previous works analyzing how representations are formed by the Transformer’s multi-head attention mechanism haven't
 taken into account the varying importance of different heads. Also, this obscures the
 roles played by individual heads which, as we will show later, influence the generated translations to differing extents.
 <br/><br/>
 
 <img src="../resources/posts/acl19_heads/confidence-min.png" width="250" style="float:right">
-One naive characteristic of a head importance might be it's confidence. We define the “confidence” of a head as the average
+One naive heuristic to detect important heads might be using a head confidence. A confident head is one that usually
+assigns a high proportion of its attention to a single token.
+We define the “confidence” of a head as the average
 of its maximum attention weight excluding the end of sentence
-symbol.
-A confident head is one that usually assigns a high proportion of its attention to a single token. Intuitively,
+symbol, where average is taken over tokens in a set of sentences used for evaluation (development set).
+ Intuitively,
 we might expect confident heads to be important to the translation task.
 <br/> Figure shows confidence of all heads in the model. We see, that there are a few heads which are extremely confident:
 on average, they assign more than 80% of their attention mass to a single token.
@@ -62,7 +64,7 @@ For this, we use <a href="https://journals.plos.org/plosone/article?id=10.1371/j
   Layerwise Relevance Propagation (LRP). </a><br/>
 LRP was originally designed to compute the contributions of
 single pixels to predictions of image classifiers.  It back-propagates relevance
-recursively from the output layer to the input layer as shown on the illustration
+recursively from the output layer to the input layer as shown in the illustration
 (the illustration is taken from <a href="http://danshiebler.com/2017-04-16-deep-taylor-lrp/"> this cool post</a>).
 To propagate the prediction
 back, LRP relies on a conservation principle. Intuitively, this means that total contribution of neurons at each layer is constant.
@@ -70,13 +72,13 @@ back, LRP relies on a conservation principle. Intuitively, this means that total
 
 We adapt LRP to the Transformer model to calculate
 relevance that measures the association degree between two arbitrary neurons in neural networks.
-The way we use LRP here is different from using attribution methods in computer vision in two important aspects:
+The way we use LRP here is different from using attribution methods in computer vision in two important ways:
 <ul>
   <li>we evaluate a neuron/network part importance, not input element (pixel or token), </li>
   <li>we evaluate the importance on average, not for a single prediction.</li>
 </ul>
 
-Since we are interested only in heads relevance, we do not propagate till input variables and stop at the neurons
+Since we are interested only in heads relevance, we do not propagate down to input variables and stop at neurons
 of the encoder layer of interest. In our experiments, we compute relative contribution of each head to the network
 predictions. For this, we evaluate contribution of neurons in each head to the top-1 logit
 predicted by the model. Head relevance for a given prediction is computed as the sum of relevances of its
@@ -88,11 +90,11 @@ for the whole model, not for a single generation step.
 <img src="../resources/posts/acl19_heads/lrp_confidence-min.png" width="400" style="float:right">
 The results of LRP and confidence for the same model are shown in figure (in each layer, heads are sorted by their relevance).
 In each layer, LRP ranks a small number of heads as much more
-important than all others.
+important than the rest.
 Also, we see that the relevance of a head as
 computed by LRP agrees to a reasonable extent with its confidence. The only clear exception to this pattern
 is the head judged by LRP to be the most important in the first layer. It is the most relevant head in the first
-layer but its average maximum attention weight is low. We will discuss this head further when characterizing heads functions.
+layer but its average maximum attention weight is low. We will discuss this head further when characterizing heads' functions.
 <br/><br/>
 
 
@@ -213,8 +215,9 @@ direct object (dobj), adjectival modifier (amod) and adverbial modifier (advmod)
 We calculate for each head how often it assigns its maximum attention weight
 (excluding EOS) to a token with which it is in one of the aforementioned dependency relations.
 
-We dp so by comparing its attention weights to a predicted by <a href="https://aclweb.org/anthology/P14-5010">CoreNLP </a>
-dependency structure on a large number of held-out sentences.
+We do so by comparing its attention weights to a dependency structure
+predicted by <a href="https://aclweb.org/anthology/P14-5010">CoreNLP </a>
+ on a large number of held-out sentences.
 <br/>
 For more details, read <a href="https://arxiv.org/pdf/1905.09418.pdf">the paper.</a>
 <br/>
@@ -303,7 +306,7 @@ two least frequent tokens in more than 50% of such cases.
 <img src="../resources/posts/acl19_heads/heads_functions/functions_ru_de_fr_with_notation.png" width="400" style="float:right">
 
 Let's now look at how these functions correspond to the importancies evaluated earlier.
-As can be seen, the positional heads correspond to a large extent to the most important heads as ranked by LRP.
+As can be seen, the positional heads correspond, to a large extent, to the most important heads as ranked by LRP.
 In each model, there are several heads tracking syntactic relations, and these heads are also judged to be important by LRP.
 In all models, we find that one head in the first layer is
 judged to be much more important to the model’s predictions than any other heads in this layer. Interestingly,
@@ -316,7 +319,7 @@ this turns out to be the head attending to rare tokens.
 <h2>Pruning Attention Heads</h2>
 
 We have identified certain functions of the most relevant heads at each layer and showed that to a large extent
-they are interpretable. What of the remaining heads? Are they redundant to translation quality or do they play
+they are interpretable. What about the remaining heads? Are they useless to translation quality or do they play
 equally vital but simply less easily defined roles? We introduce a method for pruning attention heads to try to answer
 these questions.
 <br/><br/>
@@ -328,7 +331,6 @@ In the standard Transformer, results of different attention heads in a layer are
 <img src="../resources/posts/acl19_heads/multihead_attn-min.png" width="350">.
 </center>
 
-We would like to disable less important heads completely, i.e. ideally apply L0 regularization to the number of heads.
 We modify the original Transformer architecture by multiplying the representation computed by each
 <img src="../resources/posts/acl19_heads/head_i-min.png" width="45"> by a scalar
 gate <img src="../resources/posts/acl19_heads/g_i-min.png" width="18">:
@@ -337,12 +339,19 @@ gate <img src="../resources/posts/acl19_heads/g_i-min.png" width="18">:
 </center>
 </br>
 
+Unlike usual gates, <img src="../resources/posts/acl19_heads/g_i-min.png" width="18"> are parameters
+specific to heads and are independent of the input (i.e. the sentence).
+As we would like to disable less important heads completely, we would ideally apply L0 regularization to the
+scalars <img src="../resources/posts/acl19_heads/g_i-min.png" width="18">. The L0 norm equals the number of
+non-zero components and would push the model to switch off less important heads.
+
 <iframe frameborder="0" width="350" height="360" src="../resources/posts/acl19_heads/concrete_min.html" style="float:right"></iframe>
 
 <br/>
-Unlike usual gates, <img src="../resources/posts/acl19_heads/g_i-min.png" width="18"> are parameters
-specific to heads and are independent of the input (i.e. the sentence). Each gate
-<img src="../resources/posts/acl19_heads/g_i-min.png" width="18"> is a random variable
+Unfortunately, the L0 norm is nondifferentiable and so cannot be directly incorporated as a regularization term in
+the objective function. Instead, we use a stochastic relaxation.
+ Each gate
+<img src="../resources/posts/acl19_heads/g_i-min.png" width="18"> is now a random variable
 drawn independently from a head-specific <a href="https://openreview.net/pdf?id=H1Y8hhg0b">Hard Concrete distribution</a>.
 The distributions have non-zero probability mass at 0 and 1; look at the illustration. You can play with the distribution
 parameters and see how the distribution is changing. The parameter log(α) is optimized in training.
@@ -354,16 +363,23 @@ We use the sum of the probabilities of heads being non-zero (<img src="../resour
 <img src="../resources/posts/acl19_heads/loss-min.png" width="145">.
 <br/><br/>
 
+When applying the regularizer, we start from the converged model trained without the
+<img src="../resources/posts/acl19_heads/l_c-min.png" width="23"> penalty (i.e. the parameters are
+initialized with the parameters of the converged model) and then add the gates and continue training the
+full objective. By varying the coefficient λ in the optimized objective, we obtain models with different numbers of retained heads.
+<br/><br/>
+
 <img src="../resources/posts/acl19_heads/enc_head_gif_delay7-min.gif" height="250" width="320"
      style="float:right; margin-top:5px; margin-bottom:10px; margin-left:15px">
 
-By varying the coefficient λ in the optimized objective, we obtain models with different numbers of retained heads.
-On the gif is shown how the probabilities of encoder heads being completely closed
+
+
+The gif shows how the probabilities of encoder heads being completely closed
 (<img src="../resources/posts/acl19_heads/p_gi0-min.png" width="90">) change in training
-for different values of λ (pruning starts from a converged model). White color denotes
+for different values of λ. White color denotes
 <img src="../resources/posts/acl19_heads/p_gi0_1-min.png" width="135">, which means that
 a head is completely removed from the model.
-(Gif is for model trained on EN-RU WMT. For other datasets, values of λ can be different.)
+(Gif is for the model trained on EN-RU WMT. For other datasets, values of λ can be different.)
 
 <br/><br/>
 
@@ -375,7 +391,7 @@ This means that at test time we can treat the model as a standard Transformer an
 <h4>Encoder heads</h4>
 
 First, let's look how the translation quality is affected by pruning attention heads. The figure below shows BLEU score as a
-function of number of retained <strong>encoder heads</strong> (EN-RU). Regularization applied by fine-tuning trained model.
+function of number of retained <strong>encoder heads</strong> (EN-RU). Regularization applied by fine-tuning the trained model.
 <br/>
 <img src="../resources/posts/acl19_heads/heads_dying_enc_bleu_linear_x.png" width="600"
 style="margin-left:40px">
@@ -394,8 +410,8 @@ For all models, we can prune more than half of all attention heads and lose no m
 In the rightmost column we provide BLEU scores for models trained with exactly
 the same number and configuration of heads in each layer as the corresponding pruned models but starting from a random
 initialization of parameters. Here the degradation in translation quality is more significant than for pruned models with
-the same number of heads. This agrees with the observations made in works on model compression: sparse architectures
-learned through pruning cannot be trained from scratch to the same test set performance as a model trained with joint
+the same number of heads. This agrees with the observations made in model compression papers: sparse architectures
+learned through pruning cannot be trained from scratch to reach the same test set performance as a model trained with joint
 sparsification and optimization. See for example <a href="https://arxiv.org/abs/1710.01878"> Zhu and Gupta, 2017</a> or
 <a href="https://arxiv.org/abs/1902.09574"> Gale et al., 2019</a>.
 <br/><br/>
@@ -406,7 +422,7 @@ sparsification and optimization. See for example <a href="https://arxiv.org/abs/
 <img src="../img/paper/acl19_heads-min.png" width="400"
      style="float:right; margin-top:5px; margin-bottom:10px; margin-left:15px">
 The figure shows functions of encoder heads retained after pruning. Each column represents all
-remaining heads after varying amount of pruning; heads color-coded for their function in a pruned model.
+remaining heads after varying amount of pruning; heads are color-coded for their function in a pruned model.
 Some
 heads can perform several functions (e.g., s → v and v → o); in this case the number of functions is shown.
 <br/><br/>
@@ -431,7 +447,7 @@ varies across domains.
 <img src="../resources/posts/acl19_heads/heads_dying_decoder-min.png" width="450"
      style="float:right; margin-top:5px; margin-bottom:10px; margin-left:15px">
 Here is shown the number of active self-attention and decoder-encoder attention heads at different layers
-in the decoder for models with different sparsity rate (to reduce noise, we plot the sum of heads remaining
+in the decoder for models with different sparsity rates (to reduce noise, we plot the sum of heads remaining
 in pairs of adjacent layers). Self-attention heads are retained more readily in the lower
 layers, while decoder-encoder attention heads are retained in the higher layers. This suggests that lower layers
 of the Transformer’s decoder are mostly responsible for language modeling, while higher layers are mostly responsible

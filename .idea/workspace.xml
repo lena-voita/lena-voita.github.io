@@ -2,19 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="761392bc-7f53-4674-a9c2-966e5c9edf64" name="Default" comment="[github.io] true face of lena">
-      <change afterPath="$PROJECT_DIR$/_data/posts/2019.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/_posts/acl19_heads.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/posts/acl19_heads.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_includes/header.html" beforeDir="false" afterPath="$PROJECT_DIR$/_includes/header.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_includes/post.html" beforeDir="false" afterPath="$PROJECT_DIR$/_includes/post.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_layouts/photolist.html" beforeDir="false" afterPath="$PROJECT_DIR$/_layouts/photolist.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_posts/acl19_heads.markdown" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/index.md" beforeDir="false" afterPath="$PROJECT_DIR$/index.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/papers.md" beforeDir="false" afterPath="$PROJECT_DIR$/papers.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/posts.html" beforeDir="false" afterPath="$PROJECT_DIR$/posts.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/posts/concrete.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/teaching.md" beforeDir="false" afterPath="$PROJECT_DIR$/teaching.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_site/feed.xml" beforeDir="false" afterPath="$PROJECT_DIR$/_site/feed.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_site/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_site/papers.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/papers.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_site/posts.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/posts.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_site/posts/acl19_heads.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/posts/acl19_heads.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_site/teaching.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/teaching.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/posts/acl19_heads.html" beforeDir="false" afterPath="$PROJECT_DIR$/posts/acl19_heads.html" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -29,7 +24,7 @@
           <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
             <state split_layout="SPLIT">
               <first_editor relative-caret-position="75">
-                <caret line="5" column="122" lean-forward="true" selection-start-line="5" selection-end-line="5" selection-end-column="122" />
+                <caret line="5" column="122" selection-start-line="5" selection-end-line="5" selection-end-column="122" />
               </first_editor>
               <second_editor />
             </state>
@@ -63,8 +58,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/posts/acl19_heads.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="241">
-              <caret line="382" column="93" lean-forward="true" selection-start-line="382" selection-start-column="93" selection-end-line="382" selection-end-column="93" />
+            <state relative-caret-position="179">
+              <caret line="393" column="113" selection-start-line="393" selection-start-column="113" selection-end-line="393" selection-end-column="113" />
               <folding>
                 <element signature="n#style#0;n#img#0;n#a#0;n#!!top" expanded="true" />
                 <element signature="e#2098#2117#0" expanded="true" />
@@ -159,6 +154,9 @@
     </option>
   </component>
   <component name="FindInProjectRecents">
+    <findStrings>
+      <find>color-</find>
+    </findStrings>
     <replaceStrings>
       <replace />
     </replaceStrings>
@@ -595,7 +593,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="11" y="23" width="1258" height="709" extended-state="1" />
+    <frame x="11" y="23" width="1258" height="709" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.15683104" />
@@ -941,7 +939,7 @@
       <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
         <state split_layout="SPLIT">
           <first_editor relative-caret-position="75">
-            <caret line="5" column="122" lean-forward="true" selection-start-line="5" selection-end-line="5" selection-end-column="122" />
+            <caret line="5" column="122" selection-start-line="5" selection-end-line="5" selection-end-column="122" />
           </first_editor>
           <second_editor />
         </state>
@@ -954,8 +952,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/posts/acl19_heads.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="241">
-          <caret line="382" column="93" lean-forward="true" selection-start-line="382" selection-start-column="93" selection-end-line="382" selection-end-column="93" />
+        <state relative-caret-position="179">
+          <caret line="393" column="113" selection-start-line="393" selection-start-column="113" selection-end-line="393" selection-end-column="113" />
           <folding>
             <element signature="n#style#0;n#img#0;n#a#0;n#!!top" expanded="true" />
             <element signature="e#2098#2117#0" expanded="true" />
