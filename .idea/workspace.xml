@@ -1,45 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="761392bc-7f53-4674-a9c2-966e5c9edf64" name="Default" comment="[github.io] true face of lena">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_config.yml" beforeDir="false" afterPath="$PROJECT_DIR$/_config.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_includes/footer.html" beforeDir="false" afterPath="$PROJECT_DIR$/_includes/footer.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_site/feed.xml" beforeDir="false" afterPath="$PROJECT_DIR$/_site/feed.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_site/img/ico/UvA-gray.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/_site/img/ico/UvA.png" beforeDir="false" afterPath="$PROJECT_DIR$/_site/img/ico/UvA.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_site/img/ico/edn.png" beforeDir="false" afterPath="$PROJECT_DIR$/_site/img/ico/edn.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_site/img/ico/edn_25.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/_site/img/ico/github-gray.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/_site/img/ico/github.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/_site/img/ico/gs.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/_site/img/ico/gs_letter.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/_site/img/ico/gs_letter_21.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/_site/img/ico/gs_letter_25.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/_site/img/ico/mail.png" beforeDir="false" afterPath="$PROJECT_DIR$/_site/img/ico/mail.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_site/img/ico/uva_20.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/_site/img/ico/uva_small.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/_site/img/ico/yr.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/_site/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_site/papers.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/papers.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_site/posts.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/posts.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_site/posts/acl19_heads.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/posts/acl19_heads.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_site/teaching.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/teaching.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/ico/UvA-gray.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/ico/UvA.png" beforeDir="false" afterPath="$PROJECT_DIR$/img/ico/UvA.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/ico/edn.png" beforeDir="false" afterPath="$PROJECT_DIR$/img/ico/edn.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/ico/edn_25.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/ico/github-gray.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/ico/github.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/ico/gs.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/ico/gs_letter.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/ico/gs_letter_21.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/ico/gs_letter_25.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/ico/mail.png" beforeDir="false" afterPath="$PROJECT_DIR$/img/ico/mail.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/ico/uva_20.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/ico/uva_small.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/ico/yr.png" beforeDir="false" />
-    </list>
+    <list default="true" id="761392bc-7f53-4674-a9c2-966e5c9edf64" name="Default" comment="[github.io] true face of lena" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -139,16 +101,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/img/ico/twitter.png">
-          <provider selected="true" editor-type-id="images" />
-        </entry>
-      </file>
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/_includes/footer.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="386">
-              <caret line="67" column="16" selection-start-line="67" selection-start-column="16" selection-end-line="67" selection-end-column="16" />
+            <state relative-caret-position="311">
+              <caret line="62" column="15" lean-forward="true" selection-start-line="62" selection-start-column="15" selection-end-line="62" selection-end-column="15" />
             </state>
           </provider>
         </entry>
@@ -1070,8 +1027,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/_includes/footer.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="386">
-          <caret line="67" column="16" selection-start-line="67" selection-start-column="16" selection-end-line="67" selection-end-column="16" />
+        <state relative-caret-position="311">
+          <caret line="62" column="15" lean-forward="true" selection-start-line="62" selection-start-column="15" selection-end-line="62" selection-end-column="15" />
         </state>
       </provider>
     </entry>
