@@ -3,13 +3,42 @@
   <component name="ChangeListManager">
     <list default="true" id="761392bc-7f53-4674-a9c2-966e5c9edf64" name="Default" comment="[github.io] true face of lena">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_config.yml" beforeDir="false" afterPath="$PROJECT_DIR$/_config.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_includes/footer.html" beforeDir="false" afterPath="$PROJECT_DIR$/_includes/footer.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/_site/feed.xml" beforeDir="false" afterPath="$PROJECT_DIR$/_site/feed.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_site/img/ico/UvA-gray.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/_site/img/ico/UvA.png" beforeDir="false" afterPath="$PROJECT_DIR$/_site/img/ico/UvA.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_site/img/ico/edn.png" beforeDir="false" afterPath="$PROJECT_DIR$/_site/img/ico/edn.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_site/img/ico/edn_25.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/_site/img/ico/github-gray.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/_site/img/ico/github.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/_site/img/ico/gs.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/_site/img/ico/gs_letter.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/_site/img/ico/gs_letter_21.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/_site/img/ico/gs_letter_25.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/_site/img/ico/mail.png" beforeDir="false" afterPath="$PROJECT_DIR$/_site/img/ico/mail.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_site/img/ico/uva_20.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/_site/img/ico/uva_small.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/_site/img/ico/yr.png" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/_site/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/index.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/_site/papers.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/papers.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/_site/posts.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/posts.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/_site/posts/acl19_heads.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/posts/acl19_heads.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/_site/teaching.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/teaching.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/posts/acl19_heads.html" beforeDir="false" afterPath="$PROJECT_DIR$/posts/acl19_heads.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/ico/UvA-gray.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/ico/UvA.png" beforeDir="false" afterPath="$PROJECT_DIR$/img/ico/UvA.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/ico/edn.png" beforeDir="false" afterPath="$PROJECT_DIR$/img/ico/edn.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/ico/edn_25.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/ico/github-gray.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/ico/github.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/ico/gs.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/ico/gs_letter.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/ico/gs_letter_21.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/ico/gs_letter_25.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/ico/mail.png" beforeDir="false" afterPath="$PROJECT_DIR$/img/ico/mail.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/ico/uva_20.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/ico/uva_small.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/ico/yr.png" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -55,11 +84,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/posts/acl19_heads.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="179">
-              <caret line="393" column="113" selection-start-line="393" selection-start-column="113" selection-end-line="393" selection-end-column="113" />
+            <state relative-caret-position="373">
+              <caret line="474" column="93" selection-start-line="474" selection-start-column="82" selection-end-line="474" selection-end-column="93" />
               <folding>
                 <element signature="n#style#0;n#img#0;n#a#0;n#!!top" expanded="true" />
                 <element signature="e#2098#2117#0" expanded="true" />
@@ -111,6 +140,34 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/img/ico/twitter.png">
+          <provider selected="true" editor-type-id="images" />
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/_includes/footer.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="386">
+              <caret line="67" column="16" selection-start-line="67" selection-start-column="16" selection-end-line="67" selection-end-column="16" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/img/ico/edn.png">
+          <provider selected="true" editor-type-id="images" />
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/_config.yml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="330">
+              <caret line="22" column="34" lean-forward="true" selection-start-line="22" selection-start-column="34" selection-end-line="22" selection-end-column="34" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/posts.html">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="488">
@@ -135,15 +192,6 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/_layouts/default.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="45">
-              <caret line="3" column="13" selection-start-line="3" selection-start-column="13" selection-end-line="3" selection-end-column="13" />
-            </state>
-          </provider>
-        </entry>
-      </file>
     </leaf>
   </component>
   <component name="FileTemplateManagerImpl">
@@ -156,6 +204,7 @@
   <component name="FindInProjectRecents">
     <findStrings>
       <find>color-</find>
+      <find>unfortu</find>
     </findStrings>
     <replaceStrings>
       <replace />
@@ -167,9 +216,7 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/_includes/footer.html" />
         <option value="$PROJECT_DIR$/_layouts/course.html" />
-        <option value="$PROJECT_DIR$/_config.yml" />
         <option value="$PROJECT_DIR$/_includes/course.html" />
         <option value="$PROJECT_DIR$/_data/courses.yml" />
         <option value="$PROJECT_DIR$/_includes/paper.html" />
@@ -190,10 +237,12 @@
         <option value="$PROJECT_DIR$/_includes/header.html" />
         <option value="$PROJECT_DIR$/posts.html" />
         <option value="$PROJECT_DIR$/posts/acl19_heads.html" />
+        <option value="$PROJECT_DIR$/_config.yml" />
+        <option value="$PROJECT_DIR$/_includes/footer.html" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="1">
+  <component name="ProjectFrameBounds">
     <option name="x" value="11" />
     <option name="y" value="23" />
     <option name="width" value="1258" />
@@ -220,12 +269,18 @@
             <path>
               <item name="lena-voita.github.io" type="b2602c69:ProjectViewProjectNode" />
               <item name="lena-voita.github.io" type="462c0819:PsiDirectoryNode" />
-              <item name="_layouts" type="462c0819:PsiDirectoryNode" />
+              <item name="_posts" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="lena-voita.github.io" type="b2602c69:ProjectViewProjectNode" />
               <item name="lena-voita.github.io" type="462c0819:PsiDirectoryNode" />
-              <item name="_posts" type="462c0819:PsiDirectoryNode" />
+              <item name="img" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="lena-voita.github.io" type="b2602c69:ProjectViewProjectNode" />
+              <item name="lena-voita.github.io" type="462c0819:PsiDirectoryNode" />
+              <item name="img" type="462c0819:PsiDirectoryNode" />
+              <item name="ico" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="lena-voita.github.io" type="b2602c69:ProjectViewProjectNode" />
@@ -589,14 +644,21 @@
       <option name="project" value="LOCAL" />
       <updated>1560626676410</updated>
     </task>
-    <option name="localTasksCounter" value="47" />
+    <task id="LOCAL-00047" summary="add twitter button to the post">
+      <created>1561106580066</created>
+      <option name="number" value="00047" />
+      <option name="presentableId" value="LOCAL-00047" />
+      <option name="project" value="LOCAL" />
+      <updated>1561106580066</updated>
+    </task>
+    <option name="localTasksCounter" value="48" />
     <servers />
   </component>
   <component name="ToolWindowManager">
     <frame x="11" y="23" width="1258" height="709" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.15683104" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.18755053" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -657,7 +719,8 @@
     <MESSAGE value="[github.io] fix" />
     <MESSAGE value="[github.io] true face of lena" />
     <MESSAGE value="gem" />
-    <option name="LAST_COMMIT_MESSAGE" value="gem" />
+    <MESSAGE value="add twitter button to the post" />
+    <option name="LAST_COMMIT_MESSAGE" value="add twitter button to the post" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/img/example/example.jpg">
@@ -666,17 +729,10 @@
     <entry file="file://$PROJECT_DIR$/img/ico/UvA-gray.png">
       <provider selected="true" editor-type-id="images" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/img/ico/UvA.png">
+    <entry file="file://$PROJECT_DIR$/img/ico/uva.png">
       <provider selected="true" editor-type-id="images" />
     </entry>
     <entry file="file://$PROJECT_DIR$/img/ico/be.png" />
-    <entry file="file://$PROJECT_DIR$/_includes/footer.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="405">
-          <caret line="27" column="74" selection-start-line="27" selection-start-column="74" selection-end-line="27" selection-end-column="74" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/_includes/person.html">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
@@ -813,13 +869,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/_config.yml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="210">
-          <caret line="14" column="39" selection-start-line="14" selection-start-column="39" selection-end-line="14" selection-end-column="39" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/_layouts/post.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="225">
@@ -950,10 +999,20 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/img/ico/twitter.png">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/_config.yml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="330">
+          <caret line="22" column="34" lean-forward="true" selection-start-line="22" selection-start-column="34" selection-end-line="22" selection-end-column="34" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/posts/acl19_heads.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="179">
-          <caret line="393" column="113" selection-start-line="393" selection-start-column="113" selection-end-line="393" selection-end-column="113" />
+        <state relative-caret-position="373">
+          <caret line="474" column="93" selection-start-line="474" selection-start-column="82" selection-end-line="474" selection-end-column="93" />
           <folding>
             <element signature="n#style#0;n#img#0;n#a#0;n#!!top" expanded="true" />
             <element signature="e#2098#2117#0" expanded="true" />
@@ -1000,6 +1059,19 @@
             <element signature="e#21507#21580#0" expanded="true" />
             <element signature="e#22014#22087#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/img/ico/yr.png">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/img/ico/edn.png">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/_includes/footer.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="386">
+          <caret line="67" column="16" selection-start-line="67" selection-start-column="16" selection-end-line="67" selection-end-column="16" />
         </state>
       </provider>
     </entry>

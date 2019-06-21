@@ -3,6 +3,7 @@ exclude: [README.md,example1.md,example2.md]
 title: Lena Voita
 email: lena-voita@yandex-team.ru
 github: lena-voita
+twitter: lena_voita
 scholar_id: EcN9o7kAAAAJ
 description: > # this symbol means ignore newlines until "baseurl:"
     Here you will find details about my work.
