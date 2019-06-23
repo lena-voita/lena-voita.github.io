@@ -2,8 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="761392bc-7f53-4674-a9c2-966e5c9edf64" name="Default" comment="[github.io] true face of lena">
-      <change beforePath="$PROJECT_DIR$/_includes/footer.html" beforeDir="false" afterPath="$PROJECT_DIR$/_includes/footer.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_includes/course.html" beforeDir="false" afterPath="$PROJECT_DIR$/_includes/course.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/_site/feed.xml" beforeDir="false" afterPath="$PROJECT_DIR$/_site/feed.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_site/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_site/papers.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/papers.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_site/posts.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/posts.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_site/posts/acl19_heads.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/posts/acl19_heads.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_site/teaching.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/teaching.html" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -52,8 +58,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/posts/acl19_heads.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="373">
-              <caret line="474" column="93" selection-start-line="474" selection-start-column="82" selection-end-line="474" selection-end-column="93" />
+            <state relative-caret-position="302">
+              <caret line="392" lean-forward="true" selection-start-line="392" selection-end-line="392" />
               <folding>
                 <element signature="n#style#0;n#img#0;n#a#0;n#!!top" expanded="true" />
                 <element signature="e#2098#2117#0" expanded="true" />
@@ -105,10 +111,22 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/_includes/course.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="318">
+              <caret line="29" column="34" selection-start-line="29" selection-start-column="34" selection-end-line="29" selection-end-column="34" />
+              <folding>
+                <element signature="n#style#0;n#img#0;n#div#0;n#div#0;n#!!top" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/_includes/footer.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="241">
-              <caret line="20" column="44" selection-start-line="20" selection-start-column="44" selection-end-line="20" selection-end-column="44" />
+            <state relative-caret-position="381">
+              <caret line="64" column="12" lean-forward="true" selection-start-line="64" selection-start-column="12" selection-end-line="64" selection-end-column="12" />
             </state>
           </provider>
         </entry>
@@ -177,7 +195,6 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/_layouts/course.html" />
-        <option value="$PROJECT_DIR$/_includes/course.html" />
         <option value="$PROJECT_DIR$/_data/courses.yml" />
         <option value="$PROJECT_DIR$/_includes/paper.html" />
         <option value="$PROJECT_DIR$/_data/papers/2018.yml" />
@@ -196,9 +213,10 @@
         <option value="$PROJECT_DIR$/teaching.md" />
         <option value="$PROJECT_DIR$/_includes/header.html" />
         <option value="$PROJECT_DIR$/posts.html" />
-        <option value="$PROJECT_DIR$/posts/acl19_heads.html" />
         <option value="$PROJECT_DIR$/_config.yml" />
         <option value="$PROJECT_DIR$/_includes/footer.html" />
+        <option value="$PROJECT_DIR$/posts/acl19_heads.html" />
+        <option value="$PROJECT_DIR$/_includes/course.html" />
       </list>
     </option>
   </component>
@@ -611,11 +629,25 @@
       <option name="project" value="LOCAL" />
       <updated>1561106580066</updated>
     </task>
-    <option name="localTasksCounter" value="48" />
+    <task id="LOCAL-00048" summary="mention the &quot;16 heads&quot; paper :)">
+      <created>1561123903534</created>
+      <option name="number" value="00048" />
+      <option name="presentableId" value="LOCAL-00048" />
+      <option name="project" value="LOCAL" />
+      <updated>1561123903534</updated>
+    </task>
+    <task id="LOCAL-00049" summary="add link to the joost's paper">
+      <created>1561287351824</created>
+      <option name="number" value="00049" />
+      <option name="presentableId" value="LOCAL-00049" />
+      <option name="project" value="LOCAL" />
+      <updated>1561287351824</updated>
+    </task>
+    <option name="localTasksCounter" value="50" />
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="11" y="23" width="1258" height="709" extended-state="0" />
+    <frame x="11" y="23" width="1258" height="709" extended-state="1" />
     <editor active="true" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.18755053" />
@@ -680,7 +712,9 @@
     <MESSAGE value="[github.io] true face of lena" />
     <MESSAGE value="gem" />
     <MESSAGE value="add twitter button to the post" />
-    <option name="LAST_COMMIT_MESSAGE" value="add twitter button to the post" />
+    <MESSAGE value="mention the &quot;16 heads&quot; paper :)" />
+    <MESSAGE value="add link to the joost's paper" />
+    <option name="LAST_COMMIT_MESSAGE" value="add link to the joost's paper" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/img/example/example.jpg">
@@ -714,13 +748,6 @@
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/img/course/ysda.jpg" />
-    <entry file="file://$PROJECT_DIR$/_includes/course.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="7" column="82" selection-start-line="7" selection-start-column="82" selection-end-line="7" selection-end-column="82" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/img/paper/acl19_ctx-min.png" />
     <entry file="file://$PROJECT_DIR$/_data/courses.yml">
       <provider selected="true" editor-type-id="text-editor">
@@ -969,10 +996,16 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/img/ico/yr.png">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/img/ico/edn.png">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
     <entry file="file://$PROJECT_DIR$/posts/acl19_heads.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="373">
-          <caret line="474" column="93" selection-start-line="474" selection-start-column="82" selection-end-line="474" selection-end-column="93" />
+        <state relative-caret-position="302">
+          <caret line="392" lean-forward="true" selection-start-line="392" selection-end-line="392" />
           <folding>
             <element signature="n#style#0;n#img#0;n#a#0;n#!!top" expanded="true" />
             <element signature="e#2098#2117#0" expanded="true" />
@@ -1022,16 +1055,20 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/img/ico/yr.png">
-      <provider selected="true" editor-type-id="images" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/img/ico/edn.png">
-      <provider selected="true" editor-type-id="images" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/_includes/footer.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="241">
-          <caret line="20" column="44" selection-start-line="20" selection-start-column="44" selection-end-line="20" selection-end-column="44" />
+        <state relative-caret-position="381">
+          <caret line="64" column="12" lean-forward="true" selection-start-line="64" selection-start-column="12" selection-end-line="64" selection-end-column="12" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/_includes/course.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="318">
+          <caret line="29" column="34" selection-start-line="29" selection-start-column="34" selection-end-line="29" selection-end-column="34" />
+          <folding>
+            <element signature="n#style#0;n#img#0;n#div#0;n#div#0;n#!!top" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
