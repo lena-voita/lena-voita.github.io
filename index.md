@@ -18,7 +18,8 @@ I teach NLP at the [Yandex School of Data Analysis](https://yandexdataschool.com
 
 ## <span style="color:darkblue">News </span>
 
-* Two papers _accepted to ACL 2019_:
+* 06/2019 Attending Google NLP summit in Zurich.
+* 05/2019 Two papers _accepted to ACL 2019_:
 
 [Analyzing Multi-Head Self-Attention: Specialized Heads Do the Heavy Lifting, the Rest Can Be Pruned](https://arxiv.org/abs/1905.09418)
 
