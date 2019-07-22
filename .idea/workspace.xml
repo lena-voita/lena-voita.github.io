@@ -2,6 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="761392bc-7f53-4674-a9c2-966e5c9edf64" name="Default" comment="[github.io] true face of lena">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_site/feed.xml" beforeDir="false" afterPath="$PROJECT_DIR$/_site/feed.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_site/posts/acl19_context.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/posts/acl19_context.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/posts/acl19_context.html" beforeDir="false" afterPath="$PROJECT_DIR$/posts/acl19_context.html" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -70,8 +73,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/posts/acl19_context.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="207">
-              <caret line="61" column="92" selection-start-line="61" selection-start-column="92" selection-end-line="61" selection-end-column="92" />
+            <state relative-caret-position="193">
+              <caret line="434" column="60" selection-start-line="434" selection-start-column="49" selection-end-line="434" selection-end-column="60" />
               <folding>
                 <element signature="e#261#281#0" expanded="true" />
                 <element signature="n#style#0;n#span#0;n#!!top" expanded="true" />
@@ -145,6 +148,8 @@
     <findStrings>
       <find>color-</find>
       <find>unfortu</find>
+      <find>fraction</find>
+      <find>much larger</find>
     </findStrings>
     <replaceStrings>
       <replace />
@@ -184,7 +189,7 @@
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="1">
+  <component name="ProjectFrameBounds">
     <option name="x" value="13" />
     <option name="y" value="23" />
     <option name="width" value="1258" />
@@ -1050,8 +1055,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/posts/acl19_context.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="207">
-          <caret line="61" column="92" selection-start-line="61" selection-start-column="92" selection-end-line="61" selection-end-column="92" />
+        <state relative-caret-position="193">
+          <caret line="434" column="60" selection-start-line="434" selection-start-column="49" selection-end-line="434" selection-end-column="60" />
           <folding>
             <element signature="e#261#281#0" expanded="true" />
             <element signature="n#style#0;n#span#0;n#!!top" expanded="true" />

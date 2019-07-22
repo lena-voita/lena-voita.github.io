@@ -141,7 +141,7 @@ We use OpenSubtitles dataset for English-Russian language pair and produce conte
 with Transformer model trained on this dataset.
 <br/><br/>
 <img src="../resources/posts/acl19_ctx/ha_general_results-min.png" style="max-width:330px; height:auto; float:right">
-From the table, we see that our annotators labelled
+From the table, we see that our annotators labeled
 82% of sentence pairs as good
 translations. In 11% of cases, at least one translation was considered bad at the sentence level, and in another 7%,
 the sentences were considered individually good, but bad in context of each other. This means that in our setting,
@@ -152,9 +152,9 @@ the sentences were considered individually good, but bad in context of each othe
 <img src="../resources/posts/acl19_ctx/types_of_phenomena-min.png" style="max-width:250px; height:auto; float:right">
 From the results of the human annotation, we take all instances of consecutive sentences with good
 translations which become incorrect when placed in the context of each other. For each, we identify the
-language phenomenon which caused a discrepancy. The results are provided in table.
+language phenomenon which caused a discrepancy. The results are provided in the table.
 <br/><br/>
-Below we discuss these types of phenomena and problems in translation they cause, in more detail.
+Below we discuss these types of phenomena and problems in translation they cause in more detail.
 We concentrate only on the three most frequent phenomena.
 
 <br/><br/>
@@ -366,7 +366,8 @@ The second type we evaluate are verb phrase ellipses. Mostly these are sentences
 verb “do” and omitted main verb. We manually gather such examples and replace the translation of the verb,
 which is only present on the target side, with other verbs with a different meaning, but the same inflection.
 Verbs which are used to construct such contrastive translations are the top-10 lemmas of translations of the
-verb “do” which we get from the lexical table of Moses induced from the training data.
+verb “do” which we get from the lexical table of <a href="http://www.statmt.org/moses">Moses</a>
+ induced from the training data.
 <br/><br/>
 Look at the example (we show less than 10 lemmas for simplicity). Only one of the provided possible translations of
 <font face="Comic Sans MS">"do"</font> means <font face="Comic Sans MS">"say"</font>.
@@ -403,7 +404,7 @@ Usually when dealing with context-aware NMT it is assumed that all the bilingual
 data is available at the document level. However, isolated parallel sentences are a lot easier
 to acquire and hence only a fraction of the parallel data will be at the document level in a
 practical scenario. In other words, a context-aware model trained only on document-level
-parallel data is highly unlikely to outperform a context-agnostic model trained on much
+parallel data is highly unlikely to outperform a context-agnostic model trained on a much
 larger sentence-level parallel corpus.
 <br/><br/>
 We argue that it is important to consider an asymmetric setting where the amount
@@ -496,7 +497,7 @@ incorporating context.
 <br/><br/>
 
 <h4>Context-aware stopping criteria</h4>
-We randomly choose fraction of examples from the lexical cohesion set and the deixis test
+We randomly choose a fraction of examples from the lexical cohesion set and the deixis test
 set for validation and leave the rest for final testing. We compute BLEU on the development set as well
 as scores on lexical cohesion and deixis development sets. We use convergence
 in both metrics to decide when to stop training.
