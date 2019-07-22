@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width initial-scale=1" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>When a Good Translation is Wrong in Context</title>
+    <meta name="description" content="Here you will find details about my work.
+">
+
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="canonical" href="http://localhost:4000/posts/acl19_context.html">
+
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+
+
+</head>
+
+
+  <!--style>
+  p {
+    text-align: justify;
+  }
+  </style-->
+
+  <body>
+
+    <header class="site-header">
+
+  <div class="wrapper">
+
+    <a class="site-title" href="/">Lena Voita</a>
+
+    <nav class="site-nav">
+      <a href="#" class="menu-icon">
+        <svg viewBox="0 0 18 15">
+          <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+          <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+          <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+        </svg>
+      </a>
+
+      <div class="trigger">
+        
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+          <a class="page-link" href="/posts.html">Blog</a>
+          
+        
+          
+          <a class="page-link" href="/papers.html">Publications</a>
+          
+        
+          
+          <a class="page-link" href="/teaching.html">Teaching & Supervising</a>
+          
+        
+<!--        <a href="">
+            <img src="image/UoS.ico" alt="DCS">
+        </a>-->
+      </div>
+    </nav>
+
+  </div>
+
+</header>
+
+
+    <div class="page-content">
+      <div class="wrapper">
+        <div class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">When a Good Translation is Wrong in Context</h1>
+    <p class="post-meta"></p>
+  </header>
+
+  <article class="post-content">
+    <video width="380" height="auto" style="float: right" loop autoplay muted>
+  <source src="../resources/posts/acl19_ctx/cadec_post_crop.mp4" type="video/mp4">
+</video>
+
+<span style="font-size:15px;">
+This is a post for the ACL 2019 paper
+    <a href="https://arxiv.org/abs/1905.05979">
+            When a Good Translation is Wrong in Context: Context-Aware Machine Translation Improves on Deixis, Ellipsis, and Lexical Cohesion.
+    </a>
+</span>
+
+
+<br/>
+<br/>
+<span style="font-size:15px;">
+From this post, you will learn:
+<ul>
+  <li>which phenomena cause context-agnostic translations to be inconsistent with each other</li>
+  <li>how we create test sets addressing the most frequent phenomena</li>
+    <li>about a novel set-up for context-aware NMT with a large amount of sentence-level data and much less of document-level data</li>
+  <li>about a new model for this set-up (<font color="#CA6F1E">C</font>ontext-<font color="#CA6F1E">A</font>ware
+      <font color="#CA6F1E">Dec</font>oder, aka <font color="#CA6F1E">CADec</font>) - a two-pass MT model which first produces a draft translation of the current sentence, then corrects it using context.</li>
+</ul>
+</span>
+
+
+<a class="pull-right" href="https://arxiv.org/abs/1905.05979" onMouseOver="document.readpaper.src='../resources/posts/buttons/button_read_paper_push-min.png';" onMouseOut="document.readpaper.src='../resources/posts/buttons/button_read_paper-min.png';">
+<img src="../resources/posts/buttons/button_read_paper-min.png" name="readpaper" width=120px class="pull-right"></a>
+<a class="pull-right" href="https://github.com/lena-voita/good-translation-wrong-in-context" onMouseOver="document.viewcode.src='../resources/posts/buttons/button_view_code_push-min.png';" onMouseOut="document.viewcode.src='../resources/posts/buttons/button_view_code-min.png';">
+<img src="../resources/posts/buttons/button_view_code-min.png" name="viewcode" width=120px></a>
+<span style="font-size:15px; text-align: right; float: right; color:gray">July 2019</span>
+
+<br/>
+<p></p>
+<hr>
+
+<h2>Human Annotation and Analysis</h2>
+
+<img src="../resources/posts/acl19_ctx/human_annotation-min.png" style="max-width:380px; height:auto; float:right">
+Why do we need context-aware MT? <br/> To translate a document, one can split it into sentences, translate them independently and
+put the translations together to form a translation of a document. That's right! We would be ok with such
+approach if translations of
+isolated sentences put together formed a meaningful text. Unfortunately, often this is not the case.
+<br/><br/>
+To find the proportion of translation errors which are only recognized as such in context, and understand
+which phenomena cause context-agnostic translations not to work together, we conduct a human
+study as schematically shown in the picture. For simplicity, we start with pairs of consecutive sentences.
+We use OpenSubtitles dataset for English-Russian language pair and produce context-agnostic translations
+with Transformer model trained on this dataset.
+<br/><br/>
+<img src="../resources/posts/acl19_ctx/ha_general_results-min.png" style="max-width:330px; height:auto; float:right">
+From the table, we see that our annotators labelled
+82% of sentence pairs as good
+translations. In 11% of cases, at least one translation was considered bad at the sentence level, and in another 7%,
+the sentences were considered individually good, but bad in context of each other. This means that in our setting,
+a substantial proportion of translation errors are only recognized as such in context.
+
+<br/><br/>
+<h3>Types of Phenomena</h3>
+<img src="../resources/posts/acl19_ctx/types_of_phenomena-min.png" style="max-width:250px; height:auto; float:right">
+From the results of the human annotation, we take all instances of consecutive sentences with good
+translations which become incorrect when placed in the context of each other. For each, we identify the
+language phenomenon which caused a discrepancy. The results are provided in table.
+<br/><br/>
+Below we discuss these types of phenomena and problems in translation they cause, in more detail.
+We concentrate only on the three most frequent phenomena.
+
+<br/><br/>
+<h4>Deixis</h4>
+
+<!-- the next two lines are inserted once per page even if there are several shtukovinas,
+     the rest is one-per-shtukovina; read more: https://flickity.metafizzy.co/options.html -->
+<link rel="stylesheet" href="https://unpkg.com/flickity@2/dist/flickity.min.css" media="screen">
+<script src="https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js"></script>
+
+Deictic words or phrases are referential expressions
+whose denotation depends on context. For example, if you hear
+<font color="#689F38">"I'm here telling you this"</font>, you most probably won't understand who is
+<font color="#689F38">"I"</font>, where is <font color="#689F38">"here"</font>,
+who is <font color="#689F38">"you"</font> and what is <font color="#689F38">"this"</font> unless you are a
+part of the situation.
+
+<br/><br/>
+
+
+<div class="carousel"
+     style="float:right; width:60%; margin-top:10px; margin-bottom:30px; margin-left:10px"
+  data-flickity='{ "imagesLoaded": true, "percentPosition": true}'>
+
+  <div class="carousel-cell" style="width:100%"><center>
+    <img width="350" src="../resources/posts/acl19_ctx/phenomena/deixis/tv1-min.png"/>
+      <p><br/>Violation of T-V form consistency. <br/> In color: red - T-from, blue - V-form</p>
+  </center></div>
+    <div class="carousel-cell" style="width:100%"><center>
+    <img width="350" src="../resources/posts/acl19_ctx/phenomena/deixis/tv2-min.png"/>
+      <p><br/>Violation of T-V form consistency <br/> (also marked on verbs). <br/>
+        In color: red - T-from, blue - V-form</p>
+  </center></div>
+    <div class="carousel-cell" style="width:100%"><center>
+    <img width="350" src="../resources/posts/acl19_ctx/phenomena/deixis/gender_i-min.png"/>
+      <p><br/>Violation of gender speaker consistency <br/>
+        (marked on verbs). <br/>
+        In color: red - feminine, blue - masculine</p>
+  </center></div>
+    <div class="carousel-cell" style="width:100%"><center>
+    <img width="350" src="../resources/posts/acl19_ctx/phenomena/deixis/gender_you-min.png"/>
+      <p><br/>Violation of gender addressee consistency <br/>
+        (marked on adjective and verb). <br/>
+        In color: red - feminine, blue - masculine</p>
+  </center></div>
+    <div class="carousel-cell" style="width:100%"><center>
+    <img width="350" src="../resources/posts/acl19_ctx/phenomena/deixis/gender_diff_speaker-min.png"/>
+      <p><br/>Violation of gender speaker/addressee consistency <br/> when the speaker has changed
+       (marked on verbs). <br/>In color: red - masculine, blue - feminine </p>
+  </center></div>
+
+</div>
+
+Look at the examples of inconsistencies in translation caused by deixis. Most errors are related to
+gender marking in the Russian translation,
+and the T-V distinction between informal and formal you (Latin “tu” and “vos”).
+In many cases, even when having access to neighboring sentences, it is not clear which
+of the forms should be used, as there are no obvious markers pointing to one form or another
+(e.g., for the T-V distinction, words such as “officer”, “mister” for formal and “honey”, “dude” for informal).
+
+<img src="../resources/posts/acl19_ctx/deixis_types-min.png" style="max-width:300px; height:auto; float:right">
+However, when pronouns refer to the same person, the pronouns, as well as verbs that agree with them, should be
+translated using the same form. <br/><br/> The statistics of inconsistency types caused by deixis is provided in the table.
+
+<br/><br/>
+<h4>Ellipsis</h4>
+<font color="#689F38">Do you know what ellipsis is? If you don't, I'll tell you.</font></br>
+This is an example of an elliptical structure in the second sentence: while what is meant is
+<font color="#689F38">"If you don't know <u>what ellipsis is</u>, ..."</font>, we omit the underlined part and say
+<font color="#689F38">"If you don't know, ..."</font>.
+Formally, ellipsis is the omission from a clause of one or more words that are nevertheless understood in the
+context of the remaining elements.
+<br/><br/>
+
+<div class="carousel"
+     style="float:right; width:60%; margin-top:10px; margin-bottom:30px; margin-left:10px"
+  data-flickity='{ "imagesLoaded": true, "percentPosition": true}'>
+
+  <div class="carousel-cell" style="width:100%"><center>
+    <img width="350" src="../resources/posts/acl19_ctx/phenomena/ellipsis/ell1-min.png"/>
+      <p><br/>Wrong morphological form, <br/> incorrectly marking the noun phrase as a subject.</p>
+  </center></div>
+    <div class="carousel-cell" style="width:100%"><center>
+    <img width="350" src="../resources/posts/acl19_ctx/phenomena/ellipsis/ell2-min.png"/>
+      <p><br/>Wrong morphological form <br/> in clarification question, <br/> inconsistent with the original one.</p>
+  </center></div>
+    <div class="carousel-cell" style="width:100%"><center>
+    <img width="350" src="../resources/posts/acl19_ctx/phenomena/ellipsis/ell3-min.png"/>
+      <p><br/>Wrong morphological form, <br/> incorrectly marking the verb as a singular masculine.</p>
+  </center></div>
+    <div class="carousel-cell" style="width:100%"><center>
+    <img width="350" src="../resources/posts/acl19_ctx/phenomena/ellipsis/ell4-min.png"/>
+      <p><br/>Incorrect verb meaning: <br/> correct meaning is “see”,<br/> but MT produces хотели (“want”).</p>
+  </center></div>
+
+</div>
+
+
+In machine translation, elliptical constructions in the source language pose a problem
+if the target language does not allow the same types of ellipsis
+(requiring the elided material to be predicted from context), or if the elided material affects
+the syntax of the sentence; for example, the grammatical function of a noun phrase and thus its
+inflection in Russian may depend on the elided verb,
+or the verb inflection may depend on the elided subject. Look at the examples.<br/><br/>
+
+<img src="../resources/posts/acl19_ctx/ellipsis_types-min.png" style="max-width:300px; height:auto; float:right">
+
+We classified ellipsis examples which lead to errors in sentence-level translations by the type of
+error they cause.
+It can be seen that the most frequent problems related to ellipsis
+that we find in our annotated corpus are wrong morphological forms, followed by wrongly predicted
+verbs in case of verb phrase ellipsis in English, which does not exist in Russian, thus requiring the
+prediction of the verb in the Russian translation.
+
+
+<br/><br/>
+<h4>Lexical Cohesion</h4>
+
+
+<div class="carousel"
+     style="float:right; width:60%; margin-top:10px; margin-bottom:30px; margin-left:10px"
+  data-flickity='{ "imagesLoaded": true, "percentPosition": true}'>
+
+  <div class="carousel-cell" style="width:100%"><center>
+    <img width="350" src="../resources/posts/acl19_ctx/phenomena/lex_coh/name-min.png"/>
+      <p><br/>Name translation inconsistency.</p>
+  </center></div>
+    <div class="carousel-cell" style="width:100%"><center>
+    <img width="350" src="../resources/posts/acl19_ctx/phenomena/lex_coh/town-min.png"/>
+      <p><br/>Town translation inconsistency.</p>
+  </center></div>
+    <div class="carousel-cell" style="width:100%"><center>
+    <img width="350" src="../resources/posts/acl19_ctx/phenomena/lex_coh/emphasis-min.png"/>
+      <p><br/>Inconsistent translation. <br/>Using either of the highlighted translations <br/>
+        consistently would be good.</p>
+  </center></div>
+    <div class="carousel-cell" style="width:100%"><center>
+    <img width="350" src="../resources/posts/acl19_ctx/phenomena/lex_coh/clar_q-min.png"/>
+      <p><br/>Inconsistent translation. <br/>Using either of the highlighted translations <br/>
+        consistently would be good.</p>
+  </center></div>
+
+</div>
+Lexical cohesion can be established for various types of phrases and can involve reiteration or other semantic relations.
+We focus on
+repetition with two frequent cases in our annotated corpus being reiteration of named entities
+and reiteration of more general phrase types for emphasis or in clarification questions.
+<br/><br/> Look at the examples.
+<br/><br/><br/><br/>
+
+<h2>Test Sets</h2>
+For the most frequent phenomena from the above analysis, we create test sets for targeted evaluation.
+Each test set contains contrastive examples. It is specifically designed to test the ability of a system
+to adapt to contextual information and handle the phenomenon under consideration. Each test instance consists
+of a true example (sequence of sentences and their reference translation from the data) and several contrastive
+translations which differ from the true one only in the considered aspect. The system is asked to score each
+candidate example, and we compute the system accuracy as the proportion
+of times the true translation is preferred
+over the contrastive ones.
+<br/><br/>
+<u>Important note:</u> all contrastive translations we use
+  are correct plausible translations at a sentence level, and only context reveals the errors we introduce.
+<br/><br/>
+<img src="../resources/posts/acl19_ctx/tasks_stat-min.png" style="max-width:300px; height:auto; float:right">
+Size of test sets: total number of test instances and with regard to the latest context sentence with politeness
+indication or with the named entity under consideration. For ellipsis, we distinguish whether a model has to predict
+correct noun phrase inflection, or correct verb sense (VP ellipsis).
+<br/><br/>
+We discuss each test set and provide
+some examples below.
+<br/><br/>
+
+
+<h3>Deixis</h3>
+The test set we construct for deixis tests the ability of a machine translation system to
+produce translations with consistent level of politeness. We chose this category since
+the most frequent error category related to deixis in our annotated corpus is the
+inconsistency of T-V forms when translating second person pronouns.
+<br/><br/>
+We semi-automatically identify sets of consecutive sentences
+where both polite and impolite translations are correct. For each, we construct two tasks
+as shown in the example (red - V-form, blue - T-form; verbs with politeness markers are also colored).
+<br/><br/>
+<img src="../resources/posts/acl19_ctx/task_deixis-min.png" style="max-width:650px; height:auto">
+<br/><br/>
+The task is to choose the version of translation with politeness which is consistent with translation of context.
+Note that by design any context-agnostic model has 50% accuracy on the test set.
+<br/><br/>
+
+<h3>Ellipsis</h3>
+The two most frequent types of ambiguity caused by the presence of an elliptical structure have different nature,
+hence we construct individual test sets for each of them.
+<br/><br/>
+<h4>Ellipsis (infl.)</h4>
+Ambiguity of the first type comes from the inability to predict the correct morphological form of some words.
+We manually gather examples with such structures in a source sentence and change the morphological inflection
+of the relevant target phrase to create contrastive translations. Specifically, we focus on noun phrases where the
+verb is elided, and the ambiguity lies in how the noun phrase is inflected.<br/><br/>
+Look at the example of the task: all translations of the current sentence mean
+<font face="Comic Sans MS">"My sister"</font>, but have different
+morphological inflection.
+<br/><br/>
+<img src="../resources/posts/acl19_ctx/task_ell_infl-min.png" style="max-width:600px; height:auto">
+<br/><br/>
+
+<h4>Ellipsis (VP)</h4>
+
+The second type we evaluate are verb phrase ellipses. Mostly these are sentences with an auxiliary
+verb “do” and omitted main verb. We manually gather such examples and replace the translation of the verb,
+which is only present on the target side, with other verbs with a different meaning, but the same inflection.
+Verbs which are used to construct such contrastive translations are the top-10 lemmas of translations of the
+verb “do” which we get from the lexical table of Moses induced from the training data.
+<br/><br/>
+Look at the example (we show less than 10 lemmas for simplicity). Only one of the provided possible translations of
+<font face="Comic Sans MS">"do"</font> means <font face="Comic Sans MS">"say"</font>.
+
+<br/><br/>
+<img src="../resources/posts/acl19_ctx/task_ell_vp-min.png" style="max-width:700px; height:auto">
+<br/><br/>
+
+
+<h3>Lexical cohesion</h3>
+Lexical cohesion can be established for various types of phrases and can involve reiteration or other semantic relations.
+In the scope of the current work, we focus on the reiteration of entities, since these tend to be non-coincidental,
+and can be easily detected and transformed.
+
+We identify named entities with alternative translations into Russian, find passages where they are
+translated consistently, and create contrastive test examples by switching the translation of some instances of the named entity.
+
+<br/><br/>
+Look at the example. When translating into Russian, three different translations of <font face="Comic Sans MS">"Fran"</font>
+are possible: Фр<u>э</u>н, Фр<u>е</u>н and Фр<u>а</u>н. For each of the possible translations of this name in context,
+the system has to keep the translation of the name in the current sentence consistent with the one in context.
+
+<br/><br/>
+<img src="../resources/posts/acl19_ctx/task_lex_coh-min.png" style="max-width:700px; height:auto">
+<br/><br/>
+<br/><br/>
+
+<h2>CADec: Context-Aware Decoder</h2>
+
+<h3>Setting</h3>
+<h4>TL;DR: A lot of sentence-level data; much less of document-level</h4>
+
+Usually when dealing with context-aware NMT it is assumed that all the bilingual
+data is available at the document level. However, isolated parallel sentences are a lot easier
+to acquire and hence only a fraction of the parallel data will be at the document level in a
+practical scenario. In other words, a context-aware model trained only on document-level
+parallel data is highly unlikely to outperform a context-agnostic model trained on much
+larger sentence-level parallel corpus.
+<br/><br/>
+We argue that it is important to consider an asymmetric setting where the amount
+of available document-level data is much smaller than that of sentence-level data, and propose an
+approach specifically targeting this scenario.
+<br/><br/>
+
+<h3>Model</h3>
+<u>We have</u>: a lot of sentence-level data, a small subset of which is at the document level. <br/>
+<u>We want</u>: a strong NMT system which produces consistent at the document level translations.<br/><br/>
+
+<!--The main idea is to use all available sentence-level data to train a strong context-agnostic MT system,
+and document-level data to learn to correct a translation to make it consistent with context.-->
+In our method, the initial translation produced by a baseline context-agnostic model is refined by a
+context-aware system which is trained on a small document-level subset of parallel data.
+As the first-pass translation is produced by a strong model, we expect no loss in general performance when
+training the second part on a smaller dataset.<br/>
+Look at the illustration of this process.
+
+<video width="700" height="auto" loop autoplay muted>
+  <source src="../resources/posts/acl19_ctx/gif_crop.mp4" type="video/mp4">
+</video>
+
+<br/><br/>
+More formally, the first part of the model is a context-agnostic model
+(we refer to it as the base model), and the second one is a context-aware decoder (CADec)
+which refines context-agnostic translations using context. The base model is trained on
+sentence-level data and then fixed. It is used only to sample context-agnostic translations and
+to get vector representations of the source and translated sentences. CADec is trained only on data with context.
+
+<br/><br/>
+At training time, to get a
+<font color="#0288D1" face="Comic Sans MS">draft</font> <font color="grey" face="Comic Sans MS">translation</font>
+of the current sentence we either sample
+a translation from
+the base model or use a corrupted version of the reference translation with the probability
+<font face="Times New Roman"><i>p</i> = 0.5</font>. At test time,
+<font color="#0288D1" face="Comic Sans MS">draft</font> <font color="grey" face="Comic Sans MS">translation</font>
+ is obtained from the base model using beam search.
+The purpose of using a corrupted
+reference instead of just sampling is to teach CADec to rely on the base translation and not to change it much. We'll
+discuss the importance of this below.
+<br/><br/>
+
+<h3>Experiments</h3>
+In our experiments, we have 6 million training instances from the OpenSubtitles dataset,
+among which 1.5m have context of three sentences. Base model is trained on 6m instances without context, CADec
+is trained only on 1.5m instances with context. For the context-aware baseline we also consider a naive concatenation model
+ trained on 6m sentence pairs, including 1.5m having 3 context sentences. (We also have another context-aware baseline in the paper,
+but we do not provide it here for simplicity.)
+<br/><br/>
+We evaluate in two different ways: using BLEU for general quality and the proposed contrastive test sets for consistency.
+When evaluating general quality, for context-aware models we translate all sentences including context,
+and then evaluate only the current one.<br/><br/>
+We show that models indistinguishable with BLEU can be very different in terms of consistency.
+<br/><br/>
+<h4>Results</h4>
+<!--<h4>TL;DR: No loss in BLEU in contrast to other approaches</h4> -->
+<h4>TL;DR: Substantial gains in consistency with no loss in BLEU</h4>
+
+<img src="../resources/posts/acl19_ctx/exp_results-min.png" style="max-width:400px; height:auto; float:right">
+Our model is not worse in BLEU than the baseline despite the second-pass model being trained only on a fraction of the
+data. In contrast, the concatenation baseline, trained on a naive mixture of data with and without context, is about
+1 BLEU below the context-agnostic baseline and our model when using all 3 context sentences. Note also how the performance is
+influenced by the amount of data: the BLEU score for the baseline trained on 1.5m instances is very low.
+<br/><br/>
+Despite CADec is indistinguishable from the baseline in BLEU, it shows substantial gains in consistency: 33.5, 19/52 and 12.2
+percentage points for deixis, ellipsis (infl./VP) and lexical cohesion. Concatenation model and CADec perform similarly
+for deixis and ellipsis, but CADec strongly outperforms the concatenation model in terms of BLEU and lexical cohesion.
+<br/><br/>
+
+<h4>Ablation: using corrupted reference</h4>
+<!--<h4>TL;DR: Using our test sets, we can distinguish models indistinguishable in BLEU</h4>-->
+As you remember, at training time CADec uses either a translation sampled from the base model or a corrupted
+reference translation as the
+<font color="#0288D1" face="Comic Sans MS">draft</font> <font color="grey" face="Comic Sans MS">translation</font>
+of the current sentence. Let's say that a corrupted reference
+is used with probability <font face="Times New Roman"><i>p</i></font>. Scores for CADec trained with different values
+of <font face="Times New Roman"><i>p</i></font> are provided in the table.
+
+<img src="../resources/posts/acl19_ctx/exp_p-min.png" style="max-width:370px; height:auto; float:right">
+<br/>
+All models have about the same BLEU, not statistically significantly different from the baseline, but
+they are quite different in terms of incorporating context. The denoising positively influences almost
+all tasks except for deixis, yielding the largest improvement on lexical cohesion.
+<br/><br/>
+This once again indicates <u>the effectiveness of the proposed consistency test sets</u>: without such kind of evaluation, it wouldn't be
+possible to distinguish models which have the same BLEU score but turn out to be really different in terms of
+incorporating context.
+<br/><br/>
+
+<h4>Context-aware stopping criteria</h4>
+We randomly choose fraction of examples from the lexical cohesion set and the deixis test
+set for validation and leave the rest for final testing. We compute BLEU on the development set as well
+as scores on lexical cohesion and deixis development sets. We use convergence
+in both metrics to decide when to stop training.
+<img src="../resources/posts/acl19_ctx/ca_stopping-min.png" style="max-width:370px; height:auto; float:right">
+<br/><br/>
+Figure shows that for context-aware models, BLEU is not sufficient as a criterion for stopping: even when a
+model has converged in terms of BLEU, it continues to improve in terms of consistency. For CADec,
+BLEU score has stabilized after 40k batches, but the lexical cohesion score continues to grow.
+<br/><br/>
+<u>Takeaway message</u>: BLEU is not enough not only for context-aware model selection, but also for early stopping
+criteria!
+<br/><br/><br/>
+
+<h2>Conclusions</h2>
+
+We analyze which phenomena cause otherwise good context-agnostic translations to be inconsistent when placed in
+the context of each other. Our human study on an English–Russian dataset identifies deixis,
+ellipsis and lexical cohesion as three main sources of inconsistency. We create test sets focusing specifically
+on the identified phenomena.
+<br/><br/>
+We consider a novel and realistic set-up where a much larger amount of sentence-level
+data is available compared to that aligned at the document level and introduce a model suitable for this scenario.
+We show that our model effectively handles contextual phenomena without sacrificing general quality as measured with
+BLEU despite using only a small amount of document-level data, while a naive approach to combining sentence-level and
+document-level data leads to a drop in performance. We show that the proposed test sets allow us to distinguish models
+(even though identical in BLEU) in terms of their consistency. To build context-aware machine translation systems,
+such targeted test sets should prove useful, for validation, early stopping and for model selection.
+<br/><br/>
+
+Want to know more?
+
+<a class="pull-right" href="https://arxiv.org/abs/1905.05979" onMouseOver="document.readpaper2.src='../resources/posts/buttons/button_read_paper_push-min.png';" onMouseOut="document.readpaper2.src='../resources/posts/buttons/button_read_paper-min.png';">
+<img src="../resources/posts/buttons/button_read_paper-min.png" name="readpaper2" width=120px class="pull-right"></a>
+<a class="pull-right" href="https://github.com/lena-voita/good-translation-wrong-in-context" onMouseOver="document.viewcode2.src='../resources/posts/buttons/button_view_code_push-min.png';" onMouseOut="document.viewcode2.src='../resources/posts/buttons/button_view_code-min.png';">
+<img src="../resources/posts/buttons/button_view_code-min.png" name="viewcode2" width=120px></a>
+<br/><br/>
+Share: <a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-text="When a Good Translation is Wrong in Context: a post on ACL19 paper! TL;DR: Analysis which phenomena cause context-agnostic translations to be inconsistent which each other, new test sets for context-aware NMT and a model for a setting with a lot of sentence-level data and much less of document-level." data-url="https://lena-voita.github.io/posts/acl19_context.html" data-lang="en" data-show-count="false">Tweet</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+  </article>
+
+</div>
+
+      </div>
+    </div>
+
+    <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col  footer-col-1">
+        <table >
+          <tr class="contact-list">
+            <!-- yandex research-->
+            <td>
+              <div class="media">
+                <a class="pull-left thumbnail" href="https://research.yandex.com/people/">
+                  <img src="/img/ico/yr-min.png" height=20px alt=""/>
+                </a>
+              </div>
+            </td>
+            <!-- UvA-->
+            <td>
+              <div class="media">
+                <a class="pull-left thumbnail" href="https://www.illc.uva.nl/People/show_person.php?Person_id=Voita+E.">
+                  <img src="/img/ico/uva-min.png" height=20px alt=""/>
+                </a>
+              </div>
+            </td>
+            <!-- EdnNLP-->
+            <td>
+              <div class="media">
+                <a class="pull-left thumbnail" href="https://edinburghnlp.inf.ed.ac.uk/index.php/people/">
+                  <img src="/img/ico/edn.png" height=20px alt=""/>
+                </a>
+              </div>
+            </td>
+
+            <td>
+              <div class="media">
+                <a class="pull-left thumbnail" href="mailto:lena-voita@yandex-team.ru">
+                  <img src="/img/ico/mail-min.png" height=20px alt=""/>
+                </a>
+              </div>
+            </td>
+            <td>
+              <div class="media">
+                <a class="pull-left thumbnail" href="https://scholar.google.com/citations?user=EcN9o7kAAAAJ">
+                  <img src="/img/ico/gs-min-round.png" height=20px alt=""/>
+                </a>
+              </div>
+            </td>
+            <td>
+              <div class="media">
+                <a class="pull-left thumbnail" href="https://github.com/lena-voita">
+                  <img src="/img/ico/git.png" height=20px alt=""/>
+                </a>
+              </div>
+            </td>
+            <td>
+              <div class="media">
+                <a class="pull-left thumbnail" href="https://twitter.com/">
+                  <img src="/img/ico/twitter-min.png" height=20px alt=""/>
+                </a>
+              </div>
+            </td>
+
+          </tr>
+        </table>
+      </div>
+
+      <!--<div class="footer-col  footer-col-2">
+      </div> -->
+
+      <div class="footer-col  footer-col-3">
+          <p class="text" align="right">Last updated July 22, 2019.</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+
+
+  </body>
+
+</html>
