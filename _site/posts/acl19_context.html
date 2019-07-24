@@ -132,13 +132,13 @@ From this post, you will learn:
 Why do we need context-aware MT? <br/> To translate a document, one can split it into sentences, translate them independently and
 put the translations together to form a translation of a document. That's right! We would be ok with such
 approach if translations of
-isolated sentences put together formed a meaningful text. Unfortunately, often this is not the case.
+isolated sentences put together formed a meaningful and coherent text. Unfortunately, often this is not the case.
 <br/><br/>
-To find the proportion of translation errors which are only recognized as such in context, and understand
+To find the proportion of translation errors which are only recognized as such in context, and to understand
 which phenomena cause context-agnostic translations not to work together, we conduct a human
 study as schematically shown in the picture. For simplicity, we start with pairs of consecutive sentences.
 We use OpenSubtitles dataset for English-Russian language pair and produce context-agnostic translations
-with Transformer model trained on this dataset.
+with the Transformer model trained on this dataset.
 <br/><br/>
 <img src="../resources/posts/acl19_ctx/ha_general_results-min.png" style="max-width:330px; height:auto; float:right">
 From the table, we see that our annotators labeled
@@ -217,7 +217,7 @@ of the forms should be used, as there are no obvious markers pointing to one for
 
 <img src="../resources/posts/acl19_ctx/deixis_types-min.png" style="max-width:300px; height:auto; float:right">
 However, when pronouns refer to the same person, the pronouns, as well as verbs that agree with them, should be
-translated using the same form. <br/><br/> The statistics of inconsistency types caused by deixis is provided in the table.
+translated using the same form. <br/><br/> The statistics of inconsistency types caused by deixis are provided in the table.
 
 <br/><br/>
 <h4>Ellipsis</h4>
@@ -265,7 +265,7 @@ or the verb inflection may depend on the elided subject. Look at the examples.<b
 We classified ellipsis examples which lead to errors in sentence-level translations by the type of
 error they cause.
 It can be seen that the most frequent problems related to ellipsis
-that we find in our annotated corpus are wrong morphological forms, followed by wrongly predicted
+that we find in our annotated corpus are wrong morphological forms. This is followed by wrongly predicted
 verbs in case of verb phrase ellipsis in English, which does not exist in Russian, thus requiring the
 prediction of the verb in the Russian translation.
 
@@ -388,7 +388,7 @@ translated consistently, and create contrastive test examples by switching the t
 <br/><br/>
 Look at the example. When translating into Russian, three different translations of <font face="Comic Sans MS">"Fran"</font>
 are possible: Фр<u>э</u>н, Фр<u>е</u>н and Фр<u>а</u>н. For each of the possible translations of this name in context,
-the system has to keep the translation of the name in the current sentence consistent with the one in context.
+the system has to keep the translation of the name in the current sentence consistent with the one in the context.
 
 <br/><br/>
 <img src="../resources/posts/acl19_ctx/task_lex_coh-min.png" style="max-width:700px; height:auto">
@@ -459,6 +459,10 @@ but we do not provide it here for simplicity.)
 We evaluate in two different ways: using BLEU for general quality and the proposed contrastive test sets for consistency.
 When evaluating general quality, for context-aware models we translate all sentences including context,
 and then evaluate only the current one.<br/><br/>
+Note that <u>BLEU score is likely not to capture consistency</u>. For example, if multiple translations of a name are possible,
+forcing consistency is essentially as likely to make all occurrences of
+the name match the reference translation as making them all different from the reference.
+<br/><br/>
 We show that models indistinguishable with BLEU can be very different in terms of consistency.
 <br/><br/>
 <h4>Results</h4>
@@ -613,7 +617,7 @@ Share: <a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-sh
       </div> -->
 
       <div class="footer-col  footer-col-3">
-          <p class="text" align="right">Last updated July 22, 2019.</p>
+          <p class="text" align="right">Last updated July 24, 2019.</p>
       </div>
     </div>
 
