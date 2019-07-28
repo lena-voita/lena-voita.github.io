@@ -19,11 +19,7 @@ I teach NLP at the [Yandex School of Data Analysis](https://yandexdataschool.com
 ## <span style="color:darkblue">News </span>
 
 * 06/2019 Attending Google NLP summit in Zurich.
-* 05/2019 Two papers _accepted to ACL 2019_:
-
-[Analyzing Multi-Head Self-Attention: Specialized Heads Do the Heavy Lifting, the Rest Can Be Pruned](https://arxiv.org/abs/1905.09418)
-
-[When a Good Translation is Wrong in Context: Context-Aware Machine Translation Improves on Deixis, Ellipsis, and Lexical Cohesion](https://arxiv.org/abs/1905.05979)
+* 05/2019 __2__ papers _accepted to __ACL__ 2019_, one is oral!
 * 03/2019 We are happy to host [Wilker Aziz](http://wilkeraziz.github.io) and Mirella Lapata at [Yandex NLP week](https://yandex.com/company/blog/nlp-week-2019)! More information is [here](https://academy.yandex.ru/events/data_analysis/NLP_week/), video and materials are [here](https://yandexdataschool.ru/edu-process/nlp-week)
 * 09/2018 We are launching a new [NLP course](https://github.com/yandexdataschool/nlp_course) at the Yandex School of Data Analysis!
 * 04/2018 Our paper [Context-Aware Neural Machine Translation Learns Anaphora Resolution](https://arxiv.org/pdf/1805.10163.pdf) has been _accepted to ACL 2018_ and selected for an _oral_ presentation.
