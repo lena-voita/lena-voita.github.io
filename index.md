@@ -18,6 +18,7 @@ I teach NLP at the [Yandex School of Data Analysis](https://yandexdataschool.com
 
 ## <span style="color:darkblue">News </span>
 
+* 08/2019 __2__ papers _accepted to __EMNLP__ 2019_!
 * 06/2019 Attending Google NLP summit in Zurich.
 * 05/2019 __2__ papers _accepted to __ACL__ 2019_, one is oral!
 * 03/2019 We are happy to host [Wilker Aziz](http://wilkeraziz.github.io) and Mirella Lapata at [Yandex NLP week](https://yandex.com/company/blog/nlp-week-2019)! More information is [here](https://academy.yandex.ru/events/data_analysis/NLP_week/), video and materials are [here](https://yandexdataschool.ru/edu-process/nlp-week)
