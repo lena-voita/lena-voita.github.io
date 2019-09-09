@@ -58,6 +58,8 @@
           
         
           
+        
+          
           <a class="page-link" href="/posts.html">Blog</a>
           
         
@@ -83,6 +85,50 @@
     <div class="page-content">
       <div class="wrapper">
         <hr>
+
+
+<!-- <span style="color:darkblue;font-size:28px;">The Story of Heads </span> -->
+<h1 style="font-size:28px;">Evolution of Representations in the Transformer</h1>
+
+
+<a class="float-right">
+    <img src="../resources/posts/emnlp19_evolution/fugue_logo_on_white-min-min.png" alt="" style="max-width:350px; height:auto; float: right"/>
+</a>
+
+
+<span style="font-size:14px;">
+This is a post for the EMNLP 2019 paper
+    <a href="https://arxiv.org/abs/1909.01380">
+            The Bottom-up Evolution of Representations in the Transformer: A Study with Machine Translation and Language Modeling Objectives.
+    </a>
+</span>
+
+
+<br/>
+<br/>
+<span style="font-size:15px;">
+We look at the evolution of representations of individual tokens in Transformers trained with different
+    training objectives (MT, LM, MLM - BERT-style) from the
+    <a href="https://www.cs.huji.ac.il/labs/learning/Papers/allerton.pdf">Information Bottleneck</a>
+    perspective and show, that:
+<ul>
+  <li>LMs gradually forget past when forming future;</li>
+  <li>for MLMs, the evolution has the two stages of
+      <font face="symbol">context encoding</font> and <font face="symbol">token reconstruction</font>;</li>
+    <li>MT representations get refined with context,
+        but less processing is happening.</li>
+</ul>
+</span>
+
+
+<a class="pull-right" href="/posts/emnlp19_evolution.html" onMouseOver="document.readmore3.src='../resources/posts/buttons/button_read_more_push-min.png';" onMouseOut="document.readmore3.src='../resources/posts/buttons/button_read_more-min.png';">
+<img src="../resources/posts/buttons/button_read_more-min.png" name="readmore3" width=120px class="pull-right"></a>
+<a class="pull-right" href="https://arxiv.org/abs/1909.01380" onMouseOver="document.readpaper3.src='../resources/posts/buttons/button_read_paper_push-min.png';" onMouseOut="document.readpaper3.src='../resources/posts/buttons/button_read_paper-min.png';">
+<img src="../resources/posts/buttons/button_read_paper-min.png" name="readpaper3" width=120px class="pull-right"></a>
+<span style="font-size:15px; text-align: right; float: right; color:gray">September 2019</span>
+
+<p></p>
+<hr>
 
 <!-- <span style="color:darkblue;font-size:28px;">The Story of Heads </span> -->
 <h1 style="font-size:28px;">When a Good Translation is Wrong in Context</h1>
@@ -225,7 +271,7 @@ From this post, you will learn:
             </td>
             <td>
               <div class="media">
-                <a class="pull-left thumbnail" href="https://twitter.com/">
+                <a class="pull-left thumbnail" href="https://twitter.com/lena_voita">
                   <img src="/img/ico/twitter-min.png" height=20px alt=""/>
                 </a>
               </div>
@@ -239,7 +285,7 @@ From this post, you will learn:
       </div> -->
 
       <div class="footer-col  footer-col-3">
-          <p class="text" align="right">Last updated July 28, 2019.</p>
+          <p class="text" align="right">Last updated September 09, 2019.</p>
       </div>
     </div>
 

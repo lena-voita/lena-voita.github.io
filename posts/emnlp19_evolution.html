@@ -1,0 +1,621 @@
+---
+layout: post
+title: Evolution of Representations in the Transformer
+---
+
+
+<a class="float-right">
+    <img src="../resources/posts/emnlp19_evolution/fugue_logo_on_white-min-min.png" alt="" style="max-width:350px; height:auto; float: right"/>
+</a>
+
+
+<span style="font-size:14px;">
+This is a post for the EMNLP 2019 paper
+    <a href="https://arxiv.org/abs/1909.01380">
+            The Bottom-up Evolution of Representations in the Transformer: A Study with Machine Translation and Language Modeling Objectives.
+    </a>
+</span>
+
+
+<br/>
+<br/>
+<span style="font-size:15px;">
+We look at the evolution of representations of individual tokens in Transformers trained with different
+    training objectives (MT, LM, MLM - BERT-style) from the
+    <a href="https://www.cs.huji.ac.il/labs/learning/Papers/allerton.pdf">Information Bottleneck</a>
+    perspective and show, that:
+<ul>
+  <li>LMs gradually forget past when forming future;</li>
+  <li>for MLMs, the evolution has the two stages of
+      <font face="symbol">context encoding</font> and <font face="symbol">token reconstruction</font>;</li>
+    <li>MT representations get refined with context,
+        but less processing is happening.</li>
+</ul>
+</span>
+
+
+<a class="pull-right" href="https://arxiv.org/abs/1909.01380" onMouseOver="document.readpaper3.src='../resources/posts/buttons/button_read_paper_push-min.png';" onMouseOut="document.readpaper3.src='../resources/posts/buttons/button_read_paper-min.png';">
+<img src="../resources/posts/buttons/button_read_paper-min.png" name="readpaper3" width=120px class="pull-right"></a>
+<span style="font-size:15px; text-align: right; float: right; color:gray">September 2019</span>
+
+<p></p>
+<hr>
+
+<h2>Introduction</h2>
+
+Recently, analysis of deep neural networks
+has been an active topic of research. While previous work mostly used so-called 'probing tasks' and
+has made some interesting observations
+(we will mention some of these a bit later),
+an explanation of the process behind
+the observed behavior has been lacking.
+</br></br>
+In our paper, we attempt to explain more generally why such behavior is observed.
+Instead of measuring the quality of representations obtained from a model on
+some auxiliary task, we characterize how the learning objective determines the information
+flow in the model. In particular, we
+consider how the representations of individual tokens in the Transformer evolve between layers
+under different learning objectives. We look at this task
+from the information bottleneck perspective on learning in neural networks.
+</br></br>
+In addition to
+a number of interesting results (which give insights into internal workings of Transformer
+trained with different objectives), we try to explain the superior performance of the MLM (BERT-style)
+objective  over the LM one for pretraining.
+
+<!--
+In our <a href="https://lena-voita.github.io/posts/acl19_heads.html">Story of Heads</a>
+we already tried to understand what's going on in the MT Transformer. Now, we will look at different tasks and
+will try to understand how the representations of individual tokens and the structure of the learned feature
+space evolve between layers under different training objectives. In contrast to
+<a href="https://lena-voita.github.io/posts/acl19_heads.html">The Story of Heads</a>, where we dealt with
+individual attention heads, here all experiments are done in a model-agnostic manner by investigating properties
+of token representations at each layer. This means that all analysis can, in principle, be applied to other multi-layered
+deep models, such as recurrent or convolutional. In the current work, we consider Transformers because they
+achieve state-of-the-art results for all three tasks we consider.-->
+
+<br/><br/>
+
+<h3>Tasks</h3>
+
+
+We consider three tasks.
+<br/><br/>
+<img src="../resources/posts/emnlp19_evolution/task_mt-min.png" width="100" style="float:right">
+<strong>Machine Translation (MT)</strong>
+<br/>
+Given a source sentence <img src="../resources/posts/emnlp19_evolution/mt_src-min.png" width="150">
+and a target sentence <img src="../resources/posts/emnlp19_evolution/mt_dst-min.png" width="150">, NMT models
+predict words in the target sentence, word by word, i.e. provide estimates of the conditional distribution
+<img src="../resources/posts/emnlp19_evolution/mt_prob-min.png" width="120">.
+
+<br/><br/>
+We train a standard Transformer and then take only it's encoder. On contrast to the other two tasks
+we describe below, representations from the top layers are not directly used to predict output labels
+but to encode the information which is then used by the decoder.
+<br/><br/>
+
+<img src="../resources/posts/emnlp19_evolution/task_lm-min.png" width="110" style="float:right">
+<strong>Language Modeling (LM)</strong>
+<br/>
+LMs estimate the probability of a word given the previous words in a sentence:
+<img src="../resources/posts/emnlp19_evolution/lm_prob-min.png" width="150">. Formally, the model is trained
+with inputs <img src="../resources/posts/emnlp19_evolution/lm_src-min.png" width="140"> and outputs
+<img src="../resources/posts/emnlp19_evolution/lm_dst-min.png" width="70">, where
+<img src="../resources/posts/emnlp19_evolution/x_t-min.png" width="20"> is the output label
+predicted from the final (i.e. top-layer) representation of a token
+<img src="../resources/posts/emnlp19_evolution/x_t_1-min.png" width="40">.
+
+<br/><br/><br/>
+
+<img src="../resources/posts/emnlp19_evolution/task_mlm-min.png" width="110" style="float:right">
+<strong>Masked Language Modeling (MLM)</strong>
+<br/>
+The last objective we consider is the MLM objective, which
+is (most of) the training objective of <a href="https://arxiv.org/abs/1810.04805">BERT</a>.
+In training, 15% of tokens are sampled to be predicted. Each of the sampled tokens is replaced with
+a special <font color="black" size="2" face="Comic Sans MS">[MASK]</font> token or a random token in 80% and 10% of
+the time, respectively, and unchanged otherwise.
+<br/><br/>
+For a sentence <img src="../resources/posts/emnlp19_evolution/mlm_sent-min.png" width="110">,
+where token <img src="../resources/posts/emnlp19_evolution/x_i-min.png" width="20"> is replaced with
+<img src="../resources/posts/emnlp19_evolution/x_i_tilde-min.png" width="20">, the model receives
+<img src="../resources/posts/emnlp19_evolution/mlm_src-min.png" width="260"> as input and needs to
+predict <img src="../resources/posts/emnlp19_evolution/mlm_dst-min.png" width="65">. The label
+<img src="../resources/posts/emnlp19_evolution/x_i-min.png" width="20"> is predicted from the final
+representation of the token <img src="../resources/posts/emnlp19_evolution/x_i_tilde-min.png" width="20">.
+
+<br/><br/>
+
+<h3>What we are interested in</h3>
+
+<img src="../resources/posts/emnlp19_evolution/tasks_with_evolution-min.png" width="350" style="float:right">
+For all models, we fix model hyperparameters, training data, and parameter initialization.
+The only thing which is different is the training objective.
+<br/><br/>
+All three models <u>start from the same representation of a token</u> in a sentence, which consists of
+an embedding of a token
+identity and its position. But the way information flows across layers, or <u>the evolution of a token
+representation, is different</u> depending on the objective. And this is our main interest.
+<br/><br/>
+We hypothesize that the training procedure (or, in our notation, task) defines:
+<ul>
+  <li>the nature of changes a token representation undergoes, from layer to layer;</li>
+  <li>the process of interactions and relationships between tokens;</li>
+  <li>the type of information which gets lost and acquired by a token representation in these interactions.</li>
+</ul>
+
+The nature of our work is quite unusual. We are going to have a lot of experiments and we’ll
+see a lot of results. Despite these results alone are quite interesting (in terms of methods,
+things we look at, conclusions we make; to be honest, there is <i>nothing</i> standard in what we do here :) ),
+the work itself is not about the results. The most important in what we do, as I see it, is
+<font face="symbol">we suggest you a point of view</font>, a way of looking at these results.
+This is something not seen to a naked eye, hidden inside; this is <font face="symbol">the underlying process</font>
+which defines
+not only the results observed in our work but also some previous works.
+<br/><br/>
+
+<h2>Our Point of View: Information Bottleneck</h2>
+
+Our point of view in this work is the
+<a href="https://www.cs.huji.ac.il/labs/learning/Papers/allerton.pdf">Information Bottleneck (IB)</a>
+principle.
+<br/>
+
+The Information Bottleneck method aims to extract a compressed representation of an input which
+retains as much as possible information about output. It maximizes mutual information with the output
+while penalizing the MI with the input:
+<img src="../resources/posts/emnlp19_evolution/ib_variational-min.png" width="280">.
+
+<br/><br/>
+<img src="../resources/posts/emnlp19_evolution/ib_evolution-min.png" width="350" style="float:right">
+The work by <a href="https://arxiv.org/abs/1503.02406">Tishby and Zaslavsky</a> argues that
+computation in multi-layered networks can be
+regarded as an evolution towards the theoretical optimum of the IB objective.
+
+The network is moving the information about input trough a cascade of layers,
+and this process is considered as a Markov chain. The bottleneck is in squeezing
+irrelevant information about input while preserving relevant.
+<br/><br/>
+This implies that output defines a <u>partition of input on relevant and irrelevant
+    information</u> and, therefore, defines <u>the information flow</u> in the model. Since the output is
+different for each of our models, we expect to see different patterns in information flow.
+
+
+
+
+<br/><br/>
+<h2>Information Bottleneck for Token Representations</h2>
+
+Now, we will try to look at the evolution of token representations from the Information Bottleneck perspective.
+We also view every model as learning a function from input X to output Y.
+<br/><br/>
+<img src="../resources/posts/emnlp19_evolution/lm_output_other-min.png" width="120" style="float:right">
+Note that we look into representations of individual tokens, not the entire input.
+It means that our situation is more complex than we discussed earlier.
+In our setting, the information retained in a representation of a token is induced due to the two roles it plays:
+<ul>
+  <li>predicting the <font color="#6dab52">output label</font> from a current token representation;</li>
+  <li>preserving information necessary to build <font color="#3068c2">representations of other tokens</font>.</li>
+</ul>
+
+For example, as shown in the illustration, a language model constructs a representation which
+is not only useful for predicting an output
+label, in this case the next token, but also for producing representations of subsequent tokens
+in a sentence. This is different from the MT setting, where there is no single encoder state from
+which an output label is predicted.
+
+<br/><br/>
+<h3>Mutual Information with input</h3>
+To illustrate the process of information loss and gain in representations of individual tokens,
+we first estimate the mutual information between token representations and the input token identity.
+Since the direct evaluation of mutual information between layers and labels is challenging for
+large networks, we use an approximation (if you are interested in the details,
+take a look at the paper).
+In this experiment, we use MLM as at test time, without masking out tokens.
+<br/><br/>
+<img src="../resources/posts/emnlp19_evolution/ib_mi_tasks-min.png" width="250" style="float:right">
+We see that LM gradually forgets the current input token identity.
+MT shows a similar behavior, but the decrease is much less sharp.  This agrees with our expectations:
+while LM has to predict next token from the top layer, and therefore is forced to forget not so
+relevant current token, MT is not forced to do so since nothing is predicted directly and
+token identity may be useful for translation.
+<br/><br/>
+The most interesting and surprising graph is for MLM: first, similarly to other models,
+the information about the input token  is  getting  lost  but  then,  at  two  top  layers, it
+gets  recovered.   We  will  refer  to  these  phases as <font face="symbol">context encoding</font> and
+<font face="symbol">token reconstruction</font>.
+<br/><br/>
+
+<u>Important note.</u> Whereas  such non-monotonous behavior is impossible when analyzing entire layers,
+in our case, for
+representations of individual tokens, it suggests that this extra information is obtained from other tokens.
+<br/><br/>
+
+
+<h3>Mutual Information with both input and output</h3>
+
+Now we’ll come even closer to the Information Bottleneck setting and measure MI with
+the output label for LM and MLM. In this experiment,
+we form data for MLM as in training, masking or replacing a fraction of tokens.
+Then we pick only the examples where input and output are different.
+<br/><br/>
+<img src="../resources/posts/emnlp19_evolution/ib_src_dst_lm_mlm-min.png" width="400" style="float:right">
+
+We can see that, as expected, MI with input tokens decreases while MI with output tokens increases.
+Both LM and MLM are trained to predict a token (next for LM and current for MLM) by encoding
+input and context information.
+While in the previous figure we observed monotonic behavior of LM, when looking at the
+information with both input and output tokens, we can
+see the two processes, losing information about input and accumulating information about output,
+for both LM and MLM models. For MLM these processes are more distinct and can be thought of as
+the <font face="symbol">context encoding</font> and <font face="symbol">token prediction</font> (compression/prediction) stages.
+For MT, since nothing is predicted directly, we see only the encoding stage of this process.
+</br></br>
+<font color="#6f9943" >
+This observation relates also to the findings by
+<a href="https://www.aclweb.org/anthology/P18-2003">Blevins et al, 2018</a>.
+They show that up to a certain layer the performance of representations obtained
+from a deep multi-layer RNN LM improves on a constituent labeling task, but then decreases,
+while for representations obtained from an MT encoder performance continues to improve up to
+the highest layer. We further support this view with other experiments in the section
+    "What does a layer represent?".
+</font>
+<br/><br/>
+Even though these experiments give insights into processes shaping the representations, direct estimation
+of mutual information in this setting is challenging and we had to use an approximation. That’s why now we
+switch to more well-established frameworks.
+<br/><br/>
+
+
+<h2>Analyzing Changes and Influences</h2>
+
+In this part, we also focus on the information flow in the models.
+The questions we
+ask include:
+<ul>
+  <li>how much processing is happening in a given layer;</li>
+  <li>which tokens influence other tokens most;</li>
+  <li>which tokens gain most information from other tokens.</li>
+</ul>
+
+We reduce all these questions to a comparison between network representations.
+
+
+In these experiments,  we take a lot of data, feed it to a network and get representations
+from some layer. Altogether, these representations form a ‘view’ of a layer on this data.
+We gather different ‘views’ on the same data. Then we use
+<a href="https://papers.nips.cc/paper/7815-insights-on-representational-similarity-in-neural-networks-with-canonical-correlation.pdf">projection weighted Canonical Correlation Analysis (PWCCA)</a>
+ to measure the similarity between pairs of such views. (By taking (1-similarity), we get PWCCA distance).
+
+<br/><br/>
+<img src="../resources/posts/emnlp19_evolution/views_both-min.png" width="500" style="float:right">
+For example, the views can be the same layers in different networks. In this way, we evaluate
+the distance between tasks.
+Alternatively, the views can be different layers in the same network. In this way, we evaluate
+the amount of change between layers for each task.
+<br/><br/>
+
+
+<h3>A coarse-grained view</h3>
+
+<h4><u>Distance between tasks</u></h4>
+
+As the first step in our analysis, we measure the difference between representations learned for different tasks.
+For each task, we also measure differences between representations of
+models trained with the same objective but different random initializations. ("init." lines on the figure).
+<br/><br/>
+<img src="../resources/posts/emnlp19_evolution/change_between_tasks_with_view-min.png" width="300" style="float:right">
+First, we see that models trained for the same task, but different random initializations, are more
+similar to each other than models trained with different objectives.
+This means that PWCCA has passed our 'sanity check':
+it captures underlying differences in the types of information
+learned by a model rather than those due to randomness in the training process.
+<br/><br/>
+Representations of MT and MLM are closer to each other than to LM's representations.
+There might be two reasons for this.
+First, for LM only preceding tokens are in the context, whereas for MT
+and MLM it is the entire sentence.
+Second, both MT and MLM focus on a given token, as it either needs to be reconstructed or translated. In contrast,
+LM produces a representation needed for predicting the next token.
+<br/><br/>
+
+
+
+
+<h4><u>Change between layers</u></h4>
+<img src="../resources/posts/emnlp19_evolution/change_by_task_with_view-min.png" width="230" style="float:right">
+Similarly, we measure the difference between representations of consecutive layers in each
+model (look at the figure). <!--In this case we take views $v^{m,l}$ and $v^{m,l+1}$ and vary layers $l$ and tasks $m$.
+-->
+<br/><br/>
+When going from bottom to top layers, MT changes its representations less and less.
+For LM and MLM, there is no such monotonicity.  This mirrors our view of LM and especially MLM as
+evolving through phases of encoding and reconstruction. This evolution
+requires a stage of losing information not useful to the output, which, in turn,
+entails large changes in the representations between layers.
+<br/><br/>
+
+<br/>
+<h3>Fine-grained analysis</h3>
+In the process of encoding, representations of tokens in a sentence interact with each other.
+In these interactions, on the one hand,
+they influence other tokens by giving some information. On the other hand, they are influenced
+by other tokens, which means that their representations consume information (and change themselves).
+<br/><br/>
+We now look at the tokens as behaving is these two aspects:
+<i>influencing others</i> and <i>being influenced</i> by others.
+We select tokens with some predefined property (e.g., frequency)
+and investigate how tokens' behavior depends on the value of this property.
+
+<br/><br/>
+
+<img src="../resources/posts/emnlp19_evolution/views_layers-min.png" width="150" style="float:right">
+<strong>Amount of change.</strong> We measure the extent of change for a group of tokens as the PWCCA distance between
+the representations of <u>these tokens</u> for a pair of adjacent layers (<i>n</i>,  <i>n+1</i>). This quantifies the amount of information the tokens receive in this layer.
+<br/><br/>
+<img src="../resources/posts/emnlp19_evolution/influence_howto-min.png" width="200" style="float:right">
+<strong>Amount of influence.</strong> To measure the influence of a token at <i>n</i>-th layer on other tokens, we
+measure PWCCA distance between two versions of representations of <u>other tokens</u> in a
+sentence: first after encoding as usual, second when encoding first <i>n-1</i> layers as usual and masking out
+the influencing token at the <i>n</i>-th layer.
+<br/>
+Look at the illustration.
+<br/><br/>
+
+
+<h4><u>Varying token frequency</u></h4>
+First, we measure the amount of change, or how much tokens are influenced by others.
+
+<img src="../resources/posts/emnlp19_evolution/change_freq-min.png" width="800" >
+We see that for MT and LM frequent tokens change a lot more than the rare ones.
+The only difference in the behavior of these models is that at the top layers of LM the
+amount of change is roughly the same for all frequencies. We can speculate that this is because top
+LM layers focus on building
+the future rather than understanding the past, and, at that stage, token frequency of the last
+observed token becomes less important.
+
+<br/><br/>
+The behavior for MLM is quite
+different. The
+two stages for MLMs  could already be seen when measuring mutual information.
+They are even more pronounced here.
+The transition from a generalized token representation, formed at the encoding stage, to recreating token
+identity apparently requires more changes for rare tokens.
+<br/><br/>
+
+Let’s now measure to what extent tokens influence others.
+
+<img src="../resources/posts/emnlp19_evolution/influence_freq-min.png" width="800" >
+<br/><br/>
+Generally, rare tokens influence more.<br/>
+Informally speaking, if you have a lot of information (like rare tokens)
+you don’t change much, keeping your information, but influence others. Of course, if you are a rare token,
+you definitely have something to say! On the other hand, if you don’t have much information
+    in yourself (like frequent tokens), you can’t really influence others much, but others change you a lot.
+<br/><br/>
+
+Note this extreme influence of rare tokens on the first layer of MT and for LM.
+In contrast, rare tokens are not the most influencing ones at the lower layers of MLM.
+<br/><br/>
+
+<img src="../resources/posts/emnlp19_evolution/influence_freq_iwd-min.png" width="400" style="float:right">
+
+We hypothesize that the training procedure of MLM, with masking out some tokens or replacing
+them with random, teaches the model not to over-rely on these tokens before their context is
+well understood. To test our hypothesis, we additionally trained MT and LM models with token dropout on the input
+side: at training time, each token was replaced with a random with probability 10%.
+As we expected, there is no extreme influence of rare tokens when using this regularization,
+supporting the above interpretation.
+<br/><br/>
+
+Interestingly, for the MT task
+<a href="https://lena-voita.github.io/posts/acl19_heads.html">The Story of Heads</a> (or our
+<a href="https://www.aclweb.org/anthology/P19-1580"> ACL 2019 paper</a>)
+gives us the exact form how influence of rare tokens is implemented in the MT model.
+On the first layer, there's the 'rare tokens head': a head pointing to the least frequent tokens in a sentence.
+While this observation is quite intriguing, results of this work suggest that this is a
+fancy kind of model overfitting.
+
+<br/><br/>
+
+<h4><u>Varying part of speech</u></h4>
+
+We also analyzed how the extent of change and influence depends on part of speech.
+<br/><br/>
+
+<img src="../resources/posts/emnlp19_evolution/change_pos-min.png" width="800" >
+<br/><br/>
+Generally, the patterns are similar to the ones for frequency groups: parts of speech with frequent tokens
+(preposition, conjunction, etc.) change more and influence less; vise versa for parts of speech with less
+frequent tokens (nouns, verbs). An interesting finding though is that verbs and adverbs change more than nouns
+and adjectives.
+<br/><br/>
+
+<img src="../resources/posts/emnlp19_evolution/influence_pos-min.png" width="800" >
+<br/><br/>
+
+
+<h2>What does a layer represent?</h2>
+
+Previously we quantified the amount of information exchanged
+between tokens. Now, we want to understand what representation in each layer 'focuses' on.
+We will look at the evolution of the learned feature space and will try to evaluate to what extent a
+certain property is important for defining a token representation at each layer, or to what extent
+it is defining for ordering token occurrences in the representation space.
+<br/><br/>
+Since the encoding process starts from a representation consisting of token identity and position,
+first we will track how this information is preserved. Then, we will look at how the contextual information
+(both past and future) evolves in token representations.
+<br/><br/>
+
+<h3>Preserving token identity</h3>
+
+<img src="../resources/posts/emnlp19_evolution/token_neighbors-min.png" width="350" style="float:right">
+<br/>
+To evaluate how token identity is preserved, we
+<ul>
+  <li>take a large number of representations of different tokens;</li>
+  <li>evaluate the proportion of top-k neighbors in the representation space
+      which have the same token identity.</li>
+</ul>
+<br/>
+<img src="../resources/posts/emnlp19_evolution/evolution_token-min.png" width="200" style="float:right">
+The results are similar to the ones computed with MI estimators!
+This supports the interpretations we made previously.
+<br/><br/>
+<font color="#6f9943" >
+To make it more interesting,
+let us recall the findings by <a href="https://www.aclweb.org/anthology/W18-5448">Zhang and Bowman (2018)</a>.
+They show that untrained LSTMs outperform trained ones on a word identity prediction task. This mirrors our
+view of the evolution of a token representation as going
+through compression and prediction stages, where the learning objective defines the process
+of forgetting information. If a network is not trained, it is not forced to forget input information.
+</font>
+<br/><br/>
+
+<img src="../resources/posts/emnlp19_evolution/tsne_token-min.png" width="450" style="float:right">
+
+Here is an illustration.
+<br/>
+We gathered representations of tokens
+<font color="red" face="Comic Sans MS">is</font>,
+<font color="orange" face="Comic Sans MS">are</font>,
+<font color="lightblue" face="Comic Sans MS">were</font>,
+<font color="blue" face="Comic Sans MS">was</font>
+from a
+lot of sentences and visualized their t-sne projections (on the x-axis are layers).
+<br/>
+As we go from layer to layer, MT and LM mix representations of these tokens more and
+more (MT to a lesser extent). <br/>
+For MLM, 15% of tokens were masked as in training. In the first layer, these masked
+states form a cluster separate from the others, and then they get disambiguated as we move
+bottom-up across the layers.
+<br/><br/>
+
+
+<h3>Preserving token position</h3>
+
+
+<img src="../resources/posts/emnlp19_evolution/evolution_position-min.png" width="180" style="float:right">
+Similarly, we evaluate how a token position is preserved, or how important it is
+for ordering different token occurrences in the representation space. Formally, we
+<ul>
+  <li>take a large number of representations of the same token (for different tokens);</li>
+  <li>for each occurrence, look at the positions of top-k neighbors;</li>
+    <li>evaluate the average position distance.</li>
+</ul>
+
+The results illustrate how the information about the input (in this case, position), potentially not so
+relevant to the output  (e.g., next word for LM), gets gradually dismissed.
+As expected, encoding input positions is more important for MT, so this effect is more pronounced for LM and MLM.
+<br/>
+<img src="../resources/posts/emnlp19_evolution/tsne_position-min.png" width="450" style="float:right">
+<br/>
+As an illustration, we visualize t-SNE of different occurrences of the token
+<font color="black" face="Comic Sans MS">it</font>, position is in color
+(<font color="#bae3f7">the</font>
+<font color="#98d0eb">larger</font>
+<font color="#6fb5d6">the</font>
+<font color="#57a5c9">word</font>
+<font color="#3d96bf">index</font>
+<font color="#2a89b5">the</font>
+<font color="#2a7db5">darker</font>
+<font color="#0f5ea3">its</font>
+<font color="#064d8c">color</font>), on the x-axis are layers.
+For MT, even on the last layer ordering by position is noticeable.
+<br/><br/><br/>
+
+<h3>Lexical and syntactic context</h3>
+
+In this section, we will look at the two properties: identities of immediate neighbors of a current
+token and CCG supertag of a current token (CCG supertags encode syntactic context of a token).
+On the one hand, these properties represent a model's
+understanding of different types of context: lexical (neighboring tokens identity) and syntactic.
+On the other, they are especially useful for our analysis because we can split them into information
+about 'past' and 'future' by taking either left or right neighbor or part of a CCG tag.
+<br/><br/>
+
+<strong>The importance of neighboring tokens.</strong>
+
+<img src="../resources/posts/emnlp19_evolution/same_left_right_tokens-min.png" width="350" style="float:right">
+<br/>
+The results support our previous expectation that for LM the importance of a previous
+token decreases, while information about future token is being formed. For MLM,
+the importance of neighbors gets higher until the second layer and decreases after.
+This may reflect stages of <font face="symbol">context encoding</font> and
+<font face="symbol">token reconstruction</font>.
+<br/><br/>
+
+<strong>The importance of CCG tags.</strong>
+</br>
+<img src="../resources/posts/emnlp19_evolution/evolution_same_ccg-min.png" width="190" style="float:right">
+As in previous experiments, the importance of CCG tag for MLM degrades at higher layers.
+</br></br>
+<font color="#6f9943">
+This agrees with
+<a href="https://www.aclweb.org/anthology/P19-1452">the work
+    by Tenney et al, 2019</a>. The authors deal with BERT and observe that for different tasks (e.g., part-of-speech,
+constituents, dependencies, semantic role labeling, coreference)
+the contribution of a layer to a task increases up to a certain layer, but then decreases at the top layers.
+Our work gives insights into the underlying process defining this behavior.
+</font>
+</br></br>
+<font color="#6f9943" >
+Recall also results by
+<a href="https://www.aclweb.org/anthology/P18-2003">Blevins et al, 2018</a>, who observed monotonic behavior
+    of representations from a deep RNN MT for a constituent labeling prediction task, and non-monotonic for LM,
+    where performance improved up to a certain layer, then decreased.
+</font>
+</br></br>
+
+<img src="../resources/posts/emnlp19_evolution/evolution_ccg_left_right-min.png" width="380" style="float:right">
+For LM these results are not really informative since it does not have access to the future. We go further and
+measure the importance of parts of a CCG tag corresponding to previous
+ and next parts of a sentence.
+It can be clearly seen that LM first accumulates information about the left part of CCG,
+understanding the syntactic structure of the past. Then this information gets dismissed while forming
+information about future.
+
+
+<img src="../resources/posts/emnlp19_evolution/tsne_ccg-min-min.png" width="450" style="float:right">
+</br></br>
+
+The figure shows t-SNE of different occurrences of the token
+<font color="black" face="Comic Sans MS">is</font>,
+CCG tag is in color (intensity of a color is a
+token position, on the x-axis are layers).
+</br>
+One can see that clustering by CCG tag gets preserved at the upper layers of the MT model,
+but get slightly lost for MLM.
+</br></br>
+
+<h2>Conclusions</h2>
+
+Now, summarizing all our experiments, we can make some general statements about the evolution of representations.
+Namely,
+<ul>
+  <li>with the LM objective, as you  go from bottom to top layers, information about the past
+gets lost and predictions about the future get formed;</li>
+  <li>
+      for MLMs, representations initially acquire information about the context around  the
+token,  partially  forgetting  the  token identity and producing a more generalized token representation;
+      the token identity then gets recreated at the top layer;</li>
+  <li>for MT,  though representations get refined with context, less processing is happening and
+most information about the word type does not get lost.</li>
+</ul>
+
+
+This provides us with a hypothesis for why the MLM objective may be preferable in the pretraining
+context to LM. LMs may not be the best choice, because neither information about the current token and
+its past nor future is represented well: the former since this information gets discarded,
+the latter since the model does not have access to the future.
+
+<br/><br/>
+
+Want to know more?
+
+<a class="pull-right" href="https://arxiv.org/abs/1909.01380" onMouseOver="document.readpaper2.src='../resources/posts/buttons/button_read_paper_push-min.png';" onMouseOut="document.readpaper2.src='../resources/posts/buttons/button_read_paper-min.png';">
+<img src="../resources/posts/buttons/button_read_paper-min.png" name="readpaper2" width=120px class="pull-right"></a>
+<br/><br/>
+Share: <a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-text="A View on the Evolution of Representations in the Transformer from the Information Bottleneck Perspective: a post on the EMNLP 2019 paper" data-url="https://lena-voita.github.io/posts/emnlp19_evolution.html" data-lang="en" data-show-count="false">Tweet</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
