@@ -16,6 +16,6 @@ order: 2
 {% for year in sortedyears %}
 [comment]: <> (### {{ year }})
 {% for paper in hashes[year] %}
-{% include paper.html paper=paper %}
+{% include paper_lena.html paper=paper %}
 {% endfor %}
 {% endfor %}

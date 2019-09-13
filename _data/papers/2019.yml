@@ -3,11 +3,36 @@
   paper-type: inproceedings
   selected: y
   year: 2019
+  img: emnlp19_evolution-min.png
+  title: "The Bottom-up Evolution of Representations in the Transformer: A Study with Machine Translation and Language Modeling Objectives"
+  authors: "<u>Elena Voita</u>, Rico Sennrich and Ivan Titov"
+  doc-url:
+  conf: emnlp19.png
+  url: "http://arxiv.org/abs/1909.01380"
+
+-
+  layout: paper
+  paper-type: inproceedings
+  selected: y
+  year: 2019
+  img: emnlp19_ctx-min.png
+  title: "Context-Aware Monolingual Repair for Neural Machine Translation"
+  authors: "<u>Elena Voita</u>, Rico Sennrich and Ivan Titov"
+  conf: emnlp19.png
+  url: "http://arxiv.org/abs/1909.01383"
+
+-
+  layout: paper
+  paper-type: inproceedings
+  selected: y
+  year: 2019
   img: acl19_heads-min.png
   title: "Analyzing Multi-Head Self-Attention: Specialized Heads Do the Heavy Lifting, the Rest Can Be Pruned"
-  authors: "Elena Voita, David Talbot, Fedor Moiseev, Rico Sennrich and Ivan Titov"
+  authors: "<u>Elena Voita</u>, David Talbot, Fedor Moiseev, Rico Sennrich and Ivan Titov"
   doc-url:
+  conf: acl19.png
   arxiv: //arxiv.org/abs/1905.09418
+  url: "http://www.aclweb.org/anthology/P19-1580"
   appendix:
   booktitle: "Proceedings of ACL"
   slides:
@@ -22,11 +47,13 @@
   paper-type: inproceedings
   selected: y
   year: 2019
-  img: acl19_ctx.png
+  img: acl19_ctx_scheme-min.png
   title: "When a Good Translation is Wrong in Context: Context-Aware Machine Translation Improves on Deixis, Ellipsis, and Lexical Cohesion"
-  authors: "Elena Voita, Rico Sennrich and Ivan Titov"
+  authors: "<u>Elena Voita</u>, Rico Sennrich and Ivan Titov"
   doc-url:
+  conf: acl19.png
   arxiv: //arxiv.org/abs/1905.05979
+  url: "http://www.aclweb.org/anthology/P19-1116"
   appendix:
   booktitle: "Proceedings of ACL"
   slides:

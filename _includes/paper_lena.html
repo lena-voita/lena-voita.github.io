@@ -1,0 +1,26 @@
+<div class="media">
+    <a class="pull-right" >
+    <img src="/img/paper/{{ include.paper.conf }}" alt="" style="max-width:50px; height:auto;"/>
+  </a>
+  <a class="pull-left" {% if include.paper.doc-url %} href="{{ include.paper.url }}" {% endif %}>
+    <img src="/img/paper/{{ include.paper.img }}" alt="" style="max-width:120px; height:auto;"/>
+  </a>
+  <div class="media-body">
+    <!-- citation -->
+    {% if include.paper.logo %}<img src="/img/papers/{{ include.paper.logo }}" alt=""/>{% endif %}
+    <a href="{{include.paper.url}}">{{ include.paper.title }}</a><br/>
+    {% if include.paper.authors %}{{ include.paper.authors }}.{% endif %}
+
+    <br/>
+
+
+    <!-- resources -->
+    <!-- draft/slides/poster/talk -->
+
+
+
+    <!-- amendments -->
+
+
+  </div>
+</div>

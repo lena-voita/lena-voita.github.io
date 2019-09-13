@@ -2,17 +2,21 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="761392bc-7f53-4674-a9c2-966e5c9edf64" name="Default" comment="aclweb links for ACL2019 papers">
-      <change afterPath="$PROJECT_DIR$/posts/emnlp19_evolution.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/_includes/paper_lena.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_layouts/post.html" beforeDir="false" afterPath="$PROJECT_DIR$/_layouts/post.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_data/papers/2018.yml" beforeDir="false" afterPath="$PROJECT_DIR$/_data/papers/2018.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_data/papers/2019.yml" beforeDir="false" afterPath="$PROJECT_DIR$/_data/papers/2019.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/_site/feed.xml" beforeDir="false" afterPath="$PROJECT_DIR$/_site/feed.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_site/img/paper/acl19_ctx.png" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/_site/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/index.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/_site/papers.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/papers.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/_site/posts.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/posts.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/_site/posts/acl19_context.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/posts/acl19_context.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/_site/posts/acl19_heads.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/posts/acl19_heads.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_site/posts/emnlp19_evolution.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/posts/emnlp19_evolution.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/_site/teaching.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/teaching.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/posts.html" beforeDir="false" afterPath="$PROJECT_DIR$/posts.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/paper/acl19_ctx.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/papers.md" beforeDir="false" afterPath="$PROJECT_DIR$/papers.md" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -23,35 +27,11 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/index.md">
-          <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
-            <state split_layout="SPLIT">
-              <first_editor relative-caret-position="405">
-                <caret line="27" selection-start-line="27" selection-end-line="27" />
-              </first_editor>
-              <second_editor />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/posts/acl19_heads.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="355">
-              <caret line="206" selection-start-line="206" selection-end-line="207" selection-end-column="5" />
-              <folding>
-                <element signature="e#127#177#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/papers.md">
           <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
             <state split_layout="SPLIT">
-              <first_editor relative-caret-position="60">
-                <caret line="4" column="8" selection-start-line="4" selection-start-column="8" selection-end-line="4" selection-end-column="8" />
+              <first_editor relative-caret-position="270">
+                <caret line="18" column="21" selection-start-line="18" selection-start-column="21" selection-end-line="18" selection-end-column="21" />
               </first_editor>
               <second_editor />
             </state>
@@ -59,16 +39,32 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/posts/acl19_context.html">
+        <entry file="file://$PROJECT_DIR$/_includes/paper_lena.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2323">
-              <caret line="353" selection-start-line="353" selection-end-line="353" selection-end-column="55" />
+            <state relative-caret-position="15">
+              <caret line="1" column="26" selection-start-line="1" selection-start-column="26" selection-end-line="1" selection-end-column="26" />
               <folding>
-                <element signature="e#248#271#0" expanded="true" />
-                <element signature="e#548#571#0" expanded="true" />
-                <element signature="e#2017#2084#0" expanded="true" />
-                <element signature="e#2228#2277#0" expanded="true" />
+                <element signature="n#style#0;n#img#0;n#a#0;n#div#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#img#0;n#a#0;n#div#0;n#!!top" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/_data/papers/2018.yml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="660">
+              <caret line="44" column="17" selection-start-line="44" selection-start-column="17" selection-end-line="44" selection-end-column="17" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/_data/papers/2019.yml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="75">
+              <caret line="5" column="28" selection-start-line="5" selection-start-column="28" selection-end-line="5" selection-end-column="28" />
             </state>
           </provider>
         </entry>
@@ -76,8 +72,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/posts.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="259">
-              <caret line="37" column="6" lean-forward="true" selection-start-line="37" selection-start-column="6" selection-end-line="37" selection-end-column="49" />
+            <state relative-caret-position="992">
+              <caret line="69" selection-start-line="69" selection-end-line="69" />
               <folding>
                 <element signature="n#style#0;n#h1#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#img#0;n#a#0;n#!!top" expanded="true" />
@@ -92,11 +88,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/posts/emnlp19_evolution.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="392">
-              <caret line="609" column="63" selection-start-line="609" selection-start-column="63" selection-end-line="609" selection-end-column="63" />
+            <state relative-caret-position="410">
+              <caret line="78" column="14" selection-start-line="78" selection-start-column="14" selection-end-line="78" selection-end-column="14" />
               <folding>
                 <element signature="e#193#243#0" expanded="true" />
                 <element signature="e#259#282#0" expanded="true" />
@@ -107,16 +103,6 @@
                 <element signature="e#24768#24787#0" expanded="true" />
                 <element signature="e#24873#24892#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/README.md">
-          <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
-            <state split_layout="SPLIT">
-              <first_editor />
-              <second_editor />
             </state>
           </provider>
         </entry>
@@ -142,6 +128,7 @@
       <find>sans</find>
       <find>context</find>
       <find>most of</find>
+      <find>book</find>
     </findStrings>
     <replaceStrings>
       <replace />
@@ -156,7 +143,6 @@
         <option value="$PROJECT_DIR$/_layouts/course.html" />
         <option value="$PROJECT_DIR$/_data/courses.yml" />
         <option value="$PROJECT_DIR$/_includes/paper.html" />
-        <option value="$PROJECT_DIR$/_data/papers/2018.yml" />
         <option value="$PROJECT_DIR$/Gemfile" />
         <option value="$PROJECT_DIR$/_data/posts/acl19_ctx.yml" />
         <option value="$PROJECT_DIR$/posts.md" />
@@ -166,8 +152,6 @@
         <option value="$PROJECT_DIR$/_layouts/photolist.html" />
         <option value="$PROJECT_DIR$/_layouts/default.html" />
         <option value="$PROJECT_DIR$/_includes/post.html" />
-        <option value="$PROJECT_DIR$/papers.md" />
-        <option value="$PROJECT_DIR$/teaching.md" />
         <option value="$PROJECT_DIR$/_includes/header.html" />
         <option value="$PROJECT_DIR$/_includes/course.html" />
         <option value="$PROJECT_DIR$/_posts/acl19_ctx.html" />
@@ -175,12 +159,17 @@
         <option value="$PROJECT_DIR$/_includes/footer.html" />
         <option value="$PROJECT_DIR$/posts/acl19_heads.html" />
         <option value="$PROJECT_DIR$/posts/acl19_context.html" />
-        <option value="$PROJECT_DIR$/_data/papers/2019.yml" />
         <option value="$PROJECT_DIR$/index.md" />
         <option value="$PROJECT_DIR$/_layouts/post.html" />
         <option value="$PROJECT_DIR$/posts/emnlp19_fugue_on_the_evolution_of_repr.html" />
         <option value="$PROJECT_DIR$/posts.html" />
+        <option value="$PROJECT_DIR$/teaching.md" />
         <option value="$PROJECT_DIR$/posts/emnlp19_evolution.html" />
+        <option value="$PROJECT_DIR$/_layouts/papers.html" />
+        <option value="$PROJECT_DIR$/papers.md" />
+        <option value="$PROJECT_DIR$/_data/papers/2018.yml" />
+        <option value="$PROJECT_DIR$/_includes/paper_lena.html" />
+        <option value="$PROJECT_DIR$/_data/papers/2019.yml" />
       </list>
     </option>
   </component>
@@ -284,20 +273,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1555792211203</updated>
-    </task>
-    <task id="LOCAL-00005" summary="[github.io] logos and links">
-      <created>1555794640248</created>
-      <option name="number" value="00005" />
-      <option name="presentableId" value="LOCAL-00005" />
-      <option name="project" value="LOCAL" />
-      <updated>1555794640248</updated>
-    </task>
-    <task id="LOCAL-00006" summary="[github.io] logos and links">
-      <created>1555794891946</created>
-      <option name="number" value="00006" />
-      <option name="presentableId" value="LOCAL-00006" />
-      <option name="project" value="LOCAL" />
-      <updated>1555794891946</updated>
     </task>
     <task id="LOCAL-00007" summary="[github.io] logos and links">
       <created>1555795618740</created>
@@ -628,11 +603,25 @@
       <option name="project" value="LOCAL" />
       <updated>1566073363666</updated>
     </task>
-    <option name="localTasksCounter" value="54" />
+    <task id="LOCAL-00054" summary="update students">
+      <created>1568190282026</created>
+      <option name="number" value="00054" />
+      <option name="presentableId" value="LOCAL-00054" />
+      <option name="project" value="LOCAL" />
+      <updated>1568190282027</updated>
+    </task>
+    <task id="LOCAL-00055" summary="fix">
+      <created>1568277666214</created>
+      <option name="number" value="00055" />
+      <option name="presentableId" value="LOCAL-00055" />
+      <option name="project" value="LOCAL" />
+      <updated>1568277666214</updated>
+    </task>
+    <option name="localTasksCounter" value="56" />
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="7" y="23" width="1258" height="709" extended-state="0" />
+    <frame x="7" y="23" width="1258" height="709" extended-state="1" />
     <editor active="true" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.25383994" />
@@ -674,8 +663,6 @@
     </layout-to-restore>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="[github.io] news: initial commit" />
-    <MESSAGE value="[github.io] news: fix" />
     <MESSAGE value="[github.io] teaching: initial" />
     <MESSAGE value="[github.io] teaching: courses" />
     <MESSAGE value="[github.io] add ysda" />
@@ -699,13 +686,11 @@
     <MESSAGE value="fix yr link" />
     <MESSAGE value="aclweb links for ACL2019 papers" />
     <MESSAGE value="emnlp news" />
-    <option name="LAST_COMMIT_MESSAGE" value="emnlp news" />
+    <MESSAGE value="update students" />
+    <MESSAGE value="fix" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/img/ico/UvA-gray.png" />
-    <entry file="file://$PROJECT_DIR$/img/ico/uva.png">
-      <provider selected="true" editor-type-id="images" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/img/ico/be.png" />
     <entry file="file://$PROJECT_DIR$/_includes/person.html">
       <provider selected="true" editor-type-id="text-editor" />
@@ -733,13 +718,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="180">
           <caret line="12" selection-start-line="12" selection-end-line="12" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/_data/papers/2018.yml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="600">
-          <caret line="40" column="32" selection-start-line="40" selection-start-column="32" selection-end-line="40" selection-end-column="32" />
         </state>
       </provider>
     </entry>
@@ -827,13 +805,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/_layouts/photolist.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="280">
-          <caret line="36" column="58" selection-start-line="36" selection-start-column="58" selection-end-line="36" selection-end-column="58" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/posts_md.md" />
     <entry file="file://$PROJECT_DIR$/_includes/header.html">
       <provider selected="true" editor-type-id="text-editor">
@@ -858,21 +829,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/teaching.md">
-      <provider editor-type-id="text-editor">
-        <state relative-caret-position="345">
-          <caret line="23" selection-start-line="23" selection-end-line="23" />
-        </state>
-      </provider>
-      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
-        <state split_layout="SPLIT">
-          <first_editor relative-caret-position="60">
-            <caret line="4" column="8" selection-start-line="4" selection-start-column="8" selection-end-line="4" selection-end-column="8" />
-          </first_editor>
-          <second_editor />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/_includes/course.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="435">
@@ -880,13 +836,6 @@
           <folding>
             <element signature="n#style#0;n#img#0;n#div#0;n#div#0;n#!!top" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/_includes/paper.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="225">
-          <caret line="15" column="14" selection-start-line="13" selection-start-column="10" selection-end-line="15" selection-end-column="14" />
         </state>
       </provider>
     </entry>
@@ -904,13 +853,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/_data/papers/2019.yml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="169">
-          <caret line="17" column="5" lean-forward="true" selection-start-line="17" selection-start-column="5" selection-end-line="17" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/_layouts/post.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="105">
@@ -922,36 +864,6 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/posts/emnlp19_fugue_on_the_evolution_of_repr.html" />
-    <entry file="file://$PROJECT_DIR$/index.md">
-      <provider editor-type-id="text-editor">
-        <state relative-caret-position="360">
-          <caret line="24" lean-forward="true" selection-start-line="24" selection-end-line="24" />
-        </state>
-      </provider>
-      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
-        <state split_layout="SPLIT">
-          <first_editor relative-caret-position="405">
-            <caret line="27" selection-start-line="27" selection-end-line="27" />
-          </first_editor>
-          <second_editor />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/papers.md">
-      <provider editor-type-id="text-editor">
-        <state relative-caret-position="225">
-          <caret line="15" column="30" selection-start-line="15" selection-start-column="30" selection-end-line="15" selection-end-column="30" />
-        </state>
-      </provider>
-      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
-        <state split_layout="SPLIT">
-          <first_editor relative-caret-position="60">
-            <caret line="4" column="8" selection-start-line="4" selection-start-column="8" selection-end-line="4" selection-end-column="8" />
-          </first_editor>
-          <second_editor />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/README.md">
       <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
         <state split_layout="SPLIT">
@@ -983,10 +895,78 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/index.md">
+      <provider editor-type-id="text-editor">
+        <state relative-caret-position="360">
+          <caret line="24" lean-forward="true" selection-start-line="24" selection-end-line="24" />
+        </state>
+      </provider>
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="405">
+            <caret line="27" selection-start-line="27" selection-end-line="27" />
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/teaching.md">
+      <provider editor-type-id="text-editor">
+        <state relative-caret-position="345">
+          <caret line="23" selection-start-line="23" selection-end-line="23" />
+        </state>
+      </provider>
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="390">
+            <caret line="26" lean-forward="true" selection-start-line="26" selection-end-line="26" />
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/posts/emnlp19_evolution.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="410">
+          <caret line="78" column="14" selection-start-line="78" selection-start-column="14" selection-end-line="78" selection-end-column="14" />
+          <folding>
+            <element signature="e#193#243#0" expanded="true" />
+            <element signature="e#259#282#0" expanded="true" />
+            <element signature="e#522#545#0" expanded="true" />
+            <element signature="e#1044#1111#0" expanded="true" />
+            <element signature="e#22083#22102#0" expanded="true" />
+            <element signature="e#24091#24110#0" expanded="true" />
+            <element signature="e#24768#24787#0" expanded="true" />
+            <element signature="e#24873#24892#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/_layouts/papers.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="315">
+          <caret line="21" column="29" lean-forward="true" selection-start-line="21" selection-start-column="29" selection-end-line="21" selection-end-column="29" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/_layouts/photolist.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="135">
+          <caret line="9" lean-forward="true" selection-end-line="51" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/_includes/paper.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="189">
+          <caret line="19" column="26" lean-forward="true" selection-start-line="19" selection-start-column="26" selection-end-line="19" selection-end-column="26" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/posts.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="259">
-          <caret line="37" column="6" lean-forward="true" selection-start-line="37" selection-start-column="6" selection-end-line="37" selection-end-column="49" />
+        <state relative-caret-position="992">
+          <caret line="69" selection-start-line="69" selection-end-line="69" />
           <folding>
             <element signature="n#style#0;n#h1#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#img#0;n#a#0;n#!!top" expanded="true" />
@@ -1000,20 +980,43 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/posts/emnlp19_evolution.html">
+    <entry file="file://$PROJECT_DIR$/papers.md">
+      <provider editor-type-id="text-editor">
+        <state relative-caret-position="225">
+          <caret line="15" column="30" selection-start-line="15" selection-start-column="30" selection-end-line="15" selection-end-column="30" />
+        </state>
+      </provider>
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="270">
+            <caret line="18" column="21" selection-start-line="18" selection-start-column="21" selection-end-line="18" selection-end-column="21" />
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/_includes/paper_lena.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="392">
-          <caret line="609" column="63" selection-start-line="609" selection-start-column="63" selection-end-line="609" selection-end-column="63" />
+        <state relative-caret-position="15">
+          <caret line="1" column="26" selection-start-line="1" selection-start-column="26" selection-end-line="1" selection-end-column="26" />
           <folding>
-            <element signature="e#193#243#0" expanded="true" />
-            <element signature="e#259#282#0" expanded="true" />
-            <element signature="e#522#545#0" expanded="true" />
-            <element signature="e#1044#1111#0" expanded="true" />
-            <element signature="e#22083#22102#0" expanded="true" />
-            <element signature="e#24091#24110#0" expanded="true" />
-            <element signature="e#24768#24787#0" expanded="true" />
-            <element signature="e#24873#24892#0" expanded="true" />
+            <element signature="n#style#0;n#img#0;n#a#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#img#0;n#a#0;n#div#0;n#!!top" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/_data/papers/2018.yml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="660">
+          <caret line="44" column="17" selection-start-line="44" selection-start-column="17" selection-end-line="44" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/_data/papers/2019.yml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="5" column="28" selection-start-line="5" selection-start-column="28" selection-end-line="5" selection-end-column="28" />
         </state>
       </provider>
     </entry>
