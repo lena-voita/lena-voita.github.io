@@ -76,7 +76,7 @@ achieve state-of-the-art results for all three tasks we consider.-->
 
 <br/><br/>
 
-<h3>Tasks</h3>
+<h3>Tasks: MT, LM, MLM (aka BERT)</h3>
 
 
 We consider three tasks.
@@ -127,7 +127,8 @@ representation of the token <img src="../resources/posts/emnlp19_evolution/x_i_t
 
 <br/><br/>
 
-<h3>What we are interested in</h3>
+<h3>What we are interested in,</h3>
+<h4>or How Representations Evolve and the Underlying Process Defining this Evolution</h4>
 
 <img src="../resources/posts/emnlp19_evolution/tasks_with_evolution-min.png" width="350" style="float:right">
 For all models, we fix model hyperparameters, training data, and parameter initialization.
@@ -156,6 +157,7 @@ not only the results observed in our work but also some previous works.
 <br/><br/>
 
 <h2>Our Point of View: Information Bottleneck</h2>
+<h4>TL;DR: the Evolution is in Squeezing Irrelevant Information About Input While Preserving Relevant</h4>
 
 Our point of view in this work is the
 <a href="https://www.cs.huji.ac.il/labs/learning/Papers/allerton.pdf">Information Bottleneck (IB)</a>
@@ -186,6 +188,7 @@ different for each of our models, we expect to see different patterns in informa
 
 <br/><br/>
 <h2>Information Bottleneck for Token Representations</h2>
+<h3 style="font-size:24px;">Not so easy: representations of individual tokens, not the entire input</h3>
 
 Now, we will try to look at the evolution of token representations from the Information Bottleneck perspective.
 We also view every model as learning a function from input X to output Y.
@@ -206,7 +209,9 @@ in a sentence. This is different from the MT setting, where there is no single e
 which an output label is predicted.
 
 <br/><br/>
-<h3>Mutual Information with input</h3>
+<h3>Mutual Information with input:</h3>
+<h4 style="font-size:19px;"> LM forgets a lot, MT - less, MLM has <font face="symbol" style="font-size:17px;"> context encoding</font> and
+    <font face="symbol" style="font-size:17px;">token reconstruction</font> stages</h4>
 To illustrate the process of information loss and gain in representations of individual tokens,
 we first estimate the mutual information between token representations and the input token identity.
 Since the direct evaluation of mutual information between layers and labels is challenging for
@@ -233,7 +238,8 @@ representations of individual tokens, it suggests that this extra information is
 <br/><br/>
 
 
-<h3>Mutual Information with both input and output</h3>
+<h3>Mutual Information with both input and output:</h3>
+<h4>Information about input is getting lost, information about output is accumulated</h4>
 
 Now we’ll come even closer to the Information Bottleneck setting and measure MI with
 the output label for LM and MLM. In this experiment,
@@ -270,6 +276,7 @@ switch to more well-established frameworks.
 
 <h2>Analyzing Changes and Influences</h2>
 
+<h3>How: Compare Different 'Views' on the Same Data</h3>
 In this part, we also focus on the information flow in the models.
 The questions we
 ask include:
@@ -299,7 +306,7 @@ the amount of change between layers for each task.
 
 <h3>A coarse-grained view</h3>
 
-<h4><u>Distance between tasks</u></h4>
+<h4><u>Distance between tasks</u>: MT and MLM are closer to each other than to LM</h4>
 
 As the first step in our analysis, we measure the difference between representations learned for different tasks.
 For each task, we also measure differences between representations of
@@ -325,6 +332,7 @@ LM produces a representation needed for predicting the next token.
 
 <h4><u>Change between layers</u></h4>
 <img src="../resources/posts/emnlp19_evolution/change_by_task_with_view-min.png" width="230" style="float:right">
+<h4 style="font-size:19px;">TL;DR: decreasing change for MT, a lot of change for LM, the two stages for MLM </h4>
 Similarly, we measure the difference between representations of consecutive layers in each
 model (look at the figure). <!--In this case we take views $v^{m,l}$ and $v^{m,l+1}$ and vary layers $l$ and tasks $m$.
 -->
@@ -337,7 +345,7 @@ entails large changes in the representations between layers.
 <br/><br/>
 
 <br/>
-<h3>Fine-grained analysis</h3>
+<h3><!--Fine-grained analysis:<br/>--> Change and Influence of Tokens with Varying Frequency</h3>
 In the process of encoding, representations of tokens in a sentence interact with each other.
 In these interactions, on the one hand,
 they influence other tokens by giving some information. On the other hand, they are influenced
@@ -351,8 +359,10 @@ and investigate how tokens' behavior depends on the value of this property.
 <br/><br/>
 
 <img src="../resources/posts/emnlp19_evolution/views_layers-min.png" width="150" style="float:right">
-<strong>Amount of change.</strong> We measure the extent of change for a group of tokens as the PWCCA distance between
-the representations of <u>these tokens</u> for a pair of adjacent layers (<i>n</i>,  <i>n+1</i>). This quantifies the amount of information the tokens receive in this layer.
+<strong>Amount of change.</strong> We measure the extent of change for a group of tokens as the PWCCA
+distance between
+the representations of <u>these tokens</u> for a pair of adjacent layers (<i>n</i>,  <i>n+1</i>).
+This quantifies the amount of information the tokens receive in this layer.
 <br/><br/>
 <img src="../resources/posts/emnlp19_evolution/influence_howto-min.png" width="200" style="float:right">
 <strong>Amount of influence.</strong> To measure the influence of a token at <i>n</i>-th layer on other tokens, we
@@ -361,10 +371,11 @@ sentence: first after encoding as usual, second when encoding first <i>n-1</i> l
 the influencing token at the <i>n</i>-th layer.
 <br/>
 Look at the illustration.
-<br/><br/>
+<br/><br/><br/><br/>
 
 
-<h4><u>Varying token frequency</u></h4>
+<!--<h4><u>Varying token frequency</u></h4>-->
+<h4><u>Amount of Change</u>: Frequent tokens change more than rare for MT and LM, the two stages for MLM</h4>
 First, we measure the amount of change, or how much tokens are influenced by others.
 
 <img src="../resources/posts/emnlp19_evolution/change_freq-min.png" width="800" >
@@ -384,6 +395,7 @@ The transition from a generalized token representation, formed at the encoding s
 identity apparently requires more changes for rare tokens.
 <br/><br/>
 
+<h4><u>Amount of Influence</u>: Rare tokens influence more than frequent</h4>
 Let’s now measure to what extent tokens influence others.
 
 <img src="../resources/posts/emnlp19_evolution/influence_freq-min.png" width="800" >
@@ -399,6 +411,8 @@ Note this extreme influence of rare tokens on the first layer of MT and for LM.
 In contrast, rare tokens are not the most influencing ones at the lower layers of MLM.
 <br/><br/>
 
+<h4><u>Extreme Influence of Rare Tokens: Bug or Feature?</u></h4>
+
 <img src="../resources/posts/emnlp19_evolution/influence_freq_iwd-min.png" width="400" style="float:right">
 
 We hypothesize that the training procedure of MLM, with masking out some tokens or replacing
@@ -409,6 +423,8 @@ As we expected, there is no extreme influence of rare tokens when using this reg
 supporting the above interpretation.
 <br/><br/>
 
+<h4>Remember our <a href="https://lena-voita.github.io/posts/acl19_heads.html">Story of Heads</a>?
+The Rare Tokens attention head!</h4>
 Interestingly, for the MT task
 <a href="https://lena-voita.github.io/posts/acl19_heads.html">The Story of Heads</a> (or our
 <a href="https://www.aclweb.org/anthology/P19-1580"> ACL 2019 paper</a>)
@@ -419,6 +435,7 @@ fancy kind of model overfitting.
 
 <br/><br/>
 
+<!--
 <h4><u>Varying part of speech</u></h4>
 
 We also analyzed how the extent of change and influence depends on part of speech.
@@ -434,9 +451,10 @@ and adjectives.
 
 <img src="../resources/posts/emnlp19_evolution/influence_pos-min.png" width="800" >
 <br/><br/>
+-->
 
-
-<h2>What does a layer represent?</h2>
+<h2>What does a layer represent,</h2>
+<h3>or I'll look at your neighbors and will tell who you are</h3>
 
 Previously we quantified the amount of information exchanged
 between tokens. Now, we want to understand what representation in each layer 'focuses' on.
@@ -449,7 +467,7 @@ first we will track how this information is preserved. Then, we will look at how
 (both past and future) evolves in token representations.
 <br/><br/>
 
-<h3>Preserving token identity</h3>
+<h3>MLM best preserves token identity</h3>
 
 <img src="../resources/posts/emnlp19_evolution/token_neighbors-min.png" width="350" style="float:right">
 <br/>
@@ -494,7 +512,7 @@ bottom-up across the layers.
 <br/><br/>
 
 
-<h3>Preserving token position</h3>
+<h3>MT best preserves token position</h3>
 
 
 <img src="../resources/posts/emnlp19_evolution/evolution_position-min.png" width="180" style="float:right">
@@ -526,7 +544,8 @@ As an illustration, we visualize t-SNE of different occurrences of the token
 For MT, even on the last layer ordering by position is noticeable.
 <br/><br/><br/>
 
-<h3>Lexical and syntactic context</h3>
+<h3>Lexical and syntactic context of past and future</h3>
+<h4>TL;DR: LM loses past while forming future, MLM accumulates then loses both</h4>
 
 In this section, we will look at the two properties: identities of immediate neighbors of a current
 token and CCG supertag of a current token (CCG supertags encode syntactic context of a token).
