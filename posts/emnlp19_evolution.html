@@ -25,8 +25,8 @@ We look at the evolution of representations of individual tokens in Transformers
     <a href="https://www.cs.huji.ac.il/labs/learning/Papers/allerton.pdf">Information Bottleneck</a>
     perspective and show, that:
 <ul>
-  <li>LMs gradually forget past when forming future;</li>
-  <li>for MLMs, the evolution has the two stages of
+  <li>LMs gradually forget past when forming predictions about future;</li>
+  <li>for MLMs, the evolution proceeds in two stages of
       <font face="symbol">context encoding</font> and <font face="symbol">token reconstruction</font>;</li>
     <li>MT representations get refined with context,
         but less processing is happening.</li>
@@ -90,7 +90,7 @@ predict words in the target sentence, word by word, i.e. provide estimates of th
 <img src="../resources/posts/emnlp19_evolution/mt_prob-min.png" width="120">.
 
 <br/><br/>
-We train a standard Transformer and then take only it's encoder. On contrast to the other two tasks
+We train a standard Transformer and then take only it's encoder. In contrast to the other two tasks
 we describe below, representations from the top layers are not directly used to predict output labels
 but to encode the information which is then used by the decoder.
 <br/><br/>
@@ -147,11 +147,11 @@ We hypothesize that the training procedure (or, in our notation, task) defines:
 </ul>
 
 The nature of our work is quite unusual. We are going to have a lot of experiments and we’ll
-see a lot of results. Despite these results alone are quite interesting (in terms of methods,
+see a lot of results. Despite that these results alone are quite interesting (in terms of methods,
 things we look at, conclusions we make; to be honest, there is <i>nothing</i> standard in what we do here :) ),
 the work itself is not about the results. The most important in what we do, as I see it, is
 <font face="symbol">we suggest you a point of view</font>, a way of looking at these results.
-This is something not seen to a naked eye, hidden inside; this is <font face="symbol">the underlying process</font>
+This is something not seen by the naked eye, hidden inside; this is <font face="symbol">the underlying process</font>
 which defines
 not only the results observed in our work but also some previous works.
 <br/><br/>
@@ -159,13 +159,13 @@ not only the results observed in our work but also some previous works.
 <h2>Our Point of View: Information Bottleneck</h2>
 <h4>TL;DR: the Evolution is in Squeezing Irrelevant Information About Input While Preserving Relevant</h4>
 
-Our point of view in this work is the
+We view the evolution from the
 <a href="https://www.cs.huji.ac.il/labs/learning/Papers/allerton.pdf">Information Bottleneck (IB)</a>
-principle.
+perspective.
 <br/>
 
 The Information Bottleneck method aims to extract a compressed representation of an input which
-retains as much as possible information about output. It maximizes mutual information with the output
+retains as much as possible information about an output. It maximizes mutual information with the output
 while penalizing the MI with the input:
 <img src="../resources/posts/emnlp19_evolution/ib_variational-min.png" width="280">.
 
@@ -181,7 +181,7 @@ irrelevant information about input while preserving relevant.
 <br/><br/>
 This implies that output defines a <u>partition of input on relevant and irrelevant
     information</u> and, therefore, defines <u>the information flow</u> in the model. Since the output is
-different for each of our models, we expect to see different patterns in information flow.
+different for each of our models, we expect to see different patterns in the information flow.
 
 
 
@@ -485,7 +485,7 @@ This supports the interpretations we made previously.
 <font color="#6f9943" >
 To make it more interesting,
 let us recall the findings by <a href="https://www.aclweb.org/anthology/W18-5448">Zhang and Bowman (2018)</a>.
-They show that untrained LSTMs outperform trained ones on a word identity prediction task. This mirrors our
+They show that untrained LSTMs outperform trained ones on the word-identity prediction task. This mirrors our
 view of the evolution of a token representation as going
 through compression and prediction stages, where the learning objective defines the process
 of forgetting information. If a network is not trained, it is not forced to forget input information.
@@ -506,8 +506,8 @@ lot of sentences and visualized their t-sne projections (on the x-axis are layer
 <br/>
 As we go from layer to layer, MT and LM mix representations of these tokens more and
 more (MT to a lesser extent). <br/>
-For MLM, 15% of tokens were masked as in training. In the first layer, these masked
-states form a cluster separate from the others, and then they get disambiguated as we move
+For MLM, 15% of tokens were masked as in training. In the first layer, representations of these masked
+tokens form a cluster separate from the others, and then they get disambiguated as we move
 bottom-up across the layers.
 <br/><br/>
 
