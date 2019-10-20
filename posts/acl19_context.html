@@ -309,6 +309,31 @@ the system has to keep the translation of the name in the current sentence consi
 <br/><br/>
 <br/><br/>
 
+<h3>Check out: Other contrastive test sets for evaluation of discourse phenomena</h3>
+
+<h4><u>EN-FR, Anaphora and coherence/cohesion</u> (200 examples in total)</h4>
+<img src="../resources/posts/acl19_ctx/rachel_example-min.png" style="max-width:300px; height:auto; float:right">
+<a href="https://www.aclweb.org/anthology/N18-1118.pdf">Bawden et al., 2018</a> present hand-crafted
+discourse test sets designed to test the models’ ability to exploit previous source and target sentences
+(one sentence). There are two test sets in the suite: coreference test set (100 examples) and
+coherence/cohesion test set (100 examples). Test sets are designed in a way that any context-agnostic baseline
+achieves 50% accuracy.
+</br></br>
+Look at the example from the coherence/cohesion test set.
+
+</br></br>
+<h4><u>EN-DE, Anaphora</u> (12000 examples in total)</h4>
+<img src="../resources/posts/acl19_ctx/mathias_example-min.png" style="max-width:400px; height:auto; float:right">
+
+<a href="https://www.aclweb.org/anthology/W18-6307">M&uuml;ller et al., 2018</a> present a large-scale
+test suite of contrastive translations focused specifically on the translation of pronouns.
+The test set is used to evaluate the accuracy with which NMT models translate the English
+pronoun <font face="Comic Sans MS">it</font> to its German counterparts <font face="Comic Sans MS">es</font>,
+<font face="Comic Sans MS">sie</font> and <font face="Comic Sans MS">er</font>. One beneficial property of the test set
+is a
+script for extracting the examples, which can extract any desired number of context sentences.
+</br></br>
+
 <h2>CADec: Context-Aware Decoder</h2>
 
 <h3>Setting</h3>
