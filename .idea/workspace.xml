@@ -3,6 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="761392bc-7f53-4674-a9c2-966e5c9edf64" name="Default" comment="aclweb links for ACL2019 papers">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_data/papers/2019.yml" beforeDir="false" afterPath="$PROJECT_DIR$/_data/papers/2019.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/_site/feed.xml" beforeDir="false" afterPath="$PROJECT_DIR$/_site/feed.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/_site/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/index.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/_site/papers.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/papers.html" afterDir="false" />
@@ -11,7 +12,6 @@
       <change beforePath="$PROJECT_DIR$/_site/posts/acl19_heads.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/posts/acl19_heads.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/_site/posts/emnlp19_evolution.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/posts/emnlp19_evolution.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/_site/teaching.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/teaching.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/posts/acl19_context.html" beforeDir="false" afterPath="$PROJECT_DIR$/posts/acl19_context.html" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -54,29 +54,29 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/posts/acl19_context.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="22">
-              <caret line="311" column="16" lean-forward="true" selection-start-line="311" selection-start-column="16" selection-end-line="311" selection-end-column="16" />
+            <state relative-caret-position="116">
+              <caret line="431" column="15" lean-forward="true" selection-start-line="431" selection-start-column="15" selection-end-line="431" selection-end-column="15" />
               <folding>
                 <element signature="e#248#271#0" expanded="true" />
                 <element signature="e#548#571#0" expanded="true" />
                 <element signature="e#2017#2084#0" expanded="true" />
                 <element signature="e#2228#2277#0" expanded="true" />
-                <element signature="e#17680#17729#0" expanded="true" />
-                <element signature="e#17626#17675#0" expanded="true" />
-                <element signature="e#18497#18503#0" expanded="true" />
+                <element signature="e#25376#25425#0" expanded="true" />
+                <element signature="e#26064#26113#0" expanded="true" />
+                <element signature="e#26169#26175#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/_data/papers/2019.yml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="75">
-              <caret line="5" column="28" selection-start-line="5" selection-start-column="28" selection-end-line="5" selection-end-column="28" />
+            <state relative-caret-position="87">
+              <caret line="6" column="15" selection-start-line="6" selection-start-column="15" selection-end-line="6" selection-end-column="15" />
             </state>
           </provider>
         </entry>
@@ -159,18 +159,18 @@
         <option value="$PROJECT_DIR$/papers.md" />
         <option value="$PROJECT_DIR$/_data/papers/2018.yml" />
         <option value="$PROJECT_DIR$/_includes/paper_lena.html" />
-        <option value="$PROJECT_DIR$/_data/papers/2019.yml" />
         <option value="$PROJECT_DIR$/posts.html" />
         <option value="$PROJECT_DIR$/posts/emnlp19_evolution.html" />
         <option value="$PROJECT_DIR$/teaching.md" />
         <option value="$PROJECT_DIR$/index.md" />
         <option value="$PROJECT_DIR$/posts/acl19_context.html" />
+        <option value="$PROJECT_DIR$/_data/papers/2019.yml" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="1">
-    <option name="x" value="7" />
-    <option name="y" value="23" />
+    <option name="x" value="16" />
+    <option name="y" value="51" />
     <option name="width" value="1258" />
     <option name="height" value="709" />
   </component>
@@ -248,20 +248,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1555792211203</updated>
-    </task>
-    <task id="LOCAL-00011" summary="[github.io] logos and links">
-      <created>1555796599601</created>
-      <option name="number" value="00011" />
-      <option name="presentableId" value="LOCAL-00011" />
-      <option name="project" value="LOCAL" />
-      <updated>1555796599601</updated>
-    </task>
-    <task id="LOCAL-00012" summary="[github.io] main info">
-      <created>1555798603338</created>
-      <option name="number" value="00012" />
-      <option name="presentableId" value="LOCAL-00012" />
-      <option name="project" value="LOCAL" />
-      <updated>1555798603339</updated>
     </task>
     <task id="LOCAL-00013" summary="[github.io] main info">
       <created>1555798766017</created>
@@ -592,11 +578,25 @@
       <option name="project" value="LOCAL" />
       <updated>1570714799165</updated>
     </task>
-    <option name="localTasksCounter" value="60" />
+    <task id="LOCAL-00060" summary="add section about other contrastive test sets">
+      <created>1571592654795</created>
+      <option name="number" value="00060" />
+      <option name="presentableId" value="LOCAL-00060" />
+      <option name="project" value="LOCAL" />
+      <updated>1571592654796</updated>
+    </task>
+    <task id="LOCAL-00061" summary="fix">
+      <created>1571594205025</created>
+      <option name="number" value="00061" />
+      <option name="presentableId" value="LOCAL-00061" />
+      <option name="project" value="LOCAL" />
+      <updated>1571594205025</updated>
+    </task>
+    <option name="localTasksCounter" value="62" />
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="7" y="23" width="1258" height="709" extended-state="0" />
+    <frame x="16" y="51" width="1258" height="709" extended-state="1" />
     <editor active="true" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.25383994" />
@@ -638,7 +638,6 @@
     </layout-to-restore>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="[github.io] add ysda" />
     <MESSAGE value="[github.io] add photo" />
     <MESSAGE value="[github.io] papers: initial" />
     <MESSAGE value="[github.io] papers" />
@@ -662,6 +661,7 @@
     <MESSAGE value="update students" />
     <MESSAGE value="update the evolution post" />
     <MESSAGE value="no students" />
+    <MESSAGE value="add section about other contrastive test sets" />
     <MESSAGE value="fix" />
     <option name="LAST_COMMIT_MESSAGE" value="fix" />
   </component>
@@ -897,13 +897,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/_data/papers/2019.yml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="75">
-          <caret line="5" column="28" selection-start-line="5" selection-start-column="28" selection-end-line="5" selection-end-column="28" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/posts.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="525">
@@ -971,17 +964,24 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/posts/acl19_context.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="22">
-          <caret line="311" column="16" lean-forward="true" selection-start-line="311" selection-start-column="16" selection-end-line="311" selection-end-column="16" />
+        <state relative-caret-position="116">
+          <caret line="431" column="15" lean-forward="true" selection-start-line="431" selection-start-column="15" selection-end-line="431" selection-end-column="15" />
           <folding>
             <element signature="e#248#271#0" expanded="true" />
             <element signature="e#548#571#0" expanded="true" />
             <element signature="e#2017#2084#0" expanded="true" />
             <element signature="e#2228#2277#0" expanded="true" />
-            <element signature="e#17680#17729#0" expanded="true" />
-            <element signature="e#17626#17675#0" expanded="true" />
-            <element signature="e#18497#18503#0" expanded="true" />
+            <element signature="e#25376#25425#0" expanded="true" />
+            <element signature="e#26064#26113#0" expanded="true" />
+            <element signature="e#26169#26175#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/_data/papers/2019.yml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="87">
+          <caret line="6" column="15" selection-start-line="6" selection-start-column="15" selection-end-line="6" selection-end-column="15" />
         </state>
       </provider>
     </entry>

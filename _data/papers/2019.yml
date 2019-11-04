@@ -1,3 +1,27 @@
+
+-
+  layout: paper
+  paper-type: inproceedings
+  selected: y
+  year: 2019
+  img: bpe_drop.png
+  title: "BPE-Dropout: Simple and Effective Subword Regularization"
+  authors: "Ivan Provilkov, Dmitrii Emelianenko, <u>Elena Voita</u>"
+  doc-url:
+  conf: no_conf.png
+  url: "https://arxiv.org/abs/1910.13267"
+
+- layout: paper
+  paper-type: inproceedings
+  selected: y
+  year: 2019
+  img: nips19_cat-min.png
+  title: "Sequence Modeling with Unconstrained Generation Order"
+  authors: "Dmitrii Emelianenko, <u>Elena Voita</u>, Pavel Serdyukov"
+  doc-url:
+  conf: nips19.png
+  url: "https://arxiv.org/abs/1911.00176"
+
 -
   layout: paper
   paper-type: inproceedings
