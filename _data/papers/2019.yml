@@ -4,7 +4,7 @@
   paper-type: inproceedings
   selected: y
   year: 2019
-  img: bpe_drop.png
+  img: bpe_drop-min.png
   title: "BPE-Dropout: Simple and Effective Subword Regularization"
   authors: "Ivan Provilkov, Dmitrii Emelianenko, <u>Elena Voita</u>"
   doc-url:
