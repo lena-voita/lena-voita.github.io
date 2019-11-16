@@ -20,6 +20,7 @@ I [teach NLP](https://github.com/yandexdataschool/nlp_course) at the [Yandex Sch
 
 ## <span style="color:darkblue">News </span>
 
+* 09/2019 _To appear at __NeurIPS__ 2019_: [Sequence Modeling with Unconstrained Generation Order](https://arxiv.org/abs/1911.00176).
 * 08/2019 __2__ papers _accepted to __EMNLP__ 2019_!
 * 06/2019 Attending Google NLP summit in Zurich.
 * 05/2019 __2__ papers _accepted to __ACL__ 2019_, one is oral!
