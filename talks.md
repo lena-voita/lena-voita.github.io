@@ -10,7 +10,7 @@ Program committee:
 * EMNLP 2019 (outstanding reviewer)
 
 
-## <span style="color:darkblue"> Talks </span>
+## <span style="color:darkblue"> Selected Talks </span>
 
 (Upcoming talks are <span style="color:gray;font-size:0.9em">in grey</span>)
 
