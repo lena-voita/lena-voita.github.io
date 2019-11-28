@@ -16,10 +16,10 @@ Program committee:
 
 ### <span style="color:darkblue"> Keynote talks </span>
 
-* <span style="color:grey">01/2020 [Applied Machine Learning Days at EPFL](https://appliedmldays.org), Lausanne, Switzerland</span>
-* 08/2019 <span style="color:#5a8f3b">_Inside the Transformer_</span>, [Yandex Research Summit](https://yandex.com/promo/academy/yars_2019), <span style="font-size:0.9em">Moscow, Russia (joint talk with David Talbot)</span> 
+* <span style="color:grey">01/2020 [Applied Machine Learning Days at EPFL](https://appliedmldays.org/tracks/ai-nlp), Lausanne, Switzerland</span>
+* 08/2019 <span style="color:#5a8f3b">_Inside the Transformer_</span>, [Yandex Research Summit](https://yandex.com/promo/academy/yars_2019), <span style="font-size:0.9em">Moscow, Russia (with David Talbot)</span> 
 * 07/2019 <span style="color:#5a8f3b">_Machine translation: Analyzing multi-head self-attention_</span>, [AIST 2019](http://aistconf.org) <span style="font-size:0.9em">(8th International Conference - Analysis of Images, Social networks and Texts), Kazan, Russia</span> 
-* 08/2018 <span style="color:#5a8f3b">_Does NMT learn to solve NLP?_</span>,  [Yandex Research Summit](https://yandex.com/promo/academy/yars_2019), <span style="font-size:0.9em">Moscow, Russia (joint talk with David Talbot)</span>
+* 08/2018 <span style="color:#5a8f3b">_Does NMT learn to solve NLP?_</span>,  [Yandex Research Summit](https://yandex.com/promo/academy/yars_2019), <span style="font-size:0.9em">Moscow, Russia (with David Talbot)</span>
 
 ### <span style="color:darkblue"> Guest talks </span>
 
