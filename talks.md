@@ -27,7 +27,7 @@ Program committee:
 
 * <span style="color:grey">01/2020 Seminar at Naver Labs Europe, Grenoble, France</span>
 * <span style="color:grey">01/2020 Seminar at Google Research, Berlin, Germany</span>
-* 11/2019 [NLP Highlights](https://soundcloud.com/nlp-highlights) 
+* 11/2019 [NLP Highlights](https://soundcloud.com/nlp-highlights) podcast
 <iframe width="100%" height="170" scrolling="no" frameborder="no" allow="autoplay" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/725286211&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=false&show_artwork=false&visual=false"></iframe>
 
 ### <span style="color:darkblue"> Conference talks </span>
