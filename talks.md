@@ -8,6 +8,8 @@ order: 3
 ### <span style="color:darkblue"> Service </span>
 Program committee:
 * EMNLP 2019 (outstanding reviewer)
+* ACL 2020 + [DeeLIO workshop](https://sites.google.com/view/deelio-ws/program-committee)
+* ICML 2020
 
 
 ## <span style="color:darkblue"> Selected Talks </span>
@@ -25,6 +27,8 @@ Program committee:
 
 * <span style="color:grey">01/2020 Seminar at Naver Labs Europe, Grenoble, France</span>
 * <span style="color:grey">01/2020 Seminar at Google Research, Berlin, Germany</span>
+* 11/2019 [NLP Highlights](https://soundcloud.com/nlp-highlights) 
+<iframe width="100%" height="170" scrolling="no" frameborder="no" allow="autoplay" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/725286211&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=false&show_artwork=false&visual=false"></iframe>
 
 ### <span style="color:darkblue"> Conference talks </span>
 * [ACL 2019](http://www.acl2019.org/EN/index.xhtml): <span style="color:#5a8f3b">_Analyzing Multi-Head Self-Attention: Specialized Heads Do the Heavy Lifting, the Rest Can Be Pruned_</span>, Florence, Italy <a href="http://www.livecongress.it/aol/indexSA.php?id=9FB3FACA&ticket=" class="label label-success">Video</a>
