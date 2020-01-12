@@ -10,7 +10,7 @@ layout: default
 <img src="/img/people/lena-min.png" name="readmore_1" width=204px height=240px></a> -->
 
 
-I am Elena (Lena) Voita, a __Ph.D. candidate__ at the University of Amsterdam. I'm also a frequent visitor at the [School of Informatics]({{site.school_of_informatics}}) at the University of Edinburgh, and I am part of the [EdinburghNLP]({{site.edn_nlp_main}}) group. I'm very happy to be supervised by [Ivan Titov]({{site:ivan_page}}) and [Rico Sennrich]({{site.rico_page}}).
+I am Elena (Lena) Voita, a __Ph.D. candidate__ at the University of Amsterdam. I'm also a frequent visitor at the University of Edinburgh and part of the [EdinburghNLP]({{site.edn_nlp_main}}) group. I'm very happy to be supervised by [Ivan Titov]({{site:ivan_page}}) and [Rico Sennrich]({{site.rico_page}}).
 
 Till spring 2020, I am also a __research scientist__ at [Yandex Research]({{site.yandex_research_main}}) working on __Natural Language Processing__. My research focuses on Neural Machine Translation, and I work closely with the [Yandex Translate](https://translate.yandex.com) team<a onMouseOver="document.fox.src='/img/people/foxie.jpeg';" onMouseOut="document.fox.src='/img/people/lena-min.png';">.</a>
 
