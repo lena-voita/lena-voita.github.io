@@ -18,14 +18,14 @@ Program committee:
 
 ### <span style="color:darkblue"> Speaker </span>
 
-* 01/2020 <span style="color:#5a8f3b">_Evolution of Representations in the Transformer_</span>, AI & NLP track at [Applied Machine Learning Days at EPFL](https://appliedmldays.org/tracks/ai-nlp), Lausanne, Switzerland
+* 01/2020 <span style="color:#5a8f3b">_Evolution of Representations in the Transformer_</span>, keynote at AI & NLP track at [Applied Machine Learning Days at EPFL](https://appliedmldays.org/tracks/ai-nlp), Lausanne, Switzerland
 * 08/2019 <span style="color:#5a8f3b">_Inside the Transformer_</span>, [Yandex Research Summit](https://yandex.com/promo/academy/yars_2019), <span style="font-size:0.9em">Moscow, Russia (with David Talbot)</span> 
 * 07/2019 <span style="color:#5a8f3b">_Machine translation: Analyzing multi-head self-attention_</span>, keynote at [AIST 2019](http://aistconf.org) <span style="font-size:0.9em">(8th International Conference - Analysis of Images, Social networks and Texts), Kazan, Russia</span> 
 * 08/2018 <span style="color:#5a8f3b">_Does NMT learn to solve NLP?_</span>,  [Yandex Research Summit](https://yandex.com/promo/academy/yars_2019), <span style="font-size:0.9em">Moscow, Russia (with David Talbot)</span>
 
 ### <span style="color:darkblue"> Guest talks </span>
 
-* 01/2020 Seminar at Naver Labs Europe, Grenoble, France
+* 01/2020 [Seminar at Naver Labs Europe](https://europe.naverlabs.com/research/seminars/analyzing-information-flow-in-transformers/), Grenoble, France
 * 01/2020 Seminar at Google Research, Berlin, Germany
 * 11/2019 [NLP Highlights](https://soundcloud.com/nlp-highlights) podcast
 <iframe width="100%" height="170" scrolling="no" frameborder="no" allow="autoplay" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/725286211&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=false&show_artwork=false&visual=false"></iframe>
