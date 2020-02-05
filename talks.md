@@ -8,7 +8,7 @@ order: 3
 ### <span style="color:darkblue"> Service </span>
 Program committee:
 * EMNLP 2019 (outstanding reviewer)
-* ACL 2020 + [DeeLIO workshop](https://sites.google.com/view/deelio-ws/program-committee)
+* ACL 2020 + [RepL4NLP](https://sites.google.com/view/repl4nlp2020/home) and [DeeLIO](https://sites.google.com/view/deelio-ws/program-committee) workshops
 * ICML 2020
 
 
