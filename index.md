@@ -10,23 +10,21 @@ layout: default
 <img src="/img/people/lena-min.png" name="readmore_1" width=204px height=240px></a> -->
 
 
-I am Elena (Lena) Voita, a __Ph.D. candidate__ at the University of Amsterdam. I'm also a frequent visitor at the University of Edinburgh and part of the [EdinburghNLP]({{site.edn_nlp_main}}) group. I'm very happy to be supervised by [Ivan Titov]({{site:ivan_page}}) and [Rico Sennrich]({{site.rico_page}}).
+I am Elena (Lena) Voita, a __Ph.D. student__ at the University of Edinburgh and University of Amsterdam. I'm very happy to be supervised by [Ivan Titov]({{site:ivan_page}}) and [Rico Sennrich]({{site.rico_page}}).
 
-Till spring 2020, I am also a __research scientist__ at [Yandex Research]({{site.yandex_research_main}}) working on __Natural Language Processing__. My research focuses on Neural Machine Translation, and I work closely with the [Yandex Translate](https://translate.yandex.com) team<a onMouseOver="document.fox.src='/img/people/foxie.jpeg';" onMouseOut="document.fox.src='/img/people/lena-min.png';">.</a>
+I'm a [Facebook PhD Fellow](https://research.fb.com/blog/2020/01/announcing-the-recipients-of-the-2020-facebook-fellowship-awards/) (from fall 2020).
 
+Previously, I was a __research scientist__ at [Yandex Research]({{site.yandex_research_main}}) and worked closely with the [Yandex Translate](https://translate.yandex.com) team<a onMouseOver="document.fox.src='/img/people/foxie.jpeg';" onMouseOut="document.fox.src='/img/people/lena-min.png';">.</a>
+I (still) [teach NLP](https://github.com/yandexdataschool/nlp_course) at the [Yandex School of Data Analysis](https://yandexdataschool.com).
 
-
-I [teach NLP](https://github.com/yandexdataschool/nlp_course) at the [Yandex School of Data Analysis](https://yandexdataschool.com).
+<span style="color:red">__Note__ </span>email change: <span style="background-color:#ebf0df">lena-voita@hotmail.com</span>
 
 ## <span style="color:darkblue">News </span>
 
-* 01/2020 I'm [awarded Facebook PhD Fellowhip](https://research.fb.com/blog/2020/01/announcing-the-recipients-of-the-2020-facebook-fellowship-awards/) (starts from fall 2020).
+* 01/2020 I'm [awarded Facebook PhD Fellowhip](https://research.fb.com/blog/2020/01/announcing-the-recipients-of-the-2020-facebook-fellowship-awards/).
 * 01/2020 Giving several talks, including talks at Google Research Berlin, [Naver Labs Europe](https://europe.naverlabs.com/research/seminars/analyzing-information-flow-in-transformers/), NLP track at [Applied Machine Learning Days at EPFL](https://appliedmldays.org/tracks/ai-nlp).
 * 09/2019 _To appear at __NeurIPS__ 2019_: [Sequence Modeling with Unconstrained Generation Order](https://arxiv.org/abs/1911.00176).
 * 08/2019 __2__ papers _accepted to __EMNLP__ 2019_!
 * 06/2019 Attending Google NLP summit in Zurich.
 * 05/2019 __2__ papers _accepted to __ACL__ 2019_, one is oral!
-* 03/2019 We are happy to host [Wilker Aziz](http://wilkeraziz.github.io) and Mirella Lapata at [Yandex NLP week](https://yandex.com/company/blog/nlp-week-2019)! More information is [here](https://academy.yandex.ru/events/data_analysis/NLP_week/), video and materials are [here](https://yandexdataschool.ru/edu-process/nlp-week)
-* 09/2018 We are launching a new [NLP course](https://github.com/yandexdataschool/nlp_course) at the Yandex School of Data Analysis!
-* 04/2018 Our paper [Context-Aware Neural Machine Translation Learns Anaphora Resolution](https://arxiv.org/pdf/1805.10163.pdf) has been _accepted to ACL 2018_ and selected for an _oral_ presentation.
 
