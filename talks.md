@@ -10,6 +10,7 @@ Program committee:
 * EMNLP 2019 (outstanding reviewer)
 * ACL 2020 (+ [RepL4NLP](https://sites.google.com/view/repl4nlp2020/home) + [DeeLIO](https://sites.google.com/view/deelio-ws/program-committee))
 * ICML 2020
+* NeurIPS 2020
 
 
 ## <span style="color:darkblue"> Selected Talks </span>
