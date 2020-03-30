@@ -1,0 +1,13 @@
+
+-
+  layout: paper
+  paper-type: inproceedings
+  selected: y
+  year: 2020
+  img: mdl_probes-min.png
+  title: "Information-Theoretic Probing with Minimum Description Length"
+  authors: "<u>Elena Voita</u> and Ivan Titov"
+  doc-url:
+  conf: no_conf.png
+  url: "https://arxiv.org/abs/2003.12298"
+

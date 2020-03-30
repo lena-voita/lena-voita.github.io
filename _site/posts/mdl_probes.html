@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width initial-scale=1" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>Information-Theoretic Probing with MDL</title>
+    <meta name="description" content="Hi! I'm Lena and here you will find what I do.
+">
+
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="canonical" href="http://localhost:4000/posts/mdl_probes.html">
+
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+
+
+</head>
+
+
+  <!--style>
+  p {
+    text-align: justify;
+  }
+  </style-->
+
+  <body>
+
+    <header class="site-header">
+
+  <div class="wrapper">
+
+    <a class="site-title" href="/">Lena Voita</a>
+
+    <nav class="site-nav">
+      <a href="#" class="menu-icon">
+        <svg viewBox="0 0 18 15">
+          <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+          <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+          <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+        </svg>
+      </a>
+
+      <div class="trigger">
+        
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+          <a class="page-link" href="/posts.html">Blog</a>
+          
+        
+          
+          <a class="page-link" href="/papers.html">Publications</a>
+          
+        
+          
+          <a class="page-link" href="/talks.html">Talks & Service</a>
+          
+        
+          
+          <a class="page-link" href="/teaching.html">Teaching & Supervising</a>
+          
+        
+<!--        <a href="">
+            <img src="image/UoS.ico" alt="DCS">
+        </a>-->
+      </div>
+    </nav>
+
+  </div>
+
+</header>
+
+
+    <div class="page-content">
+      <div class="wrapper">
+        <div class="post">
+
+  <header class="post-header">
+    <h1 style="font-size:38px;" class="post-title">Information-Theoretic Probing with MDL</h1>
+    <p class="post-meta"></p>
+  </header>
+
+  <article class="post-content">
+    <a class="float-right">
+    <img src="../resources/posts/mdl_probes/probe_main_orange-min.png" alt=""
+         style="max-width:350px; height:auto; float: right; margin-left:15px; margin-top:25px"/>
+</a>
+
+
+<span style="font-size:14px;">
+
+This is a post for the paper
+    <a href="">
+            Information-Theoretic Probing with Minimum Description Length.
+    </a>
+</span>
+
+<br/>
+<br/>
+<span style="font-size:15px;">
+
+
+    Probing classifiers often fail to adequately reflect  differences in representations
+    and can show different results depending on hyperparameters.
+    </br>
+    As an alternative to the standard probes,
+
+<ul>
+    <li>we propose information-theoretic probing which measures
+        <font face="symbol">minimum description length</font> (MDL) of labels given representations;</li>
+    <li>we show that MDL characterizes both <font face="symbol">probe quality</font> and
+      <font face="symbol">the amount of effort</font> needed to achieve it;</li>
+    <li>we explain how to easily measure MDL on top of standard probe-training pipelines;</li>
+    <li>we show that results of MDL probes are more informative and stable than those of standard probes.</li>
+</ul>
+</span>
+
+
+<a class="pull-right" href="https://arxiv.org/pdf/2003.12298.pdf" onMouseOver="document.readpaper.src='../resources/posts/buttons/button_read_paper_push-min.png';" onMouseOut="document.readpaper.src='../resources/posts/buttons/button_read_paper-min.png';">
+<img src="../resources/posts/buttons/button_read_paper-min.png" name="readpaper" width=120px class="pull-right"></a>
+<a class="pull-right" href="https://github.com/lena-voita/description-length-probing" onMouseOver="document.viewcode.src='../resources/posts/buttons/button_view_code_push-min.png';" onMouseOut="document.viewcode.src='../resources/posts/buttons/button_view_code-min.png';">
+<img src="../resources/posts/buttons/button_view_code-min.png" name="viewcode" width=120px></a>
+
+<span style="font-size:15px; text-align: right; float: right; color:gray">March 2020</span>
+
+<p></p>
+<hr>
+
+<h3>How to understand if a model captures a linguistic property?</h3>
+
+How would you understand whether a model (e.g., ELMO, BERT) learned to encode some linguistic property?
+Usually this question is narrowed down to the following.
+
+</br></br>
+<u>We have:</u></br> data
+<img src="../resources/posts/mdl_probes/data-min.png" height="22">, where
+<img src="../resources/posts/mdl_probes/data_x-min.png" height="19"> are representations from a model and
+<img src="../resources/posts/mdl_probes/data_y-min.png" height="21"> are labels for some linguistic task
+(<img src="../resources/posts/mdl_probes/y_is_clf-min.png" height="19">).
+
+</br>
+<u>We want:</u></br> to measure to what extent
+representations <img src="../resources/posts/mdl_probes/data_x_prefix-min.png" height="19"> capture labels
+<img src="../resources/posts/mdl_probes/data_y_prefix-min.png" height="22">.
+</br></br>
+
+
+
+<h4>Standard Probing: train a classifier, use its accuracy</h4>
+<img src="../resources/posts/mdl_probes/standard_probe-min.png" width="400" style="float:right; margin-left:15px" >
+The most popular approach is to use probing classifiers (aka probes, probing tasks, diagnostic classifiers).
+These classifiers are trained to predict a linguistic property from frozen representations,
+and accuracy of the classifier is used to measure how well these representations encode the property.
+</br>
+Looks reasonable and simple, right? Yes, but...
+</br></br>
+
+<h4>Wait, how about some sanity checks?</h4>
+<!--
+<img src="../resources/posts/mdl_probes/random_model_and_labels_close-min.png" width="400" style="float:right; margin-left:15px" >
+-->
+<img src="../resources/posts/mdl_probes/random_model_with_head-min.png" width="170" style="float:right; margin-left:15px" >
+
+
+While such probes are extremely popular, several 'sanity checks' showed that
+<u>differences in accuracies fail to reflect differences in representations.</u>
+</br></br>
+These sanity checks are different kinds of random baselines. For example,
+<a href="https://www.aclweb.org/anthology/W18-5448">Zhang & Bowman (2018)</a> compared
+probe scores for trained models and randomly initialized ones. They were able to see reasonable differences in the scores
+only when <u>reducing the amount of a classifier training data</u>.</br></br>
+
+<img src="../resources/posts/mdl_probes/random_labels_with_head-min.png" width="170" style="float:right; margin-left:15px" >
+Later <a href="https://www.aclweb.org/anthology/D19-1275">Hewitt & Liang (2019)</a> proposed to
+put probe accuracy in context with its ability to remember from word types. They constructed so-called 'control tasks',
+which are manually constructed for each linguistic task. A control task defines random output for a word type,
+regardless of context. For example, for POS tags, each word is assigned
+a random label based on the empirical distribution of tags. </br>
+
+Control tasks were used to perform an exhaustive search over hyperparameters for training probes and
+to find a setting with the largest
+difference in the scores. This was achieved by <u>reducing size of a probing model</u> (e.g., fewer neurons).
+
+
+</br></br>
+
+<h4>Houston, we have a problem.</h4>
+
+We see that accuracy of a probe does not always reflect what we want it to reflect, at least not without explicit
+search for a setting where it does. But then another problem arises: if we tune a probe to behave in a certain way for one task
+(e.g., we tune its setting to have low accuracy for a certain control task), how do we know if it's still reasonable
+for other tasks? Well, we do not (if you do, please tell!).
+
+
+</br></br>
+
+All in all, <font face="symbol">we want a probing method which does not require a human to tell it what to say</font>.
+
+</br></br>
+
+
+<h2>Information-Theoretic Viewpoint</h2>
+
+
+Let us come back to the initial task: we have data <img src="../resources/posts/mdl_probes/data-min.png" height="22">
+with representations <img src="../resources/posts/mdl_probes/data_x_prefix-min.png" height="19"> and labels
+<img src="../resources/posts/mdl_probes/data_y_prefix-min.png" height="22"> and want to measure to what extent
+<img src="../resources/posts/mdl_probes/data_x_prefix-min.png" height="19"> encode
+<img src="../resources/posts/mdl_probes/data_y_prefix-min.png" height="22">.
+Let us look at this task from a new perspective, different from the current most popular approach.
+</br>
+Our idea can be summarized in two sentences.
+
+</br></br>
+<!--<span style="background-color:#ebf0df">-->
+<span style="background-color:#f6faed">
+
+    <font face="symbol">
+    <u>Regularity</u> in representations with respect to labels can be <u>exploited to compress</u> the data.</br>
+    Better compression &#8596; stronger regularity &#8596; representations better encode labels.</font>
+</span>
+
+</br></br>
+
+Basically, this is it. All is left is to make it clear, theoretically justified and illustrated experimentally.
+For this, I will need some help from Alice and Bob.
+</br></br>
+
+<h3>Adventures of Alice, Bob and the Data</h3>
+
+<img src="../resources/posts/mdl_probes/alice_bob-min.png" width="700" style="margin-bottom:25px">
+
+</br>
+Let us imagine that Alice has all pairs <img src="../resources/posts/mdl_probes/pair_xi_yi-min.png" height="22">
+from <img src="../resources/posts/mdl_probes/D-min.png" height="19">, Bob has just
+<img src="../resources/posts/mdl_probes/data_x_prefix-min.png" height="19">, and that Alice wants to communicate
+<img src="../resources/posts/mdl_probes/data_y_prefix-min.png" height="22"> to Bob. Transmitting data is
+a lot of work, and surely Alice has much better things to do: let's help Alice to compress the data!
+</br></br>
+
+Formally, the task is to encode labels <img src="../resources/posts/mdl_probes/data_y_prefix-min.png" height="22">
+knowing representations <img src="../resources/posts/mdl_probes/data_x_prefix-min.png" height="19"> in an optimal way,
+i.e., with minimal codelength (in bits) needed to transmit
+<img src="../resources/posts/mdl_probes/data_y_prefix-min.png" height="22">.
+The resulting minimal number of bits is <font face="symbol">minimum description length (MDL)</font>
+of labels given representations, and we will refer to probes measuring MDL as
+<font face="symbol">description length probes</font> or <font face="symbol">MDL probes</font>.
+
+</br></br>
+
+<h4>Changing a probe's goal converts it into an MDL probe</h4>
+
+Turns out that to evaluate MDL we don't need to change much in standard probe-training pipelines.
+This is done via a simple trick: we know that data can be compressed using some probabilistic model
+<img src="../resources/posts/mdl_probes/p_y_x-min.png" height="22">, and we just set this model
+<img src="../resources/posts/mdl_probes/p_y_x-min.png" height="22"> to be a probing classifier. This is how
+we turn a standard probe into an MDL probe by <u>changing a goal from predicting labels to transmitting data</u>.
+
+</br></br>
+
+
+
+<img src="../resources/posts/mdl_probes/mdl_logo_full-min.png" width="350" style="float:right; margin-left:15px" >
+
+Note that since Bob does not know the precise model Alice is using, we will also have to
+transmit the model, either explicitly or implicitly. Thus, the overall codelength is a combination
+of quality-of-fit of the model (compressed data length), together with the cost of transmitting the model itself.
+</br></br>
+
+Intuitively, codelength characterizes not only <font face="symbol">final quality</font> of a probe
+(data codelength), but also
+the <font face="symbol">amount of effort</font> needed to achieve this quality.
+
+</br></br>
+<!--<font face="symbol" color="#dea404">model</font> <font face="symbol" color="#85a81d">data</font>-->
+
+<h3>The <font face="symbol">Data</font> Part</h3>
+<h4>TL;DR: cross-entropy is the data codelength</h4>
+
+Let's assume for now Alice and Bob have agreed in advance on a model
+<img src="../resources/posts/mdl_probes/p_y_x-min.png" height="22"> and both know the inputs
+<img src="../resources/posts/mdl_probes/data_x_prefix-min.png" height="19">;
+we need just to transmit data using this known model.
+Then there exists a code to transmit the labels
+<img src="../resources/posts/mdl_probes/data_y_prefix-min.png" height="22">
+losslessly with codelength
+<center>
+<img src="../resources/posts/mdl_probes/data_codelength-min.png" height="60">
+</center>
+This is the <font face="symbol">Shannon-Huffman code</font>, which gives the optimal bound on the codelength
+if the data are independent and come from a conditional probability distribution
+<img src="../resources/posts/mdl_probes/p_y_x-min.png" height="22">.
+
+</br></br>
+
+<h4>Learning is Compression</h4>
+Note that (1) is exactly the categorical cross-entropy
+loss evaluated on the model <i>p</i>. This shows that <font face="symbol">the task of compressing labels</font>
+<img src="../resources/posts/mdl_probes/data_y_prefix-min.png" height="22">
+is <font face="symbol">equivalent to learning a model</font> <img src="../resources/posts/mdl_probes/p_y_x-min.png" height="22">
+of data:</br>
+quality of a learned model <img src="../resources/posts/mdl_probes/p_y_x-min.png" height="22">
+    is the codelength needed to transmit the data.
+</br></br>
+
+
+<h4>Compression is compared against Uniform Code</h4>
+
+Compression is usually compared against <font face="symbol">uniform encoding</font>
+which does not require any learning from data. For <i>K</i> classes,
+it assumes <img src="../resources/posts/mdl_probes/p_uniform-min.png" height="24">, and yields
+codelength <img src="../resources/posts/mdl_probes/code_uniform-min.png" height="21"> bits.
+
+
+
+</br></br>
+
+<h3>The <font face="symbol">Amount of Effort</font> Part: <span style="font-size:20px;">Strength of the Regularity in the Data</span></h3>
+
+<img src="../resources/posts/mdl_probes/regularity-min.png" width="700">
+</br>
+<span style="font-size:12px;">
+    <u>Based on real events!</u> These are t-sne projections of representations of different occurrences of
+    the token <font face="symbol">is</font> from the last layer of MT encoder (strong) and the last LM layer (weak).
+    The colors show CCG tags (only 4 most frequent tags). </br>
+    Curious why MT and LM behave this way? Look at our
+    <a href="https://lena-voita.github.io/posts/emnlp19_evolution.html">Evolution of Representations</a> post!
+</span>
+</br></br>
+Now we come to the other component of the total codelength, which
+characterizes how hard it is to achieve final quality of a trained probe. Intuitively,
+if representations have some <font face="symbol">clear structure</font> with respect to labels, this structure can be
+understood with
+<font face="symbol">less effort</font>; for example,
+<ul>
+    <li>the "rule" explaining this structure (i.e., a probing model) can be
+        simple, and/or</li>
+    <li>the amount of data needed to reveal this structure can be small.</li>
+</ul>
+This is exactly how our vague (so far) notion of the "amount of effort" is translated into codelength.
+We explain this more formally when describing the two methods for evaluating MDL we use:
+<font face="symbol">variational coding</font> and <font face="symbol">online coding</font>;
+they differ in a way they incorporate
+model cost: directly or indirectly.
+</br></br>
+
+
+<h4><u><font face="symbol">Variational Code</font></u>: Explicit Transmission of the Model</h4>
+
+
+<img src="../resources/posts/mdl_probes/variational_scheme-min.png" width="300" style="float:right; margin-left:30px" >
+
+Variational code is an  instance  of <font face="symbol">two-part codes</font>,
+where a model (probe weights) is transmitted explicitly and then used to encode the data.
+<a href="https://ieeexplore.ieee.org/document/1310354">It has been known for quite a while</a> that
+this joint cost (model and data codes) is exactly the loss function of a variational learning methods.
+</br></br>
+
+<h4>The Idea: Informal version</h4>
+What is happening in this part:
+<ul style="list-style-type:circle;">
+    <li>model weights are transmitted explicitly;</li>
+    <li>each weight is treated as a random variable;</li>
+    <li>weights with higher variance can be transmitted with lower precision (i.e., fewer bits);</li>
+    <li>by choosing sparsity-inducing priors we will obtain induced (sparse) probe architectures.</li>
+</ul>
+</br>
+
+<h4>Codelength: Formal Derivations</h4>
+
+<details>
+    <summary><font face="symbol" color="#658a01">I hereby confirm that I'm not afraid of scary formulas
+          <img src="../resources/posts/mdl_probes/ghost-min.png" height="24">
+        </font></summary>
+    </br>
+
+    <h4>May the force be with you!</h4>
+Here
+we assume that Alice and Bob have agreed on a model class
+<img src="../resources/posts/mdl_probes/model_class_h-min.png" height="20">,
+and for any model <img src="../resources/posts/mdl_probes/p_theta_of_theta_ast-min.png" height="20">,
+Alice first transmits its parameters <img src="../resources/posts/mdl_probes/theta_ast-min.png" height="20">
+and then encodes the data while relying on the model.
+The description length decomposes accordingly:
+<center>
+<img src="../resources/posts/mdl_probes/two_part_equation_with_bottom-min.png" height="70">
+</center>
+To compute the description length of the parameters,
+we can further assume that Alice and Bob have agreed on a prior distribution over the
+parameters <img src="../resources/posts/mdl_probes/alpha_param_prior-min.png" height="22">.
+Now, we can rewrite the total description length as
+<center>
+<img src="../resources/posts/mdl_probes/two_part_with_prior_and_bottom-min.png" height="70">
+</center>
+where parameters <img src="../resources/posts/mdl_probes/m-min.png" height="16">
+is the number of parameters and <img src="../resources/posts/mdl_probes/epsilon-min.png" height="16">
+is a prearranged precision for each parameter.
+With deep learning models (in our case, probing classifiers),
+such straightforward codes for parameters
+are highly inefficient.
+Instead, in the variational approach,
+weights are treated as random variables,
+and the description length is given by the expectation
+<center>
+<img src="../resources/posts/mdl_probes/var_equation_with_bottom-min.png" height="70" style="margin-top:15px; margin-bottom:10px">
+</center>
+where <img src="../resources/posts/mdl_probes/beta_is_prod-min.png" height="21">
+is a distribution encoding uncertainty about the parameter values.
+The distribution <img src="../resources/posts/mdl_probes/beta_of_theta-min.png" height="19">
+is chosen by minimizing the codelength given in Eq. (3).
+In you are interested in the formal justification for the description length,
+it relies on the <font face="symbol">bits-back</font> argument and can be found, for example,
+<a href="http://www.cs.toronto.edu/~fritz/absps/colt93.pdf">here</a>.
+However, the underlying intuition is straightforward:
+<u>parameters we are uncertain about can be transmitted
+    at a lower cost</u> as
+the uncertainty
+ can be used to determine the required
+precision. The entropy term in equation (3),
+<img src="../resources/posts/mdl_probes/the_entropy_term-min.png" height="21">,
+quantifies this discount.
+</br></br>
+The negated codelength <img src="../resources/posts/mdl_probes/l_beta_var-min.png" height="22">
+is known as the evidence-lower-bound (ELBO) and used as the objective in variational inference.
+The distribution <img src="../resources/posts/mdl_probes/beta_of_theta-min.png" height="19">
+approximates the intractable posterior distribution
+<img src="../resources/posts/mdl_probes/p_theta_posterior-min.png" height="21">.
+Consequently, any variational method can in principle be used to estimate the  codelength.
+</details>
+
+</br></br>
+<!--
+<h4>We Use: Bayesian Compression</h4>
+
+<img src="../resources/posts/mdl_probes/sparse_nns_0.1_0.2_min-min.png" width="290" style="float:right; margin-left:15px; margin-bottom:20px">
+
+The specific variational method we use in our experiments is the
+<a href="https://github.com/KarenUllrich/Tutorial_BayesianCompressionForDL">bayesian network compression method</a>.
+Similarly to <a href="https://github.com/senya-ashukha/variational-dropout-sparsifies-dnn">variational dropout</a>,
+it uses sparsity-inducing priors on the parameters, pruning neurons from the probing
+classifier as a byproduct of optimizing the ELBO. As a result we can assess the  probe complexity
+both using its description length
+<img src="../resources/posts/mdl_probes/kl_beta_alpha-min.png" height="19">
+and by inspecting the  discovered architecture.
+-->
+
+<h4>We Use: Bayesian Compression</h4>
+
+<img src="../resources/posts/mdl_probes/sparse_nns_0.1_0.2_min-min.png" width="290" style="float:right; margin-left:15px; margin-bottom:20px">
+
+You can choose  priors for weights to get something interesting. For example, if you choose
+sparsity-inducing priors on the parameters, you can get
+<a href="https://github.com/senya-ashukha/variational-dropout-sparsifies-dnn">variational dropout</a>.
+What is more interesting, you can do this in such way that you prune the whole neurons (not just individual weights): this is the
+<a href="https://github.com/KarenUllrich/Tutorial_BayesianCompressionForDL">
+    <font face="symbol">Bayesian network compression method</font></a> we use.
+ This allows us to assess the  probe complexity
+both using its description length
+<img src="../resources/posts/mdl_probes/kl_beta_alpha-min.png" height="19">
+and <font face="symbol">by inspecting the  discovered architecture</font>.
+
+
+</br></br>
+
+<h4>Intuition</h4>
+<img src="../resources/posts/mdl_probes/regularity_separate_h_model-min.png" width="300" style="float:right; margin-left:15px; margin-bottom:15px" >
+
+If <font face="symbol">regularity</font> in the data <font face="symbol">is strong</font>,
+it can be <font face="symbol">explained with a "simple rule"</font> (i.e., a small probing model).
+A small probing model is easy to communicate, i.e., only a few parameters require high precision.
+As we will see in the experiments,
+similar probe accuracies often come at a very different model cost, i.e. different total codelength.
+
+</br></br>
+Note that the variational code gives us probe architecture (and model size) as a
+<font face="symbol">byproduct of training</font>, and <font face="symbol">does not require
+    manual search</font> over probe hyperparameters.
+
+</br></br>
+</br>
+
+
+
+<h4><u><font face="symbol">Online Code</font></u>: Implicit Transmission of the Model</h4>
+
+Online code provides a way to transmit data <font face="symbol">without directly transmitting the model</font>. Intuitively, it
+measures the ability to learn from different amounts of data.</br></br>
+<img src="../resources/posts/mdl_probes/online_scheme-min.png" width="350"
+     style="float:right; margin-left:30px; margin-top:2px; margin-bottom:15px" >
+
+ In this setting, the data is transmitted in
+a sequence of portions; at each step, the data transmitted so far is used to understand the regularity
+in this data and compress the following portion.
+</br></br>
+
+<h4>Codelength: Formal Derivations</h4>
+Formally, Alice and Bob agree on the form of the model
+<img src="../resources/posts/mdl_probes/p_theta_y_x-min.png" height="20">
+with learnable parameters <img src="../resources/posts/mdl_probes/theta-min.png" height="19">,
+its initial random seeds, and its learning algorithm. They also choose timesteps
+<img src="../resources/posts/mdl_probes/online_timesteps-min.png" height="16">
+and encode data by blocks. Alice starts by communicating
+<img src="../resources/posts/mdl_probes/y_1_t1-min.png" height="15">
+with a uniform code, then both Alice and Bob learn a model
+<img src="../resources/posts/mdl_probes/p_theta1_y_x-min.png" height="20">
+that predicts <img src="../resources/posts/mdl_probes/y-min.png" height="14">
+from <img src="../resources/posts/mdl_probes/x-min.png" height="13"> using data
+<img src="../resources/posts/mdl_probes/portion_1_t1-min.png" height="24">,
+and Alice uses that model to communicate the next data block
+<img src="../resources/posts/mdl_probes/y_t1_t2-min.png" height="17">.
+Then both Alice and Bob learn a model
+<img src="../resources/posts/mdl_probes/p_theta2_y_x-min.png" height="20">
+from a larger block <img src="../resources/posts/mdl_probes/portion_1_t2-min.png" height="27">
+and use it to encode <img src="../resources/posts/mdl_probes/y_t2_t3-min.png" height="15">.
+This process continues until the entire dataset is transmitted. The resulting online codelength is
+<center>
+<img src="../resources/posts/mdl_probes/online_equation_with_bottom-min.png" height="110" style="margin-top:15px; margin-bottom:10px">
+</center>
+
+<h4>Data and Model components of Online Code</h4>
+While the online code does not incorporate model cost explicitly, we can still evaluate model cost by interpreting
+the difference between the cross-entropy of the model trained on all data,
+<img src="../resources/posts/mdl_probes/xent_s_portion-min.png" height="22">,
+and online codelength as the cost of the model:
+
+<center>
+<img src="../resources/posts/mdl_probes/online_equation_data_model_with_bottom-min.png" height="70" style="margin-top:15px; margin-bottom:10px">
+</center>
+
+Indeed, <img src="../resources/posts/mdl_probes/xent_s_portion-min.png" height="22">
+is codelength of the data if one knows model parameters,
+<img src="../resources/posts/mdl_probes/l_online-min.png" height="22"> - if one does not know them.
+
+</br></br>
+
+
+<h4>Intuition</h4>
+<img src="../resources/posts/mdl_probes/regularity_separate_h_data-min.png" width="300" style="float:right; margin-left:15px" >
+
+Online code
+measures the ability to learn from different amounts of data, and
+it is related to the <font face="symbol">area under the learning curve</font>, which plots quality
+as a function of the number of training examples.
+</br></br>
+Intuitively, if the <font face="symbol">regularity</font> in the data <font face="symbol">is strong</font>, it can be
+<font face="symbol">revealed
+    using a small subset of the data</font>, i.e., early in the transmission process, and can be exploited to efficiently
+transmit the rest of the dataset.
+
+</br></br>
+
+
+
+
+
+<h2>Description Length and Control Tasks</h2>
+
+
+<img src="../resources/posts/mdl_probes/control_table_with_pict_and_caption-min.png" width="800">
+</br></br>
+
+<h4>Compression methods agree in results:</h4>
+<ul style="list-style-type:circle;">
+    <li>for the linguistic task, the best layer is the first;</li>
+    <li>for the control task, codes become
+        larger as we move up from the embedding layer</br>
+        (this is expected since the control task measures the ability to remember word types);
+    </li>
+    <li><font face="symbol">codelengths for the control task are substantially larger than for
+        the linguistic task</font>.
+    </li>
+</ul>
+
+
+<h4><u>Layer 0</u>: MDL is correct, accuracy is not.</h4>
+
+What is even more surprising, <font face="symbol">codelength identifies the control task even when accuracy indicates the opposite</font>:
+for layer 0, accuracy for the control task is higher, but
+the code is twice longer than for the linguistic task.
+This is because codelength characterizes how hard it is to achieve this accuracy:
+for the control task, <font face="symbol">accuracy is higher, but the cost of achieving this score is very big</font>.
+We will illustrate this a bit later when looking at the model component of the code.</br></br>
+
+<h4><u>Embedding vs contextual</u>:  drastic difference.</h4>
+
+For the linguistic task,
+note that codelength for the embedding layer is approximately twice larger than that for the first layer.
+Later, when looking at the random model baseline, we will see the same trends for several other tasks
+and will show that even contextualized representations obtained with a randomly initialized model are a lot
+better than the embedding layer alone.
+
+</br></br>
+
+<h4><u>Model</u>: small for linguistic, large for control.</h4>
+
+Let us now look at the data and model components of code separately
+(as shown in formulas (3) and (5) for variational and online codes, respectively).
+</br></br>
+
+<img src="../resources/posts/mdl_probes/both_by_type_control_pos-min.png" width="400" style="float:right; margin-left:15px" >
+
+The trends for the two compression methods are similar:
+for the control
+task, model size is several times larger than for the linguistic task. This is something that
+<font face="symbol">probe accuracy alone is not able to reflect</font>:
+while representations have structure with respect to the linguistic task labels,
+the same <font face="symbol">representations do not have structure with
+    respect to random labels</font>.</br></br>
+For variational code, it means that the linguistic task labels can be "explained"
+with a small model, but random labels can be learned only using a larger model.
+</br>
+For online code, it shows that the linguistic task labels can be learned
+from a small amount of data, but random labels can be learned (memorized) well only using a large dataset.
+
+
+</br>
+
+<img src="../resources/posts/mdl_probes/online_acc_curve-min.png" width="200" style="float:right; margin-left:20px" >
+
+</br>
+For online code, we can also recall that it is related to the area under the learning curve, which plots quality as a function of the number of training examples.
+This figure shows
+learning curves corresponding to online code. We can clearly see the difference between behavior of the linguistic and control tasks.
+
+
+</br></br></br>
+
+<h4><u>Architecture</u>: sparse for linguistic, dense for control.</h4>
+
+
+<img src="../resources/posts/mdl_probes/control_bayes_arc_with_pict-min.png" width="255" style="float:right; margin-left:15px" >
+
+Let us now recall that <a href="https://github.com/KarenUllrich/Tutorial_BayesianCompressionForDL">Bayesian compression</a>
+gives us not only variational codelength, but also the induced probe architecture.
+</br></br>
+Probes learned for linguistic tasks have small architectures with only 33-75 neurons at the second
+and third layers of the probe. In contrast, models learned for control tasks are quite dense.
+
+</br></br>
+This relates to the <a href="https://www.aclweb.org/anthology/D19-1275.pdf">control tasks</a>
+paper which proposed to use random label baselines.
+The authors considered several predefined
+probe architectures and picked one of them based on a manually defined criterion. In contrast, variational
+code gives probe architecture as a <font face="symbol">byproduct of training</font> and
+<font face="symbol">does not require human guidance</font>.
+
+</br></br>
+
+
+<h3>MDL results are stable, accuracy is not</h3>
+
+<h4><u>Hyperparameters</u>: change results for accuracy but not for MDL.</h4>
+
+<img src="../resources/posts/mdl_probes/control_settings_with_annotation-min.png" width="400" style="float:right; margin-left:15px; margin-bottom:15px" >
+
+ While here we discussed in detail results for the default settings, we also tried
+10 different settings and saw that <font face="symbol">accuracy varies greatly with the settings</font>.
+For example,  for layer 0 there are settings with contradictory
+results: accuracy can be higher either for the linguistic or for the control task depending on the settings
+(look at the figure). In striking contrast to accuracy,
+<font face="symbol">MDL results are stable across settings</font>, thus
+<font face="symbol">MDL does not require search for probe settings</font>.
+</br></br>
+
+<h4><u>Random Seed</u>: affects accuracy but not MDL.</h4>
+<img src="../resources/posts/mdl_probes/control_seeds_with_annotation-min.png" width="350" style="float:right; margin-left:15px; margin-bottom:15px" >
+
+Figure shows results for 5 random seeds (linguistic task).
+We see that using accuracy can lead to different
+rankings of layers depending on a random seed, making it hard to draw conclusions about their relative qualities.
+For example, accuracy for layer 1 and layer 2 are 97.48 and 97.31 for seed 1, but 97.38 and 97.48
+for seed 0.
+</br>
+On the contrary, the <font face="symbol">MDL results are stable and the scores given to different layers are well separated</font>.
+
+</br></br>
+
+
+<h2>Description Length and Random Models</h2>
+
+
+
+<img src="../resources/posts/mdl_probes/jiant_5_tasks-min.png" width="800">
+</br></br>
+
+<img src="../resources/posts/mdl_probes/random_model_with_head-min.png" width="170" style="float:right; margin-left:15px" >
+
+In the paper, we also consider another type of random baselines: randomly initialized models.
+ Following previous work, we also experiment with ELMo and compare it with a version of the ELMo model in which all weights above the lexical
+layer (layer 0) are replaced with random orthonormal matrices (but the embedding layer,
+layer 0, is retained from trained ELMo).
+</br></br>
+
+We experiment with 7 <a href="https://arxiv.org/pdf/1905.06316.pdf">edge probing tasks</a> (5 of them are listed above).
+Here we will only briefly mention our findings: if you are interested in more details, look at the paper.
+
+</br></br>
+
+<h4>We find, that:</h4>
+<ul style="list-style-type:circle;">
+    <li><font face="symbol">layer 0 vs contextual: even random contextual representations are better</font></br>
+        As we already saw in the previous part, codelength shows a drastic difference between the
+        embedding layer (layer 0) and contextualized representations: codelengths differ about twice for most tasks.
+        Both compression methods show that even for the randomly initialized model,
+        contextualized representations are better than lexical representations.
+        </li></br>
+    <li><font face="symbol">codelengths for the randomly initialized model are larger than for the trained one</font></br>
+This is more prominent when not just looking at the bare scores, but comparing compression against
+        context-agnostic representations. For all tasks, compression bounds for the randomly
+        initialized model are closer to those of context-agnostic Layer 0 than to representations
+        from the trained model.
+        This shows that <u>gain from using context for the randomly initialized model is at least twice smaller than
+            for the trained model</u>.
+    </li></br>
+    <li><font face="symbol">randomly initialized layers do not evolve</font></br>
+        For all tasks, MDL (and data/model components of code separately) for layers of the randomly initialized model is identical.
+For the trained model, this is not the case: layer 2 is worse than layer 1 for all tasks.
+        This is one more illustration of the general process explained
+        in our <a href="https://lena-voita.github.io/posts/emnlp19_evolution.html">Evolution of Representations</a> post:
+        the way representations evolve between layers is
+        defined by the training objective. For the randomly initialized model,
+        since no training objective has been optimized, no evolution happens.
+    </li>
+</ul>
+
+
+<h1>Conclusions</h1>
+
+We propose information-theoretic probing which measures <font face="symbol">minimum description length (MDL)</font>
+of labels given representations. We show that MDL naturally characterizes not only <font face="symbol">probe quality</font>,
+but also <font face="symbol">the amount of effort</font> needed to achieve it (or, intuitively,
+<font face="symbol">strength of the regularity</font> in representations with respect to the labels);
+this is done in a  theoretically justified way without manual search for settings.
+We explain how to easily measure MDL on top of standard probe-training pipelines. We show that results of
+MDL probing are more informative and stable compared to the standard probes.
+</br></br>
+
+Want to know more?
+
+<a class="pull-right" href="https://arxiv.org/pdf/2003.12298.pdf" onMouseOver="document.readpaper2.src='../resources/posts/buttons/button_read_paper_push-min.png';" onMouseOut="document.readpaper2.src='../resources/posts/buttons/button_read_paper-min.png';">
+<img src="../resources/posts/buttons/button_read_paper-min.png" name="readpaper2" width=120px class="pull-right"></a>
+<a class="pull-right" href="https://github.com/lena-voita/description-length-probing" onMouseOver="document.viewcode2.src='../resources/posts/buttons/button_view_code_push-min.png';" onMouseOut="document.viewcode2.src='../resources/posts/buttons/button_view_code-min.png';">
+<img src="../resources/posts/buttons/button_view_code-min.png" name="viewcode2" width=120px></a>
+
+<br/><br/>
+Share: <a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-text="Information-Theoretic Probing with Minimum Description Length: a more informative and stable alternative to the standard probes! Blog post for a new paper by @lena_voita and @iatitov" data-url="https://lena-voita.github.io/posts/mdl_probes.html" data-lang="en" data-show-count="false">Tweet</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+  </article>
+
+</div>
+
+      </div>
+    </div>
+
+    <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col  footer-col-1">
+        <table >
+          <tr class="contact-list">
+            <!-- yandex research
+            <td>
+              <div class="media">
+                <a class="pull-left thumbnail" href="https://research.yandex.com">
+                  <img src="/img/ico/yr-min.png" height=20px alt=""/>
+                </a>
+              </div>
+            </td>
+            -->
+            <!-- EdnNLP-->
+            <td>
+              <div class="media">
+                <a class="pull-left thumbnail" href="https://edinburghnlp.inf.ed.ac.uk/index.php/people/">
+                  <img src="/img/ico/edn_uni-min.png" height=30px alt=""/>
+                </a>
+              </div>
+            </td>
+            <!-- UvA-->
+            <td>
+              <div class="media">
+                <a class="pull-left thumbnail" href="https://msclogic.illc.uva.nl/people/students/">
+                  <img src="/img/ico/uva-min.png" height=20px alt=""/>
+                </a>
+              </div>
+            </td>
+
+
+            <td>
+              <div class="media">
+                <a class="pull-left thumbnail" href="mailto:lena-voita@hotmail.com">
+                  <img src="/img/ico/mail-min.png" height=20px alt=""/>
+                </a>
+              </div>
+            </td>
+            <td>
+              <div class="media">
+                <a class="pull-left thumbnail" href="https://scholar.google.com/citations?user=EcN9o7kAAAAJ">
+                  <img src="/img/ico/gs-min-round.png" height=20px alt=""/>
+                </a>
+              </div>
+            </td>
+            <td>
+              <div class="media">
+                <a class="pull-left thumbnail" href="https://github.com/lena-voita">
+                  <img src="/img/ico/git.png" height=20px alt=""/>
+                </a>
+              </div>
+            </td>
+            <td>
+              <div class="media">
+                <a class="pull-left thumbnail" href="https://twitter.com/lena_voita">
+                  <img src="/img/ico/twitter-min.png" height=20px alt=""/>
+                </a>
+              </div>
+            </td>
+
+          </tr>
+        </table>
+      </div>
+
+      <!--<div class="footer-col  footer-col-2">
+      </div> -->
+
+      <div class="footer-col  footer-col-3">
+          <p class="text" align="right">Last updated March 30, 2020.</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+
+
+  </body>
+
+</html>

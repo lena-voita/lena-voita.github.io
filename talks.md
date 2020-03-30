@@ -7,7 +7,7 @@ order: 3
 
 ### <span style="color:darkblue"> Service </span>
 Program committee:
-* EMNLP 2019 (outstanding reviewer)
+* EMNLP: 2019 (outstanding reviewer), 2020
 * ACL 2020 (+ [RepL4NLP](https://sites.google.com/view/repl4nlp2020/home) + [DeeLIO](https://sites.google.com/view/deelio-ws/program-committee))
 * ICML 2020
 * NeurIPS 2020
