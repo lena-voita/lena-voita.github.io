@@ -27,7 +27,7 @@ We look at the evolution of representations of individual tokens in Transformers
 <ul>
   <li>LMs gradually forget past when forming predictions about future;</li>
   <li>for MLMs, the evolution proceeds in two stages of
-      <font face="symbol">context encoding</font> and <font face="symbol">token reconstruction</font>;</li>
+      <font face="arial">context encoding</font> and <font face="arial">token reconstruction</font>;</li>
     <li>MT representations get refined with context,
         but less processing is happening.</li>
 </ul>
@@ -150,8 +150,8 @@ The nature of our work is quite unusual. We are going to have a lot of experimen
 see a lot of results. Despite that these results alone are quite interesting (in terms of methods,
 things we look at, conclusions we make; to be honest, there is <i>nothing</i> standard in what we do here :) ),
 the work itself is not about the results. The most important in what we do, as I see it, is
-<font face="symbol">we suggest you a point of view</font>, a way of looking at these results.
-This is something not seen by the naked eye, hidden inside; this is <font face="symbol">the underlying process</font>
+<font face="arial">we suggest you a point of view</font>, a way of looking at these results.
+This is something not seen by the naked eye, hidden inside; this is <font face="arial">the underlying process</font>
 which defines
 not only the results observed in our work but also some previous works.
 <br/><br/>
@@ -210,8 +210,8 @@ which an output label is predicted.
 
 <br/><br/>
 <h3>Mutual Information with input:</h3>
-<h4 style="font-size:19px;"> LM forgets a lot, MT - less, MLM has <font face="symbol" style="font-size:17px;"> context encoding</font> and
-    <font face="symbol" style="font-size:17px;">token reconstruction</font> stages</h4>
+<h4 style="font-size:19px;"> LM forgets a lot, MT - less, MLM has <font face="arial" style="font-size:17px;"> context encoding</font> and
+    <font face="arial" style="font-size:17px;">token reconstruction</font> stages</h4>
 To illustrate the process of information loss and gain in representations of individual tokens,
 we first estimate the mutual information between token representations and the input token identity.
 Since the direct evaluation of mutual information between layers and labels is challenging for
@@ -228,8 +228,8 @@ token identity may be useful for translation.
 <br/><br/>
 The most interesting and surprising graph is for MLM: first, similarly to other models,
 the information about the input token  is  getting  lost  but  then,  at  two  top  layers, it
-gets  recovered.   We  will  refer  to  these  phases as <font face="symbol">context encoding</font> and
-<font face="symbol">token reconstruction</font>.
+gets  recovered.   We  will  refer  to  these  phases as <font face="arial">context encoding</font> and
+<font face="arial">token reconstruction</font>.
 <br/><br/>
 
 <u>Important note.</u> Whereas  such non-monotonous behavior is impossible when analyzing entire layers,
@@ -255,7 +255,7 @@ While in the previous figure we observed monotonic behavior of LM, when looking 
 information with both input and output tokens, we can
 see the two processes, losing information about input and accumulating information about output,
 for both LM and MLM models. For MLM these processes are more distinct and can be thought of as
-the <font face="symbol">context encoding</font> and <font face="symbol">token prediction</font> (compression/prediction) stages.
+the <font face="arial">context encoding</font> and <font face="arial">token prediction</font> (compression/prediction) stages.
 For MT, since nothing is predicted directly, we see only the encoding stage of this process.
 </br></br>
 <font color="#6f9943" >
@@ -562,8 +562,8 @@ about 'past' and 'future' by taking either left or right neighbor or part of a C
 The results support our previous expectation that for LM the importance of a previous
 token decreases, while information about future token is being formed. For MLM,
 the importance of neighbors gets higher until the second layer and decreases after.
-This may reflect stages of <font face="symbol">context encoding</font> and
-<font face="symbol">token reconstruction</font>.
+This may reflect stages of <font face="arial">context encoding</font> and
+<font face="arial">token reconstruction</font>.
 <br/><br/>
 
 <strong>The importance of CCG tags.</strong>
