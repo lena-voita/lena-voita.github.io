@@ -20,6 +20,7 @@ I (still) [teach NLP](https://github.com/yandexdataschool/nlp_course) at the [Ya
 
 ## <span style="color:darkblue">News </span>
 
+* 04/2020 Our [BPE-dropout](https://arxiv.org/pdf/1910.13267.pdf) is _accepted to __ACL__ 2020_. 
 * 01/2020 I'm [awarded Facebook PhD Fellowhip](https://research.fb.com/blog/2020/01/announcing-the-recipients-of-the-2020-facebook-fellowship-awards/).
 * 01/2020 Giving several talks, including talks at Google Research Berlin, [Naver Labs Europe](https://europe.naverlabs.com/research/seminars/analyzing-information-flow-in-transformers/), NLP track at [Applied Machine Learning Days at EPFL](https://appliedmldays.org/tracks/ai-nlp).
 * 09/2019 _To appear at __NeurIPS__ 2019_: [Sequence Modeling with Unconstrained Generation Order](https://arxiv.org/abs/1911.00176).
