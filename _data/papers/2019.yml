@@ -8,7 +8,7 @@
   title: "BPE-Dropout: Simple and Effective Subword Regularization"
   authors: "Ivan Provilkov, Dmitrii Emelianenko, <u>Elena Voita</u>"
   doc-url:
-  conf: no_conf.png
+  conf: acl20.png
   url: "https://arxiv.org/abs/1910.13267"
 
 - layout: paper
