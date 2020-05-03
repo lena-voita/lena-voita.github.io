@@ -7,10 +7,11 @@ order: 3
 
 ### <span style="color:darkblue"> Service </span>
 Program committee:
-* EMNLP: 2019 (outstanding reviewer), 2020 (+ [DeeLIO](https://sites.google.com/view/deelio-ws/program-committee))
-* ACL 2020 (+ [RepL4NLP](https://sites.google.com/view/repl4nlp2020/home))
+* EMNLP: 2019 <span style="color:#abb089">(outstanding reviewer)</span>, 2020
+* ACL 2020
 * ICML 2020
 * NeurIPS 2020
+* Workshops: [RepL4NLP](https://sites.google.com/view/repl4nlp2020/home) 2020 <span style="font-size:0.9em">(at ACL)</span>, [DeeLIO](https://sites.google.com/view/deelio-ws/program-committee) 2020 <span style="font-size:0.9em">(at EMNLP)</span> 
 
 
 ## <span style="color:darkblue"> Selected Talks </span>
