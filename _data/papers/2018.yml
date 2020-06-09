@@ -5,7 +5,7 @@
   year: 2018
   img: ctx_anaphora-min.png
   title: "Context-Aware Neural Machine Translation Learns Anaphora Resolution"
-  authors: "<u>Elena Voita</u>, Pavel Serdyukov, Rico Sennrich and Ivan Titov"
+  authors: "<u>Elena Voita</u>, Pavel Serdyukov, Rico Sennrich, Ivan Titov"
   doc-url: //aclweb.org/anthology/P18-1117/
   arxiv: //arxiv.org/abs/1805.10163
   appendix: //anthology.aclweb.org/attachments/P/P18/P18-1117.Notes.pdf
@@ -36,7 +36,7 @@
   year: 2018
   img: blank.png
   title: "A Large-Scale Test Set for the Evaluation of Context-Aware Pronoun Translation in Neural Machine Translation"
-  authors: "Mathias M&uuml;ller, Annette Rios, <u>Elena Voita</u> and Rico Sennrich"
+  authors: "Mathias M&uuml;ller, Annette Rios, <u>Elena Voita</u>, Rico Sennrich"
   doc-url: //aclweb.org/anthology/W18-6307
   arxiv:
   url: "http://www.aclweb.org/anthology/W18-6307"

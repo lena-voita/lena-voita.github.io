@@ -10,6 +10,7 @@
   doc-url:
   conf: acl20.png
   url: "https://arxiv.org/abs/1910.13267"
+  abstract: "Subword segmentation is widely used to address the open vocabulary problem in machine translation. The dominant approach to subword segmentation is Byte Pair Encoding (BPE), which keeps the most frequent words intact while splitting the rare ones into multiple tokens. While multiple segmentations are possible even with the same vocabulary, BPE splits words into unique sequences; this may prevent a model from better learning the compositionality of words and being robust to segmentation errors. So far, the only way to overcome this BPE imperfection, its deterministic nature, was to create another subword segmentation algorithm (Kudo, 2018). In contrast, we show that BPE itself incorporates the ability to produce multiple segmentations of the same word. We introduce BPE-dropout - simple and effective subword regularization method based on and compatible with conventional BPE. It stochastically corrupts the segmentation procedure of BPE, which leads to producing multiple segmentations within the same fixed BPE framework. Using BPE-dropout during training and the standard BPE during inference improves translation quality up to 3 BLEU compared to BPE and up to 0.9 BLEU compared to the previous subword regularization."
 
 - layout: paper
   paper-type: inproceedings
@@ -21,6 +22,7 @@
   doc-url:
   conf: nips19.png
   url: "https://arxiv.org/abs/1911.00176"
+  abstract: "The dominant approach to sequence generation is to produce a sequence in some predefined order, e.g. left to right. In contrast, we propose a more general model that can generate the output sequence by inserting tokens in any arbitrary order. Our model learns decoding order as a result of its training procedure. Our experiments show that this model is superior to fixed order models on a number of sequence generation tasks, such as Machine Translation, Image-to-LaTeX and Image Captioning."
 
 -
   layout: paper
@@ -29,10 +31,11 @@
   year: 2019
   img: emnlp19_evolution-min.png
   title: "The Bottom-up Evolution of Representations in the Transformer: A Study with Machine Translation and Language Modeling Objectives"
-  authors: "<u>Elena Voita</u>, Rico Sennrich and Ivan Titov"
+  authors: "<u>Elena Voita</u>, Rico Sennrich, Ivan Titov"
   doc-url:
   conf: emnlp19.png
   url: "http://arxiv.org/abs/1909.01380"
+  abstract: "We seek to understand how the representations of individual tokens and the structure of the learned feature space evolve between layers in deep neural networks under different learning objectives. We focus on the Transformers for our analysis as they have been shown effective on various tasks, including machine translation (MT), standard left-to-right language models (LM) and masked language modeling (MLM). Previous work used black-box probing tasks to show that the representations learned by the Transformer differ significantly depending on the objective. In this work, we use canonical correlation analysis and mutual information estimators to study how information flows across Transformer layers and how this process depends on the choice of learning objective. For example, as you go from bottom to top layers, information about the past in left-to-right language models gets vanished and predictions about the future get formed. In contrast, for MLM, representations initially acquire information about the context around the token, partially forgetting the token identity and producing a more generalized token representation. The token identity then gets recreated at the top MLM layers."
 
 -
   layout: paper
@@ -41,9 +44,10 @@
   year: 2019
   img: emnlp19_ctx-min.png
   title: "Context-Aware Monolingual Repair for Neural Machine Translation"
-  authors: "<u>Elena Voita</u>, Rico Sennrich and Ivan Titov"
+  authors: "<u>Elena Voita</u>, Rico Sennrich, Ivan Titov"
   conf: emnlp19.png
   url: "http://arxiv.org/abs/1909.01383"
+  abstract: "Modern sentence-level NMT systems often produce plausible translations of isolated sentences. However, when put in context, these translations may end up being inconsistent with each other. We propose a monolingual DocRepair model to correct inconsistencies between sentence-level translations. DocRepair performs automatic post-editing on a sequence of sentence-level translations, refining translations of sentences in context of each other. For training, the DocRepair model requires only monolingual document-level data in the target language. It is trained as a monolingual sequence-to-sequence model that maps inconsistent groups of sentences into consistent ones. The consistent groups come from the original training data; the inconsistent groups are obtained by sampling round-trip translations for each isolated sentence. We show that this approach successfully imitates inconsistencies we aim to fix: using contrastive evaluation, we show large improvements in the translation of several contextual phenomena in an English-Russian translation task, as well as improvements in the BLEU score. We also conduct a human evaluation and show a strong preference of the annotators to corrected translations over the baseline ones. Moreover, we analyze which discourse phenomena are hard to capture using monolingual data only."
 
 -
   layout: paper
@@ -52,7 +56,7 @@
   year: 2019
   img: acl19_heads-min.png
   title: "Analyzing Multi-Head Self-Attention: Specialized Heads Do the Heavy Lifting, the Rest Can Be Pruned"
-  authors: "<u>Elena Voita</u>, David Talbot, Fedor Moiseev, Rico Sennrich and Ivan Titov"
+  authors: "<u>Elena Voita</u>, David Talbot, Fedor Moiseev, Rico Sennrich, Ivan Titov"
   doc-url:
   conf: acl19.png
   arxiv: //arxiv.org/abs/1905.09418
@@ -60,8 +64,7 @@
   appendix:
   booktitle: "Proceedings of ACL"
   slides:
-  abstract: >
-      Multi-head self-attention is a key component of the Transformer, a state-of-the-art architecture for neural machine translation. In this work we evaluate the contribution made by individual attention heads in the encoder to the overall performance of the model and analyze the roles played by them. We find that the most important and confident heads play consistent and often linguistically-interpretable roles. When pruning heads using a method based on stochastic gates and a differentiable relaxation of the L0 penalty, we observe that specialized heads are last to be pruned. Our novel pruning method removes the vast majority of heads without seriously affecting performance. For example, on the English-Russian WMT dataset, pruning 38 out of 48 encoder heads results in a drop of only 0.15 BLEU.
+  abstract: "Multi-head self-attention is a key component of the Transformer, a state-of-the-art architecture for neural machine translation. In this work we evaluate the contribution made by individual attention heads in the encoder to the overall performance of the model and analyze the roles played by them. We find that the most important and confident heads play consistent and often linguistically-interpretable roles. When pruning heads using a method based on stochastic gates and a differentiable relaxation of the L0 penalty, we observe that specialized heads are last to be pruned. Our novel pruning method removes the vast majority of heads without seriously affecting performance. For example, on the English-Russian WMT dataset, pruning 38 out of 48 encoder heads results in a drop of only 0.15 BLEU."
   bibtex: >
 
     }
@@ -73,7 +76,7 @@
   year: 2019
   img: acl19_ctx_scheme-min.png
   title: "When a Good Translation is Wrong in Context: Context-Aware Machine Translation Improves on Deixis, Ellipsis, and Lexical Cohesion"
-  authors: "<u>Elena Voita</u>, Rico Sennrich and Ivan Titov"
+  authors: "<u>Elena Voita</u>, Rico Sennrich, Ivan Titov"
   doc-url:
   conf: acl19.png
   arxiv: //arxiv.org/abs/1905.05979
@@ -81,8 +84,7 @@
   appendix:
   booktitle: "Proceedings of ACL"
   slides:
-  abstract: >
-      Though machine translation errors caused by the lack of context beyond one sentence have long been acknowledged, the development of context-aware NMT systems is hampered by several problems. Firstly, standard metrics are not sensitive to improvements in consistency in document-level translations. Secondly, previous work on context-aware NMT assumed that the sentence-aligned parallel data consisted of complete documents while in most practical scenarios such document-level data constitutes only a fraction of the available parallel data. To address the first issue, we perform a human study on an English-Russian subtitles dataset and identify deixis, ellipsis and lexical cohesion as three main sources of inconsistency. We then create test sets targeting these phenomena. To address the second shortcoming, we consider a set-up in which a much larger amount of sentence-level data is available compared to that aligned at the document level. We introduce a model that is suitable for this scenario and demonstrate major gains over a context-agnostic baseline on our new benchmarks without sacrificing performance as measured with BLEU.
+  abstract: "Though machine translation errors caused by the lack of context beyond one sentence have long been acknowledged, the development of context-aware NMT systems is hampered by several problems. Firstly, standard metrics are not sensitive to improvements in consistency in document-level translations. Secondly, previous work on context-aware NMT assumed that the sentence-aligned parallel data consisted of complete documents while in most practical scenarios such document-level data constitutes only a fraction of the available parallel data. To address the first issue, we perform a human study on an English-Russian subtitles dataset and identify deixis, ellipsis and lexical cohesion as three main sources of inconsistency. We then create test sets targeting these phenomena. To address the second shortcoming, we consider a set-up in which a much larger amount of sentence-level data is available compared to that aligned at the document level. We introduce a model that is suitable for this scenario and demonstrate major gains over a context-agnostic baseline on our new benchmarks without sacrificing performance as measured with BLEU."
   bibtex: >
 
     }
