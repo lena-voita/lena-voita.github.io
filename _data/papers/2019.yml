@@ -9,6 +9,8 @@
   authors: "Ivan Provilkov, Dmitrii Emelianenko, <u>Elena Voita</u>"
   doc-url:
   conf: acl20.png
+  conf_name: ACL
+  conf_year: 2020
   url: "https://arxiv.org/abs/1910.13267"
   abstract: "Subword segmentation is widely used to address the open vocabulary problem in machine translation. The dominant approach to subword segmentation is Byte Pair Encoding (BPE), which keeps the most frequent words intact while splitting the rare ones into multiple tokens. While multiple segmentations are possible even with the same vocabulary, BPE splits words into unique sequences; this may prevent a model from better learning the compositionality of words and being robust to segmentation errors. So far, the only way to overcome this BPE imperfection, its deterministic nature, was to create another subword segmentation algorithm (Kudo, 2018). In contrast, we show that BPE itself incorporates the ability to produce multiple segmentations of the same word. We introduce BPE-dropout - simple and effective subword regularization method based on and compatible with conventional BPE. It stochastically corrupts the segmentation procedure of BPE, which leads to producing multiple segmentations within the same fixed BPE framework. Using BPE-dropout during training and the standard BPE during inference improves translation quality up to 3 BLEU compared to BPE and up to 0.9 BLEU compared to the previous subword regularization."
 
@@ -21,7 +23,10 @@
   authors: "Dmitrii Emelianenko, <u>Elena Voita</u>, Pavel Serdyukov"
   doc-url:
   conf: nips19.png
+  conf_name: NeurIPS
+  conf_year: 2019
   url: "https://arxiv.org/abs/1911.00176"
+  code: "https://github.com/TIXFeniks/neurips2019_intrus"
   abstract: "The dominant approach to sequence generation is to produce a sequence in some predefined order, e.g. left to right. In contrast, we propose a more general model that can generate the output sequence by inserting tokens in any arbitrary order. Our model learns decoding order as a result of its training procedure. Our experiments show that this model is superior to fixed order models on a number of sequence generation tasks, such as Machine Translation, Image-to-LaTeX and Image Captioning."
 
 -
@@ -34,7 +39,10 @@
   authors: "<u>Elena Voita</u>, Rico Sennrich, Ivan Titov"
   doc-url:
   conf: emnlp19.png
+  conf_name: EMNLP
+  conf_year: 2019
   url: "http://arxiv.org/abs/1909.01380"
+  blog: "https://lena-voita.github.io/posts/emnlp19_evolution.html"
   abstract: "We seek to understand how the representations of individual tokens and the structure of the learned feature space evolve between layers in deep neural networks under different learning objectives. We focus on the Transformers for our analysis as they have been shown effective on various tasks, including machine translation (MT), standard left-to-right language models (LM) and masked language modeling (MLM). Previous work used black-box probing tasks to show that the representations learned by the Transformer differ significantly depending on the objective. In this work, we use canonical correlation analysis and mutual information estimators to study how information flows across Transformer layers and how this process depends on the choice of learning objective. For example, as you go from bottom to top layers, information about the past in left-to-right language models gets vanished and predictions about the future get formed. In contrast, for MLM, representations initially acquire information about the context around the token, partially forgetting the token identity and producing a more generalized token representation. The token identity then gets recreated at the top MLM layers."
 
 -
@@ -46,7 +54,10 @@
   title: "Context-Aware Monolingual Repair for Neural Machine Translation"
   authors: "<u>Elena Voita</u>, Rico Sennrich, Ivan Titov"
   conf: emnlp19.png
+  conf_name: EMNLP
+  conf_year: 2019
   url: "http://arxiv.org/abs/1909.01383"
+  code: "https://github.com/lena-voita/good-translation-wrong-in-context"
   abstract: "Modern sentence-level NMT systems often produce plausible translations of isolated sentences. However, when put in context, these translations may end up being inconsistent with each other. We propose a monolingual DocRepair model to correct inconsistencies between sentence-level translations. DocRepair performs automatic post-editing on a sequence of sentence-level translations, refining translations of sentences in context of each other. For training, the DocRepair model requires only monolingual document-level data in the target language. It is trained as a monolingual sequence-to-sequence model that maps inconsistent groups of sentences into consistent ones. The consistent groups come from the original training data; the inconsistent groups are obtained by sampling round-trip translations for each isolated sentence. We show that this approach successfully imitates inconsistencies we aim to fix: using contrastive evaluation, we show large improvements in the translation of several contextual phenomena in an English-Russian translation task, as well as improvements in the BLEU score. We also conduct a human evaluation and show a strong preference of the annotators to corrected translations over the baseline ones. Moreover, we analyze which discourse phenomena are hard to capture using monolingual data only."
 
 -
@@ -59,8 +70,12 @@
   authors: "<u>Elena Voita</u>, David Talbot, Fedor Moiseev, Rico Sennrich, Ivan Titov"
   doc-url:
   conf: acl19.png
+  conf_name: ACL
+  conf_year: 2019
   arxiv: //arxiv.org/abs/1905.09418
   url: "http://www.aclweb.org/anthology/P19-1580"
+  code: "https://github.com/lena-voita/the-story-of-heads"
+  blog: "https://lena-voita.github.io/posts/acl19_heads.html"
   appendix:
   booktitle: "Proceedings of ACL"
   slides:
@@ -79,8 +94,12 @@
   authors: "<u>Elena Voita</u>, Rico Sennrich, Ivan Titov"
   doc-url:
   conf: acl19.png
+  conf_name: ACL
+  conf_year: 2019
   arxiv: //arxiv.org/abs/1905.05979
   url: "http://www.aclweb.org/anthology/P19-1116"
+  code: "https://github.com/lena-voita/good-translation-wrong-in-context"
+  blog: "https://lena-voita.github.io/posts/acl19_context.html"
   appendix:
   booktitle: "Proceedings of ACL"
   slides:
