@@ -52,7 +52,7 @@
   .links {
     text-align: left;
     color: black;
-    margin-right: 10px;
+    margin-right: 8px;
     padding: 4px;
     margin-bottom: 0px;
 
@@ -86,9 +86,9 @@
       <hr style="margin-bottom:5px">
       {% if include.paper.conf_name %}<div class="conf_name">{{ include.paper.conf_name }} {{ include.paper.conf_year }}</div>{% endif %}
     <div class="links">
-      <a href="{{ include.paper.url }}" target="_blank" >Paper  </a>
-        {% if include.paper.code %}<a href="{{ include.paper.code }}" target="_blank">Code</a>{% endif %}
-        {% if include.paper.blog %}<a href="{{ include.paper.blog }}" target="_blank">Blog</a>{% endif %}
+      <a href="{{ include.paper.url }}" target="_blank" class="links">paper  </a>
+        {% if include.paper.code %}<a href="{{ include.paper.code }}" target="_blank" class="links">code</a>{% endif %}
+        {% if include.paper.blog %}<a href="{{ include.paper.blog }}" target="_blank" class="links">blog</a>{% endif %}
     </div>
 
   </div>
