@@ -32,12 +32,13 @@ Program committee:
 
 ### <span style="color:darkblue"> Guest talks </span>
 * 06/2020 <span class="talk-title">_Information-Theoretic Probing with Minimum Description Length_</span> <a href="https://drive.google.com/file/d/1iP7P0nld_O8op2SLEEX-q7WSFA1rKlfk/view?usp=sharing" class="label slides">Slides</a>
-<br/>&nbsp; &nbsp; &nbsp; Seminar at MIT (remotely)
+<br/>&nbsp; &nbsp; &nbsp; MIT (Massachusetts Institute of Technology) (remotely)
+<br/>&nbsp; &nbsp; &nbsp; DeepMind, London (remotely)
 * 01/2020 <span class="talk-title">_Analyzing Information Flow in Transformers_</span> <a href="https://drive.google.com/file/d/1bEiWUZDNbKAgMkt5PPF9sQl3x9AYNVoZ/view?usp=sharing" class="label slides">Slides</a>
-<br/>&nbsp; &nbsp; &nbsp; [Seminar at Naver Labs Europe](https://europe.naverlabs.com/research/seminars/analyzing-information-flow-in-transformers/), Grenoble, France
-<br/>&nbsp; &nbsp; &nbsp; Seminar at Google Research, Berlin, Germany
+<br/>&nbsp; &nbsp; &nbsp; [Naver Labs Europe](https://europe.naverlabs.com/research/seminars/analyzing-information-flow-in-transformers/), Grenoble, France
+<br/>&nbsp; &nbsp; &nbsp; Google Research, Berlin, Germany
 * 01/2020 <span class="talk-title">_Evolution of Representations in the Transformer_</span> <a href="https://drive.google.com/file/d/1bEiWUZDNbKAgMkt5PPF9sQl3x9AYNVoZ/view?usp=sharing" class="label slides">Slides</a> <a href="https://youtu.be/h5N7sbAKBhA" class="label video">Video</a> 
-<br/>&nbsp; &nbsp; &nbsp; [Meetup at Rasa](https://www.meetup.com/ru-RU/Bots-Berlin-Build-better-conversational-interfaces-with-AI/events/267058207/), Berlin, Germany
+<br/>&nbsp; &nbsp; &nbsp; [Rasa](https://www.meetup.com/ru-RU/Bots-Berlin-Build-better-conversational-interfaces-with-AI/events/267058207/), Berlin, Germany
 * 11/2019 [NLP Highlights](https://soundcloud.com/nlp-highlights) podcast
 <iframe width="100%" height="170" scrolling="no" frameborder="no" allow="autoplay" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/725286211&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=false&show_artwork=false&visual=false"></iframe>
 
