@@ -1,5 +1,6 @@
 ---
 layout: default
+description: I'm Elena (Lena) Voita and I work on Natural Language Processing. More details inside!
 ---
 
 <!-- (comment) the image below can be found in img folder of this very project-->

@@ -1,6 +1,7 @@
 ---
 layout: photolist
 title: Talks & Service
+description: Links to the talks (slides & video) and service info (program/organization committee, etc.)
 menu: yes
 order: 3
 ---

@@ -1,6 +1,7 @@
 ---
 layout: photolist
 title: Publications
+description: Publications with links to papers, blogs and code.
 menu: yes
 order: 2
 ---
