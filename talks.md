@@ -31,10 +31,11 @@ Program committee:
 * 08/2018 <span class="talk-title">_Does NMT learn to solve NLP?_</span>
 <br/>&nbsp; &nbsp; &nbsp; [Yandex Research Summit](https://yandex.com/promo/academy/yars_2019), <span style="font-size:0.9em">Moscow, Russia (with David Talbot)</span> 
 
-### <span style="color:darkblue"> Guest talks </span>
-* 06/2020 <span class="talk-title">_Information-Theoretic Probing with Minimum Description Length_</span> <a href="https://drive.google.com/file/d/1iP7P0nld_O8op2SLEEX-q7WSFA1rKlfk/view?usp=sharing" class="label slides">Slides</a>
+### <span style="color:darkblue"> Invited talks </span>
+* 06-07/2020 <span class="talk-title">_Information-Theoretic Probing with Minimum Description Length_</span> <a href="https://drive.google.com/file/d/1iP7P0nld_O8op2SLEEX-q7WSFA1rKlfk/view?usp=sharing" class="label slides">Slides</a>
 <br/>&nbsp; &nbsp; &nbsp; MIT (Massachusetts Institute of Technology) (remotely)
-<br/>&nbsp; &nbsp; &nbsp; DeepMind, London (remotely)
+<br/>&nbsp; &nbsp; &nbsp; DeepMind (remotely)
+<br/>&nbsp; &nbsp; &nbsp; [Grammarly AI](https://grammarly.ai/information-theoretic-probing-with-minimum-description-length/) (remotely)
 * 01/2020 <span class="talk-title">_Analyzing Information Flow in Transformers_</span> <a href="https://drive.google.com/file/d/1bEiWUZDNbKAgMkt5PPF9sQl3x9AYNVoZ/view?usp=sharing" class="label slides">Slides</a>
 <br/>&nbsp; &nbsp; &nbsp; [Naver Labs Europe](https://europe.naverlabs.com/research/seminars/analyzing-information-flow-in-transformers/), Grenoble, France
 <br/>&nbsp; &nbsp; &nbsp; Google Research, Berlin, Germany
