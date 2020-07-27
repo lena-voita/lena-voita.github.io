@@ -36,7 +36,7 @@ Program committee:
 <br/>&nbsp; &nbsp; &nbsp; MIT (Massachusetts Institute of Technology) (remotely)
 <br/>&nbsp; &nbsp; &nbsp; DeepMind (remotely)
 <br/>&nbsp; &nbsp; &nbsp; [Grammarly AI](https://grammarly.ai/information-theoretic-probing-with-minimum-description-length/) (remotely)
-<br/>&nbsp; &nbsp; &nbsp; [NLP with Frients](https://nlpwithfriends.com) (remotely)
+<br/>&nbsp; &nbsp; &nbsp; [NLP with Friends](https://nlpwithfriends.com) (remotely)
 * 01/2020 <span class="talk-title">_Analyzing Information Flow in Transformers_</span> <a href="https://drive.google.com/file/d/1bEiWUZDNbKAgMkt5PPF9sQl3x9AYNVoZ/view?usp=sharing" class="label slides">Slides</a>
 <br/>&nbsp; &nbsp; &nbsp; [Naver Labs Europe](https://europe.naverlabs.com/research/seminars/analyzing-information-flow-in-transformers/), Grenoble, France
 <br/>&nbsp; &nbsp; &nbsp; Google Research, Berlin, Germany
