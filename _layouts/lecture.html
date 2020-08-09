@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html>
+
+  {% include head.html %}
+
+  <!--style>
+  p {
+    text-align: justify;
+  }
+  </style-->
+
+  <body>
+
+    {% include header.html %}
+
+
+    <!-- the next two lines are inserted once per page even if there are several shtukovinas,
+     the rest is one-per-shtukovina; read more: https://flickity.metafizzy.co/options.html -->
+<link rel="stylesheet" href="https://unpkg.com/flickity@2/dist/flickity.min.css" media="screen">
+<script src="https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js"></script>
+
+    <!-- MathJax -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<style>
+
+
+
+.demo_sidebar {
+  margin: 0;
+  padding: 0;
+  background-color: white;
+
+  position: relative;
+    height: auto;
+    width: 290px;
+}
+
+.demo_sidebar_text {
+    font-size: 18px;
+}
+
+.demo_sidebar_comment {
+    font-size:15px;
+    margin-left:10px;
+    font-family: "Comic Neue", "Arial";
+
+}
+
+
+
+.demo_sidebar a {
+  display: block;
+  color: black;
+  padding: 8px;
+  text-decoration: none;
+
+}
+
+.demo_sidebar a li {
+  margin-left: 5px;
+  padding: 0px;
+}
+
+
+
+.demo_sidebar a:hover {
+  box-shadow: 0 3px 6px #6e8f27, 0 1px 1px #6e8f27;
+}
+
+.demo_sidebar a:hover:not(.active) {
+  background-color: #f3f3f3;
+}
+
+.demo_sidebar .main_components {
+  background-color: #f3f3f3;
+}
+.demo_sidebar .extra_components {
+  background-color: #eaeaea;
+}
+
+
+#demo_sidebar_research_thinking:hover {
+  box-shadow: 0 3px 6px #a68305, 0 1px 1px #a68305;
+
+}
+
+
+#demo_sidebar_related_papers:hover {
+  box-shadow: 0 3px 6px #8a4972, 0 1px 1px #8a4972;
+}
+
+
+#demo_sidebar_fun:hover {
+  box-shadow: 0 3px 6px #377b94, 0 1px 1px #377b94;
+}
+
+</style>
+
+
+
+<style>
+
+@import url('https://fonts.googleapis.com/css?family=Josefin+Sans&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Comic+Neue&display=swap");
+
+
+
+#main_page_content {
+  margin-left: 300px;
+  padding: 30px;
+  padding-left: 70px;
+  text-align: justify;
+}
+
+.sidebar {
+  margin: 0;
+  padding: 0;
+  width: 270px;
+  background-color: #fafafa;
+  position: fixed;
+  height: 100%;
+  overflow: auto;
+  z-index: 1;
+}
+
+.sidebar a, .dropdown-btn {
+  display: block;
+  color: black;
+  padding: 8px;
+  text-decoration: none;
+  border-right: 5px solid #b7db67;
+}
+
+
+.sidebar a li {
+  margin-left: 10px;
+  padding: 0px;
+}
+
+.dropdown-container {
+  display: none;
+  background-color: #f4f4f4;
+}
+
+.active_caret .fa-caret-down
+{
+    color: #b7db67;
+    font-size: 30px;
+}
+
+.fa-caret-down {
+  float: right;
+  padding-right: 8px;
+}
+
+.sidebar a.active {
+  background-color: #e3e3e3;
+  color: black;
+}
+
+.sidebar a:hover {
+  box-shadow: 0 3px 6px #6e8f27, 0 1px 1px #6e8f27;
+}
+
+.sidebar a:hover:not(.active) {
+  background-color: #f3f3f3;
+}
+
+.sidebar .extra_components {
+  background-color: #eaeaea;
+}
+
+#sidebar_analysis {
+    padding: 10px;
+}
+
+#sidebar_research_thinking {
+padding: 10px;
+  border-right: 5px solid #fad400;
+}
+#sidebar_research_thinking:hover {
+  box-shadow: 0 3px 6px #a68305, 0 1px 1px #a68305;
+
+}
+
+
+#sidebar_related_papers {
+padding: 10px;
+  border-right: 5px solid #d192ba;
+}
+#sidebar_related_papers:hover {
+  box-shadow: 0 3px 6px #8a4972, 0 1px 1px #8a4972;
+}
+
+
+#sidebar_fun {
+padding: 10px;
+  border-right: 5px solid #6fb7d1;
+}
+#sidebar_fun:hover {
+  box-shadow: 0 3px 6px #377b94, 0 1px 1px #377b94;
+}
+
+
+.sidebar_ico {
+    float: right;
+    height: 20;
+  }
+
+div.content {
+  margin-left: 200px;
+  padding: 1px 16px;
+  height: 1000px;
+}
+
+#sidebar_small { width: 60px; }
+
+
+@media screen and (max-width: 1000px) {
+  .sidebar {
+    width: 200px;
+  }
+  #main_page_content {
+  margin-left: 200px;
+  padding-left: 50px;
+
+}
+
+  }
+
+
+@media screen and (max-width: 800px) {
+
+  div.content {margin-left: 0;}
+  #main_page_content {margin-left: 80px; padding: 15px;}
+
+  #demo_sidebar {}
+}
+
+
+.softmax_tau_bokeh {
+    font-size: 16px;
+  }
+
+
+
+.card_with_ico {
+    position: relative;
+    padding: 10px;
+    margin: 10px;
+  }
+  .card_with_ico p {
+    padding: 10px;
+  }
+  .card_with_ico ul {
+    padding: 10px;
+  }
+  .card_with_ico .text_box_green {
+    border: 1px solid #d8e8b5;
+    border-radius: 5px;
+    margin-left: 30px;
+  }
+  .card_with_ico .text_box_pink {
+    border: 1px solid #dec8d6;
+    border-radius: 5px;
+    margin-left: 30px;
+  }
+  .card_with_ico .text_box_yellow {
+    border: 1px solid #f0e4a5;
+    border-radius: 5px;
+    margin-left: 30px;
+  }
+  .card_with_ico .ico {
+    float: left;
+    width: 25px;
+  }
+
+
+
+.text_box_green {
+    border: 1px solid #d8e8b5;
+    border-radius: 5px;
+    display: table;
+    margin-left: 20px;
+  }
+  .text_box_green p {
+    padding: 10px;
+    padding-bottom: 0px;
+  }
+
+
+
+.green_left_thought {
+    border-left: 5px solid #b7db67;
+    margin: 10px;
+    margin-left: 20px;
+    padding: 0px;
+    background-color: #fafcf5;
+  }
+  .green_left_thought p {
+
+    margin-left: 10px;
+    padding: 5px;
+  }
+
+
+.box_green_left {
+    border-left: 2px solid #79a123;
+    margin-left: 10px;
+    padding: 10px;
+  }
+
+.box_green_right {
+    border-right: 2px solid #79a123;
+    margin-right: 10px;
+    padding: 10px;
+  }
+
+.box_pink_left {
+    border-left: 2px solid #7a3160;
+    margin-left: 5px;
+    padding: 10px;
+  }
+
+ .box_yellow_left {
+    border-left: 2px solid #d6b000;
+    margin-left: 5px;
+    padding: 10px;
+  }
+
+  .box_blue_left {
+    border-left: 2px solid #0278a1;
+    margin-left: 5px;
+    padding: 10px;
+  }
+
+.paper_title {
+    text-align: center;
+    padding: 5px;
+    padding-top: 0px;
+    font-size: 16px;
+
+  }
+  .paper_authors {
+    font-size: 14px;
+    text-align: center;
+    margin-bottom: 10px;
+  }
+  p {
+    text-align: justify;
+  }
+
+
+  .greenCard {
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 1px;
+    margin: 10px 5px;
+    padding: 3px;
+    display: grid;
+    grid-template-rows: auto auto;
+  }
+
+  #thumbnail_green {
+    box-shadow: 0 2px 4px #6e8f27, 0 1px 1px #6e8f27;
+  }
+  #thumbnail_green:hover {
+    box-shadow: 0 6px 12px #6e8f27, 0 4px 4px #6e8f27;
+  }
+
+  #thumbnail_paper {
+    box-shadow: 0 2px 4px #ab859e, 0 1px 1px #ab859e;
+  }
+  #thumbnail_paper:hover {
+    box-shadow: 0 6px 12px #ab859e, 0 4px 4px #ab859e;
+  }
+
+
+
+  #thumbnail_blue {
+    box-shadow: 0 2px 4px #377b94, 0 1px 1px ;
+  }
+  #thumbnail_blue:hover {
+    box-shadow: 0 6px 12px #377b94, 0 4px 4px #377b94;
+  }
+
+  .paperCard {
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 1px;
+    margin: 10px 5px;
+    padding: 3px;
+    display: grid;
+    grid-template-rows: auto auto;
+  }
+  .paperIntro {
+    display: grid;
+    grid-template-columns: 70% 30%;
+  }
+
+  .showMePaper {
+    box-shadow: 0 2px 4px #a68305, 0 2px 1px #a68305;
+  }
+  .showMePaper:hover {
+    box-shadow: 0 3px 6px #ab859e, 0 4px 4px #ab859e;
+  }
+
+
+  .cardContent {
+    padding: 10px;
+  }
+
+  .center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .conf_name {
+    float: right;
+    font-family: sans-serif;
+    font-size: 13px;
+    margin-bottom: 0px;
+    background-color: #f7edf4;
+    border: 1px solid #d1a1c3;
+    border-radius: 1px;
+    padding: 0px 4px 0px 4px;
+  }
+
+
+
+  .paper_circle {
+    height: 10px;
+    width: 10px;
+    background-color: #cf99be;
+    border: 1px solid #8c2b6e;
+    border-radius: 50%;
+  }
+
+  .research_circle {
+    height: 10px;
+    width: 10px;
+    background-color: #ffda00;
+    border: 1px solid #998300;
+    border-radius: 50%;
+  }
+
+  .fun_circle {
+    height: 10px;
+    width: 10px;
+    background-color: #68c7e8;
+    border: 1px solid #0278a1;
+    border-radius: 50%;
+  }
+  .green_circle {
+    height: 10px;
+    width: 10px;
+    background-color: #b7db67;
+    border: 1px solid #598005;
+    border-radius: 50%;
+  }
+
+  .data_text {
+    font-family: "Comic Neue", "Arial";
+  }
+
+
+
+
+   .researchCard {
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 1px;
+    margin: 10px 5px;
+    padding: 3px;
+    display: grid;
+    grid-template-rows: auto auto;
+  }
+  .researchIntro {
+    display: grid;
+    grid-template-columns: 70% 30%;
+  }
+    #thumbnail_research {
+    box-shadow: 0 2px 4px #a68305, 0 1px 1px #a68305;
+  }
+  #thumbnail_research:hover {
+    box-shadow: 0 6px 12px #a68305, 0 4px 4px #a68305;
+  }
+  .research_title {
+    text-align: center;
+    padding: 5px;
+    font-size: 18px;
+    font-family: "Comic Neue", "Arial";
+    background-color: #fafaf5;
+
+
+  }
+   .research_tag {
+    float: right;
+    font-family: sans-serif;
+    font-size: 13px;
+    margin-bottom: 0px;
+    background-color: #f5f0d5;
+    border: 1px solid #fad400;
+    border-radius: 1px;
+    padding: 0px 4px 0px 4px;
+  }
+
+    .research_question {
+    font-weight:bold;
+    font-size:18px;
+    background-color:#fff4b3;
+    margin-right: 15px;
+    padding-left: 5px;
+    padding-right: 5px;
+  }
+
+  .research_summary {
+    padding: 5px;
+    font-size: 18px;
+    font-family: "Comic Neue", "Arial";
+    background-color: #fafaf5;
+    margin-left:10px;
+  }
+
+
+
+
+  </style>
+
+<!--##################################################-->
+
+    <div>
+        {{ content }}
+
+    </div>
+
+    {% include footer.html %}
+
+  </body>
+
+</html>

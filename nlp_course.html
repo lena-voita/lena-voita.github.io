@@ -1,0 +1,928 @@
+---
+layout: lecture
+title: NLP Course | For You
+description: Natural Language Processing course with interactive lectures-blogs, research thinking exercises and related papers with summaries. Also a lot of fun inside!
+---
+
+
+
+
+<div class="sidebar" id="sidebar">
+    <a href="javascript:void(0)" id="close_sidebar_btn" onclick="closeNav()"
+   style="text-align:center;font-size:30px;padding:0px;">⇤</a>
+    <a class="active" href="#main_page_content" style="font-weight: bold;">NLP Course <font color="#7ca81e">| For You</font></a>
+    <a href="#whats_inside">What's inside</a>
+    <a href="#lectures">Course</a>
+    <a href="#preview_word_emb"><span style="margin-right:15px;font-size:14px;">&#8226;</span>
+        Word Embeddings</a>
+      <a href="#preview_text_clf"><span style="margin-right:15px;font-size:14px;">&#8226;</span>
+          Text Classification</a>
+      <a href="#preview_lang_models"><span style="margin-right:15px;font-size:14px;">&#8226;</span>
+          Language Modeling</a>
+      <a href="#preview_seq2seq_attn"><span style="margin-right:15px;font-size:14px;">&#8226;</span>
+          Seq2seq and Attention</a>
+
+
+</div>
+
+    <div class="sidebar" id="sidebar_small" style="background-color: #f5f5f5;">
+
+    <a class="active" onclick="openNav()" style="text-align:center;">☰</a>
+        <a href="#main_page_content" style="text-align:center; font-size:20px;color:#7ca81e"> <i class="fa fa-home"></i></a>
+        <!--<a href="#whats_inside" style="text-align:center; font-size:20px;color:#7ca81e"> <i class="fa fa-search"></i></a>-->
+        <!--<a href="#whats_inside_lectures" id="sidebar_analysis"> <img height="25" src="../resources/lectures/ico/analysis_empty.png"/></a>
+<div class="extra_components">
+    <a href="#whats_inside_research_thinking" id="sidebar_research_thinking"><img height="30" src="../resources/lectures/ico/bulb_empty.png"/></a>
+    <a href="#whats_inside_related_papers" id="sidebar_related_papers"><img height="22" src="../resources/lectures/ico/book_empty.png"/></a>
+  <a href="#whats_inside_fun" id="sidebar_fun"><img height="30" src="../resources/lectures/ico/fun_empty.png" /></a>-->
+    <a href="#lectures" style="text-align:center; font-size:20px;color:#7ca81e"> <i class="fa fa-list-ul"></i></a>
+</div>
+
+    </div>
+
+
+<script>
+function openNav() {
+  document.getElementById("sidebar").style.display = "block";
+  document.getElementById("sidebar_small").style.display = "none";
+  document.getElementById("close_sidebar_btn").style.display = "block";
+}
+
+function closeNav() {
+  document.getElementById("sidebar").style.display = "none";
+  document.getElementById("sidebar_small").style.display = "block";
+  document.getElementById("close_sidebar_btn").style.display = "none";
+}
+
+</script>
+
+
+<script>
+function onResize() {
+  if (window.innerWidth >= 800) {
+     document.getElementById("sidebar").style.display = "block";
+     document.getElementById("sidebar_small").style.display = "none";
+     document.getElementById("close_sidebar_btn").style.display = "none";
+  }
+  else {
+     document.getElementById("sidebar").style.display = "none";
+    document.getElementById("sidebar_small").style.display = "block";
+
+  }
+}
+window.onresize = onResize;
+onResize();
+</script>
+
+
+
+
+<div class="wrapper" id="main_page_content">
+    <div class="header"><h1>NLP Course <font color="#92bf32">| For You</font></h1></div>
+
+<div class="main_content">
+
+
+<p class="data_text">
+               This is an extension to the (ML for)
+               <a href="https://github.com/yandexdataschool/nlp_course" target="_blank">Natural Language Processing course</a>
+               I teach at the <a href="https://yandexdataschool.com" target="_blank">Yandex School of Data Analysis (YSDA)</a>
+                   since fall 2018. For now, only part of the topics is likely to be covered here.</p>
+    <div style="display: grid;
+    grid-template-columns: auto 290px;">
+
+        <div style="margin-right: 30px;">
+
+
+               <h3>This new format of the course is designed for:</h3>
+
+            <ul>
+            <li><span style="font-size:18px;">convenience</span><br>
+            <span class="data_text">Easy to find, learn or recap  material (both standard and more advanced), and to
+            try in practice.</span>
+            </li>
+             <li style="margin-top:10px;"><span style="font-size:18px; ">clarity</span><br>
+                <span class="data_text">
+            Each part, from front to back, is a result of my care
+                    not only about what to say, but also
+                    how to say and, especially, how to show something.
+             </span>
+            </li>
+            <li style="margin-top:10px;"><span style="font-size:18px; ">you</span> <br>
+                <span class="data_text">
+                I wanted to make these materials so that you (yes, you!)
+                could study on your own, what you like, and at your pace.
+                My main purpose is to help you enter your own very personal adventure.
+                <strong><font color="#92bf32">For you.</font></strong></span>
+            </li>
+
+            </li>
+
+        </ul>
+
+
+        </div>
+
+
+
+
+        <div class="demo_sidebar" style="font-family:helvetica;">
+
+            <div class="main_components">
+            <a href="#whats_inside_lectures">
+                Lectures-blogs
+            <span class="demo_sidebar_comment">with</span>
+            <br><span style="padding:5px;" class="demo_sidebar_comment">
+                    Interactive parts & Exercises
+                  <img height="18" src="../resources/lectures/ico/paw_empty.png" class="sidebar_ico"/>
+                  <img height="20" src="../resources/lectures/ico/dumpbell_empty.png" class="sidebar_ico" style="margin-right:10px;"/>
+                </span>
+                <br><span style="padding:5px;" class="demo_sidebar_comment">
+                    Analysis and Interpretability<img height="25" src="../resources/lectures/ico/analysis_empty.png" class="sidebar_ico"/>
+                </span>
+            </a>
+
+            <a href="#whats_inside_lectures">
+                Seminars & Homeworks
+                <br><span class="demo_sidebar_comment">notebooks in our 6k-☆ course repo</span>
+            </a>
+            </div>
+
+            <div class="extra_components">
+            <a href="#whats_inside_research_thinking" id="demo_sidebar_research_thinking">
+                Research Thinking
+                <img height="30" src="../resources/lectures/ico/bulb_empty.png" class="sidebar_ico" style="margin-top:10px;"/>
+                <br><span class="demo_sidebar_comment">learn to ask right questions</span>
+            </a>
+
+            <a href="#whats_inside_related_papers" id="demo_sidebar_related_papers">
+                Related Papers
+                <img height="22" src="../resources/lectures/ico/book_empty.png" class="sidebar_ico" style="margin-top:15px;"/>
+                <br><span class="demo_sidebar_comment">with summaries and explanations</span>
+            </a>
+
+            <a href="#whats_inside_fun" id="demo_sidebar_fun">
+                Have Fun!
+                <img height="35" src="../resources/lectures/ico/fun_empty.png" class="sidebar_ico" style="margin-top:8px;"/>
+                <br><span class="demo_sidebar_comment">just fun</span>
+            </a>
+            </div>
+        </div>
+
+    </div>
+
+
+
+    <hr style="height:5px" color="#92bf32">
+
+<br>
+
+<div id="whats_inside">
+<h1>What's inside: A Guide to Your Adventure</h1>
+
+<br>
+
+ <div style="border: 0px solid #ccc;border-radius:15px;margin: 10px; padding: 4px;
+ background-color: #f5f5f5;">
+     <div style="display: grid; grid-template-columns: 45% 55%; margin:10px;"  id="whats_inside_lectures">
+
+        <div style="margin-right: 15px;">
+
+            <h2 style="margin-bottom:5px;">Lectures-blogs</h2>
+            <p class="data_text" style="margin-bottom:2px;">
+               which I tried to make:</p>
+            <ul class="data_text">
+            <li>intuitive, clear and engaging;</li>
+            <li>complete: full lecture and more,</li>
+            <li>up-to-date with the field.</li>
+            </ul>
+
+            <h3 style="margin-bottom:2px;">Bonus:</h3>
+            <ul class="data_text">
+                <li><a href="#whats_inside_research_thinking">Research Thinking</a>,</li>
+                <li><a href="#whats_inside_related_papers">Related Papers</a>,</li>
+                <li><a href="#whats_inside_fun">Have Fun!</a></li>
+            </ul>
+
+
+            <h2 style="margin-bottom:2px;">Seminars & Homeworks</h2>
+            <p class="data_text">For each topic, you can take notebooks from
+                <a href="https://github.com/yandexdataschool/nlp_course" target="_blank">our 6k-☆ course repo</a>.
+            </p>
+               <p class="data_text" style="margin-top:-7px;"> From 2020, both PyTorch and Tensorflow!
+            </p>
+        </div>
+
+         <div>
+
+        <!--##############    begin of right part   ####################################-->
+        <div class="green_circle" style="float:left; margin-left: 10px;"></div>
+        <div class="box_green_left" style="margin-left: 15px;">
+
+
+                <div class="greenCard" id="thumbnail_green" style="background-color:white;">
+                <div class="cardContent">
+                <img height="18" src="../resources/lectures/ico/paw_empty.png"
+                     style="float:left; padding-right:10px; "/>
+                    <img height="20" src="../resources/lectures/ico/dumpbell_empty.png"
+                     style="float:left; padding-right:20px; "/>
+                <h3>Interactive parts & Exercises</h3>
+                <p class="data_text" style="font-size:14px;">
+                Often I ask you to go over "slides" visualizing some process,
+                    play with something or just think.
+                </p>
+
+
+                </div>
+            </div>
+
+
+
+            <div class="greenCard" id="thumbnail_green" style="background-color:white;">
+                <div class="cardContent">
+                <img height="30" src="../resources/lectures/ico/analysis_empty.png"
+                     style="float:left; padding-right:20px; "/>
+                <h3>Analysis and Interpretability</h3>
+                <p class="data_text" style="font-size:14px;">
+                Since 2020, top NLP conferences (ACL, EMNLP) have the
+                    "Analysis and Interpretability" area: one more confirmation that
+                    analysis is an integral part of NLP.</p>
+                <p class="data_text" style="font-size:14px;">
+                    Each lecture has a section with relevant results on internal workings of models and methods.
+                </p>
+
+                </div>
+            </div>
+
+        </div>
+        <div class="green_circle" style="float:left; margin-left: 10px;"></div>
+
+        <!--#########################   end of right part #########################-->
+
+
+       </div>
+
+      </div>
+ </div>
+
+
+<br>
+
+ <div style="border: 0px solid #ccc;border-radius:15px;margin: 10px; padding: 4px;
+ background-color: #f5f5f5;">
+     <div style="display: grid; grid-template-columns: 45% 55%; margin:10px;"  id="whats_inside_research_thinking">
+
+        <div style="margin-right: 15px;">
+
+            <h2>Research Thinking</h2>
+            <p class="data_text">
+                Learn to think as a research scientist:</p>
+            <ul class="data_text">
+            <li>find flaws in an approach,</li>
+            <li>think why/when something can help,</li>
+            <li>come up with ways to improve,</li>
+            <li>learn about previous attempts.</li>
+            </ul>
+
+            <p class="data_text">It's well-known that you will learn something easier
+                if you are not just given the answer right away, but if you think about it first. Even
+            if you don't want to be a researcher, this is still a good way to learn things!
+            </p>
+
+        </div>
+
+         <div>
+         <img height="38" src="../resources/lectures/ico/bulb_empty.png"
+             style="float:left; padding-right:10px; margin-top:-10px;"/>
+        <div class="box_yellow_left" style="margin-left: 15px;">
+                <!--##############    begin of research card   ####################################-->
+        <div class="researchCard" id="thumbnail_research" style="background-color: white;">
+            <div class="researchIntro" id="research_meaning_shift">
+
+              <div class="cardContent">
+
+                  <div class="research_title">
+                      Demo: Research Card
+                  </div>
+
+                <hr color="#dedeca" style="margin:5px;">
+                  <span style="font-size:14px;">Here I define the starting point:
+                      something you already know.</span>
+              </div>
+                <div>
+                    <!--<div class="research_tag">neural</div>-->
+
+                      <img src="../resources/lectures/main/i_saw_cat-min.png"
+                           alt="" style="margin-top:10px;" class="center"/>
+
+                </div>
+
+             </div>
+            <hr color="#dedeca" style="margin:2px; height:1px">
+            <div class="cardContent">
+                <span style="font-size:14px; ">Here I ask you questions. Think (for a minute, a day, a week, ...) and then
+                    look at possible answers.</span>
+                <br>
+                <span style="font-size:14px;">
+                <span class="research_question">?</span>
+                Why this or that can be useful?</span>
+                <details>
+                    <summary  class="research_summary">
+                        <span style="font-size:14px;">Possible answers</span></summary>
+                    <div style="font-size:14px; margin-bottom:10px;">
+
+                        Here you will see some possible answers. This part is a motivation
+                    to try a new approach: usually, this is what a research project starts with.
+                    </div>
+                </details>
+
+                <span style="font-size:14px;">
+                <span class="research_question">?</span>
+                How can we use this to improve that model?</span>
+                <details>
+                    <summary  class="research_summary">
+                        <span style="font-size:14px;">Existing solutions</span></summary>
+                    <div style="font-size:14px">
+                    Here I will summarize some previous attempts. You are not supposed to come up with
+                    something exactly like here - remember, each paper usually takes the authors several
+                    months of work. It's a habit of thinking about these things that counts: you have
+                    several ideas, you try; if they don't work, you think again. Eventually, something
+                    will work - and this is what papers tell you about.
+                    </div>
+                </details>
+
+            </div>
+        </div>
+
+        <!--#########################   end of research card #########################-->
+        </div>
+        <div class="research_circle" style="float:left; margin-left: 10px;"></div>
+
+       </div>
+
+      </div>
+ </div>
+
+
+<br>
+
+<div style="border: 0px solid #ccc; border-radius:15px; margin: 10px; padding: 4px;
+ background-color: #f5f5f5;">
+    <div style="display: grid; grid-template-columns: 45% 55%; margin:10px;" id="whats_inside_related_papers">
+
+        <div style="margin-right: 15px;">
+
+            <h2>Related Papers</h2>
+            <p class="data_text">
+                Explore related work:</p>
+            <ul class="data_text">
+            <li><u>high-level</u>: look at key results in short summaries and
+                get an idea of what's going on in the field;</li>
+            <li><u>a bit deeper</u>: for topics which interest you more,
+                read longer summaries with illustrations and explanations;</li>
+            <li><u>in depth</u>: read the papers you liked.</li>
+            </ul>
+
+
+        </div>
+
+         <div>
+         <img height="25" src="../resources/lectures/ico/book_empty.png"
+             style="float:left; padding-right:10px; margin-top:-5px;"/>
+        <div class="box_pink_left" style="margin-left: 15px;margin-top: 15px;">
+        <!--######### begin of paper card #########################################-->
+        <div class="paperCard" id="thumbnail_paper" style="background-color: white;">
+            <div class="paperIntro">
+
+              <div class="cardContent">
+
+                  <div class="paper_title">
+                      <a href="" target="_blank" class="links">
+                      Demo: Paper Card
+                      </a>
+                  </div>
+
+                <div class="paper_authors">
+                    Good Author and Cool Author
+                </div>
+                <hr color="#f2e4ee" style="margin:5px; ">
+                  <div style="font-size:14px">
+                  Here I give you a couple of sentences explaining the high-level idea of the paper
+                      and/or its main results.
+                  </div>
+              </div>
+
+                <div>
+                    <div class="conf_name">EMNLP 2019</div>
+                  <a href="" target="_blank">
+                      <img src="../resources/lectures/main/pink_lm-min.png"
+                           alt="" style="margin-top:30px;" class="center"/>
+                  </a>
+                </div>
+
+             </div>
+            <hr color="#f2e4ee" style="margin:5px; height: 1px;">
+            <div class="cardContent">
+            <details>
+                    <summary style="margin-left:10px;">
+                        <span style="font-size:14px">More detals: click (yes, right here, right now!)</span></summary>
+
+                <div style="font-size:14px">
+                    <br>
+                  Here I give you a longer summary, with illustrations and explanations.
+                    I try to walk you through the authors' reasoning steps and key observations,
+                    and I try to make it as easy for you as possible.
+                    After you get the main idea, it'll be easier to read an original research paper.
+                  </div>
+
+
+
+
+                </details>
+            </div>
+        </div>
+
+        <!--################ end of paper card ##################################-->
+        </div>
+        <div class="paper_circle" style="float:left; margin-left: 10px;"></div>
+
+        </div>
+
+    </div>
+</div>
+
+
+
+ <br>
+
+<div style="border: 0px solid #ccc; border-radius:15px; margin: 10px; padding: 4px; background-color: #f5f5f5;">
+     <div style="display: grid; grid-template-columns: 45% 55%; margin:10px;" id="whats_inside_fun">
+
+        <div style="margin-right: 15px;">
+
+            <h2>Have Fun!</h2>
+            <p class="data_text">
+                Just fun.
+                <br><br>
+                Here you'll see some NLP games related to a lecture topic.</p>
+
+        </div>
+
+         <div>
+         <img height="40" src="../resources/lectures/ico/fun_empty.png"
+             style="float:left; padding-right:10px; margin-top:-10px;"/>
+        <div class="box_blue_left" style="margin-left: 15px;margin-top: 15px;">
+        <!--######### begin of fun #########################################-->
+                <div width=100% id="thumbnail_blue" style="background-color:white;
+    border:1px solid #ccc; border-radius:1px;margin:10px 5px;padding:3px;">
+                <div class="cardContent">
+                    <p style="text-align:center;">
+                        Week 1: <a href="./nlp_course/word_embeddings.html#have_fun" target="_blank">Semantic Space Surfer</a></p>
+                <img width=100% src="../resources/lectures/main/fun_preview-min.png">
+
+                </div>
+            </div>
+        <!--################ end of fun ##################################-->
+        </div>
+        <div class="fun_circle" style="float:left; margin-left: 10px;"></div>
+
+        </div>
+
+    </div>
+</div>
+</div>
+
+
+
+<br>
+<hr style="height:5px" color="#92bf32">
+<br>
+
+
+
+
+<div id="lectures">
+<h1>Course</h1>
+
+
+<div style="border: 0px solid #ccc;border-radius:15px;margin: 10px; padding: 4px;
+ background-color: #f5f5f5;">
+
+<div class="greenCard" id="thumbnail_green" style="background-color:white; margin:10px;width:96%">
+<div class="cardContent" id="preview_word_emb">
+<div style="display: grid; grid-template-columns: 50% 50%; margin:10px;">
+
+    <div>
+    <!--##############    begin of left part   ####################################-->
+        <div class="green_circle" style="float:right; margin-right:5px;"></div>
+        <div class="box_green_right">
+        <div style="margin-right:15px; ">
+
+            <h2 style="margin-bottom:5px;background-color:#f6fce8;text-align:center;">
+                <a href="./nlp_course/word_embeddings.html" style="color:black">Word Embeddings</a></h2>
+            <ul class="data_text">
+            <li>Distributional semantics</li>
+            <li>Count-based (pre-neural) methods</li>
+            <li>Word2Vec: <strong>learn</strong> vectors</li>
+            <li>GloVe: count, then learn</li>
+            <li>Evaluation: intrinsic vs extrinsic</li>
+            <li><img height="20" src="../resources/lectures/ico/analysis_empty.png" style="margin-right:10px;"/>
+            Analysis and Interpretability</li>
+            <li><span style="float: left;">Bonus: </span>
+                <div class="research_circle" style="margin: 8px; float: left;"></div>
+                <div class="paper_circle" style="margin: 8px; float: left;"></div>
+                <div class="fun_circle" style="margin: 8px; float: left;"></div></li>
+            </ul>
+
+            <hr color="#e9f5d0" style="margin:5px;">
+
+            <h3 style="margin-bottom:2px;">Seminar & Homework</h3>
+
+            <p class="data_text">Week 1 in
+                <a href="https://github.com/yandexdataschool/nlp_course" target="_blank">the course repo</a>.
+            </p>
+
+        </div>
+        </div>
+        <div class="green_circle" style="float:right; margin-right:5px;"></div>
+
+    </div>
+    <!--#########################   end of left part #########################-->
+
+    <div>
+
+      <div class="carousel carousel_word_emb"
+         style="width:100%; margin-left:-5px; margin-right:-5px;"
+      data-flickity='{ "imagesLoaded": true, "percentPosition": true, "wrapAround": true, "prevNextButtons": false}'>
+      <div class="carousel-cell" style="width:100%"><center>
+            <img src="../resources/lectures/main/preview/word_emb/word_emb-min.png" style="width:90%">
+          </center></div>
+      <div class="carousel-cell" style="width:100%"><center>
+            <img src="../resources/lectures/main/preview/word_emb/one_hot-min.png" style="width:90%">
+          </center></div>
+      <div class="carousel-cell" style="width:100%"><center>
+            <img src="../resources/lectures/main/preview/word_emb/count_based-min.png" style="width:90%">
+        </center></div>
+          <div class="carousel-cell" style="width:100%"><center>
+            <img src="../resources/lectures/main/preview/word_emb/context_window-min.png" style="width:90%">
+        </center></div>
+       <div class="carousel-cell" style="width:100%"><center>
+            <img src="../resources/lectures/main/preview/word_emb/skip_gram-min.png" style="width:90%">
+        </center></div>
+          <div class="carousel-cell" style="width:100%"><center>
+            <img src="../resources/lectures/main/preview/word_emb/cbow-min.png" style="width:90%">
+        </center></div>
+          <div class="carousel-cell" style="width:100%"><center>
+            <img src="../resources/lectures/main/preview/word_emb/w2v_training_1-min.png" style="width:90%">
+        </center></div>
+          <div class="carousel-cell" style="width:100%"><center>
+            <img src="../resources/lectures/main/preview/word_emb/w2v_training_2-min.png" style="width:90%">
+        </center></div>
+          <div class="carousel-cell" style="width:100%"><center>
+            <img src="../resources/lectures/main/preview/word_emb/semantic_space-min.png" style="width:90%">
+        </center></div>
+          <div class="carousel-cell" style="width:100%"><center>
+            <img src="../resources/lectures/main/preview/word_emb/neighbors-min.png" style="width:90%">
+        </center></div>
+          <div class="carousel-cell" style="width:100%"><center>
+            <img src="../resources/lectures/main/preview/word_emb/analogy-min.png" style="width:90%">
+        </center></div>
+          <div class="carousel-cell" style="width:100%"><center>
+            <img src="../resources/lectures/main/preview/word_emb/cross_lingual-min.png" style="width:90%">
+        </center></div>
+          <div class="carousel-cell" style="width:100%"><center>
+            <img src="../resources/lectures/main/preview/word_emb/research_thinking-min.png" style="width:90%">
+        </center></div>
+          <div class="carousel-cell" style="width:100%"><center>
+            <img src="../resources/lectures/main/preview/word_emb/related_papers-min.png" style="width:90%">
+        </center></div>
+
+    </div>
+</div>
+</div>
+</div>
+</div><!-- div for word emb green card-->
+
+<script>
+var flkty_word_emb = new Flickity( '.carousel_word_emb', { imagesLoaded: true, percentPosition: true,
+wrapAround: true, prevNextButtons: false,});
+
+flkty_word_emb.on( 'staticClick', function( event, pointer, cellElement, cellIndex ) {
+    flkty_word_emb.next();
+});
+</script>
+
+
+
+
+<div class="greenCard" id="thumbnail_green" style="background-color:white; margin:10px;width:96%">
+<div class="cardContent" id="preview_text_clf">
+<div style="display: grid; grid-template-columns: 50% 50%; margin:10px;">
+
+    <div>
+    <!--##############    begin of left part   ####################################-->
+        <div class="green_circle" style="float:right; margin-right:5px;"></div>
+        <div class="box_green_right">
+        <div style="margin-right:15px; ">
+
+            <h2 style="margin-bottom:5px;background-color:#f6fce8;text-align:center;">
+                <a href="./nlp_course/page_not_ready.html" style="color:black">Text Classification</a></h2>
+            <ul class="data_text">
+                <li>Intro</li>
+                <li>General Framework</li>
+                <li>BOW</li>
+                <li>RNNs</li>
+                <li>CNNs</li>
+             <li><img height="20" src="../resources/lectures/ico/analysis_empty.png" style="margin-right:10px;"/>
+            Analysis and Interpretability</li>
+            <li><span style="float: left;">Bonus: </span>
+                <div class="research_circle" style="margin: 8px; float: left;"></div>
+                <div class="paper_circle" style="margin: 8px; float: left;"></div>
+                <div class="fun_circle" style="margin: 8px; float: left;"></div></li>
+            </ul>
+
+            <hr color="#e9f5d0" style="margin:5px;">
+
+            <h3 style="margin-bottom:2px;">Seminar & Homework</h3>
+
+            <p class="data_text">Week 2 in
+                <a href="https://github.com/yandexdataschool/nlp_course" target="_blank">the course repo</a>.
+            </p>
+
+        </div>
+        </div>
+        <div class="green_circle" style="float:right; margin-right:5px;"></div>
+
+    </div>
+    <!--#########################   end of left part #########################-->
+
+    <div>
+
+      <div class="carousel carousel_text_clf"
+         style="width:100%; margin-left:-5px; margin-right:-5px;"
+      data-flickity='{ "imagesLoaded": true, "percentPosition": true, "wrapAround": true, "prevNextButtons": false}'>
+
+          <div class="carousel-cell" style="width:100%"><center>
+            <img src="../resources/lectures/main/preview/pusheen_tea.gif" style="width:50%; margin-top:60px;">
+          </center>
+      <p style="text-align: center; font-size:20px;">Wait for the release!<br> (September 17-24)</p>
+      </div>
+
+
+    </div>
+</div>
+</div>
+</div>
+</div><!-- div for lang models green card-->
+
+<script>
+var flkty_clf = new Flickity( '.carousel_text_clf', { imagesLoaded: true, percentPosition: true,
+wrapAround: true, prevNextButtons: false,});
+
+flkty_clf.on( 'staticClick', function( event, pointer, cellElement, cellIndex ) {
+    flkty_clf.next();
+});
+</script>
+
+
+
+
+
+<div class="greenCard" id="thumbnail_green" style="background-color:white; margin:10px;width:96%">
+<div class="cardContent" id="preview_lang_models">
+<div style="display: grid; grid-template-columns: 50% 50%; margin:10px;">
+
+    <div>
+    <!--##############    begin of left part   ####################################-->
+        <div class="green_circle" style="float:right; margin-right:5px;"></div>
+        <div class="box_green_right">
+        <div style="margin-right:15px; ">
+
+            <h2 style="margin-bottom:5px;background-color:#f6fce8;text-align:center;">
+                <a href="./nlp_course/page_not_ready.html" style="color:black">Language Modeling</a></h2>
+            <ul class="data_text">
+            <li>General Framework</li>
+            <li>N-Gram LMs</li>
+            <li>Neural LMs</li>
+            <li>Generation Strategies</li>
+            <li>Evaluating LMs</li>
+            <li>Practical Tips</li>
+             <li><img height="20" src="../resources/lectures/ico/analysis_empty.png" style="margin-right:10px;"/>
+            Analysis and Interpretability</li>
+            <li><span style="float: left;">Bonus: </span>
+                <div class="research_circle" style="margin: 8px; float: left;"></div>
+                <div class="paper_circle" style="margin: 8px; float: left;"></div>
+                <div class="fun_circle" style="margin: 8px; float: left;"></div></li>
+            </ul>
+
+            <hr color="#e9f5d0" style="margin:5px;">
+
+            <h3 style="margin-bottom:2px;">Seminar & Homework</h3>
+
+            <p class="data_text">Week 3 in
+                <a href="https://github.com/yandexdataschool/nlp_course" target="_blank">the course repo</a>.
+            </p>
+
+        </div>
+        </div>
+        <div class="green_circle" style="float:right; margin-right:5px;"></div>
+
+    </div>
+    <!--#########################   end of left part #########################-->
+
+    <div>
+
+      <div class="carousel carousel_lang_models"
+         style="width:100%; margin-left:-5px; margin-right:-5px;"
+      data-flickity='{ "imagesLoaded": true, "percentPosition": true, "wrapAround": true, "prevNextButtons": false}'>
+
+          <div class="carousel-cell" style="width:100%"><center>
+            <img src="../resources/lectures/main/preview/pusheen_waits.png" style="width:60%; margin-top:20px;">
+          </center>
+      <p style="text-align: center; font-size:20px;">Wait for the release!<br> (September 24-30)</p>
+      </div>
+
+          <div class="carousel-cell" style="width:100%"><center>
+            <video width="90%" height="auto" style="margin-top:40px;" loop autoplay muted style="">
+         <source src="../resources/lectures/lang_models/neural/nn_lm_prob_idea.mp4" type="video/mp4">
+            </video>
+          </center></div>
+
+      <div class="carousel-cell" style="width:100%"><center>
+            <img src="../resources/lectures/main/preview/lang_models/markov_property-min.png" style="width:90%">
+          </center></div>
+      <div class="carousel-cell" style="width:100%"><center>
+            <img src="../resources/lectures/main/preview/lang_models/smoothing-min.png" style="width:90%">
+          </center></div>
+          <div class="carousel-cell" style="width:100%"><center>
+          <p style="text-align: center; font-size:20px;">Generate a Text with Ngram LMs<br></p>
+            <video width="90%" height="auto" loop autoplay muted style="">
+         <source src="../resources/lectures/main/preview/lang_models/ngram_generation.mp4" type="video/mp4">
+            </video>
+          </center></div>
+      <div class="carousel-cell" style="width:100%"><center>
+          <p style="text-align: center; font-size:20px;">Neural Language Models<br></p>
+            <video width="90%" height="auto" loop autoplay muted style="">
+         <source src="../resources/lectures/lang_models/neural/nn_lm_prob_idea.mp4" type="video/mp4">
+            </video>
+          </center></div>
+      <div class="carousel-cell" style="width:100%"><center>
+            <img src="../resources/lectures/main/preview/lang_models/loss-min.png" style="width:90%">
+        </center></div>
+          <div class="carousel-cell" style="width:100%"><center>
+            <img src="../resources/lectures/main/preview/lang_models/evaluation-min.png" style="width:90%">
+        </center></div>
+       <div class="carousel-cell" style="width:100%"><center>
+            <img src="../resources/lectures/main/preview/lang_models/temperature-min.png" style="width:90%">
+        </center></div>
+       <div class="carousel-cell" style="width:100%"><center>
+            <img src="../resources/lectures/main/preview/lang_models/top_k-min.png" style="width:90%">
+        </center></div>
+        <div class="carousel-cell" style="width:100%"><center>
+            <img src="../resources/lectures/main/preview/lang_models/top_p_1-min.png" style="width:90%">
+        </center></div>
+       <!--<div class="carousel-cell" style="width:100%"><center>
+            <img src="../resources/lectures/main/preview/lang_models/top_p_2-min.png" style="width:90%">
+        </center></div>-->
+       <div class="carousel-cell" style="width:100%"><center>
+            <img src="../resources/lectures/main/preview/lang_models/weight_tying-min.png" style="width:90%">
+        </center></div>
+
+
+    </div>
+</div>
+</div>
+</div>
+</div><!-- div for lang models green card-->
+
+<script>
+var flkty_lm = new Flickity( '.carousel_lang_models', { imagesLoaded: true, percentPosition: true,
+wrapAround: true, prevNextButtons: false,});
+
+flkty_lm.on( 'staticClick', function( event, pointer, cellElement, cellIndex ) {
+    flkty_lm.next();
+});
+</script>
+
+
+
+
+<div class="greenCard" id="thumbnail_green" style="background-color:white; margin:10px;width:96%">
+<div class="cardContent" id="preview_seq2seq_attn">
+<div style="display: grid; grid-template-columns: 50% 50%; margin:10px;">
+
+    <div>
+    <!--##############    begin of left part   ####################################-->
+        <div class="green_circle" style="float:right; margin-right:5px;"></div>
+        <div class="box_green_right">
+        <div style="margin-right:15px; ">
+
+            <h2 style="margin-bottom:5px;background-color:#f6fce8;text-align:center;">
+                <a href="./nlp_course/page_not_ready.html" style="color:black">Seq2seq and Attention</a></h2>
+            <ul class="data_text">
+                <li>Encoder-decoder framework</li>
+                <li>Attention basics</li>
+                <li>Transformer</li>
+                <li>Subword Segmentation (e.g., BPE)</li>
+                <li>Inference (e.g., beam search)</li>
+             <li><img height="20" src="../resources/lectures/ico/analysis_empty.png" style="margin-right:10px;"/>
+            Analysis and Interpretability</li>
+            <li><span style="float: left;">Bonus: </span>
+                <div class="research_circle" style="margin: 8px; float: left;"></div>
+                <div class="paper_circle" style="margin: 8px; float: left;"></div>
+                <div class="fun_circle" style="margin: 8px; float: left;"></div></li>
+            </ul>
+
+            <hr color="#e9f5d0" style="margin:5px;">
+
+            <h3 style="margin-bottom:2px;">Seminar & Homework</h3>
+
+            <p class="data_text">Week 4 in
+                <a href="https://github.com/yandexdataschool/nlp_course" target="_blank">the course repo</a>.
+            </p>
+
+        </div>
+        </div>
+        <div class="green_circle" style="float:right; margin-right:5px;"></div>
+
+    </div>
+    <!--#########################   end of left part #########################-->
+
+    <div>
+
+      <div class="carousel carousel_text_clf"
+         style="width:100%; margin-left:-5px; margin-right:-5px;"
+      data-flickity='{ "imagesLoaded": true, "percentPosition": true, "wrapAround": true, "prevNextButtons": false}'>
+      <div class="carousel-cell" style="width:100%"><center>
+            <img src="../resources/lectures/main/preview/wait_window.gif" style="width:50%; margin-top:60px;">
+          </center>
+      <p style="text-align: center; font-size:20px;">Wait for the release!<br>(October 1-8)</p></div>
+
+
+    </div>
+</div>
+</div>
+</div>
+</div><!-- div for lang models green card-->
+
+<script>
+var flkty_attn = new Flickity( '.carousel_attention', { imagesLoaded: true, percentPosition: true,
+wrapAround: true, prevNextButtons: false,});
+
+flkty_attn.on( 'staticClick', function( event, pointer, cellElement, cellIndex ) {
+    flkty_attn.next();
+});
+</script>
+
+
+
+
+    <div style="display: grid; grid-template-columns: 50% 50%; margin:10px;">
+        <div style="margin-top:90px;margin-left:40px;">
+            <font style="font-size:30px;">To be continued...</font>
+        </div>
+        <div>
+            <center>
+            <img src="../resources/lectures/main/preview/typing.gif"
+               style="width:50%; padding-top:50px;padding-bottom:50px;border-radius:50%">
+            </center>
+        </div>
+    </div>
+
+</div> <!-- div for gray background-->
+
+
+
+
+
+
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--
+<img width="50%" src="../resources/lectures/main/test2.png"
+         style="float:right; margin-left: 25px; max-width:60%"/>
+-->
+
+
+</div>

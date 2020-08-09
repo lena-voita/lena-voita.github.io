@@ -1,0 +1,3877 @@
+---
+layout: lecture
+title: Word Embeddings
+description: >
+Methods for learning word vectors: from count-based to prediction-based, including the most recent results.
+---
+
+
+<div class="sidebar" id="sidebar">
+    <a href="javascript:void(0)" id="close_sidebar_btn" onclick="closeNav()"
+   style="text-align:center;font-size:30px;padding:0px;">⇤</a>
+  <a class="active" href="#main_content"  style="font-weight: bold;">Word Embeddings</a>
+    <a href="#one_hot_vectors">One-Hot Vectors</a>
+  <a href="#distributional_semantics">Distributional Semantics</a>
+    <a href="#pre_neural">Count-Based Methods</a>
+
+    <div class="dropdown-scope">
+           <a class="dropdown-btn" >Word2Vec
+            <i class="fa fa-caret-down"></i>
+          </a>
+          <div class="dropdown-container">
+              <a href="#w2v_idea"><span style="margin-right:15px;font-size:14px;">&#8226;</span>Idea</a>
+              <a href="#w2v_objective_function"><span style="margin-right:15px;font-size:14px;">&#8226;</span>Objective Function</a>
+              <a href="#w2v_training"><span style="margin-right:15px;font-size:14px;">&#8226;</span>Training Procedure</a>
+              <a href="#w2v_negative_sampling"><span style="margin-right:15px;font-size:14px;">&#8226;</span>Negative Sampling</a>
+              <a href="#w2v_skipgram_cbow"><span style="margin-right:15px;font-size:14px;">&#8226;</span>Skip-Gram vs CBOW</a>
+              <a href="#w2v_additional_notes"><span style="margin-right:15px;font-size:14px;">&#8226;</span>Additional Notes</a>
+          </div>
+        </div>
+
+   <a href="#glove">GloVe</a>
+    <a href="#evaluation">Evaluation</a>
+<a href="#analysis_interpretability" id="sidebar_analysis">Analysis and Interpretability <img height="25" src="../resources/lectures/ico/analysis_empty.png" class="sidebar_ico"/></a>
+<div class="extra_components">
+    <a href="#research_thinking" id="sidebar_research_thinking">Research Thinking <img height="30" src="../resources/lectures/ico/bulb_empty.png" class="sidebar_ico"/></a>
+    <!--<hr color="#b7db67">-->
+
+    <a href="#related_papers" id="sidebar_related_papers">Related Papers <img height="22" src="../resources/lectures/ico/book_empty.png" class="sidebar_ico"/></a>
+    <!--<hr color="#b7db67">-->
+
+  <a href="#have_fun" id="sidebar_fun">Have Fun! <img height="30" src="../resources/lectures/ico/fun_empty.png" class="sidebar_ico"/></a>
+</div>
+</div>
+
+
+
+<div class="sidebar" id="sidebar_small">
+
+  <a class="active" onclick="openNav()" style="text-align:center;">☰</a>
+    <a href="#main_page_content" style="text-align:center; font-size:20px;color:#7ca81e"> <i class="fa fa-home"></i></a>
+
+<a href="#analysis_interpretability" id="sidebar_analysis"> <img height="25" src="../resources/lectures/ico/analysis_empty.png"/></a>
+<div class="extra_components">
+    <a href="#research_thinking" id="sidebar_research_thinking"><img height="30" src="../resources/lectures/ico/bulb_empty.png"/></a>
+    <!--<hr color="#b7db67">-->
+
+    <a href="#related_papers" id="sidebar_related_papers"><img height="22" src="../resources/lectures/ico/book_empty.png"/></a>
+    <!--<hr color="#b7db67">-->
+
+  <a href="#have_fun" id="sidebar_fun"><img height="30" src="../resources/lectures/ico/fun_empty.png" /></a>
+</div>
+</div>
+
+
+<script>
+function openNav() {
+  document.getElementById("sidebar").style.display = "block";
+  document.getElementById("sidebar_small").style.display = "none";
+  document.getElementById("close_sidebar_btn").style.display = "block";
+}
+
+function closeNav() {
+  document.getElementById("sidebar").style.display = "none";
+  document.getElementById("sidebar_small").style.display = "block";
+  document.getElementById("close_sidebar_btn").style.display = "none";
+}
+
+</script>
+
+
+<script>
+function onResize() {
+  if (window.innerWidth >= 800) {
+     document.getElementById("sidebar").style.display = "block";
+     document.getElementById("sidebar_small").style.display = "none";
+     document.getElementById("close_sidebar_btn").style.display = "none";
+  }
+  else {
+     document.getElementById("sidebar").style.display = "none";
+    document.getElementById("sidebar_small").style.display = "block";
+
+  }
+}
+window.onresize = onResize;
+onResize();
+</script>
+
+<script>
+/* Loop through all dropdown buttons to toggle between hiding and showing its dropdown content - This allows the user to have multiple dropdowns without any conflict */
+var dropdown = document.getElementsByClassName("dropdown-btn");
+var i;
+
+for (i = 0; i < dropdown.length; i++) {
+  dropdown[i].addEventListener("click", function(event) {
+  this.classList.toggle("active_caret");
+  var dropdownButton = event.target || event.srcElement;
+  while(dropdownButton.className != "dropdown-scope")
+     dropdownButton = dropdownButton.parentElement;
+  var dropdownContent = dropdownButton.getElementsByClassName("dropdown-container")[0];
+
+  if (dropdownContent.style.display === "block") {
+  dropdownContent.style.display = "none";
+  } else {
+  dropdownContent.style.display = "block";
+  }
+  });
+}
+</script>
+
+
+<style>
+        :root{}
+        .quiz_window {
+            width: 100%;
+            border: 1px solid #ccc;
+            border-radius: 1px;
+            margin: 10px 5px;
+            padding: 3px;
+            background-color: white;
+            text-align: center;
+        }
+        #semantic_space_surfer {
+            box-shadow: 0 2px 4px #377b94, 0 1px 1px ;
+          }
+        #semantic_space_surfer:hover {
+            box-shadow: 0 6px 12px #377b94, 0 4px 4px #377b94;
+          }
+        .prompt_text {
+            font-size: 24px;
+            font-family: "Comic Neue", "Arial";
+            margin-top: 10px;
+            margin-bottom: 10px;
+            font-weight: bold;
+            text-align: center;
+            background-color: #ebf6fa;
+        }
+        .result_header {
+            font-size: 24px;
+            font-family: "Comic Neue", "Arial";
+            margin-top: 10px;
+            margin-bottom: 10px;
+            font-weight: bold;
+            text-align: center;
+            background-color: #ebf6fa;
+        }
+        .result_course_mention {
+            font-size: 18px;
+            font-family: "Comic Neue", "Arial";
+            margin-top: 10px;
+            margin-bottom: 10px;
+            text-align: center;
+            background-color: white;
+        }
+        .comment_text {
+            font-size: 16px;
+            font-family: "Gill Sans", sans-serif;
+            font-style: italic;
+            text-align: center;
+        }
+        .answer_button {
+          width: 40%;
+          background-color: #fafafa;
+          font-size: 20px;
+          font-family: "Comic Neue", "Arial";
+          font-weight: bold;
+          color: black;
+          margin-right: 20px;
+          margin-left: 20px;
+          margin-top: 10px;
+          margin-bottom: 10px;
+          border: 0px solid black;
+          border-radius: 12px;
+          padding: 20px;
+          padding-top: 0px;
+          padding-bottom: 0px;
+          text-decoration: none;
+          display: inline-block;
+          text-align: center;
+          box-shadow: 0px 2px 3px #377b94, 0 1px 1px #377b94;
+        }
+        .answer_button:hover {
+            box-shadow: 0 3px 6px #377b94, 0 2px 2px #377b94;
+        }
+        .answer_text_tight {
+            margin-top: 3px;
+            margin-bottom: 3px;
+        }
+        .quiz_result {
+            font-size: 24px;
+            font-family: "Gill Sans", sans-serif;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+        .answer_block {
+            display: grid;
+            grid-template-columns: auto 30px;
+        }
+        .next_button {
+            width: 0;
+            height: 0;
+            border-top: 50px solid transparent;
+            border-left: 20px solid #1b6f8c;
+            border-bottom: 50px solid transparent;
+        }
+        .next_text {
+            color: #1b6f8c;
+            font-weight: 600;
+            font-family: "Comic Neue", "Arial";
+            margin: 0 auto;
+        }
+        progress[value]::-moz-progress-bar {
+          background-image:
+            -moz-linear-gradient(
+              135deg,
+              transparent 33%,
+              rgba(0, 0, 0, 0.1) 33%,
+              rgba(0, 0, 0, 0.1) 66%,
+              transparent 66%
+            ),
+            -moz-linear-gradient(
+              top,
+              rgba(255, 255, 255, 0.25),
+              rgba(0, 0, 0, 0.25)
+            ),
+            -moz-linear-gradient(
+              left,
+              #09c,
+              #44f
+            );
+
+          border-radius: 2px;
+          background-size: 35px 20px, 100% 100%, 100% 100%;
+          display: inline-block;
+        }
+    </style>
+
+
+
+<div class="wrapper" id="main_page_content">
+    <div class="header"><h1>Word Embeddings</h1></div>
+
+<div class="main_content" id="main_content">
+
+<div id="intro">
+
+    <img height="200" src="../resources/lectures/word_emb/word_repr_intro-min.png"
+         style="float:right; margin-left: 25px; max-width:60%"/>
+    <p>The way machine learning models "<font face="arial">see</font>" data is different from how we (humans) do. For example, we can easily
+    understand the text <span class="data_text" style="font-weight:bold;">"I saw a cat"</span>,
+        but our models can not - they need vectors of features.
+        Such vectors, or <font face="arial">word embeddings</font>, are representations of words which can be fed into your model.
+    </p>
+
+    <br>
+
+        <img height="130" src="../resources/lectures/word_emb/lookup_table.gif"
+         style="float:right; margin-left: 25px; max-width:60%"/>
+        <h4><u>How it works:</u> Look-up Table (Vocabulary)</h4>
+        <p>In practice, you have a vocabulary of allowed words; you choose this vocabulary in advance.
+        For each vocabulary word, a look-up table contains its embedding. This embedding can be found
+        using the word index in the vocabulary (i.e., you
+            to <font face="arial">look up</font> the embedding in the table using word index).</p>
+
+
+<img height="70" src="../resources/lectures/word_emb/unk_in_voc-min.png"
+         style="float:right; margin-left: 25px; max-width:60%"/>
+        <p>To account for unknown words (the ones which are not in the vocabulary), usually a vocabulary
+        contains a special token
+        <span class="data_text" style="font-weight:bold;">UNK</span>. Alternatively, unknown tokens
+        can be ignored
+            or assigned a zero vector.</p>
+
+
+
+    <h3> The main question of this lecture is: how do we get these word vectors?
+    </h3>
+
+</div>
+<br>
+
+<div id="one_hot_vectors">
+<h2>Represent as Discrete Symbols: One-hot Vectors</h2>
+
+<img height="200" src="../resources/lectures/word_emb/one_hot-min.png"
+         style="float:right; margin-left: 25px; max-width:60%"/>
+
+    <p>The easiest you can do is to represent words as one-hot vectors: for the i-th word in the vocabulary,
+    the vector has 1 on the i-th dimension and 0 on the rest. In Machine Learning, this is the most simple way to represent
+        categorical features.</p>
+
+
+        <p>You probably can guess why one-hot vectors are not the best way to represent words. One of the problems is that
+        for large vocabularies, these vectors will be very long: vector dimensionality is equal to the vocabulary size.
+            This is undesirable in practice, but this problem is not the most crucial one.</p>
+
+        <p>What is really important, is that these vectors <font face="arial">know nothing</font>
+        about the words they represent. For example, one-hot vectors "think" that
+        <span class="data_text" style="font-weight:bold;">cat</span> is as close to
+        <span class="data_text" style="font-weight:bold;">dog</span> as it is to
+        <span class="data_text" style="font-weight:bold;">table!</span>
+            We can say that <u>one-hot vectors do not capture <font face="arial">meaning.</font></u></p>
+
+           <p>But how do we know what is meaning?</p>
+
+    </div>
+<br>
+
+
+
+
+
+
+<div id="distributional_semantics">
+        <h2>Distributional Semantics</h2>
+
+            <p>To capture meaning of words in their vectors, we first need to define
+            the notion of meaning that can be used in practice.
+                For this, let us try to understand how we, humans, get to know which words have similar meaning.</p>
+
+
+        <img height="20" src="../resources/lectures/ico/paw_empty.png" style="float:left; margin-top:-10px;"/>
+        <div class="box_green_left">
+
+            <div class="text_box_green">
+              <p class="data_text"><u>How to:</u> go over the slides at your pace. Try to notice how your brain works.</p>
+            </div>
+
+            <div class="carousel" data-flickity='{ "imagesLoaded": true, "percentPosition": true,
+            "selectedAttraction": 1, "friction": 1 }'
+     style="width:100%; margin-top:10px; margin-bottom:30px; margin-left:10px;">
+              <div class="carousel-cell" style="width:100%"><center>
+                    <img width="600" src="../resources/lectures/word_emb/tezguino1-min.png"/></center>
+              </div>
+              <div class="carousel-cell" style="width:100%"><center>
+                    <img width="600" src="../resources/lectures/word_emb/tezguino2-min.png"/></center>
+              </div>
+                <div class="carousel-cell" style="width:100%"><center>
+                    <img width="600" src="../resources/lectures/word_emb/tezguino3-min.png"/></center>
+              </div>
+                <div class="carousel-cell" style="width:100%"><center>
+                    <img width="600" src="../resources/lectures/word_emb/tezguino4-min.png"/></center>
+              </div>
+                <div class="carousel-cell" style="width:100%"><center>
+                    <img width="600" src="../resources/lectures/word_emb/tezguino5-min.png"/></center>
+              </div>
+                <div class="carousel-cell" style="width:100%"><center>
+                    <img width="600" src="../resources/lectures/word_emb/tezguino6-min.png"/></center>
+              </div>
+                <div class="carousel-cell" style="width:100%"><center>
+                    <img width="600" src="../resources/lectures/word_emb/tezguino7-min.png"/></center>
+              </div>
+                <div class="carousel-cell" style="width:100%"><center>
+                    <img width="600" src="../resources/lectures/word_emb/tezguino8-min.png"/></center>
+              </div>
+                <div class="carousel-cell" style="width:100%"><center>
+                    <img width="600" src="../resources/lectures/word_emb/tezguino9-min.png"/></center>
+              </div>
+            </div>
+
+            <div style="font-size:14px; margin-left: 20px; margin-top: 20px;" class="data_text">
+                <font color="#888">
+                <u>Lena</u>: The example is from
+                <a href="https://github.com/jacobeisenstein/gt-nlp-class/blob/master/notes/eisenstein-nlp-notes.pdf" target="_blank">
+                Jacob Eisenstein's NLP notes;</a>
+                the <span  style="font-weight:bold;">tezgüino</span> example
+                originally appeared in <a href="https://www.aclweb.org/anthology/C98-2122.pdf" target="_blank">Lin, 1998</a>.</font>
+            </div>
+
+        </div>
+        <img height="20" src="../resources/lectures/ico/paw_empty.png" style="float:left; margin-top:-10px;"/>
+
+<br><br>
+        <p>Once you saw how the unknown word used in different contexts,
+            you were able to understand it's meaning.
+            How did you do this?</p>
+
+            <p>The hypothesis is that your brain searched for other words
+            that can be used in the same contexts, found some (e.g., <span class="data_text" style="font-weight:bold;">wine</span>), and
+            made a conclusion that <span class="data_text" style="font-weight:bold;">tezgüino</span> has meaning
+                similar to those other words.
+
+            This is the <font face="arial">distributional hypothesis:</font></p>
+
+            <div class="green_left_thought" style="font-size:18px;">
+                <p  class="data_text">
+                    Words which frequently appear in <strong>similar contexts</strong> have
+                    <strong>similar meaning</strong>.</p>
+            </div>
+
+            <p class="data_text" style="color:#888; font-size:14px;"><u>Lena:</u>
+                Often you can find it formulated as "You shall know a word by the company it keeps" with the reference
+            to J. R. Firth in 1957, but
+                actually there
+                were a lot more people
+            responsible, and much earlier. For example,
+            <a href="https://www.tandfonline.com/doi/pdf/10.1080/00437956.1954.11659520" target="_blank">Harris, 1954.</a></p>
+
+
+            <p>This is an extremely valuable idea: it can be used in practice to make word vectors capture
+            their meaning. According to the distributional hypothesis, "to capture meaning" and
+            "to capture contexts" are inherently the same.
+            Therefore,
+            all we need to do is to put information about word
+                contexts into word representation.</p>
+
+            <div class="green_left_thought" style="font-size:18px;">
+                <p class="data_text"><u>Main idea</u>: We need to put information about word
+                contexts into word representation.</p>
+            </div>
+
+        <p>All we'll be doing at this lecture is looking at different ways to do this.</p>
+        </div>
+<br>
+
+
+<div id="pre_neural">
+        <h1>Count-Based Methods </h1>
+
+        <center>
+        <img src="../resources/lectures/word_emb/preneural/idea-min.png"
+             style="max-width:90%; margin-bottom: 15px;"/>
+        </center>
+
+        <p>Let's remember our main idea:</p>
+        <div class="green_left_thought">
+                <p class="data_text" style="font-size:18px;"><u>Main idea</u>:
+                    We have to put information about contexts into word vectors.</p>
+        </div>
+
+
+        <p>Count-based methods take this idea quite literally:</p>
+        <div class="green_left_thought">
+                <p class="data_text" style="font-size:18px;"><u>How</u>:
+                    Put this information <strong>manually</strong> based on global corpus statistics.</p>
+        </div>
+
+        <p>The general procedure is illustrated above and consists of the two steps: (1)
+        construct a word-context matrix, (2) reduce its dimensionality. There are two reasons to reduce dimensionality.
+        First, a raw matrix is very large. Second, since a lot of words appear in only a few of possible contexts,
+            this matrix potentially has a lot of uninformative elements (e.g., zeros).</p>
+
+        <!--
+        <ul>
+        <li><u>Construct a matrix based on global counts.</u><br>
+        Rows of this matrix correspond to words, columns -- to contexts.
+    Each matrix elements says something about cooccurrence of the corresponding word and context; this
+        "something" is computed based on global information about corpus.</li>
+
+        <li><u>Reduce dimensionality.</u><br>
+            There are two reasons to reduce dimensionality.
+        First, raw matrix is very large. Second, since not all words appear in all contexts,
+            this matrix potentially has a lot of uninformative elements (e.g., zeros).
+        </li>
+        </ul>-->
+
+        <p>To estimate
+        similarity between words/contexts, usually you need to evaluate
+            the dot-product of normalized word/context vectors (i.e., cosine similarity).</p>
+
+
+        <div>
+        <img width="25%" src="../resources/lectures/word_emb/preneural/need_to_define-min.png"
+             style="float:right; margin-left:30px;"/>
+
+            <p>To define a count-based method, we need to define two things:</p>
+        <ul>
+        <li>possible contexts (including what does it mean that a word appears in a context),</li>
+        <li>the notion of association, i.e., formulas for computing matrix elements.</li>
+        </ul>
+</div>
+
+        <p>Below we provide a couple of popular ways of doing this.</p>
+<br>
+
+
+         <h2 id="simple_cooccurrence">Simple: Co-Occurence Counts </h2>
+        <img width="30%" src="../resources/lectures/word_emb/preneural/define_simple-min.png"
+             style="float:right; margin-left:20px; margin-top:0px;"/>
+
+        <img src="../resources/lectures/word_emb/preneural/window-min.png"
+             style="float:left; max-width:65%; margin-bottom:10px;"/>
+
+        <p>The simplest approach is to define contexts as each word in an L-sized window.
+        Matrix element for a word-context pair (w, c) is the number of times w appears in context c.
+            This is the very basic (and very, very old) method for obtaining embeddings.</p>
+
+
+    <div class="card_with_ico">
+    <img class="ico" src="../resources/lectures/ico/bulb_empty.png"/>
+    <div class="text_box_yellow">
+    <p class="data_text">
+        The (once) famous HAL model (1996)
+        is also a modification of this approach.
+        Learn more from <a href="#research_improve_count_based">this exercise</a>
+    in the <a href="#research_thinking">Research Thinking</a> section. </p>
+    </div>
+    </div>
+
+
+
+        <h2>Positive Pointwise Mutual Information (PPMI)</h2>
+        <img width="45%" src="../resources/lectures/word_emb/preneural/define_ppmi-min.png"
+             style="float:right; margin-left:20px;"/>
+        <p>Here contexts are defined as before, but the measure of
+        the association between word and context is more clever: positive PMI (or PPMI for short).
+
+            PPMI measure is widely regarded as state-of-the-art for pre-neural distributional-similarity models.</p>
+
+        <br><br>
+        <div class="text_box_green">
+        <p class="data_text"><u>Important</u>: relation to neural models!<br>
+        Turns out, some of the neural methods we will consider (Word2Vec) were shown
+            to implicitly approximate the factorization of a (shifted) PMI matrix. Stay tuned!</p>
+        </div>
+
+
+        <br>
+        <h2>Latent Semantic Analysis (LSA): Understanding Documents</h2>
+
+            <img width="60%" src="../resources/lectures/word_emb/preneural/lsa-min.png"
+             style="float:right; margin-left:20px;"/>
+            <p>Latent Semantic Analysis (LSA) analyzes a collection of documents.
+                While in the previous approaches contexts served only to get word vectors
+                and were thrown away afterward, here we are also interested
+                in context, or, in this case, document vectors. LSA is one of the simplest topic models:
+                cosine similarity between document vectors can be used to measure similarity between documents.</p>
+
+    </div>
+<br><br>
+
+<div id="word2vec">
+
+    <h1>Word2Vec: a Prediction-Based Method</h1>
+
+    <div id="w2v_idea">
+        <p>Let us remember our main idea again:</p>
+        <div class="green_left_thought">
+                <p class="data_text" style="font-size:18px;"><u>Main idea</u>:
+                    We have to put information about contexts into word vectors.</p>
+        </div>
+
+
+        <p>While count-based methods took this idea quite literally, Word2Vec uses it in a different manner:</p>
+        <div class="green_left_thought">
+                <p class="data_text" style="font-size:18px;"><u>How</u>:
+                    <strong>Learn</strong> word vectors by teaching them to <strong>predict contexts</strong>.</p>
+        </div>
+
+
+
+        <img width="250" src="../resources/lectures/word_emb/w2v/intro-min.png" style="float:right; margin-left:20px;"/>
+        <p>Word2Vec is a model whose parameters are word vectors. These parameters are optimized iteratively
+        for a certain objective. The objective forces word vectors to "know" contexts a word can appear in:
+        the vectors are trained to predict possible contexts of the corresponding words.
+            As you remember from the distributional hypothesis, if vectors "know" about contexts, they "know" word meaning.</p>
+
+        <p>Word2Vec is an iterative method. Its main idea is as follows:</p>
+        <ul>
+            <li>take a huge text corpus;</li>
+            <li>go over the text with a sliding window, moving one word at a time. At each step, there is a central word
+            and context words (other words in this window);</li>
+            <li>for the central word, compute probabilities of context words;</li>
+            <li>adjust the vectors to increase these probabilities.</li>
+        </ul>
+
+    <br>
+
+            <img height="20" src="../resources/lectures/ico/paw_empty.png" style="float:left; margin-top:-10px;"/>
+        <div class="box_green_left">
+
+            <div class="text_box_green">
+              <p class="data_text"><u>How to:</u> go over the illustration to understand the main idea. </p>
+            </div>
+
+            <div class="carousel" data-flickity='{"imagesLoaded": true, "percentPosition": true, "selectedAttraction": 1, "friction": 1 }'
+     style="width:100%; height: auto; margin-top:10px; margin-bottom:30px; margin-left:10px;">
+              <div class="carousel-cell" style="width:100%"><center>
+                    <img width="600" src="../resources/lectures/word_emb/w2v/window_prob1-min.png"/></center>
+              </div>
+              <div class="carousel-cell" style="width:100%"><center>
+                    <img width="600" src="../resources/lectures/word_emb/w2v/window_prob2-min.png"/></center>
+              </div>
+                <div class="carousel-cell" style="width:100%"><center>
+                    <img width="600" src="../resources/lectures/word_emb/w2v/window_prob3-min.png"/></center>
+              </div>
+                <div class="carousel-cell" style="width:100%"><center>
+                    <img width="600" src="../resources/lectures/word_emb/w2v/window_prob4-min.png"/></center>
+              </div>
+                <div class="carousel-cell" style="width:100%"><center>
+                    <img width="600" src="../resources/lectures/word_emb/w2v/window_prob5-min.png"/></center>
+              </div>
+                <div class="carousel-cell" style="width:100%"><center>
+                    <img width="600" src="../resources/lectures/word_emb/w2v/window_prob6-min.png"/></center>
+              </div>
+            </div>
+
+            <p class="data_text" style="color:#aaa;font-size:14px;">
+                <u>Lena:</u> Visualization idea is from
+        <a href="http://web.stanford.edu/class/cs224n/index.html#schedule" target="_blank">the Stanford CS224n course.</a></p>
+
+        </div>
+        <img height="20" src="../resources/lectures/ico/paw_empty.png" style="float:left; margin-top:-10px;"/>
+
+    </div>
+
+    <br><br>
+
+    <div id="w2v_objective_function">
+    <h2><u>Objective Function</u>: Negative Log-Likelihood</h2>
+
+    <p>
+    For each position \(t =1, \dots, T\) in a text corpora,
+        Word2Vec predicts context words within a m-sized window given the central
+    word \(\color{#88bd33}{w_t}\):
+    \[\color{#88bd33}{\mbox{Likelihood}} = L(\theta)=
+    \prod\limits_{t=1}^T\prod\limits_{-m\le j \le m, j\neq 0}P(\color{#888}{w_{t+j}}|\color{#88bd33}{w_t}, \theta), \]
+     where \(\theta\) are all variables to be optimized.
+
+    <!--The <font color="#88bd33">objective function</font> (aka <font color="#88bd33">loss function</font> or
+    <font color="#88bd33">cost function</font>) \(J(\theta)\) is the average negative log-likelihood:-->
+    The objective function (aka loss function or
+    cost function) \(J(\theta)\) is the average negative log-likelihood:</p>
+<!--
+ \[\color{#88bd33}{\mbox{Loss}} =J(\theta)= -\frac{1}{T}\log L(\theta)=
+    -\frac{1}{T}\sum\limits_{t=1}^T
+    \sum\limits_{-m\le j \le m, j\neq 0}\log P(\color{#888}{w_{t+j}}|\color{#88bd33}{w_t}, \theta). \]-->
+
+    <center>
+        <img src="../resources/lectures/word_emb/w2v/loss_with_the_plan-min.png"
+             style="max-width:90%; margin-bottom:10px;"/>
+    </center>
+
+    <p>Note how well the loss agrees with our plan main above: go over text with a
+    sliding window and compute probabilities.
+        Now let's find out how to compute these probabilities.</p>
+
+
+
+<img height="240" src="../resources/lectures/word_emb/w2v/two_vocs_with_theta-min.png"
+         style="float:right; margin-left: 25px; max-width:60%"/>
+    <h3 id="word2vec_calculate_p"><u>How to calculate</u> \(P(\color{#888}{w_{t+j}}|\color{#88bd33}{w_t}, \theta)\)?</h3>
+
+    <p>For each word \(w\) we will have two vectors:</p>
+        <ul>
+            <li>\(\color{#88bd33}{v_w}\) when it is a <font color="#88bd33">central word</font>;</li>
+            <li>\(\color{#888}{u_w}\) when it is a <font color="#888">context word</font>.</li>
+        </ul>
+        <p>(Once the vectors are trained, usually we throw away context vectors and use
+    only word vectors.)</p>
+
+
+        <p>Then for the central word \(\color{#88bd33}{c}\) (c - central) and
+        the context word \(\color{#888}{o}\) (o - outside word)
+            probability of the context word is</p>
+<img src="../resources/lectures/word_emb/w2v/prob_o_c-min.png" height="120" style="margin: 10px;">
+
+        <!--\[P(\color{#888}{o}|\color{#88bd33}{c}) = \frac{\exp{\color{#888}{u_o^T}\color{#88bd33}{v_c}}}{
+        \sum\limits_{w\in Voc}\exp{\color{#888}{u_w^T}\color{#88bd33}{v_c}}}\]-->
+
+
+        <br>
+
+        <details>
+            <summary><p><u>Note</u>: this is the <font face="arial">softmax function</font>! (click for the details)</p></summary>
+
+        <p>The function above is an example of the <font face="arial">softmax function</font>:
+        \[softmax(x_i)=\frac{\exp(x_i)}{\sum\limits_{j=i}^n\exp(x_j)}.\]
+        <font face="arial">Softmax</font> maps arbitrary values \(x_i\) to a probability
+            distribution \(p_i\):</p>
+        <ul>
+            <li><font face="arial">"max"</font> because the largest \(x_i\) will have the largest probability \(p_i\);</li>
+            <li><font face="arial">"soft"</font> because all probabilities are non-zero.</li>
+        </ul>
+        </details>
+    <p>You will deal with this function quite a lot over the NLP course (and in Deep Learning in general).</p>
+    <br>
+
+    <img height="20" src="../resources/lectures/ico/paw_empty.png" style="float:left; margin-top:-10px;"/>
+        <div class="box_green_left">
+
+            <div class="text_box_green">
+              <p class="data_text"><u>How to:</u> go over the illustration. Note that for
+              <font color="#88bd33">central words</font> and <font color="#888">context words</font>, different
+              vectors are used. For example, first the word <strong>a</strong> is central and
+                 we use \(\color{#88bd33}{v_a}\), but when it becomes context,
+                 we use \(\color{#888}{u_a}\) instead.
+              </p>
+            </div>
+
+            <div class="carousel" data-flickity='{ "imagesLoaded": true, "percentPosition": true, "selectedAttraction": 1, "friction": 1 }'
+     style="width:100%; height: auto; margin-top:10px; margin-bottom:30px; margin-left:10px;">
+              <div class="carousel-cell" style="width:100%"><center>
+                    <img width="600" src="../resources/lectures/word_emb/w2v/window_two_vocs1-min.png"/></center>
+              </div>
+              <div class="carousel-cell" style="width:100%"><center>
+                    <img width="600" src="../resources/lectures/word_emb/w2v/window_two_vocs2-min.png"/></center>
+              </div>
+                <div class="carousel-cell" style="width:100%"><center>
+                    <img width="600" src="../resources/lectures/word_emb/w2v/window_two_vocs3-min.png"/></center>
+              </div>
+                <div class="carousel-cell" style="width:100%"><center>
+                    <img width="600" src="../resources/lectures/word_emb/w2v/window_two_vocs4-min.png"/></center>
+              </div>
+                <div class="carousel-cell" style="width:100%"><center>
+                    <img width="600" src="../resources/lectures/word_emb/w2v/window_two_vocs5-min.png"/></center>
+              </div>
+                <div class="carousel-cell" style="width:100%"><center>
+                    <img width="600" src="../resources/lectures/word_emb/w2v/window_two_vocs6-min.png"/></center>
+              </div>
+            </div>
+
+        </div>
+        <img height="20" src="../resources/lectures/ico/paw_empty.png" style="float:left; margin-top:-10px;"/>
+
+    </div>
+    <br><br>
+
+    <div  id="w2v_training">
+
+    <h2><u>How to train</u>: by Gradient Descent, One Word at a Time</h2>
+
+        <p>Let us recall that our parameters \(\theta\) are vectors \(\color{#88bd33}{v_w}\) and \(\color{#888}{u_w}\)
+    for all words in the vocabulary. These vectors are learned by optimizing the training objective via gradient descent
+    (with some learning rate \(\alpha\)):
+            \[\theta^{new} = \theta^{old} - \alpha \nabla_{\theta} J(\theta).\]</p>
+
+<h3><u>One word at a time</u></h3>
+    <p>We make these updates one at a time: each update is for
+    a single pair of a center word and one of its context words.
+    Look again at the loss function:
+    \[\color{#88bd33}{\mbox{Loss}} =J(\theta)= -\frac{1}{T}\log L(\theta)=
+    -\frac{1}{T}\sum\limits_{t=1}^T
+    \sum\limits_{-m\le j \le m, j\neq 0}\log P(\color{#888}{w_{t+j}}|\color{#88bd33}{w_t}, \theta)=
+    \frac{1}{T} \sum\limits_{t=1}^T
+    \sum\limits_{-m\le j \le m, j\neq 0} J_{t,j}(\theta). \]
+
+    For the center word \(\color{#88bd33}{w_t}\), the loss contains a distinct term
+    \(J_{t,j}(\theta)=-\log P(\color{#888}{w_{t+j}}|\color{#88bd33}{w_t}, \theta)\) for each of its context words
+    \(\color{#888}{w_{t+j}}\).
+
+    Let us look in more detail at just this one term and try to understand how to make an update for this step. For example,
+        let's imagine we have a sentence</p>
+    <center>
+        <img src="../resources/lectures/word_emb/w2v/sent_cat_central-min.png"
+             style="max-width:70%"/>
+    </center>
+
+    <p>with the central word <span class="data_text" style="font-weight:bold; color:#88bd33">cat</span>,
+    and four context words.
+    Since we are going to look at just one step, we will pick only one of the context words; for example, let's take
+    <span class="data_text" style="font-weight:bold;color:#888">cute</span>.
+
+    Then
+    <!--, using the formula for the probability \(-\log P(\color{#888}{w_{t+j}}|\color{#88bd33}{w_t}, \theta)\)
+    given in <a href="#word2vec_calculate_p">the previous section</a>, -->
+    the loss term for the central word <span class="data_text" style="font-weight:bold; color:#88bd33">cat</span>
+    and the context word <span class="data_text" style="font-weight:bold; color:#888">cute</span> is:
+
+    \[ J_{t,j}(\theta)= -\log P(\color{#888}{cute}|\color{#88bd33}{cat}) = -\log \frac{\exp{\color{#888}{u_{cute}^T}\color{#88bd33}{v_{cat}}}}{
+        \sum\limits_{w\in Voc}\exp{\color{#888}{u_w^T}\color{#88bd33}{v_{cat}}}} =
+    -\color{#888}{u_{cute}^T}\color{#88bd33}{v_{cat}} - \log \sum\limits_{w\in Voc}\exp{\color{#888}{u_w^T}\color{#88bd33}{v_{cat}}}.
+        \]</p>
+
+       <p> Note which parameters are present at this step:</p>
+     <ul>
+        <li>from vectors for <font color="#88bd33">central words</font>, only \(\color{#88bd33}{v_{cat}}\);</li>
+        <li>from vectors for <font color="#888">context words</font>, all \(\color{#888}{u_w}\) (for all words in
+            the vocabulary).</li>
+    </ul>
+
+        <p>Only these parameters will be updated at the current step.</p>
+
+
+    <p>Below is the schematic illustration of
+        the derivations for this step.</p>
+
+    <center>
+        <img src="../resources/lectures/word_emb/w2v/one_step_alg-min.png"
+             style="max-width:90%; margin-top:15px; margin-bottom:15px;"/>
+    </center>
+
+    <br><br>
+
+    <img height="150" src="../resources/lectures/word_emb/w2v/loss_intuition-min.png"
+         style="float:right; margin-left: 25px; max-width:60%"/>
+
+    <p>By making an update to minimize \(J_{t,j}(\theta)\), we force the parameters to
+    <font face="arial"><u>increase</u></font> similarity (dot product)
+    of \(\color{#88bd33}{v_{cat}}\) and \(\color{#888}{u_{cute}}\) and, at the same time,
+    to <font face="arial"><u>decrease</u></font>
+        similarity between \(\color{#88bd33}{v_{cat}}\) and \(\color{#888}{u_{w}}\) for all other words \(w\) in the vocabulary.</p>
+
+    <p>
+    This may sound a bit strange: why do we want to decrease similarity between \(\color{#88bd33}{v_{cat}}\)
+    and <u>all</u> other words, if some of them are also valid context words (e.g.,
+    <span class="data_text" style="font-weight:bold; color:#888">grey</span>,
+    <span class="data_text" style="font-weight:bold; color:#888">playing</span>,
+    <span class="data_text" style="font-weight:bold; color:#888">in</span> on our example sentence)?
+    <br>
+    But do not worry: since we make updates for each context word (and for all central words in your text),
+    <u>on average over all updates</u>
+    our vectors will learn
+    the distribution of the possible contexts.</p>
+
+
+
+
+<div class="card_with_ico">
+    <img class="ico" src="../resources/lectures/ico/dumpbell_empty.png"/>
+    <div class="text_box_green">
+    <p class="data_text"> Try to derive the gradients at the final step of the illustration above.
+        <br><br>
+        If you get lost, you can look at the paper
+    <a href="https://arxiv.org/pdf/1411.2738.pdf"  target="_blank">Word2Vec Parameter Learning Explained</a>.</p>
+    </div>
+</div>
+
+</div>
+    <br>
+
+    <div id="w2v_negative_sampling">
+    <h2 >Faster Training: Negative Sampling</h2>
+
+    <p>In the example above, for each pair of a central word and its context word, we had to update all vectors
+    for context words. This is highly inefficient: for each step, the time needed to make an update is proportional
+        to the vocabulary size.</p>
+
+
+    <p>But why do we have to consider <u>all</u> context vectors in the vocabulary at each step?
+    For example, imagine that at the current step we consider context vectors not for all words,
+    but only for the current target (<span class="data_text" style="font-weight:bold; color:#888">cute</span>)
+        and several randomly chosen words. The figure shows the intuition.</p>
+
+    <center>
+        <img src="../resources/lectures/word_emb/w2v/negative_sampling-min.png"
+             style="max-width:90%; margin-top:15px; margin-bottom:15px;"/>
+    </center>
+
+    <br>
+<!--    <img height="150" src="../resources/lectures/word_emb/w2v/loss_intuition_neg_sam-min.png"
+         style="float:right; margin-left: 25px; max-width:60%"/> -->
+
+    <p>As before, we are increasing similarity between
+    \(\color{#88bd33}{v_{cat}}\) and \(\color{#888}{u_{cute}}\). What is different, is that now we
+    decrease similarity between \(\color{#88bd33}{v_{cat}}\) and context vectors <u>not for all</u> words, but only
+        with a <u>subset of K "negative" examples</u>.</p>
+
+    <p>Since we have a large corpus, on average over all updates we will update each vector sufficient number of times,
+        and the vectors will still be able to learn the relationships between words quite well.</p>
+
+    <p>
+    Formally, the new loss function for this step is:
+    \[ J_{t,j}(\theta)=
+    \log\sigma(\color{#888}{u_{cute}^T}\color{#88bd33}{v_{cat}}) +
+    \sum\limits_{w\in \{w_{i_1},\dots, w_{i_K}\}}\log\sigma({-\color{#888}{u_w^T}\color{#88bd33}{v_{cat}}}),
+    \]
+    where \(w_{i_1},\dots, w_{i_K}\) are the K negative examples chosen at this step
+    and \(\sigma(x)=\frac{1}{1+e^{-x}}\) is the sigmoid function.</p>
+
+    <p>Note that
+    \(\sigma(-x)=\frac{1}{1+e^{x}}=\frac{1\cdot e^{-x}}{(1+e^{x})\cdot e^{-x}} =
+    \frac{e^{-x}}{1+e^{-x}}= 1- \frac{1}{1+e^{x}}=1-\sigma(x)\). Then the loss can also be written as:
+    \[ J_{t,j}(\theta)=
+    \log\sigma(\color{#888}{u_{cute}^T}\color{#88bd33}{v_{cat}}) +
+    \sum\limits_{w\in \{w_{i_1},\dots, w_{i_K}\}}\log(1-\sigma({\color{#888}{u_w^T}\color{#88bd33}{v_{cat}}})).
+        \]</p>
+
+    <div class="card_with_ico">
+    <img class="ico" src="../resources/lectures/ico/dumpbell_empty.png"/>
+    <div class="text_box_green">
+    <p class="data_text">How the gradients and updates change when using negative sampling?</p>
+    </div>
+    </div>
+
+    <br>
+    <h3 id="choice_of_neg_examples"><u>The Choice of Negative Examples</u></h3>
+<p>Each word has only a few "true" contexts. Therefore, randomly chosen words are very likely to be "negative", i.e. not
+    true contexts. This simple idea is used not only to train Word2Vec efficiently but also in many other
+    applications, some of which we will see later in the course.</p>
+
+
+    <p>Word2Vec randomly samples negative examples based on the empirical distribution of words.
+    Let \(U(w)\) be a unigram distribution of words, i.e. \(U(w)\) is the frequency of the word \(w\)
+     in the text corpus. Word2Vec modifies this distribution to sample less frequent words more often:
+        it samples proportionally to \(U^{3/4}(w)\).</p>
+
+
+</div>
+
+    <div  id="w2v_skipgram_cbow">
+    <h2>Word2Vec variants: Skip-Gram and CBOW</h2>
+
+        <p>There are two Word2Vec variants: Skip-Gram and CBOW.</p>
+
+
+    <p><u>Skip-Gram</u> is the model we considered so far: it predicts context words given the central word.
+    Skip-Gram with negative sampling is the most popular approach.</p>
+
+    <p><u>CBOW</u> (Continuous Bag-of-Words) predicts the central word from the sum of context vectors. This simple sum of
+    word vectors is called "bag of words", which gives the name for the model.</p>
+
+    <center>
+        <img src="../resources/lectures/word_emb/w2v/cbow_skip-min.png"
+             style="max-width:90%; margin-top:15px; margin-bottom:15px;"/>
+    </center>
+
+
+    <div class="card_with_ico">
+    <img class="ico" src="../resources/lectures/ico/dumpbell_empty.png"/>
+    <div class="text_box_green">
+    <p class="data_text">How the loss function and the gradients change for the CBOW model?
+    <br><br>
+        If you get lost, you can again look at the paper
+    <a href="https://arxiv.org/pdf/1411.2738.pdf" target="_blank">Word2Vec Parameter Learning Explained</a>.</p>
+    </div>
+    </div>
+
+</div>
+
+    <div id="w2v_additional_notes">
+    <h2>Additional Notes</h2>
+
+        <p>The original Word2Vec papers are:</p>
+    <ul>
+        <li><a href="https://arxiv.org/pdf/1301.3781.pdf" target="_blank">Efficient Estimation of Word Representations in Vector Space</a></li>
+        <li><a href="https://papers.nips.cc/paper/5021-distributed-representations-of-words-and-phrases-and-their-compositionality.pdf"  target="_blank">
+            Distributed Representations of Words and Phrases and their Compositionality</a></li>
+    </ul>
+    <p>You can look into them for the details on the experiments, implementation and hyperparameters. Here we will
+        provide some of the most important things you need to know.</p>
+
+
+
+    <h3><u>The Idea is Not New</u></h3>
+
+    <p>The idea to learn word vectors (distributed representations) is not new. For example, there were attempts to
+    learn word vectors as part of a larger network and then extract the embedding layer. (For the details on the
+        previous methods, you can look, for example, at the summary in the original Word2Vec papers).</p>
+
+
+    <p>What was very unexpected in Word2Vec, is its ability to learn <u>high-quality</u> word vectors
+    <u>very fast</u> on huge datasets and for
+    large vocabularies. And of course, all the fun properties we will see in the
+        <a href="#analysis_interpretability">Analysis and Interpretability</a> section quickly made Word2Vec very famous.</p>
+
+
+
+    <h3><u>Why Two Vectors?</u></h3>
+    <p>As you remember, in Word2Vec we train two vectors for each word: one when it is a central word and another
+        when it is a context word. After training, context vectors are thrown away.</p>
+
+
+    <p>This is one of the tricks that made Word2Vec so simple. Look again at the loss function (for one step):
+\[ J_{t,j}(\theta)=
+    -\color{#888}{u_{cute}^T}\color{#88bd33}{v_{cat}} -
+    \log \sum\limits_{w\in V}\exp{\color{#888}{u_w^T}\color{#88bd33}{v_{cat}}}.
+    \]
+    When central and context words have different vectors, both the first term and dot products inside the exponents
+    are linear with respect to the parameters (the same for the negative training objective).
+        Therefore, the gradients are easy to compute.</p>
+
+    <div class="card_with_ico">
+    <img class="ico" src="../resources/lectures/ico/dumpbell_empty.png"/>
+    <div class="text_box_green">
+    <p class="data_text">Repeat the derivations (loss and the gradients) for the case with one vector for each word
+    (\(\forall w \ in \ V, \color{#88bd33}{v_{w}} = \color{#888}{u_{w}}\) ). </p>
+    </div>
+    </div>
+
+    <div class="card_with_ico">
+        <img class="ico" width="40" src="../resources/lectures/ico/book_empty.png"/>
+        <div class="text_box_pink">
+            <p class="data_text">
+                While the standard practice is to throw away context vectors, it was shown that
+                averaging word and context vectors may be more beneficial.
+                    <a href="#papers_good_old_classics">More details are here.</a>
+            </p>
+        </div>
+    </div>
+
+    <h3><u>Better training</u></h3>
+
+    <div class="card_with_ico">
+    <img class="ico" src="../resources/lectures/ico/bulb_empty.png"/>
+    <div class="text_box_yellow">
+    <p class="data_text">There's one more trick: learn more from <a href="#w2v_subsample_frequent">this exercise</a>
+    in the <a href="#research_thinking">Research Thinking</a> section. </p>
+    </div>
+    </div>
+
+
+        <h3><u>Relation to PMI Matrix Factorization</u></h3>
+
+        <div class="card_with_ico">
+        <img class="ico" width="40" src="../resources/lectures/ico/book_empty.png"/>
+        <div class="text_box_pink">
+            <p class="data_text">
+                Word2Vec SGNS (Skip-Gram with Negative Sampling)
+            implicitly approximates the factorization of a (shifted) PMI matrix.
+                    <a href="#papers_good_old_classics">Learn more here.</a>
+            </p>
+        </div>
+    </div>
+
+    <h3><u>(Somewhat) Standard Hyperparameters</u></h3>
+    As always, the choice of hyperparameters usually depends on the task at hand;
+    you can look at the original papers for more details.
+    <br><br>
+
+    Somewhat standard setting is:
+     <ul>
+         <li><font face="arial">Model:</font> Skip-Gram with negative sampling;</li>
+         <li><font face="arial">Number of negative examples:</font> for smaller datasets, 15-20; for huge datasets
+             (which are usually used) it can be 2-5.</li>
+        <li><font face="arial">Embedding dimensionality:</font> frequently used value is 300, but other
+    variants (e.g., 100 or 50) are also possible. For theoretical explanation of the optimal dimensionality,
+    take a look at the <a href="#related_papers">Related Papers</a> section.</li>
+        <li><font face="arial">Sliding window (context) size:</font> 5-10.</li>
+    </ul>
+
+    <!--
+    <div class="card_with_ico">
+        <img class="ico" width="40" src="../resources/lectures/ico/book_empty.png"/>
+        <div class="text_box_pink">
+            <p class="data_text">
+                Interestingly, different size of a context window leads to embeddings with different
+                properties.
+                    <a href="">More details are here.</a>
+            <font color="red">add link</font>
+            </p>
+        </div>
+    </div>-->
+
+<br>
+</div>
+
+</div>
+
+<div id="glove">
+    <h1>GloVe: Global Vectors for Word Representation</h1>
+
+    <center>
+    <img src="../resources/lectures/word_emb/glove/idea-min.png"
+         style="max-width:90%; margin-bottom:15px;"/>
+    </center>
+
+    <div>
+        <p><a href="https://www.aclweb.org/anthology/D14-1162.pdf" target="_blank">The GloVe model</a> is a combination of
+        count-based methods and prediction methods (e.g., Word2Vec). Model name, GloVe, stands
+        for "Global Vectors", which reflects its idea: the method uses
+        <font face="arial">global</font> information from corpus to <font face="arial">learn vectors</font>.</p>
+
+
+
+        <p><a href="simple_cooccurrence">As we saw earlier</a>, the simplest count-based method uses
+        co-occurrence counts to measure the association between <font color="#88bd33">word
+        <span class="data_text" style="font-weight:bold;">w</span></font>
+        and <font color="#888">context <span class="data_text" style="font-weight:bold;">c</span></font>:
+        N(<font color="#88bd33">w</font>, <font color="#888">c</font>).
+        <!--Specifically,
+        they use
+        N(<font color="#88bd33">w</font>, <font color="#888">c</font>) - number of times
+        <font color="#88bd33">word
+        <span class="data_text" style="font-weight:bold;">w</span></font> appears in context
+        <font color="#888">context <span class="data_text" style="font-weight:bold;">c</span></font>. -->
+
+        GloVe also uses these counts to construct the loss function:</p>
+        <center>
+        <img src="../resources/lectures/word_emb/glove/loss-min.png"
+             style="max-width:80%; margin-bottom:15px;"/>
+        </center>
+
+        <p>Similar to Word2Vec, we also have different vectors for
+        <font color="#88bd33">central</font> and <font color="#888">context</font> words - these are our parameters.
+            Additionally, the method has a scalar bias term for each word vector.</p>
+
+        <p>
+        What is especially interesting, is the way GloVe controls the influence of rare and frequent words:
+        loss for each pair (<font color="#88bd33">w</font>, <font color="#888">c</font>) is weighted in a way that</p>
+        <ul>
+            <li>rare events are penalized,</li>
+            <li>very frequent events are not over-weighted.</li>
+        </ul>
+
+        <p class="data_text" style="color:#888;"><u>Lena:</u>
+        The loss function looks reasonable as it is, but
+        <a href="https://www.aclweb.org/anthology/D14-1162.pdf" target="_blank">the original GloVe paper</a>
+        has very nice motivation leading to the above formula. I will not provide it here
+        (I have to finish the lecture at some point, right?..), but
+            you can read it yourself - it's really, really nice!</p>
+    </div>
+</div>
+<br>
+
+
+<div id="evaluation">
+        <h1>Evaluation of Word Embeddings</h1>
+
+         <p>How can we understand that one method for getting word embeddings is better than another?
+             There are two types of evaluation (not only for word embeddings): intrinsic and extrinsic.</p>
+
+
+         <div>
+         <h3><u>Intrinsic Evaluation</u>: Based on Internal Properties</h3>
+             <img width="40%" src="../resources/lectures/word_emb/intrinsic_evaluation-min.png"
+         style="float:right; margin-left: 25px; max-width:60%"/>
+            <p>This type of evaluation looks at the internal properties of embeddings, i.e.
+             how well they capture meaning. Specifically, in the
+    <a href="#analysis_interpretability">Analysis and Interpretability</a> section,
+                we will discuss in detail how we can evaluate embeddings on word similarity and word analogy tasks.</p>
+         </div>
+
+         <div>
+         <h3><u>Extrinsic Evaluation</u>: On a Real Task</h3>
+         <img width="60%" src="../resources/lectures/word_emb/extrinsic_evaluation-min.png"
+         style="float:right; margin-left: 25px; max-width:60%"/>
+
+             <p>This type of evaluation tells which embeddings are better for the task you really care about (e.g.,
+             text classification, coreference resolution, etc.).
+             <br><br>
+             In this setting, you have to train the model/algorithm for the real task several times: one model for each of the
+              embeddings you want to evaluate. Then, look at the quality of these models to decide which
+                 embeddings are better.</p>
+         </div>
+
+         <div>
+         <h3><u>How to Choose?</u></h3>
+             <img width="60%" src="../resources/lectures/word_emb/evaluation_tradeoff-min.png"
+         style="float:right; margin-left: 25px; max-width:60%"/>
+             <p>One thing you have to get used to is that there is no perfect solution and no right answer
+                 for all situations: it always depends on many things.</p>
+
+             <p>Regarding evaluation, you usually care about quality of the task you want to solve. Therefore,
+             you are likely to be more interested in extrinsic evaluation. However, real-task models
+             usually require a lot of time and resources to train, and training several of them may
+                 be too expensive.</p>
+             <p>In the end, this is your call to make :)</p>
+         </div>
+
+    </div>
+<br><br>
+
+<div id="analysis_interpretability">
+    <img height="40" src="../resources/lectures/ico/analysis_empty.png"
+         style="float:left; padding-right:20px; "/>
+    <h1>Analysis and Interpretability</h1>
+
+    <p class="data_text" style="color:#888;"><u>Lena:</u> For word embeddings, most of the content of
+    this part is usually considered as evaluation (intrinsic evaluation). However,
+        since looking at what a model learned (beyond task-specific metrics) is the kind of thing
+        people usually do for analysis, I believe it can be presented here, in the analysis section. </p>
+
+
+    <div id="analysis_walk_through_space">
+        <h2>Take a Walk Through Space... Semantic Space!</h2>
+
+        <p>Semantic spaces aim to create representations of natural language that capture meaning.
+        We can say that (good) word embeddings form semantic space and will refer to
+            a set of word vectors in a multi-dimensional space as "semantic space".</p>
+
+
+        <p>Below is shown semantic space formed by GloVe vectors trained on twitter data (taken from
+    <a href="https://github.com/RaRe-Technologies/gensim-data" target="_blank">gensim</a>). Vectors were
+            projected to two-dimensional space using t-SNE; these are only the top-3k most frequent words.</p>
+
+
+    <img height="20" src="../resources/lectures/ico/paw_empty.png" style="float:left; margin-top:-10px;"/>
+    <div class="box_green_left">
+        <div class="text_box_green">
+
+            <p class="data_text">
+                <u>How to:</u> Walk through semantic space and try to find:</p>
+        <ul class="data_text" style="padding-right:10px;">
+    <li>language clusters: Spanish, Arabic, Russian, English. Can you find more languages?</li>
+    <li>clusters for: food, family, names, geographical locations. What else can you find?</li>
+        </ul>
+        </div>
+
+        <center>
+        <iframe frameborder="0" width="510" height="510"
+                src="../resources/lectures/word_emb/analysis/glove100_twitter_top3k.html">
+        </iframe>
+        </center>
+
+        <!--<p class="data_text" style="color:#aaa;font-size:13px;"><u>Lena:</u> Embeddings are from
+    <a href="https://github.com/RaRe-Technologies/gensim-data">gensim.</a></p>-->
+
+    </div>
+    <img height="20" src="../resources/lectures/ico/paw_empty.png" style="float:left; margin-top:-10px;"/>
+
+    </div>
+    <br><br>
+
+    <div id="analysis_neighbors">
+        <h2>Nearest Neighbors</h2>
+
+        <p style="text-align: center; float: right; display: block; margin-left:25px;
+         margin-top:-10px; max-width:50%;">
+            <img src="../resources/lectures/word_emb/analysis/frog-min.png" alt="" /><br />
+            <span style="font-size: small;">The example is
+        from the <a href="https://nlp.stanford.edu/projects/glove/" target="_blank">GloVe project page</a>.</span></p>
+
+    <p>During your walk through semantic space, you probably noticed that the points (vectors) which are nearby
+    usually have close meaning. Sometimes, even rare words are understood very well. Look at the example:
+        the model understood that words such as <span class="data_text" style="font-weight:bold;">leptodactylidae</span>
+        or <span class="data_text" style="font-weight:bold;">litoria</span> are close to
+        <span class="data_text" style="font-weight:bold;">frog</span>.</p>
+
+        <br>
+
+
+
+        <p style="text-align: center; float: right; display: block; margin-left:25px; max-width:30%;">
+            <img src="../resources/lectures/word_emb/analysis/rare_words-min.png" alt="" /><br />
+            <span style="font-size: small;">Several pairs from the
+        <a href="https://nlp.stanford.edu/~lmthang/data/papers/conll13_morpho.pdf" target="_blank">
+                    Rare Words similarity benchmark</a>.</span></p>
+
+    <h3><u>Word Similarity Benchmarks</u></h3>
+        <p>"Looking" at nearest neighbors (by cosine similarity or Euclidean distance) is one of the
+        methods to estimate the quality of the learned embeddings. There are several
+        <font face="arial">word similarity</font> benchmarks (test sets). They consist
+        of word pairs with a similarity score according to human judgments.
+        The quality of embeddings is estimated as
+            the correlation between the two similarity scores (from model and from humans).</p>
+
+    </div>
+    <br>
+
+    <div id="analysis_linear_structure">
+        <h2>Linear Structure</h2>
+
+        <p>While similarity results are encouraging, they are not surprising: all in all,
+        the embeddings were trained specifically to reflect word similarity.
+        What is surprising, is that many semantic and syntactic <u>relationships between words
+                are (almost) linear</u> in word vector space.</p>
+
+        <img src="../resources/lectures/word_emb/analysis/king_example-min.png" alt=""
+        style="float:right; width: 50%; margin-left: 20px; margin-top: 10px;"/>
+
+
+        <p>For example, the difference between
+        <span class="data_text" style="font-weight:bold;">king</span> and
+        <span class="data_text" style="font-weight:bold;">queen</span>
+        is (almost) the same as between
+        <span class="data_text" style="font-weight:bold;">man</span>
+        and <span class="data_text" style="font-weight:bold;">woman.</span>
+        Or a word that is similar to
+        <span class="data_text" style="font-weight:bold;">queen</span>
+        in the same sense that
+        <span class="data_text" style="font-weight:bold;">kings</span> is similar to
+        <span class="data_text" style="font-weight:bold;">king</span> turns out to be
+        <span class="data_text" style="font-weight:bold;">queens</span>.
+
+        The
+        <span class="data_text" style="font-weight:bold;">man-woman</span> \(\approx\)
+        <span class="data_text" style="font-weight:bold;">king-queen</span> example
+            is probably the most popular one, but there are also many other relations and funny examples.</p>
+
+
+
+        <p>Below are examples for the country-capital relation <!--(from
+        <a href="https://papers.nips.cc/paper/5021-distributed-representations-of-words-and-phrases-and-their-compositionality.pdf"
+        target="_blank">this Word2Vec paper</a>) -->
+            and a couple of syntactic relations.</p>
+
+        <center>
+        <img src="../resources/lectures/word_emb/analysis/examples_both-min.png" alt=""
+        style="width: 100%; margin: 10px;"/>
+        </center>
+
+ <div class="card_with_ico">
+    <img class="ico" width="40" src="../resources/lectures/ico/book_empty.png"/>
+    <div class="text_box_pink">
+        <p class="data_text">
+            At ICML 2019, it was shown that there's actually a theoretical explanation for
+            analogies in Word2Vec.
+                <a href="#papers_theory">More details are here.</a>
+        <br><br>
+            <font color="#888"> <u>Lena:</u> This paper,
+                <a href="https://arxiv.org/pdf/1901.09813.pdf" target="_blank">
+            Analogies Explained: Towards Understanding Word Embeddings</a>
+            by Carl Allen and Timothy Hospedales from the University of Edinburgh, received
+            Best Paper Honourable Mention award at ICML 2019 - well deserved!</font>
+        </p>
+    </div>
+</div>
+
+
+
+        <h3><u>Word Analogy Benchmarks</u></h3>
+
+        <p>These near-linear relationships inspired a new type of evaluation:
+            word analogy evaluation.</p>
+
+        <center>
+        <img src="../resources/lectures/word_emb/analysis/analogy_task_v2-min.png" alt=""
+        style="width: 70%; margin: 10px;"/>
+        </center>
+
+
+        <p style="text-align: center; float: right; display: block;
+        margin-bottom:20px; margin-left:25px; max-width:60%;">
+            <img src="../resources/lectures/word_emb/analysis/analogy_testset-min.png" alt="" /><br />
+            <span style="font-size: small;">Examples of relations and word pairs from
+        <a href="https://arxiv.org/pdf/1301.3781.pdf" target="_blank">
+                    the Google analogy test set</a>.</span></p>
+
+        <p>Given two word pairs for the same relation, for example
+        <span class="data_text" style="font-weight:bold;">(man, woman)</span> and
+        <span class="data_text" style="font-weight:bold;">(king, queen)</span>,
+        the task is to check if we can identify one of the words based on the rest of them.
+        Specifically, we have to check if the closest vector to
+        <span class="data_text" style="font-weight:bold;">king - man + woman</span>
+        corresponds to the word
+            <span class="data_text" style="font-weight:bold;">queen</span>.</p>
+
+
+        <p>Now there are several analogy benchmarks; these include
+        the standard benchmarks (<a href="https://www.aclweb.org/anthology/N13-1090.pdf" target="_blank">MSR</a> +
+        <a href="https://arxiv.org/pdf/1301.3781.pdf" target="_blank">Google analogy</a> test sets) and
+            <a href="https://www.aclweb.org/anthology/N16-2002.pdf" target="_blank">BATS (the Bigger Analogy Test Set)</a>.</p>
+
+    </div>
+    <br>
+
+    <div  id="analysis_cross_lingual">
+        <h2>Similarities across Languages</h2>
+
+        <p>We just saw that some relationships between words are (almost) linear in the embedding space.
+        But what happens across languages? Turns out, relationships between semantic spaces are also
+        (somewhat) linear: you can linearly map one semantic space to another so that
+            corresponding words in the two languages match in the new, joint semantic space.</p>
+
+            <center>
+            <img src="../resources/lectures/word_emb/analysis/cross_lingual_matching-min.png" alt=""
+            style="width: 100%; margin: 10px;"/>
+            </center>
+
+
+        <p>The figure above illustrates <a href="https://arxiv.org/pdf/1309.4168.pdf" target="_blank">the approach proposed
+        by Tomas Mikolov et al. in 2013</a> not long after the original Word2Vec. Formally,
+        we are given a set of word pairs and their vector representations
+        \(\{\color{#88a635}{x_i}, \color{#547dbf}{z_i} \}_{i=1}^n\),
+        where \(\color{#88a635}{x_i}\) and \(\color{#547dbf}{z_i}\)
+        are vectors for i-th word in the source language and its translation in the target.
+We want to find a transformation matrix W such that \(W\color{#547dbf}{z_i}\) approximates \(\color{#88a635}{x_i}\)
+        : "matches" words from the dictionary.
+        We pick \(W\) such that
+        \[W = \arg \min\limits_{W}\sum\limits_{i=1}^n\parallel W\color{#547dbf}{z_i} - \color{#88a635}{x_i}\parallel^2,\]
+            and learn this matrix by gradient descent.</p>
+
+        <p>In the original paper, the initial vocabulary consists of the 5k most frequent words with their translations,
+            and the rest is learned.</p>
+
+
+    <div class="card_with_ico">
+        <img class="ico" width="40" src="../resources/lectures/ico/book_empty.png"/>
+        <div class="text_box_pink">
+            <p class="data_text">
+                Later it turned out, that we don't need a dictionary at all -
+                we can build a mapping between semantic spaces even
+                if we know <u>nothing</u> about languages! <a href="#papers_cross_lingual">More details are
+                        here.</a>
+            </p>
+        </div>
+    </div>
+
+    <div class="card_with_ico">
+        <img class="ico" width="40" src="../resources/lectures/ico/book_empty.png"/>
+        <div class="text_box_pink">
+            <p class="data_text">
+                Is the "true" mapping between languages indeed linear, or more complicated?
+                    We can look at geometry of the learned semantic spaces and check.
+                    <a href="#papers_analyzing_geometry">More details are
+                        here.</a>
+            </p>
+        </div>
+    </div>
+
+    <div class="card_with_ico">
+    <img class="ico" src="../resources/lectures/ico/bulb_empty.png"/>
+    <div class="text_box_yellow">
+    <p class="data_text">
+        The idea to linearly map different embedding sets to (nearly) match them can also be used
+        for a very different task!
+        Learn more <!--from <a href="#research_meaning_shift">this exercise</a>-->
+    in the <a href="#research_thinking">Research Thinking</a> section. </p>
+    </div>
+    </div>
+
+    </div>
+
+</div>
+
+    <br><br>
+
+    <!--
+        <hr color="#fced95" style="height:5px; margin-bottom: 5px;">
+        <img height="40" src="../resources/lectures/ico/bulb_empty.png"
+             style="float:left; padding-right:20px; "/>
+        <h1>Research Thinking</h1>
+
+        <br><br><br><br>
+
+        <img height="40" src="../resources/lectures/ico/bulb_empty.png"
+             style="float:left; padding-right:10px; margin-top:-20px;"/>
+        <hr color="#fced95" style="height:3px">
+        <h1 style="margin-left:40px; margin-top:10px">Research Thinking</h1>
+
+
+        <br><br><br><br>
+        -->
+
+<div id="research_thinking">
+        <img height="40" src="../resources/lectures/ico/bulb_empty.png"
+             style="float:left; padding-right:10px; margin-top:-20px;"/>
+        <h1 style="margin-left:10px; margin-right:20px; float: left; margin-top:-20px">Research Thinking</h1>
+        <hr color="#fced95" style="height:5px">
+<br><br>
+
+
+<fieldset style="border: 1px solid #f0e4a5;
+    border-radius: 5px;">
+            <legend><p class="data_text"><strong>How to</strong></p></legend>
+            <ul class="data_text">
+                <li>Read the  short description at the beginning - this is our starting point,
+        something known.</li>
+                <li>Read a question and think: for a minute, a day, a week, ... -
+        give yourself some time! Even if you are not thinking about it constantly,
+        something can still come to mind.</li>
+                <li>Look at the possible answers - previous attempts to answer/solve this problem.<br>
+                    <u>Important:</u>
+                    You are <strong>not</strong> supposed to come up with
+                    something exactly like here - remember, each paper usually takes the authors several
+                    months of work. It's a habit of thinking about these things that counts!
+                    All the rest a scientist needs is time: to try-fail-think
+                    until it works.</li>
+            </ul>
+
+            <p class="data_text">It's well-known that you will learn something easier if you are not just given the answer right away,
+            but if you think about it first. Even if you don't want to be a researcher, this is still a good way
+            to learn things!</p>
+</fieldset>
+
+
+        <br><br>
+
+
+        <!--##################################################-->
+        <!--##################################################-->
+        <!--##################################################-->
+
+        <div class="research_circle" style="float:left;"></div>
+        <h2 style="margin-top:-10px; float: left; padding-left:10px; padding-right:10px; color:#786702">
+            Count-Based Methods</h2>
+        <div class="box_yellow_left">
+
+        <!--##################################################-->
+        <div class="researchCard" id="thumbnail_research" >
+            <div class="researchIntro" id="research_improve_count_based">
+
+              <div class="cardContent">
+
+                  <div class="research_title">
+                      Improve Simple Co-Occurrence Counts
+                  </div>
+
+                <hr color="#dedeca" style="margin:5px;">
+                  The simplest co-occurrence counts treat context words equally, although these words
+                  are at different relative positions from the central word.
+                  For example, from one sentence
+                  the central word <span class="data_text" style="font-weight:bold; color:#88bd33">cat</span>
+                  will get a co-occurrence count of 1 for each of the words
+                  <span class="data_text" style="font-weight:bold; color:#888">cute</span>,
+                  <span class="data_text" style="font-weight:bold; color:#888">grey</span>,
+                  <span class="data_text" style="font-weight:bold; color:#888">playing</span>,
+                  <span class="data_text" style="font-weight:bold; color:#888">in</span> (look at the example to the right).
+
+              </div>
+                <div>
+                    <!--<div class="research_tag">neural</div>-->
+
+                      <img src="../resources/lectures/word_emb/research/counts_simple-min.png"
+                           alt="" style="margin-top:20px;" class="center"/>
+
+                </div>
+
+             </div>
+            <hr color="#dedeca" style="margin:5px">
+            <div class="cardContent">
+
+                <span class="research_question">?</span>
+                Are context words at different distances equally important?
+                If not, how can we modify co-occurrence counts?<br>
+                <details>
+                    <summary  class="research_summary">
+                       Possible answers</summary>
+
+
+                    <img src="../resources/lectures/word_emb/research/counts_modify_position-min.png"
+                           alt="" style="margin-left:20px; float:right; width: 40%"/>
+
+                    Intuitively, words that are closer to the central are more important; for example,
+                    immediate neighbors are more informative than words at distance 3.
+                    <br><br>
+                    We can use this to modify the model: when evaluating counts,
+                    let's give closer words more weight. This idea was used in the
+                    <a href="https://link.springer.com/content/pdf/10.3758/BF03204766.pdf"  target="_blank">HAL model (1996)</a>,
+                    which once was very famous. They modified counts as shown in the example.
+                </details>
+
+
+                <br>
+                <span class="research_question">?</span>
+                In language, word order is important; specifically, left and right contexts have different meanings.
+                How can we distinguish between the left and right contexts?
+                <details>
+                    <summary class="research_summary">
+                        One of the existing approaches</summary>
+
+                    <img src="../resources/lectures/word_emb/research/counts_left_right-min.png"
+                           alt="" style="margin-left:20px; float:right; width: 50%"/>
+
+                    Here the weighting idea we saw above would not work: we can not say which
+                    contexts, left or right, are more important.<br><br>
+                    What we have to do is to evaluate co-occurrences to the left and to the right separately.
+                    For each context word, we will have two different counts: one when it is a left context and
+                    another when it is the right context. This means that our co-occurrence matrix will have
+                    |V| rows and 2|V| columns.
+                    This idea was also used in the
+                    <a href="https://link.springer.com/content/pdf/10.3758/BF03204766.pdf" target="_blank">HAL model (1996)</a>.
+                    <br><br>
+                    Look at the example; note that for <span class="data_text" style="font-weight:bold; color:#888">cute</span>,
+                    we have left co-occurrence count, for
+                    <span class="data_text" style="font-weight:bold; color:#888">cat</span> - right.
+                </details>
+
+            </div>
+        </div>
+
+        <!--##################################################-->
+        </div>
+        <div class="research_circle" style="float:left;"></div>
+        <!--##################################################-->
+        <!--##################################################-->
+        <!--##################################################-->
+
+
+        <br><br>
+
+        <!--##################################################-->
+        <!--##################################################-->
+        <!--##################################################-->
+
+        <div class="research_circle" style="float:left;"></div>
+        <h2 style="margin-top:-10px; float: left; padding-left:10px; padding-right:10px; color:#786702">
+            Word2Vec</h2>
+        <div class="box_yellow_left">
+
+        <!--##################################################-->
+        <div class="researchCard" id="thumbnail_research" >
+            <div class="researchIntro" id="w2v_subsample_frequent">
+
+              <div class="cardContent">
+
+                  <div class="research_title">
+                      Are all context words equally important for training?
+                  </div>
+
+                <hr color="#dedeca" style="margin:5px;">
+                  During Word2Vec training, we make an update for each of the context words.
+                  For example, for the central word <span class="data_text" style="font-weight:bold; color:#88bd33">cat</span>
+                  we make an update for each of the words
+                  <span class="data_text" style="font-weight:bold; color:#888">cute</span>,
+                  <span class="data_text" style="font-weight:bold; color:#888">grey</span>,
+                  <span class="data_text" style="font-weight:bold; color:#888">playing</span>,
+                  <span class="data_text" style="font-weight:bold; color:#888">in</span>.
+
+              </div>
+                <div>
+                    <!--<div class="research_tag">neural</div>-->
+
+                      <img src="../resources/lectures/word_emb/research/cat_5windows-min.png"
+                           alt="" style="margin-top:20px;" class="center"/>
+
+                </div>
+
+             </div>
+            <hr color="#dedeca" style="margin:5px">
+            <div class="cardContent">
+
+                <span class="research_question">?</span>
+                Are all context words equally important?<br>
+                Which word types give more/less information than others?
+                Think about some characteristics of words
+                that can influence their importance. Do not forget the previous exercise!
+                <details>
+                    <summary  class="research_summary">
+                       Possible answers</summary>
+
+                    <ul>
+                        <li><u>word frequency</u>
+                            <br>
+                        We can expect that frequent words usually give less information than rare ones.
+                        For example, the fact that <span class="data_text" style="font-weight:bold; color:#88bd33">cat</span>
+                        appears in context of <span class="data_text" style="font-weight:bold; color:#888">in</span>
+                        does not tell us much about the meaning of
+                        <span class="data_text" style="font-weight:bold; color:#88bd33">cat</span>: the word
+                        <span class="data_text" style="font-weight:bold; color:#888">in</span> serves as a context for many other words.
+                        In contrast,
+                        <span class="data_text" style="font-weight:bold; color:#888">cute</span>,
+                      <span class="data_text" style="font-weight:bold; color:#888">grey</span> and
+                      <span class="data_text" style="font-weight:bold; color:#888">playing</span>
+                        already give us some idea about
+                        <span class="data_text" style="font-weight:bold; color:#88bd33">cat</span>.
+                        </li>
+                        <li>
+                            <u>distance from the central word</u>
+                            <br>
+                            As we discussed in <a href="#research_improve_count_based">the previous exercise
+                            on count-based methods</a>, words that are closer to the central may be more important.
+                        </li>
+                    </ul>
+                </details>
+
+
+                <br>
+                <span class="research_question">?</span>
+                How can we use this to modify training?
+                <details>
+                    <summary class="research_summary">
+                        Tricks from the original Word2Vec</summary>
+                    <h3><u>1. Word Frequency</u></h3>
+
+                    <center>
+                        <img src="../resources/lectures/word_emb/w2v/freq_subsampling_idea-min.png"
+                             style="max-width:80%; margin-bottom:15px;"/>
+                    </center>
+
+                    To account for different informativeness of rare and frequent words,
+                    Word2Vec uses a simple subsampling
+                    approach: each word \(w_i\) in the training set is ignored with probability
+                    computed by the formula
+                    \[P(w_i)=1 - \sqrt{\frac{thr}{f(w_i)}}\]
+                    where \(f(w_i)\) is the word frequency and \(thr\) is the chosen threshold
+                    (in the original paper, \(thr=10^{-5}\)).
+                    This formula preserves the ranking of the frequencies, but aggressively subsamples words whose
+                    frequency is greater than \(thr\).
+                    <br><br>
+                    Interestingly, this heuristic
+                    works well in practice:
+                    it accelerates learning and even significantly improves the
+                    accuracy of the learned vectors of the rare words.
+                    <br><br>
+
+                    <h3><u>2. Distance from the central word</u></h3>
+                    <img src="../resources/lectures/word_emb/research/w2v_position-min.png"
+                           alt="" style="margin-left:20px; float:right; width: 40%"/>
+                    As in <a href="#research_improve_count_based">the previous exercise
+                            on count-based methods</a>, we can assign higher weights to the words which are closer to
+                    the central.
+
+                    <br><br>
+                    At the first glance, you won't see any weights in the original Word2Vec implementation.
+                    However, at each step it samples the size of the context window from 1 to L. Therefore,
+                    words which are closer to central are used more frequently than the distant ones.
+                    In the original work this was (probably) done for efficiency (fewer updates for each step),
+                    but this also has the effect similar to assigning weights.
+
+
+                </details>
+
+            </div>
+        </div>
+
+        <!--##################################################-->
+
+
+        <!--##################################################-->
+        <div class="researchCard" id="thumbnail_research" >
+            <div class="researchIntro" id="research_fasttext">
+
+              <div class="cardContent">
+
+                  <div class="research_title">
+                      Use Information About Subwords ("invent" FastText)
+                  </div>
+
+                <hr color="#dedeca" style="margin:5px;">
+                  Usually, we have a look-up table where each word is assigned a distinct vector.
+                  By construction, these vectors do not have any idea about subwords they consist of:
+                  all information they have is what they learned from contexts.
+
+              </div>
+                <div>
+                    <!--<div class="research_tag">neural</div>-->
+
+                      <img src="../resources/lectures/word_emb/research/distinct_vectors-min.png"
+                           alt="" style="margin-top:20px;" class="center"/>
+
+                </div>
+
+             </div>
+            <hr color="#dedeca" style="margin:5px">
+            <div class="cardContent">
+
+                <span class="research_question">?</span>
+                Imagine that word embeddings have some understanding of subwords they consist of.
+                Why can this be useful?<br>
+                <details>
+                    <summary  class="research_summary">
+                       Possible answers</summary>
+                    <ul>
+                        <li><u>better understanding of morphology</u><br>
+                        By assigning a distinct vector to each word, we ignore morphology. Giving information about
+                            subwords can let the model know that different tokens can be forms of the same word.
+                        </li>
+                        <li><u>representations for unknown words</u><br>
+                        Usually, we can represent only those words, which are present in the vocabulary.
+                            Giving information about
+                            subwords can help to represent out-of-vocabulary words relying of their spelling.
+                        </li>
+                        <li><u>handling misspellings</u><br>
+                        Even if one character in a word is wrong, this is another token, and,
+                            therefore, a completely different embedding
+                            (or even unknown word). With information about subwords, misspelled word would still
+                            be similar to the original one.
+                        </li>
+                    </ul>
+
+                </details>
+
+
+                <br>
+                <span class="research_question">?</span>
+                How can we incorporate information about subwords into embeddings? Let's assume that the training pipeline
+                is fixed, e.g., Skip-Gram with Negative sampling.
+                <details>
+                    <summary class="research_summary">
+                        One of the existing approaches (FastText)</summary>
+                    <center>
+                        <img src="../resources/lectures/word_emb/research/fasttext-min.png"
+                             style="max-width:75%; margin-bottom:15px;"/>
+                    </center>
+
+                    One of the possible approaches is to compose a word vector from vectors for its subwords.
+                    For example, popular
+                    <a href="https://arxiv.org/pdf/1607.04606.pdf" target="_blank">FastText embeddings</a>
+                    operate as shown in the illustration. For each word, they add special start and end
+                    characters for each word. Then, in addition to the vector for this word, they also use vectors
+                    for character n-grams (which are also in the vocabulary). Representation of a word
+                    us sum of vectors for the word and its subwords, as shown in the picture.
+                    <br><br>
+                    Note that this changes only the way we form word vector; the whole training pipeline is the same
+                    as in the standard Word2Vec.
+
+                </details>
+
+            </div>
+        </div>
+
+        <!--##################################################-->
+
+        </div>
+        <div class="research_circle" style="float:left;"></div>
+        <!--##################################################-->
+        <!--##################################################-->
+        <!--##################################################-->
+
+
+        <br><br>
+
+        <!--##################################################-->
+        <!--##################################################-->
+        <!--##################################################-->
+
+        <div class="research_circle" style="float:left;"></div>
+        <h2 style="margin-top:-10px; float: left; padding-left:10px; padding-right:10px; color:#786702">
+            Semantic Change</h2>
+        <div class="box_yellow_left">
+
+        <!--##################################################-->
+        <div class="researchCard" id="thumbnail_research" >
+            <div class="researchIntro" id="research_meaning_shift">
+
+              <div class="cardContent">
+
+                  <div class="research_title">
+                      Detect Words that Changed Their Usage
+                  </div>
+
+                <hr color="#dedeca" style="margin:5px;">
+                  Imagine you have text corpora from different sources:
+                  time periods, populations, geographic regions, etc.
+                  In digital humanities and computational social science, people
+                  often want to find words that used differently in these corpora.
+
+
+              </div>
+                <div>
+                    <!--<div class="research_tag">neural</div>-->
+
+                      <img src="../resources/lectures/word_emb/research/semantic_change-min.png"
+                           alt="" style="margin-top:20px;" class="center"/>
+
+                </div>
+
+             </div>
+            <hr color="#dedeca" style="margin:5px">
+            <div class="cardContent">
+
+                <span class="research_question">?</span>
+                Given two text corpora, how would you detect which words are used differently/have different meaning?
+                Do not be shy to think about very simple ways!
+                <details>
+                    <summary  class="research_summary">
+                       Some of the existing attempts</summary>
+                    <h3><u>ACL 2020</u>: train embeddings, look at the neighbors</h3>
+                    <img src="../resources/lectures/word_emb/research/intersect_neighbors-min.png"
+                           alt="" style="margin-left:20px; float:right; width: 50%"/>
+
+                    A very simple approach
+                    is to train embeddings (e.g., Word2Vec) and look at the closest neighbors.
+                    If a word's closest neighbors are different for the two corpora, the word changed
+                    its meaning: remember that word embeddings reflect contexts they saw!
+                    <br><br>
+                    This approach was proposed in  <a href="https://www.aclweb.org/anthology/2020.acl-main.51.pdf" target="_blank">
+                    this ACL 2020 paper</a>. Formally, for each word the authors take k nearest neighbors
+                    in the two embeddings sets and count how many neighbors are the same. Large intersection
+                    means that the meaning is not different, small intersection - meaning is different.
+                    <br><br>
+                    <p class="data_text"><font color="#888"><u>Lena:</u> Note that while the approach is recent,
+                        it is extremely simple and works better than previous more complicated ideas.
+                        Never be afraid to try simple things - you'll be surprised how often they work!</font></p>
+
+
+                    <h3><u>Previous popular approach</u>: align two embedding sets</h3>
+                    <center>
+                        <img src="../resources/lectures/word_emb/research/emb_align-min.png"
+                             style="max-width:85%; margin-bottom:15px;"/>
+                    </center>
+                    <a href="https://www.aclweb.org/anthology/P16-1141.pdf" target="_blank">The previous popular approach</a>
+                    was to align two embeddings sets and to find word
+                    whose embeddings do not match well. Formally, let \(\color{#88a635}{W_1}, \color{#547dbf}{W_2} \in
+                    \mathbb{R}^{d\times |V|}\)
+                    be embedding sets trained on different corpora.
+                    To align the learned embeddings, the authors find the rotation
+                    \(R = \arg \max\limits_{Q^TQ=I}\parallel \color{#547dbf}{W_2}Q - \color{#88a635}{W_1}\parallel_F\) - this
+                    is called Orthogonal Procrustes. Using this rotation, we can align embedding sets
+                    and find words which do not match well: these are the words that change
+                    meaning with the corpora.
+
+                    <br><br>
+                    <p class="data_text"><font color="#888"><u>Lena:</u> You will implement Ortogonal
+                    Proctustes in your homework to align Russian and Ukranian embeddings. Find the notebook in
+                    <a href="https://github.com/yandexdataschool/nlp_course" target="_blank">the course repo</a>.
+                    </font></p>
+
+                </details>
+
+
+
+
+            </div>
+        </div>
+
+        <!--##################################################-->
+
+        </div>
+        <div class="research_circle" style="float:left;"></div>
+        <!--##################################################-->
+        <!--##################################################-->
+        <!--##################################################-->
+
+
+
+
+
+
+
+
+
+    </div>
+
+    <br><br><br><br>
+
+
+
+
+
+    <!--#########################################################################################################-->
+    <!--#########################################################################################################-->
+    <!--#########################################################################################################-->
+
+<div id="related_papers">
+        <img height="40" src="../resources/lectures/ico/book_empty.png"
+             style="float:left; padding-right:10px; margin-top:-20px;"/>
+        <h1 style="margin-left:10px; margin-right:20px; float: left; margin-top:-20px">Related Papers</h1>
+        <hr color="#facae9" style="height:5px">
+
+        <br><br>
+
+
+
+
+<fieldset style="border: 1px solid #dec8d6;
+    border-radius: 5px;">
+            <legend><p class="data_text"><strong>How to</strong></p></legend>
+            <ul class="data_text">
+            <li><u>High-level</u>: look at key results in short summaries -
+                get an idea of what's going on in the field.</li>
+            <li><u>A bit deeper</u>: for topics which interest you more,
+                read longer summaries with illustrations and explanations.
+                Take a walk through the authors' reasoning steps and key observations. </li>
+            <li><u>In depth</u>: read the papers you liked. Now, when you got the main idea, this
+            is going to be easier!</li>
+            </ul>
+</fieldset>
+
+        <br><br>
+
+        <p class="data_text" style="font-size:24px;color:#7a3160">What's inside:</p>
+        <ul class="data_text" style="font-size:20px;color:#7a3160">
+            <li><a href="#papers_good_old_classics">Good Old Classics</a></li>
+            <li><a href="#papers_analyzing_geometry">Analyzing Geometry</a></li>
+            <li><a href="#papers_biases">Biases in Word Embeddings</a></li>
+            <li><a href="#papers_semantic_change_box">Semantic Change</a></li>
+            <li><a href="#papers_theory">Theory to the Rescue!</a> - coming soon</li>
+            <li><a href="#papers_cross_lingual">Cross-Lingual Embeddings</a> - coming soon</li>
+            <li>... to be updated</li>
+        </ul>
+
+
+        <br><br>
+
+
+        <!--##################################################-->
+        <!--##################################################-->
+        <!--##################################################-->
+
+        <div class="paper_circle" style="float:left;"></div>
+        <h2 style="margin-top:-10px; float: left; padding-left:10px; padding-right:10px; color:#7a3160">
+            Good Old Classics</h2>
+        <div class="box_pink_left" id="papers_good_old_classics">
+
+
+        <!--##################################################-->
+        <div class="paperCard" id="thumbnail_paper" >
+            <div class="paperIntro">
+
+              <div class="cardContent">
+
+                  <div class="paper_title">
+                      <a href="https://papers.nips.cc/paper/5477-neural-word-embedding-as-implicit-matrix-factorization.pdf" target="_blank" class="links">
+                      Neural Word Embedding as Implicit Matrix Factorization
+                      </a>
+                  </div>
+
+                <div class="paper_authors">
+                    Omer Levy, Yoav Goldberg
+                </div>
+                <hr color="#f2e4ee" style="margin:5px;">
+                  <p>Theoretically, Word2Vec is not so different from
+                      matrix factorization approaches!
+                      Skip-gram with negative-sampling (SGNS) implicitly factorizes the shifted pointwise mutual information
+                      (PMI) matrix:
+                      \(PMI(\color{#88bd33}{w}, \color{#888}{c})-\log k\),
+                      where \(k\) is the number of negative examples in negative sampling.</p>
+              </div>
+
+                <div>
+                    <div class="conf_name">NeurIPS 2014</div>
+                  <a href="https://papers.nips.cc/paper/5477-neural-word-embedding-as-implicit-matrix-factorization.pdf" target="_blank">
+                      <img src="../resources/lectures/word_emb/papers/levy_goldberg_idea-min.png"
+                           alt="" style="margin-top:20px;" class="center"/>
+                  </a>
+                </div>
+
+             </div>
+            <hr color="#f2e4ee" style="margin:5px">
+            <div class="cardContent">
+                <details>
+                    <summary style="margin-left:10px;">More details</summary>
+
+                    Let us recall the loss function for <font color="#88bd33">central word w</font>
+            and <font color="#888">context word c</font>:
+
+    \[ J_{\color{#88bd33}{w}, \color{#888}{c}}(\theta)=
+    \log\sigma(\color{#888}{u_{c}^T}\color{#88bd33}{v_{w}}) +
+    \sum\limits_{\color{#888}{ctx}\in \{w_{i_1},\dots, w_{i_k}\}}
+            \log(1-\sigma({\color{#888}{u_{ctx}^T}\color{#88bd33}{v_w}})),
+    \]
+    where \(w_{i_1},\dots, w_{i_K}\) are the \(k\) negative examples chosen at this step.
+<br><br>
+            This is the loss for one step, but how the loss for the whole corpus will look like?
+            Surely we will meet the same word-context pairs several times. <!--Let's denote as
+            N(<font color="#88bd33">w</font>, <font color="#888">c</font>),
+            N(<font color="#88bd33">w</font>),
+            N(<font color="#888">c</font>) and N number of occurrences of the word-context pair
+            (<font color="#88bd33">w</font>, <font color="#888">c</font>), word
+            <font color="#88bd33">w</font>, context word <font color="#888">c</font> and the whole
+            number of words in the corpus respectively.-->
+<br><br>
+            We will meet:
+            <ul>
+                <li>(<font color="#88bd33">w</font>, <font color="#888">c</font>) word-context pair:
+                    \(N(\color{#88bd33}{w}, \color{#888}{c})\) times;</li>
+                <li><font color="#888">c</font> as negative example for
+                     <font color="#88bd33">w</font>:
+                    \( \frac{kN(\color{#88bd33}{w})N(\color{#888}{c})}{N}\) times.<br>
+                    <span class="data_text"><u>Why:</u> each time we sample a negative example,  we can pick
+                        <font color="#888">c</font>
+                    with the probability \(\frac{N(\color{#888}{c})}{N}\) -
+                    frequency of  <font color="#888">c</font>. Multiply by N(<font color="#88bd33">w</font>)
+                    because we meet <font color="#88bd33">w</font> exactly N(<font color="#88bd33">w</font>) times;
+                    multiply by \(k\) because
+                    we sample \(k\) negative examples.</span>
+                </li>
+            </ul>
+
+            Therefore, the total loss for all corpus is:
+            \[ J(\theta)=\sum\limits_{\color{#88bd33}{w}\in V, \color{#888}{c} \in V}
+    \left[N(\color{#88bd33}{w}, \color{#888}{c})\cdot
+            \log\sigma(\color{#888}{u_{c}^T}\color{#88bd33}{v_{w}}) +
+            \frac{kN(\color{#88bd33}{w})N(\color{#888}{c})}{N}\cdot
+            \log(1-\sigma(\color{#888}{u_{c}^T}\color{#88bd33}{v_{w}}))\right].\]
+
+            Partial derivative with respect to \(\color{#888}{u_{c}^T}\color{#88bd33}{v_{w}}\)
+            is  (check yourself):
+            <center>
+            <img src="../resources/lectures/word_emb/papers/pmi_from_gradient-min.png"
+                 style="max-width:70%; margin-bottom:15px;"/>
+            </center>
+
+            What we got is that Word2Vec (SGNS) optimizes something with an optimum
+            \(\color{#888}{u_{c}^T}\color{#88bd33}{v_{w}} = PMI(\color{#88bd33}{w}, \color{#888}{c})-\log k\).
+            It means that it learns such vectors \(\color{#888}{u_{c}}\) and
+            \(\color{#88bd33}{v_{w}}\) that their dot product is equal to the element of
+            PMI matrix shifted by \(\log k\) \(\Longrightarrow\) it
+                    implicitly learns to factorize this shifted PMI matrix.
+
+            <br><br>
+            This is a rather intuitive explanation of the idea behind the proof. For more formal version, look
+            in the paper.
+
+            Additionally, the authors use these results to factorize the shifted PMI matrix
+            directly and to see if the quality is the same as Word2Vec.
+
+
+
+                </details>
+            </div>
+        </div>
+
+        <!--##################################################-->
+
+
+        <!--##################################################-->
+        <div class="paperCard" id="thumbnail_paper" >
+            <div class="paperIntro">
+
+              <div class="cardContent">
+
+                  <div class="paper_title">
+                      <a href="https://www.aclweb.org/anthology/Q15-1016.pdf" target="_blank" class="links">
+                      Improving Distributional Similarity with Lessons Learned from Word Embeddings
+                      </a>
+
+                  </div>
+
+                <div class="paper_authors">
+                    Omer Levy, Yoav Goldberg, Ido Dagan
+                </div>
+                <hr color="#f2e4ee" style="margin:5px;">
+                <p>At some point, it was believed that
+                prediction-based embeddings are better than count-based. But this is not true:
+                we can adapt some "tricks" from the word2vec implementation to
+                count-based models and achieve the same results. Also, when evaluated properly,
+                GloVE is worse than Word2Vec.</p>
+
+              </div>
+
+                <div>
+                    <div class="conf_name">TACL 2015</div>
+                  <a href="https://www.aclweb.org/anthology/Q15-1016.pdf" target="_blank">
+                      <img src="../resources/lectures/word_emb/papers/levy_tacl15-min.png"
+                           alt="" style="margin-top:20px;" class="center"/>
+                  </a>
+                </div>
+
+             </div>
+            <hr color="#f2e4ee" style="margin:5px">
+            <div class="cardContent">
+                <details>
+                    <summary style="margin-left:10px;">More details</summary>
+
+                    <p>The paper tests many hyperparameters and has lots of experiments -
+                    I do recommend looking into it. Here I will provide the most important
+                        things you need to remember.</p>
+
+                    <h2>Eigenvalue Weighting: It is better to use SVD "incorrectly"</h2>
+
+                    <img width=100% src="../resources/lectures/word_emb/papers/eigenvalue_weighting-min.png"
+                           alt="" style="margin-bottom:15px;"/>
+                    <p>Typically, word and context vectors derived by SVD are represented by
+                    \(V_d\Sigma_d\) and \(U_d\): the eigenvalue matrix is included
+                    only in word vectors. However, for word similarity tasks
+                    this is not the optimal construction. The experiments show
+                    that symmetric variants are better: either include \(\sqrt{\Sigma_d}\) in both word and context vectors,
+                    or discard in both (look at the figure).</p>
+
+                    <img width=25% src="../resources/lectures/word_emb/papers/smooth_pmi-min.png"
+                           alt="" style="margin-left:20px; float:right;"/>
+                    <h2>Context Distribution Smoothing</h2>
+                    <p><a href="#choice_of_neg_examples">As we discussed in the lecture</a>,
+                    Word2Vec samples negative examples according to <font face="arial">smoothed</font>
+                    unigram distribution \(U^{3/4}\). This was done to pick rare words more frequently.</p>
+
+                    <p>We can do something similar when calculating PMI:
+                    instead of true context distribution, let's use the smoothed one (look at the
+                        figure to the right). As in Word2Vec, \(\alpha=0.75\).</p>
+
+                    <h2>Word and Context Vectors in Word2Vec: Try to Average</h2>
+                    <p>Recall that after training
+                        GloVe averages word and context vectors, while Word2Vec throws context vectors
+                    away. However, sometimes Word2Vec can also benefit from averaging: you have to try!</p>
+
+                    <h2>Main Results</h2>
+                    <ul>
+                        <li>with tuned hyperparameters, prediction-based embeddings are
+                            <font face="arial">not</font> better than count-based;</li>
+                        <li>with a couple of fixes, Word2Vec (SGNS) is
+                            <font face="arial">better than GloVe on every task</font>.</li>
+
+                    </ul>
+                </details>
+            </div>
+        </div>
+
+        <!--##################################################-->
+
+        </div>
+        <div class="paper_circle" style="float:left;"></div>
+
+        <!--##################################################-->
+        <!--##################################################-->
+        <!--##################################################-->
+
+
+
+
+
+        <br><br>
+
+        <!--##################################################-->
+        <!--##################################################-->
+        <!--##################################################-->
+
+        <div class="paper_circle" style="float:left;"></div>
+        <h2 style="margin-top:-10px; float: left; padding-left:10px; padding-right:10px; color:#7a3160">
+            Analyzing Geometry</h2>
+        <div class="box_pink_left" id="papers_analyzing_geometry">
+
+            <div class="paperCard" id="thumbnail_paper" >
+                <div class="paperIntro">
+
+                  <div class="cardContent">
+
+                      <div class="paper_title">
+                          <a href="https://www.aclweb.org/anthology/D17-1308.pdf" target="_blank" class="links">
+                          The strange geometry of skip-gram with negative sampling
+                          </a>
+
+                      </div>
+
+                    <div class="paper_authors">
+                        David Mimno, Laure Thompson
+                    </div>
+                    <hr color="#f2e4ee" style="margin:5px;">
+                      The negative sampling objective influences
+                      the geometry of embeddings: <font color="#88bd33">word vectors</font> \(\color{#88bd33}{v_{w}}\)
+                      lie in a narrow cone, diametrically opposed to the
+                      <font color="#888">context vectors</font> \(\color{#888}{u_{w}}\).
+                      Also, differently from GloVe, context vectors in Word2Vec point
+                      away from word vectors.
+                  </div>
+
+                    <div>
+                        <div class="conf_name">EMNLP 2017</div>
+                      <a href="https://www.aclweb.org/anthology/D17-1308.pdf" target="_blank">
+                          <img width=90% src="../resources/lectures/word_emb/papers/emnlp17_strange_geometry-min.png"
+                               alt="" style="margin-top:20px;" class="center"/>
+                      </a>
+                    </div>
+
+                 </div>
+                <hr color="#f2e4ee" style="margin:5px">
+                <div class="cardContent">
+                    <details>
+                        <summary style="margin-left:10px;">More details</summary>
+
+                        <h2>Word vectors point to roughly the same direction</h2>
+
+                        <p>The authors evaluate dot products of vectors for words of different frequencies
+                        with the mean of all vectors. Since the distributions are very close and dot products
+                        are positive,
+                            the vectors (mostly) point in the direction of the mean vector.</p>
+
+                            <center>
+                            <img src="../resources/lectures/word_emb/papers/strange_geometry_dot_prod_to_mean-min.png"
+                                 style="max-width:90%; margin-bottom:15px;"/>
+                            </center>
+
+                        <h2>Context vectors point away from word vectors</h2>
+                                <p>Here we do the same, but take context vectors (the mean is still for word vectors).
+                                For SGNS, dot products of context vectors with the mean of word vectors are negative.
+                                This means that context vectors point away from word vectors, and it is not reasonable
+                                to use them - we throw them away and use only word vectors.
+                                For GloVe, this is not the case: context vectors behave the same way as word
+                                vectors.
+                                </p>
+                        <center>
+                            <img src="../resources/lectures/word_emb/papers/strange_geometry_dot_prod_to_ctx-min.png"
+                                 style="max-width:100%; margin-bottom:15px;"/>
+                            </center>
+
+                        This is not all - find more in the paper!
+
+                    </details>
+                </div>
+            </div>
+
+            <div class="paperCard" id="thumbnail_paper" >
+                <div class="paperIntro">
+
+                  <div class="cardContent">
+
+                      <div class="paper_title">
+                          <a href="https://www.aclweb.org/anthology/P18-2036.pdf" target="_blank" class="links">
+                          Characterizing Departures from Linearity in Word Translation
+                          </a>
+
+                      </div>
+
+                    <div class="paper_authors">
+                        Ndapa Nakashole, Raphael Flauger
+                    </div>
+                    <hr color="#f2e4ee" style="margin:5px;">
+                    <p><a href="#analysis_cross_lingual">We learned </a>
+                    that we can (almost) match semantic spaces for different languages linearly.
+                        But is the "true" underlying mapping between languages
+                    indeed linear? If it is linear globally,
+                        then all local linear mappings
+                        have to be similar (to the global linear mapping, and hence to each other).
+                        Well, they are not.</p>
+
+                  </div>
+
+                    <div>
+                        <div class="conf_name">ACL 2018</div>
+                      <a href="https://www.aclweb.org/anthology/P18-2036.pdf" target="_blank">
+                          <img src="../resources/lectures/word_emb/papers/acl18_departures_from_linearity-min.png"
+                               alt="" style="margin-top:20px;" class="center"/>
+                      </a>
+                    </div>
+
+                 </div>
+                <hr color="#f2e4ee" style="margin:5px">
+                <div class="cardContent">
+                    <details>
+                        <summary style="margin-left:10px;">More details</summary>
+                        <br>
+                        <p>How to check if the "true" mapping between
+                            semantic spaces is indeed linear? The main idea is shown at the figure.</p>
+                        <center>
+                            <img src="../resources/lectures/word_emb/papers/global_linearity_idea-min.png"
+                                 style="max-width:100%; margin-bottom:15px;"/>
+                            </center>
+
+                        <h2>Local cross-lingual mappings are not similar</h2>
+                        <p>To check if the local mappings are similar, the authors</p>
+                        <ul>
+                            <li>for several words, take their neighborhood: a set of words
+                            with the cosine similarity at least some value;</li>
+                            <li>for each neighborhood, find the corresponding set of words in the other language;</li>
+                            <li>build local cross-linear mappings;</li>
+                            <li>evaluate how similar these mappings are: for two mappings \(M_1\) and
+                            \(M_2\) (e.g., for neighborhoods of words \(w_1\) and \(w_2\)),
+                             compute the cosine similarity between the vectorized versions of matrices
+                            \(M_1\) and \(M_2\).</li>
+                        </ul>
+
+                        <h2>For distant words, their local cross-lingual mappings are different</h2>
+                        <p>The authors found that</p>
+                        <ul>
+                            <li>local mappings for different neighborhoods can be very different. Therefore,
+                            "true" cross-lingual mapping between semantic spaces is not linear;</li>
+                            <li>for more distant words, the local cross-lingual mappings are more
+                                different.</li>
+                        </ul>
+
+
+                    </details>
+                </div>
+            </div>
+
+            <div class="paperCard" id="thumbnail_paper" >
+                <div class="paperIntro">
+
+                  <div class="cardContent">
+
+                      <div class="paper_title">
+                          <a href="https://openreview.net/pdf?id=HkuGJ3kCb" target="_blank" class="links">
+                          All-But-The-Top: Simple and Effective Post-Processing for Word Representations
+                          </a>
+                      </div>
+
+                    <div class="paper_authors">
+                        Jiaqi Mu, Pramod Viswanath
+                    </div>
+                    <hr color="#f2e4ee" style="margin:5px;">
+                      <p class="data_text" style="color:#888"><u>Lena</u>: This is an example of how analysis can improve quality! </p>
+                      <p> The authors noticed that
+                      (i) embeddings have non-zero mean and (ii) early singular values are much larger than the rest.
+                      When the authors eliminated these properties,
+                      they got large improvements in both intrinsic and extrinsic evaluation.</p>
+                  </div>
+
+                    <div>
+                        <div class="conf_name">ICLR 2018</div>
+                      <a href="https://openreview.net/pdf?id=HkuGJ3kCb" target="_blank">
+                          <img src="../resources/lectures/word_emb/papers/all_but_the_top-min.png"
+                               alt="" style="margin-top:30px;" class="center"/>
+                      </a>
+                    </div>
+
+                 </div>
+                <hr color="#f2e4ee" style="margin:5px">
+                <div class="cardContent">
+                    <details>
+                        <summary style="margin-left:10px;">More details</summary>
+                        <br>
+
+                        <h2>Step 1: Analyze</h2>
+                        <img src="../resources/lectures/word_emb/papers/all_but_top_svd_decay-min.png"
+                               alt="" style="width:35%;float:right;margin-left:20px;margin-top:-20px;"/>
+                        <p>For different word embedding models and languages, the authors found that vectors</p>
+                        <ul>
+                            <li><font face="arial">have a large non-zero mean</font></li>
+                            <li><font face="arial">are not isotropic</font><br>
+                            Look at the figure: if \(\sigma_i\) are singular values, then they decay almost exponentially
+                                for small \(i\), and remain roughly constant for the rest.
+                            </li>
+                        </ul>
+
+
+                        <img src="../resources/lectures/word_emb/papers/all_but_top_first_two_pca-min.png"
+                               alt="" style="width:65%;float:right;margin-left:20px;"/>
+                        <p>Additionally, the authors noticed that the top PCA components encode something which
+                        is not related to semantics: e.g., word frequency.</p>
+
+                        <br>
+                        <p>These properties seem to have nothing to do with semantic, i.e., something
+                        which is important for us in word embeddings. What if we eliminate these effects? Will it be better?</p>
+
+                        <h2>Step 2: Use Observations to Improve Quality</h2>
+                        <p>To eliminate the found properties, the authors</p>
+                        <ul>
+                            <li><font face="arial">subtract from word vectors their mean</font></li>
+                            <li><font face="arial">eliminate top PCA components</font><br>
+                            Let \(u_1, \dots, u_d\) be the PCA components of word vectors \(\{v_w, w\in V\}\).
+                                Then the vectors are updated as follows:
+                                \[v_w \longleftarrow v_w - \sum\limits_{i=1}^d(u_i^Tv_w)u_i.\]
+                            </li>
+                        </ul>
+
+                        <p><u>Result</u>: large improvements in various tasks, both intrinsic (similarity and analogy)
+                        and extrinsic (supervised classification).</p>
+
+                    </details>
+                </div>
+            </div>
+
+        </div>
+        <div class="paper_circle" style="float:left;"></div>
+
+        <!--##################################################-->
+        <!--##################################################-->
+        <!--##################################################-->
+
+
+
+        <br><br>
+
+
+
+
+        <!--##################################################-->
+        <!--##################################################-->
+        <!--##################################################-->
+
+        <div class="paper_circle" style="float:left;"></div>
+        <h2 style="margin-top:-10px; float: left; padding-left:10px; padding-right:10px; color:#7a3160">
+            Biases in Word Embeddings</h2>
+        <div class="box_pink_left" id="papers_biases">
+
+            <div class="paperCard" id="thumbnail_paper" >
+                <div class="paperIntro">
+
+                  <div class="cardContent">
+
+                      <div class="paper_title">
+                          <a href="https://papers.nips.cc/paper/6228-man-is-to-computer-programmer-as-woman-is-to-homemaker-debiasing-word-embeddings.pdf" target="_blank" class="links">
+                          Man is to Computer Programmer as Woman is to Homemaker? Debiasing Word Embeddings
+                          </a>
+
+                      </div>
+
+                    <div class="paper_authors">
+                        Tolga Bolukbasi, Kai-Wei Chang, James Zou, Venkatesh Saligrama, Adam Kalai
+                    </div>
+                    <hr color="#f2e4ee" style="margin:5px;">
+                    <p>Word embeddings are biased.
+                    For example, while their analogical reasoning can be desirable, e.g.
+                        "a <span class="data_text"><strong>man</strong></span> to a <span class="data_text"><strong>woman</strong></span>
+                            is as a <span class="data_text"><strong>king</strong></span> to a <span class="data_text"><strong>queen</strong></span>",
+                            but also
+                            "a <span class="data_text"><strong>man</strong></span> to a <span class="data_text"><strong>woman</strong></span>
+                            is as a <span class="data_text"><strong>physician</strong></span> to a <span class="data_text"><strong>nurse</strong></span>",
+                            which is an undesired association.</p>
+                  </div>
+
+                    <div>
+                        <div class="conf_name">NeurIPS 2016</div>
+                      <a href="https://papers.nips.cc/paper/6228-man-is-to-computer-programmer-as-woman-is-to-homemaker-debiasing-word-embeddings.pdf" target="_blank">
+                          <img src="../resources/lectures/word_emb/papers/gender_bias-min.png"
+                               alt="" style="margin-top:20px;" class="center"/>
+                      </a>
+                    </div>
+
+                 </div>
+                <hr color="#f2e4ee" style="margin:5px">
+                <div class="cardContent">
+                    <details>
+                        <summary style="margin-left:10px;">More details</summary>
+                        <br>
+                        <h2>Problem: Embeddings are Biased</h2>
+                        <p>The authors noticed that word embeddings are biased: they encode undesired gender
+                            associations. To find such examples, they take a seed pair (e.g., (a, b) =
+                            (<span class="data_text"><strong>he</strong></span>, <span class="data_text"><strong>she</strong></span>))
+                            and find pairs of words which have the same association:
+                            differ from each other in the same direction, and relatively close to each other.
+                            Formally, they pick pairs with the high score:
+                        </p>
+
+                        <img width=60% src="../resources/lectures/word_emb/papers/he_she_criteria-min.png"
+                               alt="" style="margin-top:20px;" class="center"/>
+                        <p>Look at the results below - definitely some pairs are biased!</p>
+                        <img width=80% src="../resources/lectures/word_emb/papers/he_she_results-min.png"
+                               alt="" style="margin-top:10px;margin-bottom:15px;" class="center"/>
+                        <p>This means that, for example, not only
+                        "a <span class="data_text"><strong>man</strong></span> to a <span class="data_text"><strong>woman</strong></span>
+                            is as a <span class="data_text"><strong>king</strong></span> to a <span class="data_text"><strong>queen</strong></span>",
+                            which is the desired behavior, but also
+                            "a <span class="data_text"><strong>man</strong></span> to a <span class="data_text"><strong>woman</strong></span>
+                            is as a <span class="data_text"><strong>physician</strong></span> to a <span class="data_text"><strong>nurse</strong></span>",
+                            which is an undesired association.
+                        </p>
+
+
+                        <img width=30% src="../resources/lectures/word_emb/papers/he_she_projections-min.png"
+                               alt="" style="margin-left:20px;float:right;"/>
+                        <h3>Gender-stereotypic occupations</h3>
+                        <p>To find the most gender-stereotypic occupations, the authors project occupations onto the
+                        <span class="data_text"><strong>he</strong></span>-<span class="data_text"><strong>she</strong></span>
+                        gender direction. Results are shown to the right.</p>
+                        <p>We can see that, for example, <span class="data_text"><strong>homemaker</strong></span>,
+                        <span class="data_text"><strong>nurse</strong></span>, <span class="data_text"><strong>librarian</strong></span>,
+                        <span class="data_text"><strong>stylist</strong></span> are mostly associated with women, while
+                        <span class="data_text"><strong>captain</strong></span>, <span class="data_text"><strong>magician</strong></span>,
+                            <span class="data_text"><strong>architect</strong></span>, <span class="data_text"><strong>warrior</strong></span> are
+                            more strongly associated with men.
+                        </p>
+
+                        <h2>Debiasing Word Embeddings</h2>
+                        <p> In <a href="https://papers.nips.cc/paper/6228-man-is-to-computer-programmer-as-woman-is-to-homemaker-debiasing-word-embeddings.pdf"
+                        target="_blank">
+                            the original paper</a>, the authors also propose several heuristics to
+                            <font face="arial">debias word embeddings</font> - remove the undesired associations as a post-processing step.
+                            Since a lot has been done on debiasing recently, for more details on this specific approach look in the original paper.
+                            For a more recent method, look at <a href="#paper_null_it_out">the next paper</a>.
+                        </p>
+
+                    </details>
+                </div>
+            </div>
+
+            <div class="paperCard" id="thumbnail_paper">
+                <div class="paperIntro"  id="paper_null_it_out">
+
+                  <div class="cardContent">
+
+                      <div class="paper_title">
+                          <a href="https://www.aclweb.org/anthology/2020.acl-main.647.pdf" target="_blank" class="links">
+                          Null It Out: Guarding Protected Attributes by Iterative Nullspace Projection
+                          </a>
+
+                      </div>
+
+                    <div class="paper_authors">
+                        Shauli Ravfogel, Yanai Elazar, Hila Gonen, Michael Twiton, Yoav Goldberg
+                    </div>
+                    <hr color="#f2e4ee" style="margin:5px;">
+                    <p>Iterative nullspace projection to debias word embeddings: </p>
+                        <ul>
+                            <li>train a linear classifier \(W\) to predict a property from embeddings (e.g., gender),</li>
+                            <li>linearly project embeddings on the \(W\)'s nullspace (\(x \rightarrow Px\), \(W(Px)=0\))
+                                - remove the information used for prediction;</li>
+                            <li>repeat until a classifier is not able to predict anything.</li>
+                      </ul>
+
+                  </div>
+
+                    <div>
+                        <div class="conf_name">ACL 2020</div>
+                      <a href="https://www.aclweb.org/anthology/2020.acl-main.647.pdf" target="_blank">
+                          <img src="../resources/lectures/word_emb/papers/null_it_out-min.png"
+                               alt="" style="margin-top:20px;" class="center"/>
+                      </a>
+                    </div>
+
+                 </div>
+                <hr color="#f2e4ee" style="margin:5px">
+                <div class="cardContent">
+                    <details>
+                        <summary style="margin-left:10px;">More details</summary>
+                        <br>
+
+                        <h2><u>Idea</u>: Remove Information Used by a Linear Classifier</h2>
+                        <p>We have to remove the information about some desired property (e.g., gender),
+                            but not to harm other properties of the embeddings.
+                            The authors proposed a very simple idea: train a linear classifier to predict this property
+                        from the embeddings, then remove the information this classifier used. </p>
+
+                        <img width=90% src="../resources/lectures/word_emb/papers/null_it_out_idea-min.png"
+                               alt="" style="margin-top:20px;" class="center"/>
+
+                        <p>If the classifier is linear,
+                        the removing part can be done easily: by projecting onto the classifier's decision boundary.
+                        This projection is the least harming way to remove the linear information about the property:
+                        it harms the distances between embeddings as little as possible.</p>
+
+                        <p><font face="arial">The method is iterative</font>: you have to repeat this (train a classifier and
+                            project to the new decision boundary) until the classifier is not able to predict anything
+                        meaningful. When a classifier can not predict the property, we know that all information has been removed.</p>
+
+
+                        <h2>Results: All Good</h2>
+                        <img width=25% src="../resources/lectures/word_emb/papers/null_it_out_steps-min.png"
+                               alt="" style="margin-left:20px;float:right;"/>
+
+                        <p><a href="https://www.aclweb.org/anthology/2020.acl-main.647.pdf">In the original paper</a>, you will
+                        find experiments showing that the method:</p>
+                        <ul>
+                            <li>does remove bias <br> <font color="#888">(look at the illustration to the right:
+                                t-SNE projection of GloVe vectors of the most gender-biased words at 0, 3, 18, 35 iterations of the algorithm),</font> </li>
+                            <li>does not hurt embedding quality <br>
+                                <font color="#888">(e.g., look at the closest neighbors before and after debiasing: see below)</font>.</li>
+                        </ul>
+
+                        <img width=90% src="../resources/lectures/word_emb/papers/null_it_out_before_after-min.png"
+                               alt="" style="margin-top:10px;margin-bottom:10px;" class="center"/>
+
+                        <p>For more formal things and more results and examples,
+                            look at <a href="https://www.aclweb.org/anthology/2020.acl-main.647.pdf">the original paper</a>.</p>
+
+
+                    </details>
+                </div>
+            </div>
+
+        </div>
+        <div class="paper_circle" style="float:left;"></div>
+
+        <!--##################################################-->
+        <!--##################################################-->
+        <!--##################################################-->
+
+
+        <br><br>
+
+
+        <!--##################################################-->
+        <!--##################################################-->
+        <!--##################################################-->
+
+        <div class="paper_circle" style="float:left;"></div>
+        <h2 style="margin-top:-10px; float: left; padding-left:10px; padding-right:10px; color:#7a3160">
+            Semantic Change</h2>
+        <div class="box_pink_left" id="papers_semantic_change_box">
+            <br><br>
+            <p style="margin-top:-20px;">Imagine you have text corpora from different sources: time periods, populations, geographic regions, etc.
+                In this part, the task is to find words that used differently in these corpora.</p>
+
+
+        <!--##################################################-->
+        <div id="paper_semantic_change_mapping_alert" style="display:block;">
+            <div class="paperCard" id="thumbnail_paper">
+
+            <div class="paperIntro" >
+
+              <div class="cardContent">
+
+                  <div class="paper_title">
+                      <a href="#paper_semantic_change_mapping_alert" class="links">
+                      Diachronic Word Embeddings Reveal Statistical Laws of Semantic Change
+                      </a>
+
+                  </div>
+
+                <div class="paper_authors">
+                    William L. Hamilton, Jure Leskovec, Dan Jurafsky
+                </div>
+                <hr color="#f2e4ee" style="margin:5px;">
+
+                  <p class="data_text" style="color:#888"><u>Lena</u>: This paper was used
+                      <!--<a href="#research_meaning_shift">was used</a>--> in
+                  the <a href="#research_thibking">Research Thinking</a> section. Here I've hidden
+                  from you the links and the content - better go there to think. But if you do want, you can learn about the paper here. </p>
+              </div>
+
+                <div>
+                    <div class="conf_name">ACL 2016</div>
+                     <p style="font-size:30px;text-align:center;margin-top:30px;">Spoiler alert!</p>
+
+                    <center>
+                    <img width=70% src="../resources/lectures/ico/dont_want_to_think.png"
+                       alt="" style="margin-top:-10px;" class="center"/>
+                    </center>
+
+                    <center>
+                      <img class="showMePaper" width=70% onclick="openPaper_semChange1()" src="../resources/lectures/ico/show_me_paper_lightgrey.png"
+                           alt="" style="margin-top:10px;" class="center"/>
+                    </center>
+
+
+                </div>
+
+             </div>
+
+            </div>
+            </div><!-- end of <div id="paper_semantic_change_neighbors_alert"> -->
+
+        <div id="paper_semantic_change_mapping" style="display:none;">
+        <div class="paperCard" id="thumbnail_paper">
+
+            <div class="paperIntro"  >
+
+              <div class="cardContent">
+
+                  <div class="paper_title">
+                      <a href="https://www.aclweb.org/anthology/P16-1141.pdf" target="_blank" class="links">
+                      Diachronic Word Embeddings Reveal Statistical Laws of Semantic Change
+                      </a>
+
+                  </div>
+
+                <div class="paper_authors">
+                    William L. Hamilton, Jure Leskovec, Dan Jurafsky
+                </div>
+                <hr color="#f2e4ee" style="margin:5px;">
+                <p>To find which words are used differently in two text corpora: </p>
+                    <ul>
+                        <li>train embeddings using each of the corpora,</li>
+                        <li>map linearly the two embedding spaces to each other;</li>
+                        <li>words whose vectors do not match well are the ones that changed their meaning.</li>
+                  </ul>
+
+              </div>
+
+                <div>
+                    <div class="conf_name">ACL 2016</div>
+                  <a href="https://www.aclweb.org/anthology/P16-1141.pdf" target="_blank">
+                      <img src="../resources/lectures/word_emb/papers/broadcast_semantic_change-min.png"
+                           alt="" style="margin-top:10px;" class="center"/>
+                  </a>
+                </div>
+
+             </div>
+
+
+            <hr color="#f2e4ee" style="margin:5px">
+            <div class="cardContent">
+
+                    <a onclick="closePaper_semChange1()" class="data_text" style="background-color:#f3f3f3;padding:5px;color:black;float:right;">
+                        I've changed my mind - hide ⤒</a>
+
+                <details>
+                    <summary style="margin-left:10px;">More details</summary>
+                    <br>
+
+                    <h2><u>Idea</u>: Align Two Embedding Sets, Find Words That Do Not Match</h2>
+                    <center>
+                        <img src="../resources/lectures/word_emb/research/emb_align-min.png"
+                             style="max-width:85%; margin-bottom:15px;"/>
+                    </center>
+                    <p>The main idea here is to align two embeddings sets and to find words
+                    whose embeddings do not match well. Formally, let \(\color{#88a635}{W_1}, \color{#547dbf}{W_2} \in
+                    \mathbb{R}^{d\times |V|}\)
+                    be embedding sets trained on different corpora.
+                    To align the learned embeddings, the authors find the rotation
+                    \[R = \arg \max\limits_{Q^TQ=I}\parallel \color{#547dbf}{W_2}Q - \color{#88a635}{W_1}\parallel_F.\]
+                    This
+                    is called Orthogonal Procrustes. Using this rotation, we can align embedding sets
+                    and find words that do not match well: these are the words that change
+                        meaning with the corpora.</p>
+
+                    <p>Once the embedding sets are aligned, we can evaluate the <font face="arial">semantic displacement</font>.
+                    Let \(\color{#88a635}{v_w^1}\) and \(\color{#547dbf}{v_w^2}\) be embedding of a word \(w\) in the two aligned spaces,
+                        then the semantic displacement
+                    is
+                    \(1- \cos (\color{#88a635}{v_w^1}, \color{#547dbf}{v_w^2}).\)
+                        Intuitively, this measures how well embeddings of the same word <font face="arial">"match"</font>
+                    in the aligned semantic spaces.</p>
+
+                    <h2><u>Experiments</u></h2>
+                    <h3>TL;DR: SGNS Embeddings are Better than PPMI and SVD(PPMI)</h3>
+
+                    <p>The authors looked at historical texts for different time periods and tried to apply the method
+                    on top of different embeddings: PPMI matrix, SVD(PPMI) and Word2Vec (SGNS). Below are examples of
+                    the top words found for each of the embedding methods.</p>
+                    <center>
+                        <img src="../resources/lectures/word_emb/papers/historical_top10-min.png"
+                             style="max-width:100%; margin-bottom:15px;"/>
+                    </center>
+
+                    <ul>
+                        <li><strong>bold</strong> - real semantic shifts (validated by examining literature)<br>
+                            <span class="data_text" style="color:#888;">E.g., <strong>headed</strong> shifted from primarily referring to the "top of a body/entity"
+                    to referring to "a direction of travel."</span></li>
+                        <li><u>underlined</u> - borderline cases (largely due
+                    to global genre/discourse shifts)<br>
+                            <span class="data_text" style="color:#888;">E.g., <strong>male</strong> has not changed in meaning, but its usage in discussions
+                    of “gender equality” is relatively new.</span></li>
+                        <li>unmarked - clear corpus artifacts<br>
+                            <span class="data_text" style="color:#888;">E.g., special, cover, and romance are artifacts from the covers of fiction books occasionally including
+                    advertisements etc.</span></li>
+                    </ul>
+                    <p>Looks like results obtained for SGNS embeddings are better.
+                        In <a href="https://www.aclweb.org/anthology/P16-1141.pdf">the original paper</a>, different kinds of evaluation were used to confirm this more formally.</p>
+
+                    <p>From <a href="#papers_semantic_change_box">the next paper</a>, you will learn how to detect semantic change more easily.</p>
+
+                    <h2>Note: The Alignment Idea is Used for Different Tasks</h2>
+                    <p>Note that the idea to linearly map different semantic spaces was also used for other tasks.
+                    For example, <a href="#analysis_cross_lingual">earlier in the lecture</a> we
+                    aligned semantic spaces for different languages to build vocabulary.</p>
+
+                    <p> For more advanced methods
+                    for building cross-lingual embeddings, look <a href="#papers_cross_lingual">here in the Related Papers</a>.</p>
+
+                </details>
+            </div>
+
+        </div>
+        </div> <!-- end of <div id="paper_semantic_change_neighbors"> -->
+
+        <!--##################################################-->
+            <script>
+            function openPaper_semChange1() {
+              document.getElementById("paper_semantic_change_mapping").style.display = "block";
+              document.getElementById("paper_semantic_change_mapping_alert").style.display = "none";
+            }
+
+            function closePaper_semChange1() {
+              document.getElementById("paper_semantic_change_mapping").style.display = "none";
+              document.getElementById("paper_semantic_change_mapping_alert").style.display = "block";
+            }
+            </script>
+
+
+        <!--##################################################-->
+        <div id="paper_semantic_change_neighbors_alert" style="display:block;">
+            <div class="paperCard" id="thumbnail_paper">
+
+            <div class="paperIntro" >
+
+              <div class="cardContent">
+
+                  <div class="paper_title">
+                      <a href="#paper_semantic_change_neighbors_alert" class="links">
+                      Simple, Interpretable and Stable Method for Detecting Words with Usage Change across Corpora
+                      </a>
+
+                  </div>
+
+                <div class="paper_authors">
+                    Hila Gonen, Ganesh Jawahar, Djamé Seddah, Yoav Goldberg
+                </div>
+                <hr color="#f2e4ee" style="margin:5px;">
+
+                  <p class="data_text" style="color:#888"><u>Lena</u>: This paper was used
+                      <!--<a href="#research_meaning_shift">was used</a>--> in
+                  the <a href="#research_thibking">Research Thinking</a> section. Here I've hidden
+                  from you the links and the content - better go there to think. But if you do want, you can learn about the paper here. </p>
+              </div>
+
+                <div>
+                    <div class="conf_name">ACL 2020</div>
+                     <p style="font-size:30px;text-align:center;margin-top:30px;">Spoiler alert!</p>
+
+                    <center>
+                    <img width=70% src="../resources/lectures/ico/dont_want_to_think.png"
+                       alt="" style="margin-top:-10px;" class="center"/>
+                    </center>
+
+                    <center>
+                      <img class="showMePaper" width=70% onclick="openPaper_semChange2()" src="../resources/lectures/ico/show_me_paper_lightgrey.png"
+                           alt="" style="margin-top:10px;" class="center"/>
+                    </center>
+
+
+                </div>
+
+             </div>
+
+            </div>
+            </div><!-- end of <div id="paper_semantic_change_neighbors_alert"> -->
+
+        <div id="paper_semantic_change_neighbors" style="display:none;">
+        <div class="paperCard" id="thumbnail_paper">
+
+            <div class="paperIntro"  >
+
+              <div class="cardContent">
+
+                  <div class="paper_title">
+                      <a href="https://www.aclweb.org/anthology/2020.acl-main.51.pdf" target="_blank" class="links">
+                      Simple, Interpretable and Stable Method for Detecting Words with Usage Change across Corpora
+                      </a>
+
+                  </div>
+
+                <div class="paper_authors">
+                    Hila Gonen, Ganesh Jawahar, Djamé Seddah, Yoav Goldberg
+                </div>
+                <hr color="#f2e4ee" style="margin:5px;">
+                <p>To find which words are used differently in two text corpora: </p>
+                    <ul>
+                        <li>train embeddings using each of the corpora,</li>
+                        <li>for each word, find closest neighbors in the two embedding spaces;</li>
+                        <li>the neighbors differ a lot → the words are used differently.</li>
+                  </ul>
+
+              </div>
+
+                <div>
+                    <div class="conf_name">ACL 2020</div>
+                  <a href="https://www.aclweb.org/anthology/2020.acl-main.51.pdf" target="_blank">
+                      <img src="../resources/lectures/word_emb/papers/semantic_change_2-min.png"
+                           alt="" style="margin-top:30px;" class="center"/>
+                  </a>
+                </div>
+
+             </div>
+
+
+            <hr color="#f2e4ee" style="margin:5px">
+            <div class="cardContent">
+
+                    <a onclick="closePaper_semChange2()" class="data_text" style="background-color:#f3f3f3;padding:5px;color:black;float:right;">
+                        I've changed my mind - hide ⤒</a>
+
+                <details>
+                    <summary style="margin-left:10px;">More details</summary>
+                    <br>
+
+                    <h2><u>Idea</u>: Train Embeddings, Look at the Neighbors</h2>
+                    <img src="../resources/lectures/word_emb/research/intersect_neighbors-min.png"
+                           alt="" style="margin-left:20px; float:right; width: 60%"/>
+
+                    <p>A very simple approach
+                    is to train embeddings (e.g., Word2Vec) and look at the closest neighbors.
+                    If a word's closest neighbors are different for the two corpora, the word changed
+                        its meaning: remember that word embeddings reflect contexts they saw!</p>
+
+                    <p>Formally, for each word \(w\) the authors take k nearest neighbors
+                    in the two embeddings sets: \(NN_1^k(w)\) and \(NN_2^k(w)\). Then they count how many neighbors are the same
+                    and define the <font face="arial">change score</font> as follows:
+                    \[score^k(w) = -|NN_1^k(w)\cap NN_2^k(w)|\]
+                    A large intersection
+                    means that the meaning is not different (the score will be low), small intersection - meaning is different
+                    (such words will receive a high score).</p>
+
+                    <h2>The Method is Interpretable</h2>
+
+                    <p>By design, the method is interpretable: it explains its decisions (i.e., why the word is used differently)
+                    by showing the closest neighbors of the word in the two embedding spaces. These neighbors reflect
+                        the word meanings in the two corpora. Look at the examples of found words along with the closest neighbors.
+                    </p>
+                    <center>
+                    <img src="../resources/lectures/word_emb/papers/semantic_nn_examples-min.png"
+                           alt="" style="width: 100%"/>
+                    </center>
+                   <!-- <p>Let us recall that in the previous approach, we also looked at the closest neighbors of the words
+                    found by the method to understand how they changed their meaning. However, in that case,
+                        this wasn't an explanation of the method decision. On the contrary, here
+                        closest neighbors provide an explicit explanation of the method.</p>-->
+
+                    <br>
+                    <h2>Other Good Things</h2>
+                    <p>Compared to the alignment-based methods (e.g., <a href="#papers_semantic_change_box">the previous paper</a>),
+                    this approach: </p>
+                    <ul>
+                        <li>is more stable,</li>
+                        <li>requires less tuning and word filtering.</li>
+                    </ul>
+
+                    <p>For more details, look at the paper.</p>
+
+
+                    <p class="data_text"><font color="#888"><u>Lena:</u> Note that while the approach is recent,
+                        it is extremely simple and works better than previous more complicated ideas.
+                        Never be afraid to try simple things - you'll be surprised how often they work!</font></p>
+
+
+                </details>
+            </div>
+
+        </div>
+        </div> <!-- end of <div id="paper_semantic_change_neighbors"> -->
+
+        <!--##################################################-->
+            <script>
+            function openPaper_semChange2() {
+              document.getElementById("paper_semantic_change_neighbors").style.display = "block";
+              document.getElementById("paper_semantic_change_neighbors_alert").style.display = "none";
+            }
+
+            function closePaper_semChange2() {
+              document.getElementById("paper_semantic_change_neighbors").style.display = "none";
+              document.getElementById("paper_semantic_change_neighbors_alert").style.display = "block";
+            }
+            </script>
+
+        </div>
+        <div class="paper_circle" style="float:left;"></div>
+
+        <!--##################################################-->
+        <!--##################################################-->
+        <!--##################################################-->
+
+
+        <br><br>
+
+
+        <!--##################################################-->
+        <!--##################################################-->
+        <!--##################################################-->
+
+        <div class="paper_circle" style="float:left;"></div>
+        <h2 style="margin-top:-10px; float: left; padding-left:10px; padding-right:10px; color:#7a3160">
+            Theory to the Rescue!</h2>
+        <div class="box_pink_left" id="papers_theory">
+
+            <br><br>
+
+         <div style="border: 0px solid #ccc;border-radius:15px;margin: 10px; padding: 4px;
+ background-color: #f5f5f5;margin-top:-20px;">
+
+            <div style="display: grid; grid-template-columns: 75% 25%; margin:10px;">
+                <div>
+                <div style="margin-top:20px;">
+                    <font style="font-size:25px;">Coming soon:</font>
+
+                    <ul>
+                        <li><a href="https://papers.nips.cc/paper/7368-on-the-dimensionality-of-word-embedding.pdf" target="_blank" class="links">
+                              On the Dimensionality of Word Embedding
+                              </a></li>
+                        <li><a href="http://proceedings.mlr.press/v97/allen19a/allen19a.pdf" target="_blank" class="links">
+                              Analogies Explained: Towards Understanding Word Embeddings
+                              </a></li>
+                    </ul>
+                </div>
+                    </div>
+                <div>
+                    <center>
+                    <img src="../resources/lectures/main/preview/pusheen_draws_on_white-min.png"
+                       style="width:80%; padding-top:20px; padding-bottom:20px;border-radius:50%">
+                    </center>
+                </div>
+            </div>
+
+        </div>
+
+
+        <!--##################################################-->
+        <!-- <div class="paperCard" id="thumbnail_paper" >
+            <div class="paperIntro">
+
+              <div class="cardContent">
+
+                  <div class="paper_title">
+                      <a href="https://papers.nips.cc/paper/7368-on-the-dimensionality-of-word-embedding.pdf" target="_blank" class="links">
+                      On the Dimensionality of Word Embedding
+                      </a>
+                  </div>
+
+                <div class="paper_authors">
+                    Zi Yin, Yuanyuan Shen
+                </div>
+                <hr color="#f2e4ee" style="margin:5px;">
+                  ???????
+              </div>
+
+                <div>
+                    <div class="conf_name">NeurIPS 2018</div>
+                  <a href="https://papers.nips.cc/paper/7368-on-the-dimensionality-of-word-embedding.pdf" target="_blank">
+                      <img src="../resources/lectures/word_emb/papers/???-min.png"
+                           alt="" style="margin-top:20px;" class="center"/>
+                  </a>
+                </div>
+
+             </div>
+            <hr color="#f2e4ee" style="margin:5px">
+            <div class="cardContent">
+                <details>
+                    <summary style="margin-left:10px;">More details</summary>
+
+
+
+
+                </details>
+            </div>
+        </div>
+        -->
+
+        <!--##################################################-->
+
+
+        <!--##################################################-->
+            <!--
+        <div class="paperCard" id="thumbnail_paper" >
+            <div class="paperIntro">
+
+              <div class="cardContent">
+
+                  <div class="paper_title">
+                      <a href="http://proceedings.mlr.press/v97/allen19a/allen19a.pdf" target="_blank" class="links">
+                      Analogies Explained: Towards Understanding Word Embeddings
+                      </a>
+
+                  </div>
+
+                <div class="paper_authors">
+                    Carl Allen, Timothy Hospedales
+                </div>
+                <hr color="#f2e4ee" style="margin:5px;">
+
+
+              </div>
+
+                <div>
+                    <div class="conf_name">ICML 2019</div>
+                  <a href="http://proceedings.mlr.press/v97/allen19a/allen19a.pdf" target="_blank">
+                      <img src="../resources/lectures/word_emb/papers/???-min.png"
+                           alt="" style="margin-top:20px;" class="center"/>
+                  </a>
+                </div>
+
+             </div>
+            <hr color="#f2e4ee" style="margin:5px">
+            <div class="cardContent">
+                <details>
+                    <summary style="margin-left:10px;">More details</summary>
+                    <br>
+
+                    Lorem ipsum dolor sit, amet consectetur adipisicing elit. A sed nobis ut exercitationem atque accusamus sit natus officiis totam blanditiis at eum nemo, nulla et quae eius culpa eveniet voluptatibus repellat illum tenetur, facilis porro. Quae fuga odio perferendis itaque alias sint, beatae non maiores magnam ad, veniam tenetur atque ea exercitationem earum eveniet totam ipsam magni tempora aliquid ullam possimus? Tempora nobis facere porro, praesentium magnam provident accusamus temporibus! Repellendus harum veritatis itaque molestias repudiandae ea corporis maiores non obcaecati libero, unde ipsum consequuntur aut consectetur culpa magni omnis vero odio suscipit vitae dolor quod dignissimos perferendis eos? Consequuntur!
+                </details>
+            </div>
+        </div>
+        -->
+
+        <!--##################################################-->
+
+        </div>
+        <div class="paper_circle" style="float:left;"></div>
+
+        <!--##################################################-->
+        <!--##################################################-->
+        <!--##################################################-->
+
+        <br><br>
+
+        <!--##################################################-->
+        <!--##################################################-->
+        <!--##################################################-->
+
+        <div class="paper_circle" style="float:left;"></div>
+        <h2 style="margin-top:-10px; float: left; padding-left:10px; padding-right:10px; color:#7a3160">
+            Cross-Lingual Embeddings</h2>
+        <div class="box_pink_left" id="papers_cross_lingual">
+
+            <br><br>
+
+         <div style="border: 0px solid #ccc;border-radius:15px;margin: 10px; padding: 4px;
+ background-color: #f5f5f5;margin-top:-20px;">
+
+            <div style="display: grid; grid-template-columns: 75% 25%; margin:10px;">
+                <div>
+                <div style="margin-top:20px;">
+                    <font style="font-size:25px;">Coming soon:</font>
+
+                    <ul>
+                        <li><a href="https://arxiv.org/abs/1710.04087" target="_blank" class="links">
+                              Word Translation Without Parallel Data
+                              </a></li>
+                        <li>... to be updated</li>
+
+                    </ul>
+                </div>
+                    </div>
+                <div>
+                    <center>
+                    <img src="../resources/lectures/main/preview/pusheen_reads_on_white-min.png"
+                       style="width:80%; padding-top:20px; padding-bottom:20px;border-radius:50%">
+                    </center>
+                </div>
+            </div>
+
+        </div>
+
+        <!--##################################################-->
+            <!--
+        <div class="paperCard" id="thumbnail_paper" >
+            <div class="paperIntro">
+
+              <div class="cardContent">
+
+                  <div class="paper_title">
+                      <a href="https://papers.nips.cc/paper/7368-on-the-dimensionality-of-word-embedding.pdf" target="_blank" class="links">
+                      On the Dimensionality of Word Embedding
+                      </a>
+                  </div>
+
+                <div class="paper_authors">
+                    Zi Yin, Yuanyuan Shen
+                </div>
+                <hr color="#f2e4ee" style="margin:5px;">
+                  ???????
+              </div>
+
+                <div>
+                    <div class="conf_name">NeurIPS 2018</div>
+                  <a href="https://papers.nips.cc/paper/7368-on-the-dimensionality-of-word-embedding.pdf" target="_blank">
+                      <img src="../resources/lectures/word_emb/papers/???-min.png"
+                           alt="" style="margin-top:20px;" class="center"/>
+                  </a>
+                </div>
+
+             </div>
+            <hr color="#f2e4ee" style="margin:5px">
+            <div class="cardContent">
+                <details>
+                    <summary style="margin-left:10px;">More details</summary>
+
+
+
+
+                </details>
+            </div>
+        </div>
+        -->
+
+        <!--##################################################-->
+
+
+        <!--##################################################-->
+            <!--
+        <div class="paperCard" id="thumbnail_paper" >
+            <div class="paperIntro">
+
+              <div class="cardContent">
+
+                  <div class="paper_title">
+                      <a href="http://proceedings.mlr.press/v97/allen19a/allen19a.pdf" target="_blank" class="links">
+                      Analogies Explained: Towards Understanding Word Embeddings
+                      </a>
+
+                  </div>
+
+                <div class="paper_authors">
+                    Carl Allen, Timothy Hospedales
+                </div>
+                <hr color="#f2e4ee" style="margin:5px;">
+
+
+              </div>
+
+                <div>
+                    <div class="conf_name">ICML 2019</div>
+                  <a href="http://proceedings.mlr.press/v97/allen19a/allen19a.pdf" target="_blank">
+                      <img src="../resources/lectures/word_emb/papers/???-min.png"
+                           alt="" style="margin-top:20px;" class="center"/>
+                  </a>
+                </div>
+
+             </div>
+            <hr color="#f2e4ee" style="margin:5px">
+            <div class="cardContent">
+                <details>
+                    <summary style="margin-left:10px;">More details</summary>
+                    <br>
+
+                    Lorem ipsum dolor sit, amet consectetur adipisicing elit. A sed nobis ut exercitationem atque accusamus sit natus officiis totam blanditiis at eum nemo, nulla et quae eius culpa eveniet voluptatibus repellat illum tenetur, facilis porro. Quae fuga odio perferendis itaque alias sint, beatae non maiores magnam ad, veniam tenetur atque ea exercitationem earum eveniet totam ipsam magni tempora aliquid ullam possimus? Tempora nobis facere porro, praesentium magnam provident accusamus temporibus! Repellendus harum veritatis itaque molestias repudiandae ea corporis maiores non obcaecati libero, unde ipsum consequuntur aut consectetur culpa magni omnis vero odio suscipit vitae dolor quod dignissimos perferendis eos? Consequuntur!
+                </details>
+            </div>
+        </div>
+-->
+        <!--##################################################-->
+
+        </div>
+        <div class="paper_circle" style="float:left;"></div>
+
+        <!--##################################################-->
+        <!--##################################################-->
+        <!--##################################################-->
+
+
+
+
+
+
+
+
+
+        <br><br>
+
+
+
+
+    </div>
+
+
+
+    <br><br>
+
+    <div id="have_fun">
+        <img height="40" src="../resources/lectures/ico/fun_empty.png"
+             style="float:left; padding-right:10px; margin-top:-20px;"/>
+        <h1 style="margin-left:10px; margin-right:20px; float: left; margin-top:-20px">Have Fun!</h1>
+        <hr color="#c8edfa" style="height:5px">
+        <br><br>
+
+<fieldset style="border: 1px solid #008cbf;
+    border-radius: 5px;font-size:18px;">
+            <legend><p class="data_text" style="font-size:24px;">
+                <font color="#008cbf"><strong>Semantic Space Surfer</strong></font></p></legend>
+            <p class="data_text">
+            Usually, we want word embeddings to reason as humans do. But let's try the opposite:
+                <strong>you</strong> will try to think as word embeddings.
+            </p>
+    <p class="data_text">You will see the analogical example, e.g. <strong>king - man + woman = ?</strong>,
+        and several possible answers. The task is to guess what word embeddings think.
+    </p>
+
+    <p class="data_text">Complete the task
+        (10 examples) and get a <strong>Semantic Space Surfer Certificate</strong>!</p>
+
+    <p class="data_text" style="font-size:14px;">
+        <font color="#888">Word embeddings: we used <font face="arial">glove-twitter-100</font>
+        from <a href="https://github.com/RaRe-Technologies/gensim-data">gensim-data</a>.
+        </font> </p>
+</fieldset>
+
+        <br><br>
+
+
+
+    <center>
+    <div class="quiz_window" id="semantic_space_surfer" style="width: 80%;">
+        <div class="cardContent">
+            <p class="prompt_text"></p>
+            <hr class="hr_in_question" color="#e9f0f2" style="margin:5px;">
+            <div class="answer_block">
+                <div class="answer_container" style="margin-right: 50px;"></div>
+                <div class="next" style="transform: translateX(-50px);">
+                    <div class="next_button"></div>
+                    <p class="next_text">next</p>
+                </div>
+            </div>
+            <p class="comment_text"></p>
+
+            <div class="result_block" style="display: none;">
+                <p class="result_header">Semantic Space Surfer: Level 0</p>
+                <p class="result_course_mention"><strong>NLP course <font color="#92bf32">| For YOU</font></strong>: Official Certificate</p>
+                <hr color="#e9f0f2" style="margin:5px;">
+                <div class="quiz_result"></div>
+            </div>
+            <progress class="progressbar" max="100" value="0"></progress>
+        </div>
+    </div>
+    </center>
+
+    <script>
+        var all_questions = [
+        // %%%%%%%%%%%%%%  1 - 10 %%%%%%%%%%%%%%%%%%%%
+         ['coder - brain + money = ?', // question
+ 'broker', // correct answer
+['banker', 'designer', 'shopper', 'freelance', 'promoter', 'ecommerce', 'makemoney', 'consultant', 'billing', 'retail'], // wrong options
+['You were close!', 'Well, almost', '', 'if only...', 'Close!', 'Naaah', 'This would be too simple', 'Nay', 'Almost there!', 'Naaah']], // comments for wrong options
+
+['italy - pizza + burger = ?',
+ 'denmark',
+['america', 'germany', 'spain', 'sweden', 'ireland', 'switzerland', 'england', 'russia'],
+['You are too human', '', '', '', '', '', '', '']],
+
+['cat - good + bad = ?',
+ 'dog',
+['pet', 'kitten', 'puppy', 'rat', 'hamster', 'pig', 'monkey', 'horse'],
+['', 'Why on earth do you think so?!', 'Why do you think so?!', 'I agree! Maybe we are too human', '', '', '', '']],
+
+['cat - scary + cute = ?',
+ 'kitty',
+['puppy', 'dog', 'pet', 'cutie', 'baby', 'bear', 'panda'],
+['Not cute enough', 'Naaa', 'Too vague', 'Too cute', '', 'If a bear is not scary for you, what is?!', 'Too cute']],
+
+['mom - tired + sleep = ?',
+ 'sister',
+['dad', 'grandma', 'friend', 'husband', 'brother', 'daughter', 'wife', 'aunt', 'cousin'],
+['', '', '', '', '', '', '', '', '']],
+
+['student - study + sleep = ?',
+ 'work',
+['school', 'home', 'friend', 'right', 'wake', 'drunk'],
+['', '', '', '', '', 'Easy, pal!']],
+
+['education - money + knowledge = ?',
+ 'leadership',
+['intelligence', 'ethics', 'literacy', 'science', 'philosophy', 'journalism', 'principles', 'educational', 'learning', 'understanding', 'academic', 'diversity'],
+['', '', '', '', '', '', '', '', '', '', '', '']],
+
+['education - knowledge + money = ?',
+ 'pay',
+['business', 'cash', 'tax', 'budget', 'bills', 'work'],
+['Almost!', 'Nah', 'Nay', 'Looks reasonable though', '', 'Too human']],
+
+['table - mouse + cat = ?',
+ 'kitchen',
+['room', 'floor', 'front', 'bath', 'bathroom', 'chair', 'pub', 'house', 'place'],
+['', '', '', '', '', '', '', '', '']],
+
+['table - cat + mouse = ?',
+ 'keyboard',
+['desk', 'corner', 'console', 'box', 'screen', 'cabinet', 'poker', 'front', 'hardware'],
+['', '', '', '', '', '', '', '', '']],
+
+// %%%%%%%%%%%%%%  11 - 20 %%%%%%%%%%%%%%%%%%%%
+
+['hedgehog - night + day = ?',
+ 'bunny',
+['puppy', 'penguin', 'dalek', 'squirrel', 'sleep'],
+['', '', '', '', '']],
+
+['vampire - blood + food = ?',
+ 'movie',
+['sushi', 'vegetarian', 'foodie'],
+['', '', '']],
+
+['dinner - night + day = ?',
+ 'lunch',
+['breakfast', 'meal', 'food', 'cooking', 'cake', 'brunch'],
+['Too early', 'Too vague', 'Too vague', 'Days for cooking, nights for eating?..', '', 'You were close!']],
+
+['dinner - wine + tea = ?',
+ 'lunch',
+['breakfast', 'cake', 'brunch', 'burger', 'eat', 'pizza', 'snack'],
+['', '', '', '', '', '', '']],
+
+['breakfast - coffee + tea = ?',
+ 'dinner',
+['lunch', 'meal', 'cake', 'brunch', 'dessert', 'snack', 'pancakes'],
+['', '', '', '', '', '', '']],
+
+['wine - alcohol + vitamin = ?',
+ 'cherry',
+['olive', 'coffee', 'almond', 'citrus', 'coconut', 'lime', 'cream', 'lemon'],
+['', '', '', '', '', '', '', '']],
+
+['morning - coffee + milk = ?',
+ 'boo',
+['day', 'baby', 'honey', 'night', 'sunday', 'today'],
+['Nay', 'Too human', '', '', "That's what I thought, but no", 'If this is how your "today" looks like - sorry :(']],
+
+['angel - good + evil = ?',
+ 'devil',
+['lucifer', 'demon', 'shadow', 'alien', 'tarzan', 'judas'],
+['', '', '', '', '', '']],
+
+['angel - food + drink = ?',
+ 'eva',
+['karina', 'abel', 'stella', 'amber', 'diana', 'luna', 'melody', 'lucy', 'miranda', 'dani', 'anna'],
+['', '', '', '', '', '', '', '', '', '', '']],
+
+['twitter - word + photo = ?',
+ 'instagram',
+['facebook', 'tumblr', 'flickr', 'fb', 'page', 'pic', 'blog'],
+['', '', '', '', '', '', '']],
+
+// %%%%%%%%%%%%%%  21 - 30 %%%%%%%%%%%%%%%%%%%%
+
+['instagram - word + photo = ?',
+ 'twitter',
+['ask.fm', 'bullshit', 'whatsapp', 'facebook', 'app', 'imessage', 'account'],
+['', '', '', '', '', '', '']],
+
+['facebook - word + photo = ?',
+ 'twitter',
+['ask.fm', 'whatsapp', 'internet', 'tweets', 'app', 'msn', 'fb', 'whats'],
+['', '', '', '', '', '', '', '']],
+
+['person - no + yes = ?',
+ 'kind',
+['guy', 'exactly', 'nice', 'definitely'],
+['', '', '', '']],
+
+['girl - skirt + pants = ?',
+ 'boy',
+['guy', 'like', 'swear', 'dude', 'friend', 'kid', 'you', 'right', 'mom'],
+['', '', '', '', '', '', '', '', '']],
+
+['gato - cat + dog = ?',
+ 'cachorro',
+['gordo', 'loco', 'burro', 'pesado', 'amigo', 'chico'],
+['', '', '', '', '', '']],
+
+['yoga - meditation + exercise = ?',
+ 'workout',
+['gym', 'jogging', 'fitness', 'strength', 'sport', 'guru', 'abs', 'vacation'],
+['', '', '', '', '', '', '', '']],
+
+['dinner - meat + vegetable = ?',
+ 'brunch',
+['lunch', 'soup', 'salad', 'breakfast', 'lasagna', 'thanksgiving', 'dessert', 'veggie', 'avocado'],
+['', '', '', '', '', '', '', '', '']],
+
+['lasagna - meat + vegetable = ?',
+ 'quinoa',
+['hummus', 'avocado', 'zucchini', 'butternut', 'chickpea', 'lentil', 'salad', 'carbonara', 'spinach', 'casserole', 'soup', 'veggie'],
+['', '', '', '', '', '', '', '', '', '', '', '']],
+
+['language - good + bad = ?',
+ 'grammar',
+['spelling', 'translation', 'understand', 'speak', 'stupid', 'accent'],
+['', '', '', '', '', '']],
+
+['reality - day + night = ?',
+ 'dreams',
+['show', 'television', 'behind', 'into', 'happens', 'hollywood', 'true', 'life'],
+['', '', '', '', '', '', '', '']],
+
+// %%%%%%%%%%%%%%  31 - 40 %%%%%%%%%%%%%%%%%%%%
+
+['tomato - red + green = ?',
+ 'avocado',
+['salad', 'vegetable', 'garlic', 'spinach', 'parsley', 'mushroom', 'soup', 'coriander', 'veg', 'basil', 'cucumber'],
+['', '', '', '', '', '', '', '', '', '', '']],
+
+['salad - vegetable + meat = ?',
+ 'chicken',
+['cheese', 'steak', 'sandwich', 'fried', 'sauce', 'burger', 'bread', 'lunch', 'fish'],
+['', '', '', '', '', '', '', '', '']],
+
+['duolingo - language + programming = ?',
+ 'coursera',
+['node.js', 'phonegap', 'xcode', 'netbeans', 'twitterrific', 'arcgis', 'powershell', 'realplayer'],
+['', '', '', '', '', '', '', '']],
+
+['skype - video + word = ?',
+ 'imessage',
+['facetime', 'wapp', 'msn', 'ping', 'whapp', 'viber'],
+['', '', '', '', '', '']],
+
+['skype - video + voice = ?',
+ 'imessage',
+['facetime', 'chat', 'kik', 'phone', 'viber', 'msn', 'tel', 'conversation'],
+['', '', '', '', '', '', '', '']],
+
+['piano - large + small = ?',
+ 'guitar',
+['violin', 'dance', 'drums', 'singing', 'ukulele', 'play', 'karate'],
+['', '', '', '', '', '', '']],
+
+['night - dark + light = ?',
+ 'morning',
+['day', 'tonight', 'today', 'sunday', 'good', 'afternoon', 'saturday', 'evening'],
+['', '', '', '', '', '', '', '']],
+
+['lion - large + small = ?',
+ 'cat',
+['simba', 'dog', 'monkey', 'tiger', 'fly'],
+['', '', '', '', '']],
+
+['bear - large + small = ?',
+ 'monkey',
+['baby', 'dog', 'cat', 'puppy', 'boy', 'daddy', 'bunny'],
+['', '', '', '', '', '', '']],
+
+['dad - large + small = ?',
+ 'mom',
+['sister', 'brother', 'friend', 'grandma', 'kid', 'grandpa', 'dude'],
+['', '', '', '', '', '', '']],
+
+
+// %%%%%%%%%%%%%%  41 - 50 %%%%%%%%%%%%%%%%%%%%
+
+['sandwich - cold + hot = ?',
+ 'burger',
+['steak', 'sushi', 'cheese', 'pizza', 'chicken', 'bacon', 'potato', 'sauce', 'cake', 'nachos'],
+['', '', '', '', '', '', '', '', '', '']],
+
+['water - drink + eat = ?',
+ 'fish',
+['food', 'ground', 'meat', 'chicken', 'salt', 'rice', 'sand', 'grass'],
+['', '', '', '', '', '', '', '']],
+
+['code - code + music = ?',
+ 'musician',
+['scientist', 'singer', 'guitarist', 'composer', 'songwriter', 'hip-hop', 'rocker', 'practitioner', 'pianist', 'frontman', 'vocalist'],
+['', '', '', '', '', '', '', '', '', '', '']],
+
+['musician - music + science = ?',
+ 'researcher',
+['psychologist', 'scholar', 'psychology', 'engineering', 'writer', 'historian', 'journalist'],
+['', '', '', '', '', '', '']],
+
+['guitarist - guitar + voice = ?',
+ 'singer',
+['vocalist', 'bassist', 'rapper', 'tribute', 'drummer', 'goldie', 'producer', 'chris', 'comedian'],
+['', '', '', '', '', '', '', '', '']],
+
+['hand - write + walk = ?',
+ 'feet',
+['front', 'side', 'floor', 'lift', 'leg', 'door', 'ground', 'down'],
+['', '', '', '', '', '', '', '']],
+
+['boat - water + sky = ?',
+ 'plane',
+['cruise', 'sunset', 'yacht', 'moon', 'harbour', 'jet'],
+['', '', '', '', '', '']],
+
+['bird - sky + water = ?',
+ 'fish',
+['flappy', 'fruit', 'goat', 'cow', 'turtle', 'salt'],
+['', '', '', '', '', '']],
+
+['life - laziness + inspiration = ?',
+ 'story',
+['amazing', 'world', 'great', 'beautiful', 'heart', 'made', 'quotes', 'dream'],
+['', '', '', '', '', '', '', '']],
+
+['computer - penguin + apple = ?',
+ 'microsoft',
+['windows', 'samsung', 'tablet', 'iphone', 'google', 'ipad', 'laptop', 'apps', 'blackberry', 'mobile', 'nokia'],
+['', '', '', '', '', '', '', '', '', '', '']],
+
+
+// %%%%%%%%%%%%%%  51 - 60 %%%%%%%%%%%%%%%%%%%%
+
+['sandwich - cold + hot = ?',
+ 'burger',
+['steak', 'sushi', 'cheese', 'pizza', 'chicken', 'bacon', 'potato', 'sauce', 'cake', 'nachos'],
+['', '', '', '', '', '', '', '', '', '']],
+
+['water - drink + eat = ?',
+ 'fish',
+['food', 'ground', 'meat', 'chicken', 'salt', 'rice', 'sand', 'grass'],
+['', '', '', '', '', '', '', '']],
+
+['code - code + music = ?',
+ 'musician',
+['scientist', 'singer', 'guitarist', 'composer', 'songwriter', 'hip-hop', 'rocker', 'practitioner', 'pianist', 'frontman', 'vocalist'],
+['', '', '', '', '', '', '', '', '', '', '']],
+
+['musician - music + science = ?',
+ 'researcher',
+['psychologist', 'scholar', 'psychology', 'engineering', 'writer', 'historian', 'journalist'],
+['', '', '', '', '', '', '']],
+
+['guitarist - guitar + voice = ?',
+ 'singer',
+['vocalist', 'bassist', 'rapper', 'tribute', 'drummer', 'goldie', 'producer', 'chris', 'comedian'],
+['', '', '', '', '', '', '', '', '']],
+
+['hand - write + walk = ?',
+ 'feet',
+['front', 'side', 'floor', 'lift', 'leg', 'door', 'ground', 'down'],
+['', '', '', '', '', '', '', '']],
+
+['boat - water + sky = ?',
+ 'plane',
+['cruise', 'sunset', 'yacht', 'moon', 'harbour', 'jet'],
+['', '', '', '', '', '']],
+
+['bird - sky + water = ?',
+ 'fish',
+['flappy', 'fruit', 'goat', 'cow', 'turtle', 'salt'],
+['', '', '', '', '', '']],
+
+['life - laziness + inspiration = ?',
+ 'story',
+['amazing', 'world', 'great', 'beautiful', 'heart', 'made', 'quotes', 'dream'],
+['', '', '', '', '', '', '', '']],
+
+['computer - penguin + apple = ?',
+ 'microsoft',
+['windows', 'samsung', 'tablet', 'iphone', 'google', 'ipad', 'laptop', 'apps', 'blackberry', 'mobile', 'nokia'],
+['', '', '', '', '', '', '', '', '', '', '']],
+
+
+// %%%%%%%%%%%%%%  61 - 70 %%%%%%%%%%%%%%%%%%%%
+
+['wolverine - night + day = ?',
+ 'thor',
+['x-men', 'ironman', 'superman', 'hulk', 'spiderman', 'deadpool', 'xmen', 'gandalf', 'jackman'],
+['', '', '', '', '', '', '', '', '']],
+
+['catwoman - cat + man = ?',
+ 'batman',
+['knight', 'tarantino', 'thor', 'stark', 'spiderman', 'robocop'],
+['', '', '', '', '', '']],
+
+['superman - super + woman = ?',
+ 'devil',
+['father', 'wife', 'werewolf', 'priest', 'superhero', 'witch', 'spiderman'],
+['', '', '', '', '', '', '']],
+
+['superhero - super + hero = ?',
+ 'villain',
+['wonderwoman', 'werewolf', 'character', 'spiderman', 'godfather', 'ghostbusters', 'marvel', 'batman', 'magician'],
+['', '', '', '', '', '', '', '', '']],
+
+['werewolf - wolf + hero = ?',
+ 'superhero',
+['villain', 'musician', 'footballer', 'ultraman', 'fighter', 'superstar', 'photographer'],
+['', '', '', '', '', '', '']],
+
+['ultraman - ultra + man = ?',
+ 'traitor',
+['paman', 'politician', 'tsubasa', 'aang', 'husband', 'kunde', 'hans', 'rvp', 'captain', 'persie'],
+['', '', '', '', '', '', '', '', '', '']],
+
+['frankenstein - psycho + hero = ?',
+ 'ghostbusters',
+['raj', 'thor', 'gandalf', 'avengers', 'villain', 'marvel', 'knight', 'merlin'],
+['', '', '', '', '', '', '', '']],
+
+['thor - mighty + weak = ?',
+ 'hulk',
+['batman', 'spiderman', 'dude', 'loki', 'robocop'],
+['', '', '', '', '']],
+
+['ironman - men + iron = ?',
+ 'thor',
+['spiderman', 'avengers', 'superman', 'looper', 'wolverine', 'marvel', 'hobbit', 'robocop', 'godzilla'],
+['', '', '', '', '', '', '', '', '']],
+
+['spiderman - spider + cats = ?',
+ 'batman',
+['superman', 'animals', 'dogs', 'minions', 'wolverine'],
+['', '', '', '', '']],
+
+
+// %%%%%%%%%%%%%%  71 - 80 %%%%%%%%%%%%%%%%%%%%
+
+['thor - loki + hobbit = ?',
+ 'trailer',
+['batman', 'django', 'spiderman', 'thrones', 'prometheus', 'knight', 'robocop'],
+['', '', '', '', '', '', '']],
+
+['loki - bad + good = ?',
+ 'hiddleston',
+['thor', 'payne', 'harry', 'klaus', 'boris'],
+['', '', '', '', '']],
+
+['superman - man + animals = ?',
+ 'turtles',
+['cats', 'dinosaurs', 'aliens', 'elephants', 'transformers', 'robots'],
+['', '', '', '', '', '']],
+
+['aliens - sky + earth = ?',
+ 'humans',
+['dinosaurs', 'robots', 'creatures', 'species', 'animals', 'monsters', 'superheroes', 'zombies', 'directionators'],
+['', '', '', '', '', '', '', '', '']],
+
+['zombies - dead + alive = ?',
+ 'aliens',
+['robots', 'krewella', 'dinosaurs', 'dreams', 'killers', 'humans', 'devil', 'miracles'],
+['', '', '', '', '', '', '', '']],
+
+['scientist - human + alien = ?',
+ 'robot',
+['nostradamus', 'starship', 'zombie', 'gorilla', 'rogue', 'fireflies', 'astronaut'],
+['', '', '', '', '', '', '']],
+
+['sherlock - harry + hermione = ?',
+ 'moriarty',
+['mycroft', 'himym', 'hitchcock', 'frankenstein', 'conan', 'moffat'],
+['', '', '', '', '', '']],
+
+['davidtennant - tennant + tardis = ?',
+ 'drwho',
+['mattsmith', 'dalek', 'sherlock', 'batman', 'moffat'],
+['', '', '', '', '']],
+
+['potter - radcliffe + davidtennant = ?',
+ 'drwho',
+['sherlock', 'batman', 'hermione'],
+['', '', '']],
+
+['dalek - tardis + hogwarts = ?',
+ 'muggle',
+['westeros', 'hamlet', 'sherlock', 'batman', 'hermione'],
+['', '', '', '', '']],
+
+        ];
+        var result_messages = [
+            "<img src='../resources/lectures/word_emb/fun/level_0_2.png' width=30% style='margin:30px;'><br><p style='text-align:center;'>Remove your cat from the screen and try again</p>",
+            "<img src='../resources/lectures/word_emb/fun/level_0_2.png' width=30% style='margin:30px;'><br><p style='text-align:center;'>Remove your cat from the screen and try again</p>",
+            "<img src='../resources/lectures/word_emb/fun/level_0_2.png' width=30% style='margin:30px;'><br><p style='text-align:center;'>Remove your cat from the screen and try again</p>",
+            "<img src='../resources/lectures/word_emb/fun/level_3.png' width=30% style='margin:30px;'><br><p style='text-align:center;'>You've tried the water, but you need more training</p>",
+            "<img src='../resources/lectures/word_emb/fun/level_4.png' width=30% style='margin:30px;'><br><p style='margin-left:60px;margin-right:60px;text-align:center;'>It’s hard to keep balance, but you’ve made the first steps - well done!</p>",
+            "<img src='../resources/lectures/word_emb/fun/level_5.png' width=25% style='margin:30px;'><br><p style='margin-left:60px;margin-right:60px;text-align:center;'>Good junior level!</p>",
+            "<img src='../resources/lectures/word_emb/fun/level_6.png' width=40% style='margin:30px;'><br><p style='margin-left:60px;margin-right:60px;text-align:center;'>More than a half - you’ve graduated from a surfing school!</p>",
+            "<img src='../resources/lectures/word_emb/fun/level_7.png' width=30% style='margin:30px;'><br><p style='text-align:center;'>You do it like a pro!</p>",
+            "<img src='../resources/lectures/word_emb/fun/level_8.png' width=40% style='margin:30px;'><br><p style='text-align:center;'>You were born a surfer!</p>",
+            "<img src='../resources/lectures/word_emb/fun/level_9.png' width=45% style='margin:30px;'><br><p style='margin-left:60px;margin-right:60px;text-align:center;'>Your surfing is so good, that it is hard to keep up with you!</p>",
+            "<img src='../resources/lectures/word_emb/fun/level_10.png' width=40% style='margin:30px;'><br><p style='text-align:center;'>Your surfing is true magic! Think about Hogwarts.</p>",
+        ] // n-th element will be displayed if user got n questions right
+
+        debug_show_correct = false; // display * after the correct answer
+        if (debug_show_correct)
+            all_questions.forEach(function(item) {item[1] += '*'})
+
+        // number of questions per run (chosen randomly)
+        var num_active_questions = result_messages.length - 1;
+        //var num_active_questions = 1;
+        var max_options_per_question = 4;  // also selected at random
+        var active_questions, current_question_index, current_score;
+        // questions in current run, initialized at prepare_questions
+
+        var quiz_div = document.getElementById('semantic_space_surfer');
+        var prompt_text = quiz_div.getElementsByClassName('prompt_text')[0];
+        var answers_box = quiz_div.getElementsByClassName('answer_container')[0];
+        var comment_text = quiz_div.getElementsByClassName('comment_text')[0];
+        var quiz_result = quiz_div.getElementsByClassName('quiz_result')[0];
+        var result_block = quiz_div.getElementsByClassName('result_block')[0];
+        var result_header = quiz_div.getElementsByClassName('result_header')[0];
+        var progressbar = quiz_div.getElementsByClassName('progressbar')[0];
+        var next = quiz_div.getElementsByClassName('next')[0];
+
+        // list all elements that should be shown and/or hidden in a given situation
+        var hidable_elements = [prompt_text, answers_box, next, comment_text, result_block,
+        quiz_div.getElementsByClassName('hr_in_question')[0]];
+        var elements_for_question = [prompt_text, answers_box, next, comment_text];
+        var elements_for_result = [result_block];
+
+        function start_quiz() {
+            current_question_index = current_score = 0;
+            active_questions = sample(all_questions, num_active_questions);
+            display_question();
+        }
+
+        function display_question() {
+            [prompt, correct_option, all_incorrect_options, comments] = active_questions[current_question_index]
+            comments = comments || [];
+            var chosen_options = sample(all_incorrect_options, max_options_per_question - 1);
+            chosen_options.push(correct_option);
+            chosen_options = shuffled(chosen_options);
+
+            var correct_index = chosen_options.indexOf(correct_option);
+            console.assert(correct_index != -1, "error: correct option was not chosen, this shouldn't happen")
+
+            prompt_text.innerHTML = prompt;
+            while (answers_box.firstChild)
+                answers_box.removeChild(answers_box.lastChild);
+            options_html = chosen_options.forEach(function(option, chosen_index){
+                html_raw = `<button class="answer_button"
+                                onclick="answer_onclick(${chosen_index}, ${correct_index},
+                                                        ${all_incorrect_options.indexOf(option)})">
+                              <p class="answer_text_tight">${option}</p></button>`
+                answers_box.appendChild(createElementFromHTML(html_raw))
+            })
+            comment_text.textContent = "Choose your answer"
+            progressbar.value = (current_question_index) / (active_questions.length) * 100;
+            next.onclick = null;
+
+            hidable_elements.forEach(function(elem) {elem.style.display = "none";});
+            elements_for_question.forEach(function(elem) {elem.style.display = "block";});
+            next.style.opacity = 0.2;
+        }
+        async function answer_onclick(chosen_index, correct_index, comment_index) {
+            var [_, correct_option, incorrect_options, comments] = active_questions[current_question_index]
+
+            for(let i = 0; i < answers_box.children.length; i++)
+                answers_box.children[i].disabled = true;
+
+            answers_box.children[chosen_index].style = "background-color: #ebf6fa;"
+            comment_text.textContent = "Drum roll..."
+            await sleep(0);
+            if (chosen_index == correct_index) {
+                current_score++;
+                comment_text.textContent = "Correct";
+                answers_box.children[chosen_index].style = "background-color: #fafff0; box-shadow: 0 6px 12px #6e8f27, 0 4px 4px #6e8f27";
+            }
+            else {
+                comment = comments[comment_index] || '';
+                comment_text.textContent = ((comment != '') ? comment : "Wrong");
+                answers_box.children[chosen_index].style = "background-color: #fcf5f5; box-shadow: 0 6px 12px #b32020, 0 4px 4px #b32020;";
+
+                answers_box.children[correct_index].style = "background-color: #fafff0; box-shadow: 0 6px 12px #6e8f27, 0 4px 4px #6e8f27;";
+            }
+            next.style.opacity = 1.0;
+            next.onclick = next_onclick;
+        }
+        function next_onclick(){
+            current_question_index++;
+            if (current_question_index < active_questions.length)
+                display_question()
+            else
+                display_result()
+        }
+        function display_result(){
+            reset_html = `<button class="answer_button" onclick="start_quiz()">
+                              <p class="answer_text_tight">Try again</p></button>`
+            quiz_result.innerHTML = `${result_messages[current_score]}<br>${reset_html}`;
+            result_header.innerHTML = `Semantic Space Surfer: Level ${current_score}`;
+            progressbar.value = 100;
+            hidable_elements.forEach(function(elem) {elem.style.display = "none";})
+            elements_for_result.forEach(function(elem) {elem.style.display = "block";})
+        }
+        function createElementFromHTML(html) {
+          var div = document.createElement('div');
+          div.innerHTML = html.trim();
+          return div.firstChild;
+        }
+        function sleep(ms) {return new Promise(resolve => setTimeout(resolve, ms));}
+        function sample(array, k) {
+             return array.map(a => [Math.random(), a]).sort().slice(0, k).map(pair => pair[1])
+        }
+        function shuffled(array) { return sample(array, array.length) }
+
+        // actually draw the first screen
+        start_quiz()
+
+    </script>
+
+<br><br><br><br><br><br>
+
+    </div>
+</div>
+
+</div>
+
+
+
