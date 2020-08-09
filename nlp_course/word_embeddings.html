@@ -622,8 +622,8 @@ for (i = 0; i < dropdown.length; i++) {
     For each position \(t =1, \dots, T\) in a text corpora,
         Word2Vec predicts context words within a m-sized window given the central
     word \(\color{#88bd33}{w_t}\):
-    \[\color{#88bd33}{\mbox{Likelihood}} = L(\theta)=
-    \prod\limits_{t=1}^T\prod\limits_{-m\le j \le m, j\neq 0}P(\color{#888}{w_{t+j}}|\color{#88bd33}{w_t}, \theta), \]
+    \[\color{#88bd33}{\mbox{Likelihood}} \color{black}= L(\theta)=
+    \prod\limits_{t=1}^T\prod\limits_{-m\le j \le m, j\neq 0}P(\color{#888}{w_{t+j}}|\color{#88bd33}{w_t}\color{black}, \theta), \]
      where \(\theta\) are all variables to be optimized.
 
     <!--The <font color="#88bd33">objective function</font> (aka <font color="#88bd33">loss function</font> or
@@ -648,7 +648,7 @@ for (i = 0; i < dropdown.length; i++) {
 
 <img height="240" src="../resources/lectures/word_emb/w2v/two_vocs_with_theta-min.png"
          style="float:right; margin-left: 25px; max-width:60%"/>
-    <h3 id="word2vec_calculate_p"><u>How to calculate</u> \(P(\color{#888}{w_{t+j}}|\color{#88bd33}{w_t}, \theta)\)?</h3>
+    <h3 id="word2vec_calculate_p"><u>How to calculate</u> \(P(\color{#888}{w_{t+j}}\color{black}|\color{#88bd33}{w_t}\color{black}, \theta)\)?</h3>
 
     <p>For each word \(w\) we will have two vectors:</p>
         <ul>
@@ -738,14 +738,14 @@ for (i = 0; i < dropdown.length; i++) {
     <p>We make these updates one at a time: each update is for
     a single pair of a center word and one of its context words.
     Look again at the loss function:
-    \[\color{#88bd33}{\mbox{Loss}} =J(\theta)= -\frac{1}{T}\log L(\theta)=
+    \[\color{#88bd33}{\mbox{Loss}}\color{black} =J(\theta)= -\frac{1}{T}\log L(\theta)=
     -\frac{1}{T}\sum\limits_{t=1}^T
-    \sum\limits_{-m\le j \le m, j\neq 0}\log P(\color{#888}{w_{t+j}}|\color{#88bd33}{w_t}, \theta)=
+    \sum\limits_{-m\le j \le m, j\neq 0}\log P(\color{#888}{w_{t+j}}\color{black}|\color{#88bd33}{w_t}\color{black}, \theta)=
     \frac{1}{T} \sum\limits_{t=1}^T
     \sum\limits_{-m\le j \le m, j\neq 0} J_{t,j}(\theta). \]
 
     For the center word \(\color{#88bd33}{w_t}\), the loss contains a distinct term
-    \(J_{t,j}(\theta)=-\log P(\color{#888}{w_{t+j}}|\color{#88bd33}{w_t}, \theta)\) for each of its context words
+    \(J_{t,j}(\theta)=-\log P(\color{#888}{w_{t+j}}\color{black}|\color{#88bd33}{w_t}\color{black}, \theta)\) for each of its context words
     \(\color{#888}{w_{t+j}}\).
 
     Let us look in more detail at just this one term and try to understand how to make an update for this step. For example,
@@ -766,9 +766,11 @@ for (i = 0; i < dropdown.length; i++) {
     the loss term for the central word <span class="data_text" style="font-weight:bold; color:#88bd33">cat</span>
     and the context word <span class="data_text" style="font-weight:bold; color:#888">cute</span> is:
 
-    \[ J_{t,j}(\theta)= -\log P(\color{#888}{cute}|\color{#88bd33}{cat}) = -\log \frac{\exp{\color{#888}{u_{cute}^T}\color{#88bd33}{v_{cat}}}}{
-        \sum\limits_{w\in Voc}\exp{\color{#888}{u_w^T}\color{#88bd33}{v_{cat}}}} =
-    -\color{#888}{u_{cute}^T}\color{#88bd33}{v_{cat}} - \log \sum\limits_{w\in Voc}\exp{\color{#888}{u_w^T}\color{#88bd33}{v_{cat}}}.
+    \[ J_{t,j}(\theta)= -\log P(\color{#888}{cute}\color{black}|\color{#88bd33}{cat}\color{black}) =
+        -\log \frac{\exp\color{#888}{u_{cute}^T}\color{#88bd33}{v_{cat}}}{
+       \sum\limits_{w\in Voc}\exp{\color{#888}{u_w^T}\color{#88bd33}{v_{cat}} }} =
+    -\color{#888}{u_{cute}^T}\color{#88bd33}{v_{cat}}\color{black}
+        - \log \sum\limits_{w\in Voc}\exp{\color{#888}{u_w^T}\color{#88bd33}{v_{cat}}}\color{black}{.}
         \]</p>
 
        <p> Note which parameters are present at this step:</p>
@@ -861,8 +863,8 @@ for (i = 0; i < dropdown.length; i++) {
     <p>
     Formally, the new loss function for this step is:
     \[ J_{t,j}(\theta)=
-    \log\sigma(\color{#888}{u_{cute}^T}\color{#88bd33}{v_{cat}}) +
-    \sum\limits_{w\in \{w_{i_1},\dots, w_{i_K}\}}\log\sigma({-\color{#888}{u_w^T}\color{#88bd33}{v_{cat}}}),
+    \log\sigma(\color{#888}{u_{cute}^T}\color{#88bd33}{v_{cat}}\color{black}) +
+    \sum\limits_{w\in \{w_{i_1},\dots, w_{i_K}\}}\log\sigma({-\color{#888}{u_w^T}\color{#88bd33}{v_{cat}}}\color{black}),
     \]
     where \(w_{i_1},\dots, w_{i_K}\) are the K negative examples chosen at this step
     and \(\sigma(x)=\frac{1}{1+e^{-x}}\) is the sigmoid function.</p>
@@ -871,8 +873,8 @@ for (i = 0; i < dropdown.length; i++) {
     \(\sigma(-x)=\frac{1}{1+e^{x}}=\frac{1\cdot e^{-x}}{(1+e^{x})\cdot e^{-x}} =
     \frac{e^{-x}}{1+e^{-x}}= 1- \frac{1}{1+e^{x}}=1-\sigma(x)\). Then the loss can also be written as:
     \[ J_{t,j}(\theta)=
-    \log\sigma(\color{#888}{u_{cute}^T}\color{#88bd33}{v_{cat}}) +
-    \sum\limits_{w\in \{w_{i_1},\dots, w_{i_K}\}}\log(1-\sigma({\color{#888}{u_w^T}\color{#88bd33}{v_{cat}}})).
+    \log\sigma(\color{#888}{u_{cute}^T}\color{#88bd33}{v_{cat}}\color{black}) +
+    \sum\limits_{w\in \{w_{i_1},\dots, w_{i_K}\}}\log(1-\sigma({\color{#888}{u_w^T}\color{#88bd33}{v_{cat}}}\color{black})).
         \]</p>
 
     <div class="card_with_ico">
@@ -962,8 +964,8 @@ for (i = 0; i < dropdown.length; i++) {
 
     <p>This is one of the tricks that made Word2Vec so simple. Look again at the loss function (for one step):
 \[ J_{t,j}(\theta)=
-    -\color{#888}{u_{cute}^T}\color{#88bd33}{v_{cat}} -
-    \log \sum\limits_{w\in V}\exp{\color{#888}{u_w^T}\color{#88bd33}{v_{cat}}}.
+    -\color{#888}{u_{cute}^T}\color{#88bd33}{v_{cat}}\color{black} -
+    \log \sum\limits_{w\in V}\exp{\color{#888}{u_w^T}\color{#88bd33}{v_{cat}}}\color{black}{.}
     \]
     When central and context words have different vectors, both the first term and dot products inside the exponents
     are linear with respect to the parameters (the same for the negative training objective).
@@ -973,7 +975,7 @@ for (i = 0; i < dropdown.length; i++) {
     <img class="ico" src="../resources/lectures/ico/dumpbell_empty.png"/>
     <div class="text_box_green">
     <p class="data_text">Repeat the derivations (loss and the gradients) for the case with one vector for each word
-    (\(\forall w \ in \ V, \color{#88bd33}{v_{w}} = \color{#888}{u_{w}}\) ). </p>
+    (\(\forall w \ in \ V, \color{#88bd33}{v_{w}}\color{black}{ = }\color{#888}{u_{w}}\) ). </p>
     </div>
     </div>
 
@@ -1187,7 +1189,7 @@ for (i = 0; i < dropdown.length; i++) {
         </div>
 
         <center>
-        <iframe frameborder="0" width="510" height="510"
+        <iframe frameborder="0" width="510" height="510" scrolling="no"
                 src="../resources/lectures/word_emb/analysis/glove100_twitter_top3k.html">
         </iframe>
         </center>
@@ -1351,13 +1353,13 @@ for (i = 0; i < dropdown.length; i++) {
         <p>The figure above illustrates <a href="https://arxiv.org/pdf/1309.4168.pdf" target="_blank">the approach proposed
         by Tomas Mikolov et al. in 2013</a> not long after the original Word2Vec. Formally,
         we are given a set of word pairs and their vector representations
-        \(\{\color{#88a635}{x_i}, \color{#547dbf}{z_i} \}_{i=1}^n\),
+        \(\{\color{#88a635}{x_i}\color{black}, \color{#547dbf}{z_i}\color{black} \}_{i=1}^n\),
         where \(\color{#88a635}{x_i}\) and \(\color{#547dbf}{z_i}\)
         are vectors for i-th word in the source language and its translation in the target.
 We want to find a transformation matrix W such that \(W\color{#547dbf}{z_i}\) approximates \(\color{#88a635}{x_i}\)
         : "matches" words from the dictionary.
         We pick \(W\) such that
-        \[W = \arg \min\limits_{W}\sum\limits_{i=1}^n\parallel W\color{#547dbf}{z_i} - \color{#88a635}{x_i}\parallel^2,\]
+        \[W = \arg \min\limits_{W}\sum\limits_{i=1}^n\parallel W\color{#547dbf}{z_i}\color{black} - \color{#88a635}{x_i}\color{black}\parallel^2,\]
             and learn this matrix by gradient descent.</p>
 
         <p>In the original paper, the initial vocabulary consists of the 5k most frequent words with their translations,
@@ -1852,11 +1854,11 @@ We want to find a transformation matrix W such that \(W\color{#547dbf}{z_i}\) ap
                     </center>
                     <a href="https://www.aclweb.org/anthology/P16-1141.pdf" target="_blank">The previous popular approach</a>
                     was to align two embeddings sets and to find word
-                    whose embeddings do not match well. Formally, let \(\color{#88a635}{W_1}, \color{#547dbf}{W_2} \in
+                    whose embeddings do not match well. Formally, let \(\color{#88a635}{W_1}\color{black}, \color{#547dbf}{W_2}\color{black} \in
                     \mathbb{R}^{d\times |V|}\)
                     be embedding sets trained on different corpora.
                     To align the learned embeddings, the authors find the rotation
-                    \(R = \arg \max\limits_{Q^TQ=I}\parallel \color{#547dbf}{W_2}Q - \color{#88a635}{W_1}\parallel_F\) - this
+                    \(R = \arg \max\limits_{Q^TQ=I}\parallel \color{#547dbf}{W_2}\color{black}Q - \color{#88a635}{W_1}\color{black}\parallel_F\) - this
                     is called Orthogonal Procrustes. Using this rotation, we can align embedding sets
                     and find words which do not match well: these are the words that change
                     meaning with the corpora.
@@ -1975,7 +1977,7 @@ We want to find a transformation matrix W such that \(W\color{#547dbf}{z_i}\) ap
                       matrix factorization approaches!
                       Skip-gram with negative-sampling (SGNS) implicitly factorizes the shifted pointwise mutual information
                       (PMI) matrix:
-                      \(PMI(\color{#88bd33}{w}, \color{#888}{c})-\log k\),
+                      \(PMI(\color{#88bd33}{w}\color{black}, \color{#888}{c}\color{black})-\log k\),
                       where \(k\) is the number of negative examples in negative sampling.</p>
               </div>
 
@@ -1996,10 +1998,10 @@ We want to find a transformation matrix W such that \(W\color{#547dbf}{z_i}\) ap
                     Let us recall the loss function for <font color="#88bd33">central word w</font>
             and <font color="#888">context word c</font>:
 
-    \[ J_{\color{#88bd33}{w}, \color{#888}{c}}(\theta)=
-    \log\sigma(\color{#888}{u_{c}^T}\color{#88bd33}{v_{w}}) +
-    \sum\limits_{\color{#888}{ctx}\in \{w_{i_1},\dots, w_{i_k}\}}
-            \log(1-\sigma({\color{#888}{u_{ctx}^T}\color{#88bd33}{v_w}})),
+    \[ J_{\color{#88bd33}{w}\color{black}, \color{#888}{c}}\color{black}(\theta)=
+    \log\sigma(\color{#888}{u_{c}^T}\color{#88bd33}{v_{w}}\color{black}) +
+    \sum\limits_{\color{#888}{ctx}\color{black}\in \{w_{i_1},\dots, w_{i_k}\}}
+            \log(1-\sigma({\color{#888}{u_{ctx}^T}\color{#88bd33}{v_w}}\color{black})),
     \]
     where \(w_{i_1},\dots, w_{i_K}\) are the \(k\) negative examples chosen at this step.
 <br><br>
@@ -2015,13 +2017,13 @@ We want to find a transformation matrix W such that \(W\color{#547dbf}{z_i}\) ap
             We will meet:
             <ul>
                 <li>(<font color="#88bd33">w</font>, <font color="#888">c</font>) word-context pair:
-                    \(N(\color{#88bd33}{w}, \color{#888}{c})\) times;</li>
+                    \(N(\color{#88bd33}{w}\color{black}, \color{#888}{c}\color{black})\) times;</li>
                 <li><font color="#888">c</font> as negative example for
                      <font color="#88bd33">w</font>:
-                    \( \frac{kN(\color{#88bd33}{w})N(\color{#888}{c})}{N}\) times.<br>
+                    \( \frac{kN(\color{#88bd33}{w}\color{black})N(\color{#888}{c}\color{black})}{N}\) times.<br>
                     <span class="data_text"><u>Why:</u> each time we sample a negative example,  we can pick
                         <font color="#888">c</font>
-                    with the probability \(\frac{N(\color{#888}{c})}{N}\) -
+                    with the probability \(\frac{N(\color{#888}{c}\color{black})}{N}\) -
                     frequency of  <font color="#888">c</font>. Multiply by N(<font color="#88bd33">w</font>)
                     because we meet <font color="#88bd33">w</font> exactly N(<font color="#88bd33">w</font>) times;
                     multiply by \(k\) because
@@ -2030,11 +2032,11 @@ We want to find a transformation matrix W such that \(W\color{#547dbf}{z_i}\) ap
             </ul>
 
             Therefore, the total loss for all corpus is:
-            \[ J(\theta)=\sum\limits_{\color{#88bd33}{w}\in V, \color{#888}{c} \in V}
-    \left[N(\color{#88bd33}{w}, \color{#888}{c})\cdot
-            \log\sigma(\color{#888}{u_{c}^T}\color{#88bd33}{v_{w}}) +
-            \frac{kN(\color{#88bd33}{w})N(\color{#888}{c})}{N}\cdot
-            \log(1-\sigma(\color{#888}{u_{c}^T}\color{#88bd33}{v_{w}}))\right].\]
+            \[ J(\theta)=\sum\limits_{\color{#88bd33}{w}\color{black}\in V, \color{#888}{c}\color{black} \in V}
+    \left[N(\color{#88bd33}{w}\color{black}, \color{#888}{c}\color{black})\cdot
+            \log\sigma(\color{#888}{u_{c}^T}\color{#88bd33}{v_{w}}\color{black}) +
+            \frac{kN(\color{#88bd33}{w}\color{black})N(\color{#888}{c}\color{black})}{N}\cdot
+            \log(1-\sigma(\color{#888}{u_{c}^T}\color{#88bd33}{v_{w}}\color{black}))\right].\]
 
             Partial derivative with respect to \(\color{#888}{u_{c}^T}\color{#88bd33}{v_{w}}\)
             is  (check yourself):
@@ -2044,7 +2046,8 @@ We want to find a transformation matrix W such that \(W\color{#547dbf}{z_i}\) ap
             </center>
 
             What we got is that Word2Vec (SGNS) optimizes something with an optimum
-            \(\color{#888}{u_{c}^T}\color{#88bd33}{v_{w}} = PMI(\color{#88bd33}{w}, \color{#888}{c})-\log k\).
+            \(\color{#888}{u_{c}^T}\color{#88bd33}{v_{w}}\color{black} =
+                    PMI(\color{#88bd33}{w}\color{black}, \color{#888}{c}\color{black})-\log k\).
             It means that it learns such vectors \(\color{#888}{u_{c}}\) and
             \(\color{#88bd33}{v_{w}}\) that their dot product is equal to the element of
             PMI matrix shifted by \(\log k\) \(\Longrightarrow\) it
@@ -2650,7 +2653,7 @@ We want to find a transformation matrix W such that \(W\color{#547dbf}{z_i}\) ap
                     </center>
 
                     <center>
-                      <img class="showMePaper" width=70% onclick="openPaper_semChange1()" src="../resources/lectures/ico/show_me_paper_lightgrey.png"
+                      <img class="showMePaper" width=70% onclick="openPaper_semChange1()" style="cursor:pointer;" src="../resources/lectures/ico/show_me_paper_lightgrey.png"
                            alt="" style="margin-top:10px;" class="center"/>
                     </center>
 
@@ -2716,11 +2719,13 @@ We want to find a transformation matrix W such that \(W\color{#547dbf}{z_i}\) ap
                              style="max-width:85%; margin-bottom:15px;"/>
                     </center>
                     <p>The main idea here is to align two embeddings sets and to find words
-                    whose embeddings do not match well. Formally, let \(\color{#88a635}{W_1}, \color{#547dbf}{W_2} \in
+                    whose embeddings do not match well. Formally, let \(\color{#88a635}{W_1}\color{black},
+                        \color{#547dbf}{W_2}\color{black} \in
                     \mathbb{R}^{d\times |V|}\)
                     be embedding sets trained on different corpora.
                     To align the learned embeddings, the authors find the rotation
-                    \[R = \arg \max\limits_{Q^TQ=I}\parallel \color{#547dbf}{W_2}Q - \color{#88a635}{W_1}\parallel_F.\]
+                    \[R = \arg \max\limits_{Q^TQ=I}\parallel \color{#547dbf}{W_2}\color{black}Q -
+                        \color{#88a635}{W_1}\color{black}\parallel_F.\]
                     This
                     is called Orthogonal Procrustes. Using this rotation, we can align embedding sets
                     and find words that do not match well: these are the words that change
@@ -2730,7 +2735,7 @@ We want to find a transformation matrix W such that \(W\color{#547dbf}{z_i}\) ap
                     Let \(\color{#88a635}{v_w^1}\) and \(\color{#547dbf}{v_w^2}\) be embedding of a word \(w\) in the two aligned spaces,
                         then the semantic displacement
                     is
-                    \(1- \cos (\color{#88a635}{v_w^1}, \color{#547dbf}{v_w^2}).\)
+                    \(1- \cos (\color{#88a635}{v_w^1}\color{black}, \color{#547dbf}{v_w^2}\color{black}).\)
                         Intuitively, this measures how well embeddings of the same word <font face="arial">"match"</font>
                     in the aligned semantic spaces.</p>
 
@@ -2826,7 +2831,7 @@ We want to find a transformation matrix W such that \(W\color{#547dbf}{z_i}\) ap
                     </center>
 
                     <center>
-                      <img class="showMePaper" width=70% onclick="openPaper_semChange2()" src="../resources/lectures/ico/show_me_paper_lightgrey.png"
+                      <img class="showMePaper" width=70% onclick="openPaper_semChange2()" style="cursor:pointer;" src="../resources/lectures/ico/show_me_paper_lightgrey.png"
                            alt="" style="margin-top:10px;" class="center"/>
                     </center>
 
@@ -3420,7 +3425,7 @@ We want to find a transformation matrix W such that \(W\color{#547dbf}{z_i}\) ap
 
 // %%%%%%%%%%%%%%  21 - 30 %%%%%%%%%%%%%%%%%%%%
 
-['instagram - word + photo = ?',
+['instagram - photo + word = ?',
  'twitter',
 ['ask.fm', 'bullshit', 'whatsapp', 'facebook', 'app', 'imessage', 'account'],
 ['', '', '', '', '', '', '']],
