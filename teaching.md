@@ -2,7 +2,7 @@
 layout: photolist
 title: Teaching & Supervising
 description: Information about the students I supervised and the courses I teach. 
-menu: yes
+menu: no
 order: 4
 ---
 

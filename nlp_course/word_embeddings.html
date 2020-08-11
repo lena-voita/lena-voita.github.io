@@ -9,7 +9,10 @@ Methods for learning word vectors: from count-based to prediction-based, includi
 <div class="sidebar" id="sidebar">
     <a href="javascript:void(0)" id="close_sidebar_btn" onclick="closeNav()"
    style="text-align:center;font-size:30px;padding:0px;">⇤</a>
-  <a class="active" href="#main_content"  style="font-weight: bold;">Word Embeddings</a>
+    <a class="active" href="../nlp_course.html" style="font-weight: bold;">
+        <img height="18" class='sidebar_ico' src="../resources/lectures/ico/course_logo.png" style="margin-right: 8px;margin-left: 8px;margin-top: 4px;"/>
+        NLP Course <font color="#92bf32" id="for_you_in_sidebar">| For You</font></a>
+  <a  href="#main_content"  style="font-weight: bold;">Word Embeddings</a>
     <a href="#one_hot_vectors">One-Hot Vectors</a>
   <a href="#distributional_semantics">Distributional Semantics</a>
     <a href="#pre_neural">Count-Based Methods</a>
@@ -47,6 +50,8 @@ Methods for learning word vectors: from count-based to prediction-based, includi
 <div class="sidebar" id="sidebar_small">
 
   <a class="active" onclick="openNav()" style="text-align:center;">☰</a>
+    <a href="../nlp_course.html" >
+        <img height="20" src="../resources/lectures/ico/course_logo.png" style="margin-right: 8px;margin-left: 8px;"/></a>
     <a href="#main_page_content" style="text-align:center; font-size:20px;color:#7ca81e"> <i class="fa fa-home"></i></a>
 
 <a href="#analysis_interpretability" id="sidebar_analysis"> <img height="25" src="../resources/lectures/ico/analysis_empty.png"/></a>
@@ -87,8 +92,7 @@ function onResize() {
   }
   else {
      document.getElementById("sidebar").style.display = "none";
-    document.getElementById("sidebar_small").style.display = "block";
-
+     document.getElementById("sidebar_small").style.display = "block";
   }
 }
 window.onresize = onResize;
@@ -619,7 +623,7 @@ for (i = 0; i < dropdown.length; i++) {
     <h2><u>Objective Function</u>: Negative Log-Likelihood</h2>
 
     <p>
-    For each position \(t =1, \dots, T\) in a text corpora,
+    For each position \(t =1, \dots, T\) in a text corpus,
         Word2Vec predicts context words within a m-sized window given the central
     word \(\color{#88bd33}{w_t}\):
     \[\color{#88bd33}{\mbox{Likelihood}} \color{black}= L(\theta)=
@@ -770,7 +774,7 @@ for (i = 0; i < dropdown.length; i++) {
         -\log \frac{\exp\color{#888}{u_{cute}^T}\color{#88bd33}{v_{cat}}}{
        \sum\limits_{w\in Voc}\exp{\color{#888}{u_w^T}\color{#88bd33}{v_{cat}} }} =
     -\color{#888}{u_{cute}^T}\color{#88bd33}{v_{cat}}\color{black}
-        - \log \sum\limits_{w\in Voc}\exp{\color{#888}{u_w^T}\color{#88bd33}{v_{cat}}}\color{black}{.}
+        + \log \sum\limits_{w\in Voc}\exp{\color{#888}{u_w^T}\color{#88bd33}{v_{cat}}}\color{black}{.}
         \]</p>
 
        <p> Note which parameters are present at this step:</p>
@@ -788,7 +792,7 @@ for (i = 0; i < dropdown.length; i++) {
 
     <center>
         <img src="../resources/lectures/word_emb/w2v/one_step_alg-min.png"
-             style="max-width:90%; margin-top:15px; margin-bottom:15px;"/>
+             style="max-width:90%; margin-top:15px; margin-bottom:0px;"/>
     </center>
 
     <br><br>
@@ -3739,6 +3743,216 @@ We want to find a transformation matrix W such that \(W\color{#547dbf}{z_i}\) ap
 ['westeros', 'hamlet', 'sherlock', 'batman', 'hermione'],
 ['', '', '', '', '']],
 
+// %%%%%%%%%%%%%%  81 - 90 %%%%%%%%%%%%%%%%%%%%
+
+['burger - round + square = ?',
+ 'kfc',
+['mcdonald', 'sushi', 'hotdog', 'bakery', 'bagel', 'buffet', 'steak', 'pizza'],
+['', '', '', '', '', '', '', '']],
+
+['cadbury - round + square = ?',
+ 'toblerone',
+['wafer', 'magnum', 'bambu', 'cokelat', 'oreo', 'almond', 'gingerbread'],
+['', '', '', '', '', '', '']],
+
+['gingerbread - square + round = ?',
+ 'pumpkin',
+['cookie', 'whip', 'pudding', 'cake', 'baking', 'homemade', 'crack', 'vanilla'],
+['', '', '', '', '', '', '', '']],
+
+['shortbread - square + round = ?',
+ 'biscuits',
+['entwined', 'pudding', 'neigh', 'nookie', 'truffles', 'ice-cream', 'nilla', 'bezzie'],
+['', '', '', '', '', '', '', '']],
+
+['student - hungry + wealthy = ?',
+ 'corporate',
+['grads', 'academic', 'equity', 'colleges', 'education', 'universities', 'funded', 'faculty', 'scholar'],
+['', '', '', '', '', '', '', '', '']],
+
+['sausage - small + big = ?',
+ 'bacon',
+['cheese', 'toast', 'steak', 'sandwich', 'chicken', 'ham', 'pancakes', 'roast', 'egg'],
+['', '', '', '', '', '', '', '', '']],
+
+['egg - boiled + fried = ?',
+ 'chicken',
+['cheese', 'sandwich', 'cake', 'fish', 'salad', 'bread', 'rice', 'steak', 'sausage', 'burger', 'soup'],
+['', '', '', '', '', '', '', '', '', '', '']],
+
+['spock - potter + hermione = ?',
+ 'uhura',
+['randal', 'nicholson', 'blaire', 'capuano', 'reeves', 'regan'],
+['', '', '', '', '', '']],
+
+['spock - startrek + starwars = ?',
+ 'anakin',
+['jedi', 'gandalf', 'skywalker', 'darth', 'lego', 'sheldon', 'superman', 'percy', 'chuck', 'sylvester', 'bruce', 'bob'],
+['', '', '', '', '', '', '', '', '', '', '', '']],
+
+['jedi - starwars + startrek = ?',
+ 'spock',
+['terminator', 'aryan', 'warlock', 'spidey', 'anakin', 'mech', 'fenrir', 'magneto', 'cyclops'],
+['', '', '', '', '', '', '', '', '']],
+
+// %%%%%%%%%%%%%%  91 - 100 %%%%%%%%%%%%%%%%%%%%
+
+['mathematician - career + life = ?',
+ 'philosopher',
+['proverb', 'cynic', 'glutton', 'misunderstood', 'socrates', 'pothead', 'psychopath', 'colorblind', 'drunkard'],
+['', '', '', '', '', '', '', '', '']],
+
+['sheldon - male + female = ?',
+ 'leonard',
+['carl', 'cooper', 'bruce', 'doug', 'lenny', 'marshall', 'steven'],
+['', '', '', '', '', '', '']],
+
+['thebigbangtheory - sheldon + potter = ?',
+ 'harrypotter',
+['twilight', 'saga', 'hungergames', 'dragonball', 'narnia', 'starwars'],
+['', '', '', '', '', '']],
+
+['thebigbangtheory - penny + hermione = ?',
+ 'theamazingspiderman',
+['mycroft', 'twoandahalfmen', 'grint', 'tautou', 'westwick'],
+['', '', '', '', '']],
+
+['c++ - language + drink = ?',
+ 'cider',
+['smirnoff', 'lemonade', 'alc', 'linux', 'redbull', 'wisk', 'juice', 'lime', 'fanta'],
+['', '', '', '', '', '', '', '', '']],
+
+['vodka - drink + eat = ?',
+ 'nutella',
+['banana', 'bacon', 'chocolate', 'butter', 'cheese', 'bananas', 'pasta', 'sandwich', 'pizza', 'waffles', 'oreos', 'milk'],
+['', '', '', '', '', '', '', '', '', '', '', '']],
+
+['bacon - eat + drink = ?',
+ 'vodka',
+['beer', 'drinks', 'whiskey', 'coke', 'soda', 'ketchup', 'coffee', 'lemonade', 'tequila', 'wine', 'pepsi', 'whisky'],
+['', '', '', '', '', '', '', '', '', '', '', '']],
+
+['javascript - language + drink = ?',
+ 'smirnoff',
+['cider', 'coffee', 'soda', 'coffe', 'juice', 'heineken', 'vodka', 'redbull'],
+['', '', '', '', '', '', '', '']],
+
+['c++ - language + animal = ?',
+ 'linux',
+['java', 'developer', 'acnl', 'perl', 'html'],
+['', '', '', '', '']],
+
+['java - language + animal = ?',
+ 'zombie',
+['minecraft', 'iguana', 'safari', 'monster', 'resident', 'manhattan', 'green', 'farm', 'orangutan'],
+['', '', '', '', '', '', '', '', '']],
+
+
+// %%%%%%%%%%%%%%  101 - 110 %%%%%%%%%%%%%%%%%%%%
+
+['copywriting - copy + writing = ?',
+ 'screenwriting',
+['ghostwriting', 'blogging', 'journaling', 'freelancing'],
+['', '', '', '']],
+
+['jazz - piano + fork = ?',
+ 'lobster',
+['longhorn', 'salt', 'grill', 'baltimore', 'sausage', 'shrimp', 'meat', 'olive', 'barbeque'],
+['', '', '', '', '', '', '', '', '']],
+
+['writer - shame + fame = ?',
+ 'producer',
+['publisher', 'author', 'blogger', 'indie', 'artist', 'editor', 'entrepreneur', 'creator'],
+['', '', '', '', '', '', '', '']],
+
+['research - code + novelty = ?',
+ 'stimulating',
+['translational', 'speculative', 'educational'],
+['', '', '']],
+
+['lobster - sea + earth = ?',
+ 'crab',
+['fish', 'bread', 'squirrel', 'cheese', 'bagel'],
+['', '', '', '', '']],
+
+['spock - calm + emotional = ?',
+ 'uhura',
+['kirk', 'gandalf', 'frodo'],
+['', '', '']],
+
+['research - science + art = ?',
+ 'design',
+['photography', 'graphic', 'illustration', 'portrait', 'blog', 'project'],
+['', '', '', '', '', '']],
+
+['sport - medal + health = ?',
+ 'lifestyle',
+['fitness', 'nutrition', 'wellness', 'community'],
+['', '', '', '']],
+
+['startup - money + science = ?',
+ 'innovation',
+['storytelling', 'entrepreneurship', 'technology', 'institute', 'enterprise', 'computing'],
+['', '', '', '', '', '']],
+
+['innovation - novelty + money = ?',
+ 'business',
+['marketing', 'startup', 'education'],
+['', '', '']],
+
+// %%%%%%%%%%%%%%  111 - 120 %%%%%%%%%%%%%%%%%%%%
+
+['sun - hot + cold = ?',
+ 'rain',
+['storm', 'moon', 'earth', 'darkness', 'winter'],
+['', '', '', '', '']],
+
+['human - sentient + furry = ?',
+ 'dog',
+['cat', 'bear', 'child', 'monkey', 'big', 'kid', 'boy'],
+['', '', '', '', '', '', '']],
+
+['hamburger - america + italy = ?',
+ 'lasagne',
+['tiramisu', 'toastie', 'spaghetti', 'croissant', 'kebab', 'baguette', 'hotdog', 'puding', 'gnocchi'],
+['', '', '', '', '', '', '', '', '']],
+
+['nutella - chocolate + banana = ?',
+ 'yogurt',
+['pasta', 'ketchup', 'butter', 'sandwich', 'waffle', 'oreos', 'avocado'],
+['', '', '', '', '', '', '']],
+
+['wizardry - fantasy + science = ?',
+ 'mathematics',
+['humanities', 'ethics', 'linguistics', 'theology', 'anthropology', 'coding', 'physics'],
+['', '', '', '', '', '', '']],
+
+['humanities - human + language = ?',
+ 'linguistics',
+['literature', 'sociology', 'economics', 'mathematics', 'geography', 'geometry', 'civics', 'physics'],
+['', '', '', '', '', '', '', '']],
+
+['calculus - formula + shape = ?',
+ 'geometry',
+['physics', 'chem', 'biology', 'geography', 'sociology', 'midterm', 'messed'],
+['', '', '', '', '', '', '']],
+
+['math - thinking + politics = ?',
+ 'economics',
+['science', 'physics', 'ethics', 'sociology'],
+['', '', '', '']],
+
+['bar - alcohol + coffee = ?',
+ 'cafe',
+['restaurant', 'bistro', 'grill', 'garden'],
+['', '', '', '']],
+
+['box - square + round = ?',
+ 'pack',
+['bag', 'table', 'luggage', 'fox'],
+['', '', '', '']],
+
+// %%%%%%%%%%%%%%  121 - 130 %%%%%%%%%%%%%%%%%%%%
         ];
         var result_messages = [
             "<img src='../resources/lectures/word_emb/fun/level_0_2.png' width=30% style='margin:30px;'><br><p style='text-align:center;'>Remove your cat from the screen and try again</p>",
