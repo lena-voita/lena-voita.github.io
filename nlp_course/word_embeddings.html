@@ -533,11 +533,24 @@ for (i = 0; i < dropdown.length; i++) {
 
             <img width="60%" src="../resources/lectures/word_emb/preneural/lsa-min.png"
              style="float:right; margin-left:20px;"/>
-            <p>Latent Semantic Analysis (LSA) analyzes a collection of documents.
+            <p><a href="http://lsa.colorado.edu/papers/JASIS.lsi.90.pdf">
+                Latent Semantic Analysis (LSA)</a> analyzes a collection of documents.
                 While in the previous approaches contexts served only to get word vectors
                 and were thrown away afterward, here we are also interested
                 in context, or, in this case, document vectors. LSA is one of the simplest topic models:
                 cosine similarity between document vectors can be used to measure similarity between documents.</p>
+    <p>The term "LSA" sometimes refers to a more general approach of applying SVD to a term-document
+    matrix where the term-document elements can be computed in different ways
+        (e.g., simple co-occurrence, tf-idf, or some other weighting).
+    </p>
+
+        <div class="text_box_green">
+        <p class="data_text"><u>Animation alert!</u>
+            <a href="https://en.wikipedia.org/wiki/Latent_semantic_analysis">LSA wikipedia page</a> has a nice
+    animation of the topic detection process in a document-word matrix - take a look!</p>
+        </div>
+
+
 
     </div>
 <br><br>
@@ -3953,6 +3966,113 @@ We want to find a transformation matrix W such that \(W\color{#547dbf}{z_i}\) ap
 ['', '', '', '']],
 
 // %%%%%%%%%%%%%%  121 - 130 %%%%%%%%%%%%%%%%%%%%
+
+['dream - good + scare = ?',
+ 'nightmare',
+['haunted', 'ghost', 'creepy', 'insidious', 'strange', 'sinister'],
+['', '', '', '', '', '']],
+
+['dream - night + day = ?',
+ 'world',
+['life', 'wish', 'love', 'fact', 'future', 'everything', 'thing'],
+['', '', '', '', '', '', '']],
+
+['shampoo - hair + body = ?',
+ 'spray',
+['lotion', 'conditioner', 'axe', 'mineral', 'deodorant', 'dispenser', 'paracetamol'],
+['', '', '', '', '', '', '']],
+
+['food - body + soul = ?',
+ 'family',
+['music', 'heaven', 'bread'],
+['', '', '']],
+
+['water - body + soul = ?',
+ 'fire',
+['joy', 'ocean', 'sky'],
+['', '', '']],
+
+['waffle - waff + soul = ?',
+ 'cream',
+['ice', 'life', 'taste', 'sound', 'heart', 'fruit'],
+['', '', '', '', '', '']],
+
+['horror - scary + funny = ?',
+ 'comedy',
+['story', 'epic', 'hilarious', 'drama', 'book'],
+['', '', '', '', '']],
+
+['shark - scary + funny = ?',
+ 'fish',
+['dolphin', 'turtle', 'tiger', 'goat', 'whale', 'duck', 'squid'],
+['', '', '', '', '', '', '']],
+
+['green - blue + red = ?',
+ 'orange',
+['brown', 'purple', 'yellow', 'pink'],
+['', '', '', '']],
+
+['vodka - russia + scotland = ?',
+ 'whisky',
+['tequila', 'pint', 'champagne', 'licor', 'martini'],
+['', '', '', '', '']],
+
+
+// %%%%%%%%%%%%%%  131 - 140 %%%%%%%%%%%%%%%%%%%%
+
+['vodka - russia + america = ?',
+ 'tequila',
+['whisky', 'pint', 'champagne', 'licor', 'martini', 'coca', 'nutella'],
+['', '', '', '', '', '', '']],
+
+['cookie - cook + wait = ?',
+ 'christmas',
+['bread', 'sandwich', 'soup', 'yogurt', 'easter'],
+['', '', '', '', '']],
+
+['starbucks - bucks + soul = ?',
+ 'cafe',
+['heaven', 'sushi', 'chocolate', 'music', 'angel'],
+['', '', '', '', '']],
+
+['starbucks - star + food = ?',
+ 'mcdonalds',
+['milkshake', 'donuts', 'cookies'],
+['', '', '']],
+
+['man - brain + emotion = ?',
+ 'true',
+['lie', 'respect', 'drama'],
+['', '', '']],
+
+['head - hair + brain = ?',
+ 'mind',
+['inside', 'mouth', 'thoughts', 'deep', 'hear', 'stomach'],
+['', '', '', '', '', '']],
+
+['elena - russia + scotland = ?',
+ 'bonnie',
+['lucy', 'phoebe', 'blaine', 'katherine', 'stana'],
+['', '', '', '', '']],
+
+['bear - russia + scotland = ?',
+ 'puppy',
+['forest', 'cat', 'dog', 'bunny', 'kitty', 'fluffy'],
+['', '', '', '', '', '']],
+
+['analogy - valid + crazy = ?',
+ 'funny',
+['reminds', 'weird', 'badass', 'insane', 'unreal', 'dude', 'strange'],
+['', '', '', '', '', '', '']],
+
+['remind - re + mind = ?',
+ 'knowing',
+['reason', 'doubt', 'either', 'forget', 'anything'],
+['', '', '', '', '']],
+
+// %%%%%%%%%%%%%%  141 - 150 %%%%%%%%%%%%%%%%%%%%
+
+
         ];
         var result_messages = [
             "<img src='../resources/lectures/word_emb/fun/level_0_2.png' width=30% style='margin:30px;'><br><p style='text-align:center;'>Remove your cat from the screen and try again</p>",
