@@ -3304,6 +3304,11 @@ We want to find a transformation matrix W such that \(W\color{#547dbf}{z_i}\) ap
         <font color="#888">Word embeddings: we used <font face="arial">glove-twitter-100</font>
         from <a href="https://github.com/RaRe-Technologies/gensim-data">gensim-data</a>.
         </font> </p>
+
+    <p class="data_text" style="font-size:14px;">
+        <font color="#888">Big thanks
+        <a href="https://github.com/justheuristic">Just Heuristic</a> for the help with technical issues! Just Heuristic - Just Fun!
+        </font> </p>
 </fieldset>
 
         <br><br>
@@ -4088,6 +4093,18 @@ We want to find a transformation matrix W such that \(W\color{#547dbf}{z_i}\) ap
             "<img src='../resources/lectures/word_emb/fun/level_10.png' width=40% style='margin:30px;'><br><p style='text-align:center;'>Your surfing is true magic! Think about Hogwarts.</p>",
         ] // n-th element will be displayed if user got n questions right
 
+        var result_certificates = ["pic.twitter.com/mPNDkKiBXf",
+                                    "pic.twitter.com/n18Nlc8iLX",
+                                    "pic.twitter.com/brRQX4tMCx",
+                                    "pic.twitter.com/hf4rTNPjAm",
+                                    "pic.twitter.com/ngxRPQoI4w",
+                                    "pic.twitter.com/pVTlQTsj2F",
+                                    "pic.twitter.com/Uwqbe2bCVR",
+                                    "pic.twitter.com/TQ9NHpgpFC",
+                                    "pic.twitter.com/qik86IMYNb",
+                                    "pic.twitter.com/MwLSq5dWPr",
+                                    "pic.twitter.com/ulsysCFNeU"];
+
         debug_show_correct = false; // display * after the correct answer
         if (debug_show_correct)
             all_questions.forEach(function(item) {item[1] += '*'})
@@ -4181,13 +4198,18 @@ We want to find a transformation matrix W such that \(W\color{#547dbf}{z_i}\) ap
                 display_result()
         }
         function display_result(){
+
+            console.log(result_certificates[current_score]);
             reset_html = `<button class="answer_button" onclick="start_quiz()">
-                              <p class="answer_text_tight">Try again</p></button>`
-            quiz_result.innerHTML = `${result_messages[current_score]}<br>${reset_html}`;
+                              <p class="answer_text_tight">Try again</p></button>`;
+            twit_text = `I'm%20a%20certified%20Semantic%20Space%20Surfer%20-%20Level%20${current_score}!%20Learn%20about%20Word%20Embeddings%20and%20have%20fun%20at%20%23NLPCourseForYou!%0A${result_certificates[current_score]}%0ATry%20yourself:%20https://lena-voita.github.io/nlp_course/word_embeddings.html%23have_fun`;
+            twit_button = `<a href="https://twitter.com/intent/tweet?text=${twit_text}" target="_blank"><span class="fa fa-twitter" style="margin-right:15px;font-size:30px;"></span>Tweet (with certificate!)</a>`;
+            quiz_result.innerHTML = `${result_messages[current_score]}<br>${reset_html}<br>${twit_button}`;
             result_header.innerHTML = `Semantic Space Surfer: Level ${current_score}`;
             progressbar.value = 100;
             hidable_elements.forEach(function(elem) {elem.style.display = "none";})
             elements_for_result.forEach(function(elem) {elem.style.display = "block";})
+
         }
         function createElementFromHTML(html) {
           var div = document.createElement('div');
