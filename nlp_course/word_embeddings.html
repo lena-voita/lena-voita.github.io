@@ -1031,6 +1031,27 @@ for (i = 0; i < dropdown.length; i++) {
         </div>
     </div>
 
+    <h3><u>The Effect of Window Size</u></h3>
+
+         <p>The size of the sliding window has a strong effect on the resulting
+        vector similarities.
+             For example, <a href="https://arxiv.org/pdf/1510.00726.pdf">this paper</a> notes that
+             larger windows tend to produce more topical similarities
+        (i.e. <font class="data_text"><strong>dog</strong></font>,
+             <font class="data_text"><strong>bark</strong></font> and
+             <font class="data_text"><strong>leash</strong></font> will be grouped together,
+             as well as
+             <font class="data_text"><strong>walked</strong></font>,
+             <font class="data_text"><strong>run</strong></font> and
+             <font class="data_text"><strong>walking</strong></font>),
+        while smaller windows tend to produce more functional and syntactic similarities
+             (i.e. <font class="data_text"><strong>Poodle</strong></font>,
+             <font class="data_text"><strong>Pitbull</strong></font>,
+             <font class="data_text"><strong>Rottweiler</strong></font>, or
+             <font class="data_text"><strong>walking</strong></font>,
+             <font class="data_text"><strong>running</strong></font>,
+             <font class="data_text"><strong>approaching</strong></font>).</p>
+
     <h3><u>(Somewhat) Standard Hyperparameters</u></h3>
     As always, the choice of hyperparameters usually depends on the task at hand;
     you can look at the original papers for more details.
