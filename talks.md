@@ -35,7 +35,7 @@ Program committee:
 * 06-08/2020 <span class="talk-title">_Information-Theoretic Probing with Minimum Description Length_</span> <a href="https://drive.google.com/file/d/1iP7P0nld_O8op2SLEEX-q7WSFA1rKlfk/view?usp=sharing" class="label slides">Slides</a>
 <br/>&nbsp; &nbsp; &nbsp; MIT (Massachusetts Institute of Technology) (remotely)
 <br/>&nbsp; &nbsp; &nbsp; DeepMind (remotely)
-<br/>&nbsp; &nbsp; &nbsp; [Grammarly AI](https://grammarly.ai/information-theoretic-probing-with-minimum-description-length/) (remotely)
+<br/>&nbsp; &nbsp; &nbsp; [Grammarly AI](https://grammarly.ai/information-theoretic-probing-with-minimum-description-length/) (remotely) <a href="https://www.youtube.com/watch?v=e1_PFc4b-4Y&feature=youtu.be" class="label video">Video</a>
 <br/>&nbsp; &nbsp; &nbsp; [NLP with Friends](https://nlpwithfriends.com)    <a href="https://drive.google.com/file/d/1owq2nenNOfh1u87M-ZxS_iHHtZLhBx5v/view?usp=sharing" class="label slides">Slides for Friends</a>
 * 01/2020 <span class="talk-title">_Analyzing Information Flow in Transformers_</span> <a href="https://drive.google.com/file/d/1bEiWUZDNbKAgMkt5PPF9sQl3x9AYNVoZ/view?usp=sharing" class="label slides">Slides</a>
 <br/>&nbsp; &nbsp; &nbsp; [Naver Labs Europe](https://europe.naverlabs.com/research/seminars/analyzing-information-flow-in-transformers/), Grenoble, France
