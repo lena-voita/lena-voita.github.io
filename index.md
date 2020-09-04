@@ -18,7 +18,7 @@ I'm a [__Facebook PhD Fellow__](https://research.fb.com/blog/2020/01/announcing-
 Previously, I was a __research scientist__ at [Yandex Research]({{site.yandex_research_main}}) and worked closely with the [Yandex Translate](https://translate.yandex.com) team<a onMouseOver="document.fox.src='/img/people/foxie.jpeg';" onMouseOut="document.fox.src='/img/people/lena-min.png';">.</a>
 I (still) [teach NLP](https://github.com/yandexdataschool/nlp_course) at the [Yandex School of Data Analysis](https://yandexdataschool.com).
 
-<span style="color:red">__New!__</span>    [__NLP Course__ <span style="color:#92bf32">__For You__</span>](https://lena-voita.github.io/nlp_course.html).
+<span style="color:red">__New!__</span>    [__NLP Course__ <span style="color:#92bf32">__For You__</span>](https://lena-voita.github.io/nlp_course.html)
 
 ## <span style="color:darkblue">News </span>
 
