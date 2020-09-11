@@ -880,7 +880,7 @@ for (i = 0; i < dropdown.length; i++) {
     <p>
     Formally, the new loss function for this step is:
     \[ J_{t,j}(\theta)=
-    \log\sigma(\color{#888}{u_{cute}^T}\color{#88bd33}{v_{cat}}\color{black}) +
+    -\log\sigma(\color{#888}{u_{cute}^T}\color{#88bd33}{v_{cat}}\color{black}) -
     \sum\limits_{w\in \{w_{i_1},\dots, w_{i_K}\}}\log\sigma({-\color{#888}{u_w^T}\color{#88bd33}{v_{cat}}}\color{black}),
     \]
     where \(w_{i_1},\dots, w_{i_K}\) are the K negative examples chosen at this step
@@ -890,7 +890,7 @@ for (i = 0; i < dropdown.length; i++) {
     \(\sigma(-x)=\frac{1}{1+e^{x}}=\frac{1\cdot e^{-x}}{(1+e^{x})\cdot e^{-x}} =
     \frac{e^{-x}}{1+e^{-x}}= 1- \frac{1}{1+e^{x}}=1-\sigma(x)\). Then the loss can also be written as:
     \[ J_{t,j}(\theta)=
-    \log\sigma(\color{#888}{u_{cute}^T}\color{#88bd33}{v_{cat}}\color{black}) +
+    -\log\sigma(\color{#888}{u_{cute}^T}\color{#88bd33}{v_{cat}}\color{black}) -
     \sum\limits_{w\in \{w_{i_1},\dots, w_{i_K}\}}\log(1-\sigma({\color{#888}{u_w^T}\color{#88bd33}{v_{cat}}}\color{black})).
         \]</p>
 
