@@ -18,15 +18,15 @@ I'm a [__Facebook PhD Fellow__](https://research.fb.com/blog/2020/01/announcing-
 Previously, I was a __research scientist__ at [Yandex Research]({{site.yandex_research_main}}) and worked closely with the [Yandex Translate](https://translate.yandex.com) team<a onMouseOver="document.fox.src='/img/people/foxie.jpeg';" onMouseOut="document.fox.src='/img/people/lena-min.png';">.</a>
 I (still) [teach NLP](https://github.com/yandexdataschool/nlp_course) at the [Yandex School of Data Analysis](https://yandexdataschool.com).
 
-<span style="color:red">__New!__</span>    [__NLP Course__ <span style="color:#92bf32">__For You__</span>](https://lena-voita.github.io/nlp_course.html)
+<span style="color:red">__New!__</span>    NLP Course <span style="color:#92bf32">For You</span> - look [here](https://lena-voita.github.io/nlp_course.html).
 
 ## <span style="color:darkblue">News </span>
 
+* 09/2020 __2__ papers _accepted to __EMNLP__ 2020_.
 * 06-08/2020 Invited talks at: MIT, DeepMind, [Grammarly AI](https://grammarly.ai/information-theoretic-probing-with-minimum-description-length/), Unbabel, [NLP with Friends](https://nlpwithfriends.com).
 * 04/2020 Our [BPE-dropout](https://arxiv.org/pdf/1910.13267.pdf) is _accepted to __ACL__ 2020_. 
 * 01/2020 I'm [awarded Facebook PhD Fellowhip](https://research.fb.com/blog/2020/01/announcing-the-recipients-of-the-2020-facebook-fellowship-awards/).
 * 01/2020 Invited talks at: [Rasa](https://www.meetup.com/ru-RU/Bots-Berlin-Build-better-conversational-interfaces-with-AI/events/267058207/), Google Research Berlin, [Naver Labs Europe](https://europe.naverlabs.com/research/seminars/analyzing-information-flow-in-transformers/), NLP track at [Applied Machine Learning Days at EPFL](https://appliedmldays.org/tracks/ai-nlp).
-* 09/2019 _To appear at __NeurIPS__ 2019_: [Sequence Modeling with Unconstrained Generation Order](https://arxiv.org/abs/1911.00176).
-* 08/2019 __2__ papers _accepted to __EMNLP__ 2019_!
-* 05/2019 __2__ papers _accepted to __ACL__ 2019_, one is oral!
+* 08-09/2019 __2__ papers _accepted to __EMNLP__ 2019_, one at __NeurIPS__ _2019_.
+* 05/2019 __2__ papers _accepted to __ACL__ 2019_, one is oral.
 

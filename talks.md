@@ -10,7 +10,7 @@ order: 3
 Program committee:
 * EMNLP: 2019 <span style="color:#abb089">(outstanding reviewer)</span>, 2020
 * ACL 2020
-* ICML 2020
+* ICML 2020 <span style="color:#abb089">(top-33% reviewer)</span>
 * NeurIPS 2020
 * Workshops: [RepL4NLP](https://sites.google.com/view/repl4nlp2020/home) 2020 <span style="font-size:0.9em">(at ACL)</span>, [DeeLIO](https://sites.google.com/view/deelio-ws/program-committee) 2020 <span style="font-size:0.9em">(at EMNLP)</span> 
 

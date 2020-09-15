@@ -8,7 +8,8 @@
   title: "Information-Theoretic Probing with Minimum Description Length"
   authors: "<u>Elena Voita</u> and Ivan Titov"
   doc-url:
-  conf: no_conf.png
+  conf_name: EMNLP
+  conf_year: 2020
   url: "https://arxiv.org/abs/2003.12298"
   code: "https://github.com/lena-voita/description-length-probing"
   blog: "https://lena-voita.github.io/posts/mdl_probes.html"
