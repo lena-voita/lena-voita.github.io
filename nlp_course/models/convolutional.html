@@ -1,0 +1,750 @@
+---
+layout: lecture
+title: Convolutional Models for Text
+description: Convolutional Neural Networks from building blocks to applications for specific tasks.
+---
+
+
+<div class="sidebar" id="sidebar">
+    <div class="sidebar_components">
+<a href="javascript:void(0)" id="close_sidebar_btn" onclick="closeNav()"
+   style="text-align:center;font-size:30px;padding:0px;">⇤</a>
+   <a class="active" href="../nlp_course.html" style="font-weight: bold;">
+        <img height="18" class='sidebar_ico' src="../../resources/lectures/ico/course_logo.png" style="margin-right: 8px;margin-left: 8px;margin-top: 4px;"/>
+        NLP Course <font color="#92bf32" id="for_you_in_sidebar">| For You</font></a>
+        <a href="#main_content" style="font-weight: bold;">Convolutional Networks</a>
+        <a href="#intro">Intuition</a>
+        <a href="#typical_model">A Typical Model</a>
+
+
+        <div class="dropdown-scope">
+           <a class="dropdown-btn active_caret" >Building Blocks
+            <i class="fa fa-caret-down"></i>
+          </a>
+          <div class="dropdown-container" style="display:block;">
+              <a href="#blocks_convolution"><span style="margin-right:15px;font-size:14px;">&#8226;</span>
+                    Convolution</a>
+              <a href="#blocks_pooling"><span style="margin-right:15px;font-size:14px;">&#8226;</span>
+                  Pooling</a>
+          </div>
+        </div>
+
+
+        <div class="dropdown-scope">
+           <a class="dropdown-btn active_caret" >Models for Specific Tasks
+            <i class="fa fa-caret-down"></i>
+          </a>
+          <div class="dropdown-container" style="display:block;">
+              <a href="#text_classification"><span style="margin-right:15px;font-size:14px;">&#8226;</span>
+                  Text Classification</a>
+                <a href="#language_modeling"><span style="margin-right:15px;font-size:14px;">&#8226;</span>
+                    Language Modeling</a>
+              <!--
+              <a href="#machine_translation"><span style="margin-right:15px;font-size:14px;">&#8226;</span>
+                    Machine Translation</a>
+                    -->
+          </div>
+        </div>
+
+
+<a href="#analysis_interpretability" id="sidebar_analysis">Analysis and Interpretability
+    <img height="25" src="../../resources/lectures/ico/analysis_empty.png" class="sidebar_ico"/></a>
+
+</div>
+</div>
+
+
+
+<div class="sidebar" id="sidebar_small">
+
+  <a class="active" onclick="openNav()" style="text-align:center;">☰</a>
+    <a href="../nlp_course.html" style="font-weight: bold;">
+        <img height="20" src="../../resources/lectures/ico/course_logo.png" style="margin-right: 8px;margin-left: 8px;"/></a>
+    <a href="#main_page_content" style="text-align:center; font-size:20px;color:#7ca81e"> <i class="fa fa-home"></i></a>
+
+<a href="#analysis_interpretability" id="sidebar_analysis"> <img height="25" src="../../resources/lectures/ico/analysis_empty.png"/></a>
+
+</div>
+
+
+<script>
+function openNav() {
+  document.getElementById("sidebar").style.display = "block";
+  document.getElementById("sidebar_small").style.display = "none";
+  document.getElementById("close_sidebar_btn").style.display = "block";
+}
+
+function closeNav() {
+  document.getElementById("sidebar").style.display = "none";
+  document.getElementById("sidebar_small").style.display = "block";
+  document.getElementById("close_sidebar_btn").style.display = "none";
+}
+
+</script>
+
+
+<script>
+function onResize() {
+  if (window.innerWidth >= 800) {
+     document.getElementById("sidebar").style.display = "block";
+     document.getElementById("sidebar_small").style.display = "none";
+     document.getElementById("close_sidebar_btn").style.display = "none";
+  }
+  else {
+     document.getElementById("sidebar").style.display = "none";
+    document.getElementById("sidebar_small").style.display = "block";
+
+  }
+}
+window.onresize = onResize;
+onResize();
+</script>
+
+<script>
+/* Loop through all dropdown buttons to toggle between hiding and showing its dropdown content - This allows the user to have multiple dropdowns without any conflict */
+var dropdown = document.getElementsByClassName("dropdown-btn");
+var i;
+
+for (i = 0; i < dropdown.length; i++) {
+  dropdown[i].addEventListener("click", function(event) {
+  this.classList.toggle("active_caret");
+  var dropdownButton = event.target || event.srcElement;
+  while(dropdownButton.className != "dropdown-scope")
+     dropdownButton = dropdownButton.parentElement;
+  var dropdownContent = dropdownButton.getElementsByClassName("dropdown-container")[0];
+
+  if (dropdownContent.style.display === "block") {
+  dropdownContent.style.display = "none";
+  } else {
+  dropdownContent.style.display = "block";
+  }
+  });
+}
+</script>
+
+
+
+<div class="wrapper" id="main_page_content">
+    <div class="header"><h1>Convolutional Neural Networks for Text</h1></div>
+
+
+<div class="main_content" id="main_content">
+
+<div id="intro">
+    <p class="data_text"><font color="#888">This is the <a href="">Convolutional Models Supplementary</a>.
+            It contains a
+            detailed description of convolutional models in general, as well as particular
+            model configurations for specific tasks.<br><br>
+        Most of the content is copied from the corresponding parts of the main course: I gathered them here
+        for convenience.
+        The news parts here are
+        <a href="#parameters">Parameters: Kernel size, Stride, Padding, Bias</a> and
+        <a href="#k_max_pooling">k-max pooling</a>.
+
+    </font>
+        </p>
+
+    <h2>Convolutions for Images and Translation Invariance</h2>
+    <p>Convolutional networks were originally developed for computer vision tasks. Therefore, let's first
+    understand the intuition behind convolutional models for images.</p>
+    <p>Imagine we want to classify an image into several classes, e.g. cat, dog, airplane, etc.
+        In this case, if you find a cat on an image, you <font face="arial">don't care where</font> on the image
+        this cat is: you care only that it is there somewhere.
+    </p>
+
+        <center>
+        <img src="../../resources/lectures/models/cnn/translation_cats-min.png"
+             style="max-width:100%; margin-bottom:20px;"/>
+        </center>
+    <p>
+    </p>
+
+    <div style="display:grid;grid-template-columns: 75% 25%;">
+
+        <div>
+            <p>Convolutional networks apply the same operation to small parts of an image: this is how they extract features.
+                Each operation is looking for a match with a pattern,
+                and a network learns which patterns are useful.
+                With a lot of layers, the learned patterns become and more complicated: from lines in the early layers
+                to very complicated patterns (e.g., the whole cat or dog) on the upper ones. You can look at the examples
+                in the <a href="#analysis_interpretability">Analysis and Interpretability</a> section.
+            </p>
+            <p>This property is called <font face="arial">translation invariance</font>:
+                <font face="arial">translation</font> because we are talking about shifts in space,
+                <font face="arial">invariance</font> because we want it to not matter.
+            </p>
+        </div>
+        <div>
+            <p style="text-align: center; float: right; display: block; margin-left:25px;
+                   margin-top:-10px; line-height:15px;">
+                <video width="100%" height="auto" loop autoplay muted style="margin-left: 20px;">
+                <source src="../../resources/lectures/models/cnn/cnn_with_cat.mp4" type="video/mp4">
+                </video>
+                <br />
+                <span style="font-size: small;">The illustration is adapted from the one taken from
+                <a href="https://github.com/vdumoulin/conv_arithmetic" target="_blank">this cool repo</a>.</span>
+            </p>
+        </div>
+    </div>
+
+
+
+    <h2>Convolutions for Text</h2>
+
+    <p>Well, for images it's all clear: e.g. we want to be able to move a cat because we don't care where the cat is.
+    But what about texts? At first glance, this is not so straightforward: we can not move phrases easily -
+        the meaning will change or we will get something that does not make much sense.
+    </p>
+
+    <p>However, there are some applications where we can think of the same intuition. Let's imagine
+    that we want to classify texts, but not cats/dogs as in images, but positive/negative sentiment.
+    Then there are some words and phrases which could be very informative "clues" (e.g.
+        <font class="data_text"><strong>it's been great</strong></font>,
+        <font class="data_text"><strong>bored to death</strong></font>,
+        <font class="data_text"><strong>absolutely amazing</strong></font>,
+        <font class="data_text"><strong>the best ever</strong></font>, etc), and others which are not important at all.
+        We don't care much where in a text we saw
+        <font class="data_text"><strong>bored to death</strong></font> to understand the sentiment, right?
+    </p>
+
+        <center>
+        <img src="../../resources/lectures/models/cnn/translation_texts-min.png"
+             style="max-width:100%; margin-bottom:20px;"/>
+        </center>
+
+
+
+<div id="typical_model">
+    <h2>A Typical Model: Convolution+Pooling Blocks</h2>
+
+    <p>Following the intuition above, we want to detect some patterns, but we don't
+        care much where exactly these patterns are. This behavior is implemented with
+        two layers:</p>
+    <ul>
+        <li><font face="arial">convolution</font>: finds matches with patterns (as the cat head we saw above);</li>
+        <li><font face="arial">pooling</font>: aggregates these matches over positions (either locally or globally).</li>
+    </ul>
+
+    <p>A typical convolutional model for texts is shown on the figure.
+        Usually,
+        a convolutional layer is applied to word embedding,
+        which is followed by a non-linearity
+            (usually ReLU) and
+            a pooling operation. These are the main building blocks of convolutional models:
+        for specific tasks, the configurations can be different, but these blocks are standard.
+    </p>
+
+
+
+    <center>
+    <img src="../../resources/lectures/models/cnn/typical_cnn_with_cat-min.png"
+         style="max-width:100%; margin-bottom:20px;"/>
+    </center>
+    <p>In the following, we discuss in detail the main building blocks, convolution and pooling,
+    then consider modeling modifications.
+    </p>
+
+    <p><u>Note</u> that modeling modifications for specific tasks are described in the corresponding lectures
+    of the main part of the course. We repeat applications for specific tasks here just for convenience.</p>
+
+
+</div>
+
+</div>
+
+
+    <div id="blocks_convolution">
+    <h1>Building Blocks: Convolution</h1>
+
+
+
+        <div style="display:grid;grid-template-columns: 75% 25%;">
+
+            <div>
+            <p>Convolutions in computer vision go over an image with a
+                sliding window and apply the same operation,
+                <font face="arial">convolution filter</font>, to each window.
+                A convolution layer usually has several filters, and
+                each filter detects a different pattern (more on this below).
+            </p>
+
+            <p>The illustration (taken from <a href="https://github.com/vdumoulin/conv_arithmetic" target="_blank">this cool repo</a>)
+            shows this process for one filter: the bottom is the input image, the top is the filter output.
+                Since an image has two dimensions (width and height), the convolution is two-dimensional.
+            </p>
+            </div>
+            <div>
+                <p style="text-align: center; float: right; display: block; margin-left:25px;
+         margin-top:-10px; line-height:15px;">
+            <img src="../../resources/lectures/models/cnn/same_padding_no_strides.gif"/><br />
+            <span style="font-size: small;">Convolution filter for images. The illustration is from
+        <a href="https://github.com/vdumoulin/conv_arithmetic" target="_blank">this cool repo</a>.</span></p>
+            </div>
+        </div>
+
+
+        <div style="display:grid;grid-template-columns: 50% 50%;">
+            <div>
+                 <p>Differently from images, texts have only one dimension. Therefore, a convolution here is one-dimensional:
+                 look at the illustration.
+                 </p>
+
+            </div>
+            <div>
+                <video width="90%" height="auto" loop autoplay muted style="margin-left: 20px;float:right;">
+                <source src="../../resources/lectures/models/cnn/cnn_filter_reads_text.mp4" type="video/mp4">
+                </video>
+                <p style="font-size:14px;text-align:center;margin-top:-20px;">Convolution filter for text.</p>
+            </p>
+
+            </div>
+        </div>
+
+
+        <h2>Convolution is a Linear Operation Applied to Each Window</h2>
+        <img src="../../resources/lectures/models/cnn/convolution_linear_layer-min.png"
+             style="max-width:100%; margin-bottom:20px;"/>
+        <p>A convolution is a linear layer (followed by a non-linearity) which is applied to each input window.
+            Formally, let us assume that
+        </p>
+        <ul>
+            <li>\((x_1, \dots, x_n)\) - representations of the input words, \(x_i\in \mathbb{R}^d\);</li>
+            <li>\(d\) (<font face="arial">input channels</font>) - size of an input embedding;</li>
+            <li>\(k\) (<font face="arial">kernel size</font>) - the length of a convolution window (on the illustration, \(k=3\));</li>
+            <li>\(m\) (<font face="arial">output channels</font>) - number of convolution filters
+                (i.e., number of channels produced by the convolution).</li>
+        </ul>
+        <p>Then a convolution is a linear layer \(W\in\mathbb{R}^{(k\cdot d)\times m}\).
+         For a \(k\)-sized window \((x_i, \dots x_{i+k-1})\), the convolution
+                    takes the concatenation of these vectors
+                    \[u_i = [x_i, \dots x_{i+k-1}]\in\mathbb{R}^{k\cdot d}\]
+                    and multiplies by the convolution matrix:
+            \[F_i = u_i \times W.\]
+            A convolution goes over an input
+            with a sliding window and applies
+            the same linear transformation to each window.
+        </p>
+
+
+        <h2 id="parameters">Parameters: Kernel size, Stride, Padding, Bias</h2>
+
+        <h3><span style="margin-right:15px;font-size:14px;">&#8226;</span>
+                <font face="arial">Kernel size</font>: How far to look</h3>
+        <p>Kernel size is the number of input elements (tokens) a convolution looks at each step.
+        For text, typical values are 2-5.</p>
+
+        <center>
+        <img src="../../resources/lectures/models/cnn/kernel_size-min.png"
+             style="max-width:80%; margin-bottom:20px;"/>
+            </center>
+
+        <h3><span style="margin-right:15px;font-size:14px;">&#8226;</span>
+                <font face="arial">Stride</font>: How much move a filter at each step</h3>
+        <p>Stride tells how much to move filter at each step. For example, stride equal to 1 means that we
+        move the filter by 1 input element (pixel for images, token for texts) at each step.</p>
+
+        <center>
+        <img src="../../resources/lectures/models/cnn/stride-min.png"
+             style="max-width:80%; margin-bottom:20px;"/>
+            </center>
+
+        <h3><span style="margin-right:15px;font-size:14px;">&#8226;</span>
+                <font face="arial">Padding</font>: Add zero vectors to both sides</h3>
+
+        <p>Padding adds zero vectors to both sides of an input. If you are using stride>1,
+        you may need padding - be careful!</p>
+        <center>
+        <img src="../../resources/lectures/models/cnn/padding-min.png"
+             style="max-width:80%; margin-bottom:20px;"/>
+        </center>
+
+        <h3><span style="margin-right:15px;font-size:14px;">&#8226;</span>
+                <font face="arial">Bias</font>: The bias term in the linear operation in convolution.</h3>
+        <p>By default, there's no bias - only multiplication by a matrix.</p>
+
+        <center>
+        <img src="../../resources/lectures/models/cnn/bias-min.png"
+             style="max-width:80%; margin-bottom:20px;"/>
+        </center>
+
+
+        <h2><font face="arial">Intuition:</font> Each Filter Extracts a Feature</h2>
+        <p>Intuitively, each filter in a convolution extracts a feature.</p>
+        <img src="../../resources/lectures/models/cnn/one_filter-min.png"
+             style="max-width:50%; margin-left:20px; float:right;"/>
+        <h3><span style="margin-right:15px;font-size:14px;">&#8226;</span>
+                <font face="arial">One filter</font> - one feature extractor</h3>
+                <p>A filter takes vector representations in a current window
+
+                and transforms them linearly into a single feature. Formally,
+                    for a window \(u_i = [x_i, \dots x_{i+k-1}]\in\mathbb{R}^{k\cdot d}\)
+                    a filter
+                    \(f\in\mathbb{R}^{k\cdot d}\) computes dot product:
+                    \[F_i^{(f)} = (f, u_i).\]
+                    The number \(F_i^{(f)}\) (the extracted "feature") is a result of applying the
+                    filter \(f\) to the window \((x_i, \dots x_{i+k-1})\).
+                </p>
+
+
+        <h3><span style="margin-right:15px;font-size:14px;">&#8226;</span>
+                <font face="arial">m filters</font>: m feature extractors</h3>
+
+        <div style="display:grid;grid-template-columns: 45% 55%;">
+            <div>
+                <img src="../../resources/lectures/models/cnn/several_filters_read.gif"
+             style="max-width:90%; margin-right:20px; margin-bottom: 20px; float:left;"/>
+
+        <p>One filter extracts a single feature. Usually, we want many features: for this,
+            we have to take several filters. Each filter reads an input text and extracts a different feature -
+            look at the illustration.
+            The number of filters is the number of output features you want to get. With \(m\) filters
+                    instead of one, the size of
+                the convolutional layer we discussed above will become \((k\cdot d)\times m\).
+        </p>
+            </div>
+            <div>
+                <img src="../../resources/lectures/models/cnn/several_filters-min.png"
+             style="max-width:90%; margin-left:20px; float:right;"/>
+
+            </div>
+        </div>
+
+        <p><font face="arial"><u>This is done in parallel!</u></font>
+            Note that while I show you how a CNN "reads" a text, in practice these
+            computations are done in parallel.
+        </p>
+
+    </div>
+
+    <div id="blocks_pooling">
+        <h1>Building Blocks: Pooling</h1>
+
+        <p>After a convolution extracted \(m\) features from each window,
+        a <font face="arial">pooling</font>
+            layer summarises the features in some region.
+            Pooling layers are used to reduce the input dimension, and, therefore, to reduce the number
+            of parameters used by the network.</p>
+
+
+        <h2> Max and Mean Pooling</h2>
+
+        <p>
+        The most popular is <font face="arial">max-pooling</font>: it takes maximum over each dimension, i.e. takes
+            the maximum value of each feature.
+        </p>
+        <img src="../../resources/lectures/models/cnn/max_pooling-min.png"
+             style="max-width:100%; margin-bottom:20px;"/>
+        <p>Intuitively, each feature "fires" when it sees some pattern: a
+            visual pattern in an image (line, texture, a cat's paw, etc) or
+            a text pattern (e.g., a phrase).
+            After a pooling operation,
+        we have a vector saying which of these patterns occurred in the input.
+        </p>
+        <p><font face="arial">Mean-pooling</font> works similarly but computes mean over each
+        feature instead of maximum.</p>
+
+        <h2 id="k_max_pooling"> k-max Pooling</h2>
+
+        <img src="../../resources/lectures/models/cnn/k_max_pooling-min.png"
+             style="max-width:60%; margin-left:20px; float:right;"/>
+        <p><font face="arial">k-max pooling</font> is a generalization of max-pooling.
+        Instead of finding one maximum feature, it selects k features with the highest values. The order of these
+            features is preserved.
+        </p>
+
+        <p>It can be useful if it is important how many times a network found some pattern.
+        </p>
+
+        <h2> Pooling and Global Pooling</h2>
+
+        <p>Similarly to convolution, <font face="arial">pooling</font> is applied to windows
+        of several elements. Pooling also has the stride parameter, and the most common approach is to use
+        pooling with non-overlapping windows. For this, you have to set the stride parameter the same
+        as the pool size. Look at the illustration.</p>
+
+        <center>
+        <img src="../../resources/lectures/models/cnn/pooling_with_stride-min.png"
+             style="max-width:70%; margin-bottom:20px;"/>
+            </center>
+
+        <p>The difference between <font face="arial">pooling</font> and
+        <font face="arial">global pooling</font> is that <font face="arial">pooling</font> is applied over features
+        in each window independently, while
+        <font face="arial">global pooling</font> performs over the whole input.
+        For texts, global pooling is often used to get a single vector representing the whole text; such
+        global pooling is called <font face="arial">max-over-time pooling</font>, where the "time" axis
+        goes from the first input token to the last.</p>
+
+        <center>
+        <img src="../../resources/lectures/models/cnn/pooling_vs_global-min.png"
+             style="max-width:90%; margin-bottom:20px;"/>
+            </center>
+
+        <p>Intuitively, each feature "fires" when it sees some pattern: a
+            visual pattern in an image (line, texture, a cat's paw, etc) or
+            a text pattern (e.g., a phrase).
+            After a pooling operation,
+        we have a vector saying which of these patterns occurred in the input.
+        </p>
+
+    <div class="card_with_ico">
+    <img class="ico" src="../../resources/lectures/ico/analysis_empty.png" width="30px"/>
+    <div class="text_box_green">
+    <p class="data_text"> For more details
+            on intuition and examples of patterns, look at the
+            <a href="#analysis_interpretability">Analysis and Interpretability</a> section.
+    </div>
+    </div>
+
+</div>
+
+
+    <div id="text_classification">
+    <h1>Specific Tasks: Text Classification</h1>
+
+        <p class="data_text"><font color="#888">This part is a summary
+            of the convolutional models part of the <a href="../text_classification.html">Text Classification</a>
+            lecture in the main part of the course. For a detailed description of the text classification task,
+            go to the main lecture.
+            </font>
+        </p>
+
+        <p>Now, when we understand how the convolution and pooling work, let's come to modeling modifications.
+            In the case of text classification:</p>
+        <div class="green_left_thought" style="font-size:18px;">
+                <p class="data_text">
+                    We need a model
+                    that can produce a <strong>fixed-sized</strong> vector
+                    for inputs of <strong>different</strong> lengths.
+                </p>
+            </div>
+
+        <p>Therefore, we need to construct a convolutional model that represents a text as a single vector.</p>
+
+
+        <p>
+        The basic convolutional model for text classification is shown on the figure.
+        Note that, after the convolution, we use <font face="arial">global-over-time pooling</font>.
+            This is the key operation: it allows to compress a text into a single vector.
+            The model itself can be different, but at some point, it has to use the global pooling to
+            compress input in a single vector.
+        </p>
+
+
+        <center>
+        <img src="../../resources/lectures/text_clf/neural/cnn/model_basic-min.png"
+             style="max-width:80%; margin-bottom:20px;"/>
+        </center>
+
+        <h4 style="font-size:18px;"><span style="margin-right:15px;font-size:14px;">&#8226;</span>
+                <font face="arial">Several Convolutions with Different Kernel Sizes</font></h4>
+
+        <p>Instead of picking one kernel size for your convolution, you can use several convolutions
+        with different kernel sizes. The recipe is simple: apply each convolution to the data,
+        add non-linearity and global pooling after each of them,
+            then concatenate the results (on the illustration, non-linearity is omitted for simplicity).
+            This is how you get vector representation of the data which
+            is used for classification.
+        </p>
+
+        <center>
+        <img src="../../resources/lectures/text_clf/neural/cnn/several_kernel_sizes-min.png"
+             style="max-width:100%; margin-bottom:20px;"/>
+        </center>
+        <p>This idea was used, among others, in the paper
+        <a href="https://www.aclweb.org/anthology/D14-1181.pdf" target="_blank">
+            Convolutional Neural Networks for Sentence Classification</a> and many follow-ups.
+        </p>
+
+
+        <h4 style="font-size:18px;"><span style="margin-right:15px;font-size:14px;">&#8226;</span>
+                <font face="arial">Stack Several Blocks Convolution+Pooling</font></h4>
+
+
+        <p>Instead of one layer, you can stack several blocks convolution+pooling on top of each other.
+            After several blocks, you can apply another convolution, but with global pooling this time.
+            Remember: you have to get a single fixed-sized vector - for this, you need global pooling.
+        </p>
+        <p>Such multi-layered convolutions can be useful when your texts are very long; for example,
+        if your model is character-level (as opposed to word-level).</p>
+
+        <center>
+        <img src="../../resources/lectures/text_clf/neural/cnn/several_blocks-min.png"
+             style="max-width:90%; margin-bottom:20px;"/>
+        </center>
+        <p>This idea was used, among others, in the paper
+        <a href="https://papers.nips.cc/paper/5782-character-level-convolutional-networks-for-text-classification.pdf" target="_blank">
+            Character-level Convolutional Networks for Text Classification</a>.
+        </p>
+
+
+
+    </div>
+
+
+<div id="language_modeling">
+    <h1>Specific Tasks: Language Modeling</h1>
+
+    <br>
+
+    <div style="border: 0px solid #ccc;border-radius:15px;margin: 10px; padding: 4px;
+ background-color: #f5f5f5;margin-top:-20px;">
+
+            <div style="display: grid; grid-template-columns: 75% 25%; margin:10px;">
+                <div>
+                <div style="margin-top:20px;">
+                    <p style="margin:30px; font-size:30px;">Coming soon!</p>
+
+                    <p style="margin:30px;">This part will appear when we pass the
+                        <a href="../../nlp_course.html#preview_lang_models">Language Modeling</a> lecture of the course.</p>
+                </div>
+                    </div>
+                <div>
+                    <center>
+                    <img src="../../resources/lectures/main/preview/pusheen_draws_on_white-min.png"
+                       style="width:80%; padding-top:20px; padding-bottom:20px;border-radius:50%">
+                    </center>
+                </div>
+            </div>
+
+        </div>
+
+</div>
+
+
+    <br>
+
+    <!--
+<div id="machine_translation">
+    <h1>Specific Tasks: Machine Translation</h1>
+
+        <br>
+
+    <div style="border: 0px solid #ccc;border-radius:15px;margin: 10px; padding: 4px;
+ background-color: #f5f5f5;margin-top:-20px;">
+
+            <div style="display: grid; grid-template-columns: 75% 25%; margin:10px;">
+                <div>
+                <div style="margin-top:20px;">
+                    <p style="margin:30px;font-size:30px;">Coming soon!</p>
+
+                    <p style="margin:30px;">This part will appear when we pass the
+                        <a href="../../nlp_course.html#preview_seq2seq_attn">Seq2Seq and Attention</a> lecture of the course.</p>
+                </div>
+                    </div>
+                <div>
+                    <center>
+                    <img src="../../resources/lectures/main/preview/pusheen_reads_on_white-min.png"
+                       style="width:80%; padding-top:20px; padding-bottom:20px;border-radius:50%">
+                    </center>
+                </div>
+            </div>
+
+        </div>
+
+
+</div>
+-->
+
+
+<div id="analysis_interpretability">
+        <img height="40" src="../../resources/lectures/ico/analysis_empty.png"
+             style="float:left; padding-right:20px; "/>
+        <h1>Analysis and Interpretability</h1>
+
+    <h2>What do Convolutions Learn? Analyzing Convolutional Filters</h2>
+    <h3><u>Convolutions in Computer Vision: Visual Patterns</u></h3>
+    <p>Convolutions were originally developed for images, and there's already a pretty good understanding
+    of what the filters capture and how filters from different layers from a hierarchy.
+    While lower layers capture simple visual patterns such as lines or circles, final
+        layers can capture the whole pictures, animals, people, etc.
+    </p>
+
+    <p style="text-align: center;  display: block; margin-left:25px;
+         margin-top:-10px; max-width:100%;">
+            <img width=90% src="../../resources/lectures/text_clf/analysis/filters_in_images-min.png" alt="" /><br />
+            <span style="font-size: small;">
+                Examples of patterns captured by convolution filters for images.
+                The examples are from
+        <a href="https://distill.pub/2019/activation-atlas/" target="_blank">
+            Activation Atlas from distill.pub</a>.</span></p>
+
+    <h2>Convolutions for Text Classification</h2>
+
+    <p class="data_text"><font color="#888">This part is from the
+        <a href="../text_classification.html" target="_blank">Text Classification</a> lecture from the main part of the course.
+    </font>
+    </p>
+
+
+    <p>For images, filters capture local visual patterns which are important for classification.
+        For text, such local patterns are word n-grams.
+        The main findings on how CNNs work for texts are:</p>
+    <ul>
+        <li><font face="arial">convolving filters are used as ngram detectors</font><br>
+            Each filter specializes in one or several families of closely-related ngrams.
+            Filters are not homogeneous, i.e. a single filter can, and often does,
+            detect multiple distinctly different families of ngrams.
+        </li>
+        <li><font face="arial">max-pooling induces a thresholding behavior</font><br>
+            Values below a given threshold are ignored when (i.e. irrelevant to) making a prediction.
+            For example, <a href="https://arxiv.org/pdf/1809.08037.pdf" target="_blank">this paper</a>
+            shows that 40% of the pooled ngrams on average can be dropped with no loss of performance.
+        </li>
+    </ul>
+
+    <img width=55% src="../../resources/lectures/text_clf/analysis/look_at_filter-min.png" alt=""
+         style="float:right; margin-left:20px;" />
+    <p>The simplest way to understand what a network captures is to look which patterns activate its neurons.
+        For convolutions, we pick a filter and find those n-grams which activate this filter most.
+    </p>
+
+    <p>Below are examples of the top-1 n-gram for several filters. For one of them, we also
+    show other n-grams which lead to high activation of this filter - you can see that the n-grams
+    have a very similar meaning.</p>
+
+
+    <center>
+    <img width=75% src="../../resources/lectures/text_clf/analysis/top_ngrams-min.png" alt=""
+    style="margin-bottom:20px;"/>
+        </center>
+
+    <p>For more details, look at the paper
+        <a href="https://arxiv.org/pdf/1809.08037.pdf" target="_blank">
+            Understanding Convolutional Neural Networks for Text Classification</a>.
+    </p>
+
+
+    <h2>Convolutions for Language Modeling</h2>
+
+    <br>
+
+    <div style="border: 0px solid #ccc;border-radius:15px;margin: 10px; padding: 4px;
+ background-color: #f5f5f5;margin-top:-20px;">
+    <div style="display: grid; grid-template-columns: 75% 25%; margin:10px;">
+                <div>
+                <div style="margin-top:20px;">
+                    <p style="margin:30px; font-size:30px;">Coming soon!</p>
+
+                    <p style="margin:30px;">This part will appear when we pass the
+                        <a href="../../nlp_course.html#preview_lang_models">Language Modeling</a> lecture of the course.</p>
+                </div>
+                    </div>
+                <div>
+                    <center>
+                    <img src="../../resources/lectures/main/preview/pusheen_draws_on_white-min.png"
+                       style="width:80%; padding-top:20px; padding-bottom:20px;border-radius:50%">
+                    </center>
+                </div>
+            </div>
+
+        </div>
+</div>
+
+
+</div>
+
+
+</div>
+</div>
+
