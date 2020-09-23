@@ -31,6 +31,8 @@ order: 4
                   Language Modeling</a>
               <a href="#preview_seq2seq_attn"><span style="margin-right:15px;font-size:14px;">&#8226;</span>
                   Seq2seq and Attention</a>
+              <a href="#preview_transfer"><span style="margin-right:15px;font-size:14px;">&#8226;</span>
+                  Transfer Learning</a>
                 <a href="#coming_soon_main_course"><span style="margin-right:15px;font-size:14px;">&#8226;</span>
                      <font color="#888"> ...to be continued</font></a>
 
@@ -798,7 +800,7 @@ flkty_clf.on( 'staticClick', function( event, pointer, cellElement, cellIndex ) 
         <div style="margin-right:15px; ">
 
             <h2 style="margin-bottom:5px;background-color:#f6fce8;text-align:center;">
-                <a href="./nlp_course/page_not_ready.html" style="color:black">Language Modeling</a></h2>
+                <a href="./nlp_course/language_modeling.html" style="color:black">Language Modeling</a></h2>
             <ul class="data_text">
             <li>General Framework</li>
             <li>N-Gram LMs</li>
@@ -818,8 +820,8 @@ flkty_clf.on( 'staticClick', function( event, pointer, cellElement, cellIndex ) 
 
             <h3 style="margin-bottom:2px;">Seminar & Homework</h3>
 
-            <p class="data_text">Will appear in
-                <a href="https://github.com/yandexdataschool/nlp_course" target="_blank">the course repo</a>.
+            <p class="data_text"><a href="https://github.com/yandexdataschool/nlp_course/tree/2020/week03_lm" target="_blank">Week 3</a>
+                in <a href="https://github.com/yandexdataschool/nlp_course" target="_blank">the course repo</a>.
             </p>
 
         </div>
@@ -835,15 +837,15 @@ flkty_clf.on( 'staticClick', function( event, pointer, cellElement, cellIndex ) 
          style="width:100%; margin-left:-5px; margin-right:-5px;"
       data-flickity='{ "imagesLoaded": true, "percentPosition": true, "wrapAround": true, "prevNextButtons": false}'>
 
-          <div class="carousel-cell" style="width:100%"><center>
+          <!--<div class="carousel-cell" style="width:100%"><center>
             <img src="../resources/lectures/main/preview/pusheen_waits.png" style="width:60%; margin-top:20px;">
           </center>
       <p style="text-align: center; font-size:20px;">Wait for the release!<br> (September 24-30)</p>
-      </div>
+      </div>-->
 
           <div class="carousel-cell" style="width:100%"><center>
             <video width="90%" height="auto" style="margin-top:40px;" loop autoplay muted style="">
-         <source src="../resources/lectures/lang_models/neural/nn_lm_prob_idea.mp4" type="video/mp4">
+         <source src="../resources/lectures/main/preview/lang_models/lm_generate.mp4" type="video/mp4">
             </video>
           </center></div>
 
@@ -869,6 +871,18 @@ flkty_clf.on( 'staticClick', function( event, pointer, cellElement, cellIndex ) 
             <img src="../resources/lectures/main/preview/lang_models/loss-min.png" style="width:90%">
         </center></div>
           <div class="carousel-cell" style="width:100%"><center>
+            <img src="../resources/lectures/main/preview/lang_models/rnn1-min.png" style="width:90%">
+        </center></div>
+          <div class="carousel-cell" style="width:100%"><center>
+            <img src="../resources/lectures/main/preview/lang_models/rnn2-min.png" style="width:90%">
+        </center></div>
+          <div class="carousel-cell" style="width:100%"><center>
+            <img src="../resources/lectures/main/preview/lang_models/cnn1-min.png" style="width:90%">
+        </center></div>
+          <div class="carousel-cell" style="width:100%"><center>
+            <img src="../resources/lectures/main/preview/lang_models/cnn2-min.png" style="width:90%">
+        </center></div>
+          <div class="carousel-cell" style="width:100%"><center>
             <img src="../resources/lectures/main/preview/lang_models/evaluation-min.png" style="width:90%">
         </center></div>
        <div class="carousel-cell" style="width:100%"><center>
@@ -889,6 +903,7 @@ flkty_clf.on( 'staticClick', function( event, pointer, cellElement, cellIndex ) 
 
 
     </div>
+        <p style="text-align: center; font-size:20px;margin-top:30px;"><a href="./nlp_course/language_modeling.html">read more ⇨</a></p>
 </div>
 </div>
 </div>
@@ -949,7 +964,7 @@ flkty_lm.on( 'staticClick', function( event, pointer, cellElement, cellIndex ) {
 
     <div>
 
-      <div class="carousel carousel_text_clf"
+      <div class="carousel carousel_attention"
          style="width:100%; margin-left:-5px; margin-right:-5px;"
       data-flickity='{ "imagesLoaded": true, "percentPosition": true, "wrapAround": true, "prevNextButtons": false}'>
       <div class="carousel-cell" style="width:100%"><center>
@@ -973,6 +988,73 @@ flkty_attn.on( 'staticClick', function( event, pointer, cellElement, cellIndex )
 });
 </script>
 
+
+
+<div class="greenCard" id="thumbnail_green" style="background-color:white; margin:10px;width:96%">
+<div class="cardContent" id="preview_transfer">
+<div style="display: grid; grid-template-columns: 50% 50%; margin:10px;">
+
+    <div>
+    <!--##############    begin of left part   ####################################-->
+        <div class="green_circle" style="float:right; margin-right:5px;"></div>
+        <div class="box_green_right">
+        <div style="margin-right:15px; ">
+
+            <h2 style="margin-bottom:5px;background-color:#f6fce8;text-align:center;">
+                <a href="./nlp_course/page_not_ready.html" style="color:black">Transfer Learning</a></h2>
+            <ul class="data_text">
+                <li>What is Transfer Learning?</li>
+                <li>Pretrained Models (ELMO, BERT and other)</li>
+                <li>Adaptors</li>
+                <li>...to be continued</li>
+             <li><img height="20" src="../resources/lectures/ico/analysis_empty.png" style="margin-right:10px;"/>
+            Analysis and Interpretability</li>
+            <li><span style="float: left;">Bonus: </span>
+                <div class="research_circle" style="margin: 8px; float: left;"></div>
+                <div class="paper_circle" style="margin: 8px; float: left;"></div>
+                <div class="fun_circle" style="margin: 8px; float: left;"></div></li>
+            </ul>
+
+            <hr color="#e9f5d0" style="margin:5px;">
+
+            <h3 style="margin-bottom:2px;">Seminar & Homework</h3>
+
+            <p class="data_text">Will appear in
+                <a href="https://github.com/yandexdataschool/nlp_course" target="_blank">the course repo</a>.
+            </p>
+
+        </div>
+        </div>
+        <div class="green_circle" style="float:right; margin-right:5px;"></div>
+
+    </div>
+    <!--#########################   end of left part #########################-->
+
+    <div>
+
+      <div class="carousel carousel_transfer"
+         style="width:100%; margin-left:-5px; margin-right:-5px;"
+      data-flickity='{ "imagesLoaded": true, "percentPosition": true, "wrapAround": true, "prevNextButtons": false}'>
+      <div class="carousel-cell" style="width:100%"><center>
+            <img src="../resources/lectures/main/preview/pusheen_tea.gif" style="width:50%; margin-top:60px;">
+          </center>
+      <p style="text-align: center; font-size:20px;">Wait for the release!<br>(November)</p></div>
+
+
+    </div>
+</div>
+</div>
+</div>
+</div><!-- div for lang models green card-->
+
+<script>
+var flkty_attn = new Flickity( '.carousel_attention', { imagesLoaded: true, percentPosition: true,
+wrapAround: true, prevNextButtons: false,});
+
+flkty_attn.on( 'staticClick', function( event, pointer, cellElement, cellIndex ) {
+    flkty_attn.next();
+});
+</script>
 
 
 

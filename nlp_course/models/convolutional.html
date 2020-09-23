@@ -26,6 +26,8 @@ description: Convolutional Neural Networks from building blocks to applications 
                     Convolution</a>
               <a href="#blocks_pooling"><span style="margin-right:15px;font-size:14px;">&#8226;</span>
                   Pooling</a>
+              <a href="#blocks_residual"><span style="margin-right:15px;font-size:14px;">&#8226;</span>
+                  Residual Connections</a>
           </div>
         </div>
 
@@ -499,11 +501,48 @@ for (i = 0; i < dropdown.length; i++) {
 </div>
 
 
+    <div id="blocks_residual">
+        <h1>Building Blocks: Residual Connections</h1>
+        <h3>TL;DR: Train Deep Networks Easily!</h3>
+
+        <p>To process longer contexts you need a lot of layers. Unfortunately, when stacking a lot of layers,
+            you can have a problem with propagating gradients
+            from top to bottom
+            through a deep network. To avoid this, we can use
+            <font face="arial">residual connections</font> or a more complicated
+            variant <font face="arial"><a href="https://arxiv.org/pdf/1505.00387.pdf" target="_blank">highway connections</a></font>.
+        </p>
+        <img src="../../resources/lectures/lang_models/neural/cnn/residual_highway-min.png"
+             style="max-width:100%; margin-bottom:20px; "/>
+        <p>Residual connections are very simple: they add input of a block to its output. In this way,
+        the gradients over inputs will flow not only indirectly through the block, but also directly
+        through the sum.
+        </p>
+        <p>Highway connections have the same motivation, but a use a gated sum of input and output instead of
+        the simple sum. This is similar to LSTM gates where a network can learn the types of information
+        it may want to carry on from bottom to top (or, in case of LSTMs, from left to right).
+        </p>
+        <div style="display:grid;grid-template-columns: 40% 60%;">
+            <div>
+                <p>Look at the example of a convolutional network with residual connections.
+                    Typically, we put residual connections around blocks with several layers.
+                    A network can several such blocks
+                     - depending on your task, you may need a lot of layers to get a decent receptive field.
+                </p>
+            </div>
+            <div><img src="../../resources/lectures/models/cnn/model_with_residual-min.png"
+             style="max-width:90%; margin-left:20px;float:right;"/></div>
+
+        </div>
+    </div>
+
+    <br>
+
     <div id="text_classification">
     <h1>Specific Tasks: Text Classification</h1>
 
         <p class="data_text"><font color="#888">This part is a summary
-            of the convolutional models part of the <a href="../text_classification.html">Text Classification</a>
+            of the convolutional models part of the <a href="../text_classification.html" target="_blank">Text Classification</a>
             lecture in the main part of the course. For a detailed description of the text classification task,
             go to the main lecture.
             </font>
@@ -585,29 +624,74 @@ for (i = 0; i < dropdown.length; i++) {
 <div id="language_modeling">
     <h1>Specific Tasks: Language Modeling</h1>
 
-    <br>
+    <p class="data_text"><font color="#888">This part is a summary
+            of the convolutional models part of the <a href="../language_modeling.html" target="_blank">Language Modeling</a>
+            lecture in the main part of the course. For a detailed description of the language modeling task,
+            go to the main lecture.
+            </font>
+        </p>
 
-    <div style="border: 0px solid #ccc;border-radius:15px;margin: 10px; padding: 4px;
- background-color: #f5f5f5;margin-top:-20px;">
+        <p>Compared to CNNs for text classification, language models have several differences.
+            Here we discuss general design principles of CNN language models;
+            for a detailed description of specific architectures, you can look in the
+            <a href="../language_modeling.html#related_papers" target="_blank">Related Papers</a> section
+            in the <a href="../language_modeling.html" target="_blank">Language Modeling</a> lecture.
+        </p>
 
-            <div style="display: grid; grid-template-columns: 75% 25%; margin:10px;">
-                <div>
-                <div style="margin-top:20px;">
-                    <p style="margin:30px; font-size:30px;">Coming soon!</p>
+        <img src="../../resources/lectures/lang_models/neural/cnn/cnn_main-min.png"
+             style="max-width:100%; margin-bottom:20px; "/>
 
-                    <p style="margin:30px;">This part will appear when we pass the
-                        <a href="../../nlp_course.html#preview_lang_models">Language Modeling</a> lecture of the course.</p>
-                </div>
-                    </div>
-                <div>
-                    <center>
-                    <img src="../../resources/lectures/main/preview/pusheen_draws_on_white-min.png"
-                       style="width:80%; padding-top:20px; padding-bottom:20px;border-radius:50%">
-                    </center>
-                </div>
+        <p>When designing a CNN language model, you have to keep in mind the following things:</p>
+        <ul>
+            <li><font face="arial">prevent information flow from future tokens</font><br>
+                To predict a token, a left-to-right LM has to use only previous tokens - make sure
+                your CNN does not see anything but them! For example, you can shift tokens to the right by using padding - look
+                at the illustration above.
+            </li>
+            <li><font face="arial">do not remove positional information</font><br>
+                Differently from text classification, positional information is <font face="arial">very</font>
+                important for language models. Therefore, <font face="arial">do not use pooling</font>
+                (or be very careful in how you do it).
+            </li>
+            <li><font face="arial">if you stack many layers, do not forget about residual connections</font><br>
+                If you stack many layers, it may difficult to train a very deep network well. To avoid this,
+                use residual connections - look for the details below.
+            </li>
+        </ul>
+
+
+                <h3 id="receptive_field"><font face="arial">Receptive field</font>: with many layers, can be large</h3>
+
+                <img src="../../resources/lectures/lang_models/neural/cnn/receptive_field-min.png"
+             style="max-width:45%; margin-left:20px;float:right;"/>
+            <p>When using convolutional models without global pooling,
+                    your model will inevitably have a fixed-sized context. This might seem undesirable:
+                    the fixed context size problem is exactly what we didn't like in the n-gram models!
+                </p>
+                <p>However, if for n-gram models typical context size is 1-4,
+                    contexts in convolutional models can be quite long. Look at the illustration:
+                    with only 3 convolutional layers with small kernel size 3, a network has
+                    a context of 7 tokens. If you stack many layers, you can get a very large context length.
+                </p>
+
+    <h3><font face="arial">Residual Connections</font>: with many layers, you will need them!</h3>
+
+    <div style="display:grid;grid-template-columns: 40% 60%;">
+            <div>
+                <p> If you stack many layers, you may have troubles with training a deep network.
+                Luckily, for this you can use residual connections!
+                </p>
+                <p> Look at the example of a convolutional network with residual connections.
+                    Typically, we put residual connections around blocks with several layers.
+                    A network can several such blocks
+                     - remember, you need a lot of layers to get a decent receptive field.
+                </p>
             </div>
+            <div><img src="../../resources/lectures/lang_models/neural/cnn/cnn_with_residual-min.png"
+             style="max-width:90%; margin-left:20px;float:right;"/></div>
 
         </div>
+
 
 </div>
 
@@ -717,8 +801,29 @@ for (i = 0; i < dropdown.length; i++) {
 
     <h2>Convolutions for Language Modeling</h2>
 
-    <br>
+<p class="data_text"><font color="#888">This part is from the
+    <a href="../language_modeling.html#research_thinking" target="_blank">Research Thinking</a> section of
+    the <a href="../language_modeling.html" target="_blank">Language Modeling</a>
+    lecture from the main part of the course.
+    </font>
+    </p>
 
+    <p>Let's look at the examples from the EMNLP 2016 paper
+    <a href="https://www.aclweb.org/anthology/D16-1123.pdf" target="_blank">Convolutional Neural Network Language Models</a>.
+        For a simple convolutional LM, the authors feed the development data to a model and find
+                        ngrams that activate a certain filter most.
+                    </p>
+                    <img width=100% src="../../resources/lectures/lang_models/research/learned_cnn_patterns-min.png"
+                           alt="" style="margin-top:20px;margin-bottom:20px;" class="center"/>
+                    <p>While a model for sentiment classification learned to pick things which are related to
+                    sentiment, the LM model captures phrases which can be continued similarly.
+                    For example, one kernel activates on phrases ending with a month, another - with a
+                    name; note also the "comparative" kernel firing at
+                        <font class="data_text"><strong>as ... as</strong></font>.
+                    </p>
+
+
+    <!--
     <div style="border: 0px solid #ccc;border-radius:15px;margin: 10px; padding: 4px;
  background-color: #f5f5f5;margin-top:-20px;">
     <div style="display: grid; grid-template-columns: 75% 25%; margin:10px;">
@@ -739,6 +844,8 @@ for (i = 0; i < dropdown.length; i++) {
             </div>
 
         </div>
+
+        -->
 </div>
 
 
