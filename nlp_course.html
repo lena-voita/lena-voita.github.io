@@ -934,8 +934,8 @@ flkty_lm.on( 'staticClick', function( event, pointer, cellElement, cellIndex ) {
             <h2 style="margin-bottom:5px;background-color:#f6fce8;text-align:center;">
                 <a href="./nlp_course/page_not_ready.html" style="color:black">Seq2seq and Attention</a></h2>
             <ul class="data_text">
-                <li>Encoder-decoder framework</li>
-                <li>Attention basics</li>
+                <li>Seq2seq Basics (Encoder-Decoder, Training, Simple Models)</li>
+                <li>Attention</li>
                 <li>Transformer</li>
                 <li>Subword Segmentation (e.g., BPE)</li>
                 <li>Inference (e.g., beam search)</li>
@@ -967,17 +967,61 @@ flkty_lm.on( 'staticClick', function( event, pointer, cellElement, cellIndex ) {
       <div class="carousel carousel_attention"
          style="width:100%; margin-left:-5px; margin-right:-5px;"
       data-flickity='{ "imagesLoaded": true, "percentPosition": true, "wrapAround": true, "prevNextButtons": false}'>
-      <div class="carousel-cell" style="width:100%"><center>
-            <img src="../resources/lectures/main/preview/wait_window.gif" style="width:50%; margin-top:60px;">
-          </center>
-      <p style="text-align: center; font-size:20px;">Wait for the release!<br>(October 1-8)</p></div>
 
+
+
+          <div class="carousel-cell" style="width:100%"><center>
+            <img src="../resources/lectures/main/preview/seq2seq/morda-min.png" style="width:90%">
+          </center></div>
+
+          <div class="carousel-cell" style="width:100%"><center>
+            <video width="90%" height="auto" style="margin-top:40px;" loop autoplay muted style="">
+         <source src="../resources/lectures/main/preview/seq2seq/enc_dec_prob_idea.mp4" type="video/mp4">
+            </video>
+          </center></div>
+
+          <div class="carousel-cell" style="width:100%"><center>
+            <img src="../resources/lectures/main/preview/seq2seq/rnn_simple-min.png" style="width:90%">
+          </center></div>
+
+          <div class="carousel-cell" style="width:100%"><center>
+            <img src="../resources/lectures/main/preview/seq2seq/attn1-min.png" style="width:90%">
+          </center></div>
+
+          <div class="carousel-cell" style="width:100%"><center>
+            <img src="../resources/lectures/main/preview/seq2seq/self_attn-min.png" style="width:90%">
+          </center></div>
+
+          <div class="carousel-cell" style="width:100%"><center>
+            <img src="../resources/lectures/main/preview/seq2seq/masked_self_attn-min.png" style="width:90%">
+          </center></div>
+
+          <div class="carousel-cell" style="width:100%"><center>
+            <img src="../resources/lectures/main/preview/seq2seq/multi_head_attn-min.png" style="width:90%">
+          </center></div>
+
+          <div class="carousel-cell" style="width:100%"><center>
+            <img src="../resources/lectures/main/preview/seq2seq/head_positional-min.png" style="width:90%">
+          </center></div>
+
+          <div class="carousel-cell" style="width:100%"><center>
+            <img src="../resources/lectures/main/preview/seq2seq/head_syntactic-min.png" style="width:90%">
+          </center></div>
+
+          <div class="carousel-cell" style="width:100%"><center>
+            <img src="../resources/lectures/main/preview/seq2seq/probing-min.png" style="width:90%">
+          </center></div>
+
+          <div class="carousel-cell" style="width:100%"><center>
+            <img src="../resources/lectures/main/preview/seq2seq/probing_morph-min.png" style="width:90%">
+          </center></div>
 
     </div>
+        <p style="text-align: center; font-size:20px;margin-top:30px;"><a href="./nlp_course/seq2seq_and_attention.html">read more ⇨</a></p>
 </div>
 </div>
 </div>
-</div><!-- div for lang models green card-->
+</div><!-- div for seq2seq green card-->
 
 <script>
 var flkty_attn = new Flickity( '.carousel_attention', { imagesLoaded: true, percentPosition: true,

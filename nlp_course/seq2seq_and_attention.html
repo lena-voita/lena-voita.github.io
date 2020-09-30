@@ -1,0 +1,1970 @@
+---
+layout: lecture
+title: Seq2seq and Attention
+description: Sequence to sequence models (training and inference), the concept of attention and the Transformer model.
+---
+
+
+<div class="sidebar" id="sidebar">
+    <a href="javascript:void(0)" id="close_sidebar_btn" onclick="closeNav()"
+   style="text-align:center;font-size:30px;padding:0px;">⇤</a>
+    <a class="active" href="../nlp_course.html" style="font-weight: bold;">
+        <img height="18" class='sidebar_ico' src="../resources/lectures/ico/course_logo.png" style="margin-right: 8px;margin-left: 8px;margin-top: 4px;"/>
+        NLP Course <font color="#92bf32" id="for_you_in_sidebar">| For You</font></a>
+  <a  href="#main_content" style="font-weight: bold;">Seq2seq and Attention</a>
+
+    <div class="dropdown-scope">
+           <a class="dropdown-btn" >Seq2seq Basics
+            <i class="fa fa-caret-down"></i>
+          </a>
+          <div class="dropdown-container">
+              <a href="#seq2seq_basics_intro"><span style="margin-right:15px;font-size:14px;">&#8226;</span>
+                  Intro</a>
+              <a href="#enc_dec_framework"><span style="margin-right:15px;font-size:14px;">&#8226;</span>
+                  Encoder-Decoder Framework</a>
+              <a href="#conditional_lms"><span style="margin-right:15px;font-size:14px;">&#8226;</span>
+                  Conditional LMs</a>
+              <a href="#seq2seq_simple_rnn"><span style="margin-right:15px;font-size:14px;">&#8226;</span>
+                  The Simplest Model: RNNs</a>
+              <a href="#seq2seq_training"><span style="margin-right:15px;font-size:14px;">&#8226;</span>
+                  Training</a>
+              <a href="#seq2seq_inference"><span style="margin-right:15px;font-size:14px;">&#8226;</span>
+                  Inference: Beam Search</a>
+
+          </div>
+        </div>
+
+
+        <div class="dropdown-scope">
+           <a class="dropdown-btn" >Attention
+            <i class="fa fa-caret-down"></i>
+          </a>
+          <div class="dropdown-container">
+              <a href="#attention_intro"><span style="margin-right:15px;font-size:14px;">&#8226;</span>
+                  Why do we need it?</a>
+              <a href="#attention_idea"><span style="margin-right:15px;font-size:14px;">&#8226;</span>
+                  Attention: High-Level</a>
+
+              <a href="#attention_specific_functions"><span style="margin-right:15px;font-size:14px;">&#8226;</span>
+                   Attention Score Functions</a>
+              <a href="#attention_bahdanau_luong"><span style="margin-right:15px;font-size:14px;">&#8226;</span>
+                  Models: Bahdanau vs Luong</a>
+              <a href="#attention_alignment"><span style="margin-right:15px;font-size:14px;">&#8226;</span>
+                  Attention and Alignment</a>
+
+
+          </div>
+        </div>
+
+    <div class="dropdown-scope">
+           <a class="dropdown-btn" >Transformer
+            <i class="fa fa-caret-down"></i>
+          </a>
+          <div class="dropdown-container">
+              <a href="#transformer_intro"><span style="margin-right:15px;font-size:14px;">&#8226;</span>
+                  Intro</a>
+              <a href="#self_attention"><span style="margin-right:15px;font-size:14px;">&#8226;</span>
+                  Self-Attention</a>
+              <a href="#masked_self_attention"><span style="margin-right:15px;font-size:14px;">&#8226;</span>
+                  Masked Self-Attention</a>
+              <a href="#multi_head_attention"><span style="margin-right:15px;font-size:14px;">&#8226;</span>
+                  Multi-Head Attention</a>
+              <a href="#transformer_model_architecture"><span style="margin-right:15px;font-size:14px;">&#8226;</span>
+                  Model Architecture</a>
+
+          </div>
+        </div>
+
+    <a href="#bpe">Subword Segmentation: BPE</a>
+
+
+<a href="#analysis_interpretability" id="sidebar_analysis">Analysis and Interpretability <img height="25" src="../resources/lectures/ico/analysis_empty.png" class="sidebar_ico"/></a>
+<div class="extra_components">
+    <a href="#research_thinking" id="sidebar_research_thinking">Research Thinking <img height="30" src="../resources/lectures/ico/bulb_empty.png" class="sidebar_ico"/></a>
+    <!--<hr color="#b7db67">-->
+
+    <a href="#related_papers" id="sidebar_related_papers">Related Papers <img height="22" src="../resources/lectures/ico/book_empty.png" class="sidebar_ico"/></a>
+    <!--<hr color="#b7db67">-->
+
+  <a href="#have_fun" id="sidebar_fun">Have Fun! <img height="30" src="../resources/lectures/ico/fun_empty.png" class="sidebar_ico"/></a>
+</div>
+</div>
+
+
+
+<div class="sidebar" id="sidebar_small">
+
+  <a class="active" onclick="openNav()" style="text-align:center;">☰</a>
+    <a href="../nlp_course.html" >
+        <img height="20" src="../resources/lectures/ico/course_logo.png" style="margin-right: 8px;margin-left: 8px;"/></a>
+    <a href="#main_page_content" style="text-align:center; font-size:20px;color:#7ca81e"> <i class="fa fa-home"></i></a>
+
+<a href="#analysis_interpretability" id="sidebar_analysis"> <img height="25" src="../resources/lectures/ico/analysis_empty.png"/></a>
+<div class="extra_components">
+    <a href="#research_thinking" id="sidebar_research_thinking"><img height="30" src="../resources/lectures/ico/bulb_empty.png"/></a>
+    <!--<hr color="#b7db67">-->
+
+    <a href="#related_papers" id="sidebar_related_papers"><img height="22" src="../resources/lectures/ico/book_empty.png"/></a>
+    <!--<hr color="#b7db67">-->
+
+  <a href="#have_fun" id="sidebar_fun"><img height="30" src="../resources/lectures/ico/fun_empty.png" /></a>
+</div>
+</div>
+
+
+<script>
+function openNav() {
+  document.getElementById("sidebar").style.display = "block";
+  document.getElementById("sidebar_small").style.display = "none";
+  document.getElementById("close_sidebar_btn").style.display = "block";
+}
+
+function closeNav() {
+  document.getElementById("sidebar").style.display = "none";
+  document.getElementById("sidebar_small").style.display = "block";
+  document.getElementById("close_sidebar_btn").style.display = "none";
+}
+
+</script>
+
+
+<script>
+function onResize() {
+  if (window.innerWidth >= 800) {
+     document.getElementById("sidebar").style.display = "block";
+     document.getElementById("sidebar_small").style.display = "none";
+     document.getElementById("close_sidebar_btn").style.display = "none";
+  }
+  else {
+     document.getElementById("sidebar").style.display = "none";
+     document.getElementById("sidebar_small").style.display = "block";
+  }
+}
+window.onresize = onResize;
+onResize();
+</script>
+
+<script>
+/* Loop through all dropdown buttons to toggle between hiding and showing its dropdown content - This allows the user to have multiple dropdowns without any conflict */
+var dropdown = document.getElementsByClassName("dropdown-btn");
+var i;
+
+for (i = 0; i < dropdown.length; i++) {
+  dropdown[i].addEventListener("click", function(event) {
+  this.classList.toggle("active_caret");
+  var dropdownButton = event.target || event.srcElement;
+  while(dropdownButton.className != "dropdown-scope")
+     dropdownButton = dropdownButton.parentElement;
+  var dropdownContent = dropdownButton.getElementsByClassName("dropdown-container")[0];
+
+  if (dropdownContent.style.display === "block") {
+  dropdownContent.style.display = "none";
+  } else {
+  dropdownContent.style.display = "block";
+  }
+  });
+}
+</script>
+
+
+
+
+<div class="wrapper" id="main_page_content">
+    <div class="header"><h1>Sequence to Sequence (seq2seq) and Attention</h1></div>
+
+<div class="main_content" id="main_content">
+
+
+<div id="intro">
+
+<img src="../resources/lectures/seq2seq/examples.gif"
+             style="max-width:50%; float:right; margin-left:20px;"/>
+
+
+    <p>The most popular sequence-to-sequence task is translation:
+        usually, from one natural language to another.
+        In the last couple of years, commercial systems became surprisingly good at
+        machine translation - check out, for example,
+
+        <a href="https://translate.google.com" target="_blank">Google Translate</a>,
+        <a href="https://translate.yandex.com" target="_blank">Yandex Translate</a>,
+        <a href="https://www.deepl.com/en/translator" target="_blank">DeepL Translator</a>,
+        <a href="https://www.bing.com/translator" target="_blank">Bing Microsoft Translator</a>.
+        Today we will learn about the core part of these systems.
+    </p>
+
+    <p>Except for the popular machine translation between natural languages, you
+        can translate between programming languages (see e.g. the Facebook AI blog post
+        <a href="https://ai.facebook.com/blog/deep-learning-to-translate-between-programming-languages/" target="_blank">
+            Deep learning to translate between programming languages</a>),
+        or between any sequences of tokens you can come up with. From now on, by
+        <font face="arial">machine translation</font> we will mean any general sequence-to-sequence task, i.e. translation
+        between sequences of tokens of any nature.
+    </p>
+
+    <p>In the following, we will first learn about the seq2seq basics, then we'll find out about attention - an integral
+        part of all modern systems, and will finally
+        look at the most popular model - Transformer. Of course, with lots of analysis, exercises, papers, and fun!
+    </p>
+
+</div>
+
+
+
+<div id="seq2seq_basics">
+
+    <h1>Sequence to Sequence Basics</h1>
+
+<div id="seq2seq_basics_intro">
+
+    <p>Formally, in the machine translation task, we have an input sequence \(x_1, x_2, \dots, x_m\)
+        and an output sequence \(y_1, y_2, \dots, y_n\) (note that their lengths can be different).
+        Translation can be thought of as finding the target sequence that is the most probable given
+        the input; formally, the target sequence
+        that maximizes the conditional probability \(p(y|x)\): \(y^{\ast}=\arg\max\limits_{y}p(y|x).\)
+    </p>
+
+    <p>If you are bilingual and can translate between languages easily, you have an intuitive feeling of
+        \(p(y|x)\) and can say something like
+        <span class="data_text">"...well, this translation is kind of more natural for this sentence"</span>.
+        But in machine translation, we learn a function \(p(y|x, \theta)\) with some parameters \(\theta\),
+        and then find its argmax for a given input:
+        \(y'=\arg\max\limits_{y}p(y|x, \theta).\)
+    </p>
+
+        <img src="../resources/lectures/seq2seq/general/human_machine_translation-min.png"
+             style="max-width:100%;margin-bottom:20px;"/>
+
+    <p>To define a machine translation system, we need to answer three questions:</p>
+    <ul>
+        <li><font face="arial">modeling</font> - how does the model for \(p(y|x, \theta)\) look like?</li>
+        <li><font face="arial">learning</font> - how to find the parameters \(\theta\)?</li>
+        <li><font face="arial">inference</font> - how to find the best \(y\)?</li>
+    </ul>
+
+    <p>In this section, we will answer the second and third questions in full, but consider only the simplest model.
+    The more "real" models will be considered later in sections <a href="attention">Attention</a>
+        and <a href="transformer">Transformer</a>.
+    </p>
+
+    </div>
+
+    <div id="enc_dec_framework">
+        <h2>Encoder-Decoder Framework</h2>
+
+        <img src="../resources/lectures/seq2seq/general/enc_dec-min.png"
+             style="max-width:60%; margin-left:20px; float:right;"/>
+
+        <p>Encoder-decoder is the standard modeling paradigm for
+            sequence-to-sequence tasks. This framework consists of two components:
+        </p>
+        <ul>
+            <li><font face="arial">encoder</font> - reads source sequence and produces its representation;
+            </li>
+            <li><font face="arial">decoder</font> - uses source representation from the encoder to generate the target
+                sequence.
+            </li>
+        </ul>
+
+        <p>In this lecture, we'll see different models, but they all have this encoder-decoder structure.</p>
+</div>
+
+
+    <div id="conditional_lms">
+        <h2>Conditional Language Models</h2>
+
+        <p>In the <a href="./language_modeling.html" target="_blank">Language Modeling</a>
+            lecture, we learned to estimate the probability \(p(y)\) of sequences of tokens \(y=(y_1, y_2, \dots, y_n)\).
+            While <font face="arial">language models</font> estimate the
+            <font face="arial">unconditional</font> probability \(p(y)\) of a sequence \(y\),
+            <font face="arial">sequence-to-sequence models</font>
+            need to estimate
+            the <font face="arial">conditional</font> probability
+            p(y|x) of a sequence \(y\) given a source \(x\).
+            That's why sequence-to-sequence tasks can be modeled as
+            <font face="arial">Conditional Language Models (CLM)</font> - they operate
+            similarly to LMs, but additionally receive source information \(x\).
+        </p>
+        <center>
+        <img src="../resources/lectures/seq2seq/general/lm_clm-min.png"
+             style="max-width:60%; margin-bottom:20px; "/>
+            </center>
+
+        <p class="data_text"><font color="#888"><u>Lena</u>: Note that
+            Conditional Language Modeling is something more than just a way to solve
+            sequence-to-sequence tasks.
+            In the most general sense, \(x\) can be something other than a sequence of tokens. For example,
+            in the Image Captioning task,
+            \(x\) is an image and \(y\) is a description of this image.
+        </font>
+        </p>
+
+        <center>
+        <video width="90%" height="auto" loop autoplay muted style="margin-left: 20px;">
+         <source src="../resources/lectures/seq2seq/general/enc_dec_prob_idea.mp4" type="video/mp4">
+        </video>
+        </center>
+
+        <p>Since the only difference from LMs is the presence of source \(x\), the modeling and training
+            is very similar to language models. In particular, the high-level pipeline is as follows:
+        </p>
+        <ul>
+        <li>feed source and previously generated target words into a network;</li>
+        <li>get vector representation of context (both source and previous target)
+            from the networks decoder;</li>
+        <li>from this vector representation, predict a probability distribution for the next token.</li>
+        </ul>
+
+        <img src="../resources/lectures/seq2seq/general/enc_dec_linear_out-min.png"
+             style="max-width:100%; margin-bottom:20px; "/>
+        <p>Similarly to neural classifiers and language models, we can think about the classification part
+        (i.e., how to get token probabilities from a vector representation of a text) in a very simple way.
+            Vector representation of a text has some dimensionality \(d\), but in the end,
+            we need a vector of size \(|V|\) (probabilities for \(|V|\) tokens/classes).
+                To get a \(|V|\)-sized vector from a \(d\)-sized,
+            we can use a linear layer. Once we have a \(|V|\)-sized vector, all is left is to
+            apply the softmax operation to convert the raw numbers into token probabilities.
+        </p>
+
+
+    </div>
+
+
+    <div id="seq2seq_simple_rnn">
+        <h2>The Simplest Model: Two RNNs for Encoder and Decoder</h2>
+
+
+            <img src="../resources/lectures/seq2seq/general/enc_dec_simple_rnn-min.png"
+             style="max-width:100%; margin-bottom:20px;"/>
+
+        <p>The simplest encoder-decoder model consists of two RNNs (LSTMs): one for the encoder
+            and another for the decoder. Encoder RNN reads the source sentence, and the final state
+            is used as the initial state of the decoder RNN. The hope is that the final encoder state
+            "encodes" all information about the source, and the decoder can generate the target sentence
+            based on this vector.
+        </p>
+
+        <p>This model can have different modifications: for example, the encoder and decoder can have several layers.
+            Such a model with several layers was used, for example, in the paper
+            <a href="https://arxiv.org/pdf/1409.3215.pdf" target="_blank">Sequence to Sequence Learning with Neural Networks</a> -
+            one of the first attempts to solve sequence-to-sequence tasks using neural networks.
+        </p>
+
+        <p>In the same paper, the authors looked at the last encoder state and visualized several examples - look below.
+            Interestingly, representations of
+            sentences with similar meaning but different structure are close!
+        </p>
+
+
+        <p style="text-align: center; display: block;
+            margin-bottom:20px; max-width:100%;">
+           <img src="../resources/lectures/seq2seq/general/rnn_simple_examples-min.png"
+             style="max-width:100%; margin-bottom:20px;"/>
+                <br />
+            <span style="font-size: small;">The examples are from the paper
+            <a href="https://arxiv.org/pdf/1409.3215.pdf"
+               target="_blank">Sequence to Sequence Learning with Neural Networks</a>.</span>
+            </p>
+
+
+    <div class="card_with_ico">
+    <img class="ico" src="../resources/lectures/ico/bulb_empty.png"/>
+    <div class="text_box_yellow">
+    <p class="data_text">
+        The paper <a href="https://arxiv.org/pdf/1409.3215.pdf" target="_blank">Sequence to
+        Sequence Learning with Neural Networks</a>
+        introduced an elegant trick to make such a simple LSTM model work better.
+
+        Learn more in <a href="#research_reverse_order_in_lstm">this exercise</a>
+        in the <a href="#research_thinking">Research Thinking</a> section. </p>
+    </div>
+    </div>
+
+    </div>
+
+
+    <div id="seq2seq_training">
+        <h2>Training: The Cross-Entropy Loss (Once Again)</h2>
+
+        <p class="data_text"><font color="#888"><u>Lena</u>:
+        This is the same cross-entropy loss we discussed before in the
+            <a href="./text_classification.html" target="_blank">Text Classification</a>
+            and in the <a href="./language_modeling.html" target="_blank">Language Modeling</a> lectures -
+            you can skip this part or go through it quite easily :)
+        </font>
+        </p>
+
+         <p>Similarly to neural LMs, neural seq2seq models are trained to predict probability distributions
+            of the next token given previous context (source and previous target tokens).
+            Intuitively, at each step we maximize the probability a model assigns to the correct token.</p>
+        <p>
+            Formally, let's assume we have a training instance with the source
+            \(x=(x_1, \dots, x_m)\) and the target \(y=(y_1, \dots, y_n)\).
+            Then at the timestep \(t\), a model predicts a probability distribution
+            \(p^{(t)} = p(\ast|y_1, \dots, y_{t-1}, x_1, \dots, x_m)\).
+
+            The target at this step is \(p^{\ast}=\mbox{one-hot}(y_t)\), i.e.,
+            we want a model to assign probability 1 to the correct token, \(y_t\), and zero to the rest.
+        </p>
+
+        <p>The standard loss function is the <font face="arial">cross-entropy loss</font>.
+        Cross-entropy loss for the target distribution \(p^{\ast}\) and the predicted distribution \(p^{}\)
+        is
+            \[Loss(p^{\ast}, p^{})= - p^{\ast} \log(p) = -\sum\limits_{i=1}^{|V|}p_i^{\ast} \log(p_i).\]
+            Since only one of \(p_i^{\ast}\) is non-zero (for the correct token \(y_t\)), we will get
+            \[Loss(p^{\ast}, p) = -\log(p_{y_t})=-\log(p(y_t| y_{\mbox{<}t}, x)).\]
+            At each step, we maximize the probability a model assigns to the correct token.
+            Look at the illustration for a single timestep.</p>
+
+        <center>
+        <img src="../resources/lectures/seq2seq/general/one_step_loss_intuition-min.png"
+             style="max-width:100%; margin:20px;"/>
+        </center>
+
+        <p>For the whole example, the loss will be \(-\sum\limits_{t=1}^n\log(p(y_t| y_{\mbox{<}t}, x))\).
+            Look at the illustration of the training process (the illustration is for the RNN model, but
+            the model can be different).
+        </p>
+
+        <center>
+         <video width="100%" height="auto" loop autoplay muted style="margin-left: 20px;">
+             <source src="../resources/lectures/seq2seq/general/seq2seq_training_with_target.mp4" type="video/mp4">
+         </video>
+        <center>
+
+
+    </div>
+
+    <br><br>
+
+    <div id="seq2seq_inference">
+        <h2>Inference: Greedy Decoding and Beam Search</h2>
+
+        <p>Now when we understand how a model can look like and how to train this model, let's
+        think how to generate a translation using this model. We model the probability of a sentence as follows:
+        </p>
+        <img src="../resources/lectures/seq2seq/general/inference_formula-min.png"
+             style="max-width:80%; margin:20px;"/>
+        <p>Now the main question is: how to find the argmax?</p>
+
+        <p>Note that <font face="arial">we can not find the exact solution.</font> The total number of
+            hypotheses we need to check is \(|V|^n\), which is not feasible in practice. Therefore, we will find
+            an approximate solution.
+        </p>
+        <p><font class="data_text" color="#888"><u>Lena</u>: In reality, the exact solution
+            is usually worse than the approximate ones we will be using.
+        </font></p>
+
+
+        <h3><span style="margin-right:15px;font-size:14px;">&#8226;</span>
+                <font face="arial">Greedy Decoding: </font>At each step, pick the most probable token</h3>
+
+        <p>The straightforward decoding strategy is greedy - at each step, generate a token with the highest probability.
+            This can be a good baseline, but this method is inherently flawed:
+            the best token at the current step does not necessarily lead to the best sequence.
+        </p>
+        <img src="../resources/lectures/seq2seq/general/greedy_is_bad-min.png"
+             style="max-width:60%; margin:20px;"/>
+
+
+
+        <h3><span style="margin-right:15px;font-size:14px;">&#8226;</span>
+                <font face="arial">Beam Search: </font> Keep track of several most probably hypotheses</h3>
+        <p>Instead, let's keep several hypotheses. At each step, we will be continuing each of the
+        current hypotheses and pick top-N of them. This is called <font face="arial">beam search</font>.
+        </p>
+        <center>
+         <video width="80%" height="auto" loop autoplay muted style="margin-left: 20px;">
+             <source src="../resources/lectures/seq2seq/general/beam_search.mp4" type="video/mp4">
+         </video>
+        <center>
+
+
+            <p>Usually, the beam size is 4-10. Increasing beam size is computationally inefficient
+            and, what is more important, leads to worse quality.
+            </p>
+
+
+    </div>
+
+
+
+
+
+
+</div>
+
+<br><br>
+    <div id="attention">
+        <h1>Attention</h1>
+
+        <div id="attention_intro">
+            <h2>The Problem of Fixed Encoder Representation</h2>
+            <div class="green_left_thought" style="font-size:18px;">
+                <p class="data_text"><u>Problem</u>: Fixed source representation
+                    is suboptimal: (i) for the encoder, it is hard to compress the sentence; (ii)
+                    for the decoder, different information may be relevant at different steps.
+                </p>
+            </div>
+
+            <img src="../resources/lectures/seq2seq/attention/bottleneck-min.png"
+             style="max-width:60%; margin:20px;float:right;"/>
+
+            <p>In the models we looked at so far, the encoder compressed the whole source sentence into a single
+                vector. This can very hard - the number of possible
+                meanings of source is infinite. When the encoder is forced to put all information into
+                a single vector, it is likely to forget something.
+            </p>
+            <p><font class="data_text" color="#888"><u>Lena</u>: Imagine
+                    the whole universe in all its beauty - try to visualize everything you can find there and how you can
+                    describe it in words.
+                    Then imagine all of it is compressed into a single vector of size e.g. 512. Do you feel that
+                    the universe is still ok?
+                </font>
+            </p>
+
+            <p>Not only it is hard for the encoder to put all information into a single vector - this is also
+                hard for the decoder. The decoder sees only one representation of source. However, at each
+                generation step, different parts of source can be more useful than others. But in the current setting,
+                the decoder has to extract relevant information from the same fixed representation -
+                hardly an easy thing to do.
+            </p>
+
+        </div>
+
+
+
+        <div id="attention_idea">
+            <h2>Attention: A High-Level View</h2>
+
+            <p>Attention was introduced in the paper
+                <a href="https://arxiv.org/pdf/1409.0473.pdf" target="_blank">
+                    Neural Machine Translation by Jointly Learning to Align and Translate
+                </a> to address the fixed representation problem. </p>
+            <div class="green_left_thought" style="font-size:18px;">
+                <p class="data_text"><u>Attention</u>: At different steps,
+                    let a model "focus" on different parts of the input.
+                </p>
+            </div>
+
+            <p>An attention mechanism is a part of a neural network. At each decoder step,
+                it decides which source parts are more important.
+                In this setting,
+                the encoder does not have to compress the whole source into a single vector -
+                it gives representations for all
+                source tokens (for example, all RNN states instead of the last one).
+            </p>
+
+            <img src="../resources/lectures/seq2seq/attention/general_scheme-min.png"
+             style="max-width:100%; margin:20px;margin-top:0px;"/>
+            <p>At each decoder step, attention</p>
+            <ul>
+                <li>receives <font face="arial">attention input</font>: a decoder state \(\color{#b01277}{h_t}\) and all encoder states
+                    \(\color{#7fb32d}{s_1}\), \(\color{#7fb32d}{s_2}\), ..., \(\color{#7fb32d}{s_m}\);</li>
+                <li>computes <font face="arial">attention scores</font><br>
+                    For each encoder state \(\color{#7fb32d}{s_k}\), attention computes its "relevance" for
+                    this decoder state \(\color{#b01277}{h_t}\). Formally, it applies
+                    an attention function which receives one decoder state and one encoder state and returns a
+                    scalar value \(\color{#307cc2}{score}(\color{#b01277}{h_t}\color{black}{,}\color{#7fb32d}{s_k}\color{black})\);
+                </li>
+                <li>computes <font face="arial">attention weights</font>:
+                    a probability distribution - softmax applied to attention scores;</li>
+                <li>computes <font face="arial">attention output</font>:
+                    the weighted sum of encoder states with attention weights.</li>
+            </ul>
+
+            <p>The general computation scheme is shown below.</p>
+            <img src="../resources/lectures/seq2seq/attention/computation_scheme-min.png"
+             style="max-width:80%; margin:20px;"/>
+
+            <h3>Note: Everything is differentiable - learned end-to-end!</h3>
+            <p>The main idea that a network can <font face="arial">learn</font> which input parts
+                are more important at each step.
+                Since everything here is differentiable (attention function, softmax, and all the rest),
+                a model with attention can be trained end-to-end. You don't need to specifically teach the model
+                to pick the words you want -
+                <font face="arial">the model itself will learn to pick important information</font>.
+            </p>
+
+
+        <br>
+        <img height="20" src="../resources/lectures/ico/paw_empty.png" style="float:left; margin-top:-10px;"/>
+        <div class="box_green_left">
+
+            <div class="text_box_green">
+              <p class="data_text"><u>How to:</u> go over the slides at your pace. Try to notice how
+                  attention weights change from step to step - which words are the most important at each step?</p>
+            </div>
+
+            <div class="carousel" data-flickity='{ "imagesLoaded": true, "percentPosition": true,
+            "selectedAttraction": 1, "friction": 1 }'
+     style="width:100%; margin-top:10px; margin-bottom:30px; margin-left:10px;">
+              <div class="carousel-cell" style="width:100%"><center>
+                    <img width=100% src="../resources/lectures/seq2seq/attention/attn_for_steps/1-min.png"/></center>
+              </div>
+              <div class="carousel-cell" style="width:100%"><center>
+                    <img width=100% src="../resources/lectures/seq2seq/attention/attn_for_steps/2-min.png"/></center>
+              </div>
+                <div class="carousel-cell" style="width:100%"><center>
+                    <img width=100% src="../resources/lectures/seq2seq/attention/attn_for_steps/3-min.png"/></center>
+              </div>
+                <div class="carousel-cell" style="width:100%"><center>
+                    <img width=100% src="../resources/lectures/seq2seq/attention/attn_for_steps/4-min.png"/></center>
+              </div>
+                <div class="carousel-cell" style="width:100%"><center>
+                    <img width=100% src="../resources/lectures/seq2seq/attention/attn_for_steps/5-min.png"/></center>
+              </div>
+                <div class="carousel-cell" style="width:100%"><center>
+                    <img width=100% src="../resources/lectures/seq2seq/attention/attn_for_steps/6-min.png"/></center>
+              </div>
+                <div class="carousel-cell" style="width:100%"><center>
+                    <img width=100% src="../resources/lectures/seq2seq/attention/attn_for_steps/7-min.png"/></center>
+              </div>
+                <div class="carousel-cell" style="width:100%"><center>
+                    <img width=100% src="../resources/lectures/seq2seq/attention/attn_for_steps/8-min.png"/></center>
+              </div>
+
+            </div>
+
+        </div>
+        <img height="20" src="../resources/lectures/ico/paw_empty.png" style="float:left; margin-top:-10px;"/>
+        <br><br>
+
+
+        </div>
+
+        <div id="attention_specific_functions">
+
+
+            <img src="../resources/lectures/seq2seq/attention/attn_score_what_is_here-min.png"
+             style="max-width:35%; margin-left:20px; float:right;"/>
+
+            <h2> How to Compute Attention Score?</h2>
+            <p>In the general pipeline above, we haven't specified how exactly we compute
+                attention scores. You can apply any function you want - even a very complicated one.
+                However, usually you don't need to - there are several popular and simple variants which work quite well.
+            </p>
+
+            <center>
+            <img src="../resources/lectures/seq2seq/attention/score_functions-min.png"
+             style="max-width:90%; margin-bottom:20px;"/>
+            </center>
+
+            <p>The most popular ways to compute attention scores are:</p>
+            <ul>
+                <li><font face="arial">dot-product</font> - the simplest method;</li>
+                <li><font face="arial">bilinear function</font> (aka "Luong attention") - used in the paper
+                    <a href="https://arxiv.org/abs/1508.04025" target="_blank">Effective
+                        Approaches to Attention-based Neural Machine Translation</a>;</li>
+                <li><font face="arial">multi-layer perceptron</font> (aka "Bahdanau attention") -
+                    the method proposed in the
+                    <a href="https://arxiv.org/pdf/1409.0473.pdf" target="_blank">original paper</a>.
+                    </li>
+            </ul>
+
+
+
+        </div>
+
+
+
+
+        <div id="attention_bahdanau_luong">
+
+
+
+            <h2> Model Variants: Bahdanau and Luong </h2>
+
+            <p>When talking about the early attention models, you are most likely to hear
+                these variants:</p>
+            <ul>
+                <li><font face="arial">Bahdanau attention</font> - from the paper <a href="https://arxiv.org/pdf/1409.0473.pdf" target="_blank">
+                    Neural Machine Translation by Jointly Learning to Align and Translate
+                </a> by Dzmitry Bahdanau, KyungHyun Cho and Yoshua Bengio (this is the paper that introduced the attention
+                mechanism for the first time);
+                </li>
+                <li><font face="arial">Luong attention</font> - from the paper <a href="https://arxiv.org/abs/1508.04025" target="_blank">Effective
+                        Approaches to Attention-based Neural Machine Translation</a> by
+                Minh-Thang Luong, Hieu Pham, Christopher D. Manning.
+                </li>
+            </ul>
+
+            <p>These may refer to either score functions of the whole models used in these papers.
+                In this part, we will look more
+                closely at these two model variants.
+            </p>
+
+
+            <h3> <u>Bahdanau Model</u> </h3>
+            <ul><li><font face="arial">encoder: bidirectional</font><br>
+            To better encoder each source word, the encoder has two RNNs, forward and backward,
+                which read input in the opposite directions. For each token, states of the two RNNs are concatenated.
+            </li>
+                <li><font face="arial">attention score: multi-layer perceptron</font><br>
+                    To get an attention score, apply a multi-layer perceptron (MLP) to
+                    an encoder state and a decoder state.
+                </li>
+                <li><font face="arial">attention applied: between decoder steps</font><br>
+                    Attention is used between decoder steps: state \(\color{#b01277}{h_{t-1}}\) is used to
+                    compute attention and its output \(\color{#7fb32d}{c}^{\color{#b01277}{(t)}}\), and
+                     both \(\color{#b01277}{h_{t-1}}\) and \(\color{#7fb32d}{c}^{\color{#b01277}{(t)}}\)
+                    are passed to the decoder at step \(t\).
+                </li>
+
+            </ul>
+
+            <center>
+            <img src="../resources/lectures/seq2seq/attention/bahdanau_model-min.png"
+             style="max-width:100%; margin-bottom:20px;"/>
+            </center>
+
+
+            <h3> <u>Luong Model</u> </h3>
+            <p>While the <a href="https://arxiv.org/abs/1508.04025" target="_blank">paper</a> considers several model variants,
+            the one which is usually called "Luong attention" is the following:
+            </p>
+            <ul><li><font face="arial">encoder: unirectional</font> (simple)
+            </li>
+                <li><font face="arial">attention score: bilinear function</font>
+                </li>
+                <li><font face="arial">attention applied: between decoder RNN state \(t\) and prediction for this step</font><br>
+                    Attention is used after RNN decoder step \(t\) before making a prediction.
+                    State \(\color{#b01277}{h_{t}}\) used to
+                    compute attention and its output \(\color{#7fb32d}{c}^{\color{#b01277}{(t)}}\). Then
+                    \(\color{#b01277}{h_{t}}\) is combined with \(\color{#7fb32d}{c}^{\color{#b01277}{(t)}}\)
+                    to get an updated representation \(\color{#b01277}{\tilde{h}_{t}}\),
+                    which is used to get a prediction.
+                </li>
+
+            </ul>
+
+            <center>
+            <img src="../resources/lectures/seq2seq/attention/luong_model-min.png"
+             style="max-width:100%; margin-bottom:20px;"/>
+            </center>
+
+
+
+        </div>
+
+        <div id="attention_alignment">
+
+            <h2>Attention Learns (Nearly) Alignment</h2>
+
+            <p>Remember the motivation for attention? At different steps,
+                the decoder may need to focus different
+            source tokens, the ones which are more relevant at this step. Let's look at attention weights -
+                which source words does the decoder use?
+            </p>
+
+            <p style="text-align: center; display: block;
+            margin-bottom:20px; max-width:100%;">
+           <img src="../resources/lectures/seq2seq/attention/bahdanau_examples-min.png"
+             style="max-width:100%; margin-bottom:20px;"/>
+                <br />
+            <span style="font-size: small;">The examples are from the paper
+            <a href="https://arxiv.org/pdf/1409.0473.pdf" target="_blank">Neural Machine Translation
+                by Jointly Learning to Align and Translate</a>.</span>
+            </p>
+
+            <p>From the examples, we see that attention
+                learned (soft) alignment between source and target words - the decoder looks at those source
+                tokens which it is translating at the current step.
+            </p>
+
+            <p class="data_text"><font color="#888"><u>Lena</u>:
+                "Alignment" is a term from
+                statistical machine translation, but in this part, its intuitive understanding as
+                "what is translated to what" is enough.
+            </font></p>
+
+
+        </div>
+
+
+    </div>
+
+
+    <div id="transformer">
+        <h1>Transformer: Attention is All You Need</h1>
+
+
+        <div id="transformer_intro">
+
+            <p>Transformer is a model introduced in the paper
+            <a href="https://papers.nips.cc/paper/7181-attention-is-all-you-need.pdf"
+               target="_blank">Attention is All You Need</a>
+            in 2017. It is based solely on attention mechanisms: i.e., without recurrence or convolutions.
+                On top of higher translation quality, the model
+                is faster to train by up to an order of magnitude.
+                Currently, Transformers (with variations) are de-facto standard models not only in
+                sequence to sequence tasks but also for language modeling and in pretraining settings, which we
+                consider in the next lecture.
+            </p>
+
+            <p>
+                Transformer introduced a new modeling paradigm: in contrast to previous models where
+                processing within encoder and decoder was done with recurrence or convolutions, Transformer
+                operates using only attention.
+            </p>
+
+             <center>
+             <img src="../resources/lectures/seq2seq/transformer/modeling_table-min.png"
+             style="max-width:80%; margin-bottom:20px;"/>
+             </center>
+
+            <p>Look at the illustration from the
+                <a href="https://ai.googleblog.com/2017/08/transformer-novel-neural-network.html" target="_blank">
+                    Google AI blog post </a> introducing Transformer.
+            </p>
+            <p style="text-align: center; display: block;
+            margin-bottom:20px; margin-left:25px; max-width:80%;">
+           <img src="../resources/lectures/seq2seq/transformer/transformer_original.gif"
+             style="max-width:100%; margin-bottom:20px;"/>
+                <br />
+            <span style="font-size: small;">The animation is from the
+            <a href="https://ai.googleblog.com/2017/08/transformer-novel-neural-network.html" target="_blank">
+                    Google AI blog post</a>.</span>
+            </p>
+
+            <p>Without going into too many details, let's put into words what just saw in the illustration.
+                We'll get something like the following:
+            </p>
+        <center>
+        <img src="../resources/lectures/seq2seq/transformer/encdec_intuitive_words-min.png"
+             style="max-width:90%; margin-bottom:20px;"/>
+        </center>
+
+            <p>Ok, but are there any reasons why this can be more suitable that RNNs for language understanding?
+            Let's look at the example.
+            </p>
+
+            <img src="../resources/lectures/seq2seq/transformer/rnn_vs_transformer_river-min.png"
+             style="max-width:60%; margin-left:20px; float:right;"/>
+            <p>When encoding a sentence, RNNs won't understand what
+                <font class="data_text"><strong>bank</strong></font> means until they read the whole sentence,
+                and this can take a while for long sequences. In contrast, in Transformer's encoder
+                tokens interact with each other
+                <font face="arial">all at once</font>.
+            </p>
+
+            <p>Intuitively, Transformer's encoder can be thought of as a sequence of reasoning steps (layers).
+                At each step, tokens <font face="arial">look</font> at each other
+                (this is where we need attention - <font face="arial">self-attention</font>),
+                exchange information and try to understand each other better in the context of the whole sentence.
+                This happens in several layers (e.g., 6).
+            </p>
+            <p>In each decoder layer, tokens of the prefix also interact with each other via a self-attention mechanism,
+                but additionally, they look at the encoder states (without this, no translation can happen, right?).
+            </p>
+
+
+
+            <p>Now, let's try to understand how exactly this is implemented in the model.
+            </p>
+
+        </div>
+
+
+    <div id="self_attention">
+        <h2><font face="arial">Self-Attention</font>: the "Look at Each Other" Part</h2>
+
+        <p><font face="arial">Self-attention</font> is one of the key components of the model.
+            The difference between <font face="arial">attention</font>
+            and <font face="arial">self-attention</font> is that self-attention
+            operates between representations of the same nature: e.g., all encoder states in some layer.
+        </p>
+
+        <center>
+        <img src="../resources/lectures/seq2seq/transformer/decenc_vs_self-min.png"
+             style="max-width:90%; margin-bottom:20px;"/>
+        </center>
+
+
+        <p>Self-attention is the part of the model where
+            <font face="arial">tokens interact with each other</font>. Each token "looks" at other
+            tokens in the sentence with an attention mechanism, gathers context,
+            and updates the previous representation of "self". Look at the illustration.
+        </p>
+
+        <video width="80%" height="auto" loop autoplay muted style="margin-left: 20px;">
+        <source src="../resources/lectures/seq2seq/transformer/encoder_self_attention.mp4" type="video/mp4">
+        </video>
+
+        <p>Note that in practice, this happens in parallel.</p>
+
+        <h3><font face="arial">Query, Key, and Value in Self-Attention</font></h3>
+
+        <p>Formally, this intuition is implemented with a <font face="arial">query-key-value</font> attention.
+            Each input token in self-attention receives three representations corresponding
+            to the roles it can play:
+        </p>
+        <ul>
+            <li><font face="arial">query</font> - asking for information;
+            </li>
+            <li><font face="arial">key</font> - saying that it has some information;</li>
+            <li><font face="arial">value</font> - giving the information.</li>
+        </ul>
+        <p>The <font face="arial">query</font> is used when a token looks at others - it's seeking the information
+            to understand itself better.
+            The <font face="arial">key</font> is responding to a query's request: it is used to compute attention weights.
+            The <font face="arial">value</font> is used to compute attention output: it gives information
+            to the tokens which "say" they need it (i.e. assigned large weights to this token).
+        </p>
+
+        <center>
+        <img src="../resources/lectures/seq2seq/transformer/qkv_explained-min.png"
+             style="max-width:100%; margin-bottom:20px;"/>
+        </center>
+
+        <p>The formula for computing attention output is as follows:</p>
+        <center>
+        <img src="../resources/lectures/seq2seq/transformer/qkv_attention_formula-min.png"
+             style="max-width:55%; margin-bottom:20px; "/>
+            </center>
+
+    </div>
+
+        <div id="masked_self_attention">
+        <h2><font face="arial">Masked Self-Attention</font>: "Don't Look Ahead" for the Decoder</h2>
+
+            <p>In the decoder, there's also a self-attention mechanism: it is the one performing the
+                "look at the previous tokens" function.
+            </p>
+        <video width="50%" height="auto" loop autoplay muted style="margin-left: 20px;float:right;">
+        <source src="../resources/lectures/seq2seq/transformer/masked_self_attn.mp4" type="video/mp4">
+        </video>
+
+
+            <p>In the decoder, self-attention is a bit different from the one in the encoder. While
+                the encoder receives all tokens at once and the tokens can look at <font face="arial">all</font>
+                tokens in the input sentence, in the decoder, we generate
+                <font face="arial">one token at a time</font>:
+                during generation, we don't know which tokens we'll generate in future.
+
+            </p>
+            <p>To forbid the decoder to look ahead, the model uses
+                <font face="arial">masked self-attention</font>: future tokens are masked out. Look at the illustration.
+            </p>
+
+            <h3><font face="arial">But how can the decoder look ahead?</font></h3>
+            <p>During generation, it can't - we don't know what comes next.
+                But in training, we use reference translations (which we know).
+                Therefore, in training, we
+                feed the whole target sentence to the decoder - without masks, the tokens would "see future",
+                and this is not what we want.
+            </p>
+            <p>This is done for computational efficiency: the Transformer does not have a recurrence, so
+               all tokens can be processed at once. This is one of the reasons it has become so popular
+                for machine translation - it's much faster to train than the once dominant
+                recurrent models. For recurrent models,
+                one training step requires O(len(source) + len(target)) steps, but
+                for Transformer, it's O(1), i.e. constant.
+            </p>
+
+        </div>
+
+
+         <div id="multi_head_attention">
+             <h2><font face="arial">Multi-Head Attention</font>: Independently Focus on Different Things</h2>
+
+            <video width="60%" height="auto" loop autoplay muted style="margin-left: 20px;float:right;">
+            <source src="../resources/lectures/seq2seq/transformer/multi_head.mp4" type="video/mp4">
+            </video>
+
+             <p>Usually, understanding the role of a word in a sentence requires understanding
+                 how it is related to different parts of the sentence.
+                 This is important not only in processing source sentence but also in generating target.
+                 For example, in some languages, subjects define verb inflection (e.g., gender agreement),
+                 verbs define the case of their objects, and many more.
+                 What I'm trying to say is: <font face="arial">each word is part of many relations.</font>
+             </p>
+             <p>Therefore, we have to let the model focus on different things:
+                 this is the motivation behind <font face="arial">Multi-Head Attention.</font>
+                 Instead of having one attention mechanism, multi-head attention
+                 has several "heads" which work independently.
+
+             </p>
+
+
+
+             <img src="../resources/lectures/seq2seq/transformer/qkv_for_heads-min.png"
+             style="max-width:40%; margin-left:20px; float:right;"/>
+
+             <p>Formally, this is implemented as several attention mechanisms whose results are combined:
+             \[\mbox{MultiHead}(Q, K, V) = \mbox{Concat}(\mbox{head}_1, \dots, \mbox{head}_n)W_o,\]
+             \[\mbox{head}_i=\mbox{Attention}(QW_Q^i, KW_K^i, VW_V^i)\]
+             </p>
+             <p>In the implementation, you just split the queries, keys, and values you compute for a
+                single-head attention into several parts. In this way, models with one attention head
+                 or several of them have the same size - multi-head attention does not increase model size.
+             </p>
+
+
+            <div class="card_with_ico">
+            <img class="ico" src="../../resources/lectures/ico/analysis_empty.png" width="30px"/>
+            <div class="text_box_green">
+            <p class="data_text"> In the
+            <a href="#analysis_interpretability">Analysis and Interpretability</a> section,
+                we will see these heads play different "roles" in the model: e.g., positional or tracking syntactic
+                dependencies.
+            </div>
+            </div>
+
+
+    </div>
+
+
+        <div id="transformer_model_architecture">
+            <h2>Transformer: Model Architecture</h2>
+
+            <p>Now, when we understand the main model components and the general idea, let's
+                look at the whole model. The figure shows the model architecture from
+                <a href="https://papers.nips.cc/paper/7181-attention-is-all-you-need.pdf"
+                target="_blank">the original paper</a>.
+            </p>
+
+            <img src="../resources/lectures/seq2seq/transformer/model-min.png"
+             style="max-width:100%; margin-bottom:20px; "/>
+            <p>Intuitively, the model does exactly what we discussed before: in the encoder,
+                tokens communicate with each other and update their representations; in the decoder,
+                a target token first looks at previously generated target tokens, then at
+                the source, and finally updates its representation. This happens in several layers, usually 6.
+            </p>
+            <p>Let's look in more detail at the other model components.</p>
+
+            <h3><span style="margin-right:15px;font-size:14px;">&#8226;</span>
+                <font face="arial">Feed-forward blocks</font></h3>
+
+            <img src="../resources/lectures/seq2seq/transformer/ffn-min.png"
+             style="max-width:25%; margin-left:20px; float:right;"/>
+            <p>In addition to attention, each layer has a feed-forward network block: two linear layers with
+                ReLU non-linearity
+                between them:
+                \[FFN(x) = \max(0, xW_1+b_1)W_2+b_2.\]
+                After looking at other tokens via an attention mechanism, a model uses an FFN block
+                to process this new information (attention -
+                <span class="data_text">"look at other tokens and gather information"</span>,
+                FFN - <span class="data_text">"take a moment to think and process this information"</span>).
+
+            </p>
+
+            <h3><span style="margin-right:15px;font-size:14px;">&#8226;</span>
+                <font face="arial">Residual connections</font></h3>
+            <img src="../resources/lectures/seq2seq/transformer/residual-min.png"
+             style="max-width:35%; margin-left:20px; float:right;"/>
+            <p>We already saw residual connections when talking about
+            <a href="./language_modeling.html#neural_lms_models_cnn" target="_blank"> convolutional language models</a>.
+                Residual connections are very simple (add a block's input to its output),
+                but at the same time are very useful: they ease the gradient flow through a network
+                and allow stacking a lot of layers.
+            </p>
+            <p>In the Transformer, residual connections are used after each attention and FFN block.
+            On the illustration above, residuals are shown as arrows coming around a block to the yellow
+                <font face="arial">"Add & Norm"</font> layer.
+                In the <font face="arial">"Add & Norm"</font> part, the
+                    <font face="arial">"Add"</font> part stands for the residual connection.
+            </p>
+
+
+            <h3><span style="margin-right:15px;font-size:14px;">&#8226;</span>
+                <font face="arial">Layer Normalization</font></h3>
+             <img src="../resources/lectures/seq2seq/transformer/layer_norm-min.png"
+             style="max-width:40%; margin-left:20px; float:right;"/>
+            <p>The <font face="arial">"Norm"</font> part in the
+            <font face="arial">"Add & Norm"</font> layer denotes
+                <a href="https://arxiv.org/pdf/1607.06450.pdf" target="_blank">Layer Normalization</a>.
+                It independently normalizes vector representation of each example in batch
+                 - this is done to control "flow" to the next layer. Layer normalization
+                improves convergence stability and sometimes even quality.
+            </p>
+            <p>In the Transformer, you have to normalize vector representation of each token.
+                Additionally, here LayerNorm has trainable parameters, \(scale\) and \(bias\), which
+                are used after normalization to rescale layer's outputs (or the next layer's inputs).
+                Note that \(\mu_k\) and \(\sigma_k\) are evaluated for each example,
+                but \(scale\) and \(bias\) are the same -
+                these are layer parameters.
+            </p>
+
+
+            <h3><span style="margin-right:15px;font-size:14px;">&#8226;</span>
+                <font face="arial">Positional encoding</font></h3>
+            <img src="../resources/lectures/seq2seq/transformer/positional_encoding-min.png"
+             style="max-width:50%; margin-left:20px; float:right;"/>
+            <p>Note that since Transformer does not contain recurrence or convolution,
+                it does not know the order of input tokens.
+
+                Therefore, we have to let the model know the positions of the tokens explicitly.
+                For this, we have two sets of embeddings: for tokens (as we always do)
+                and for positions (the new ones needed for this model). Then
+                input representation of a token is the <font face="arial">sum of two embeddings</font>:
+                token and positional.
+            </p>
+            <p>The positional embeddings can be learned, but the authors found that
+                having fixed ones does not hurt the quality. The fixed positional encodings used in the Transformer
+                are:
+                \[\mbox{PE}_{pos, 2i}=\sin(pos/10000^{2i/d_{model}}),\]
+                \[\mbox{PE}_{pos, 2i+1}=\cos(pos/10000^{2i/d_{model}}),\]
+                where \(pos\) is position and \(i\) is the vector dimension.
+                Each dimension of the positional encoding corresponds to a sinusoid, and
+                the wavelengths form a geometric progression from 2π to 10000 · 2π.
+            </p>
+
+
+
+
+
+        </div>
+
+
+    </div>
+
+
+    <br><br>
+
+
+    <div id="bpe">
+        <h1>Subword Segmentation: Byte Pair Encoding</h1>
+
+        <p>As we know, a model has a predefined vocabulary of tokens. Those input tokens, which are not in the
+            vocabulary, will be replaced with a special <font class="data_text"><strong>UNK</strong></font>
+            ("unknown") token. Therefore, if you use
+            the straightforward word-level tokenization (i.e., your tokens are words),
+            you will be able to process a fixed number of words. This is the <font face="arial">
+                fixed vocabulary problem
+            </font>:
+            you will be getting
+            lot's of unknown tokens, and your model won't translate them properly.
+        </p>
+
+        <center>
+        <img src="../resources/lectures/seq2seq/bpe/tokenization_word_subword-min.png"
+             style="max-width:80%; margin-bottom:20px; "/>
+            </center>
+
+
+        <p>But how can we represent all words, even those we haven't seen in the training data?
+            Well, even if you are not familiar with a word, you are familiar with the parts it consists of -
+            subwords (in the worst case, symbols). Then why don't we split the rare and unknown words
+            into smaller parts?</p>
+
+        <p>
+            This is exactly what was proposed in the paper
+            <a href="https://arxiv.org/pdf/1508.07909.pdf" target="_blank">Neural Machine Translation of Rare Words with Subword Units</a>
+            by Rico Sennrich, Barry Haddow and Alexandra Birch.
+            They introduced the de-facto standard subword segmentation,
+            <font face="arial">Byte Pair Encoding (BPE)</font>. BPE keeps frequent words intact and splits rare and unknown ones into
+            smaller known parts.
+        </p>
+
+        <h2>How does it work?</h2>
+
+        <p>The original
+            <a href="https://en.wikipedia.org/wiki/Byte_pair_encoding" target="_blank">Byte Pair Encoding (BPE) (Gage, 1994)</a>
+            is a simple data compression technique that iteratively
+            replaces the most frequent pair of bytes in a sequence with a single, unused byte.
+            What we refer to as BPE now is an adaptation of this algorithm for word segmentation.
+            Instead of merging frequent pairs of bytes,
+            it merges characters or character sequences.
+        </p>
+
+        <p>BPE algorithm consists of two parts:</p>
+        <ul>
+            <li><font face="arial">training</font> - learn "BPE rules", i.e., which pairs of symbols to merge;</li>
+            <li><font face="arial">inference</font> - apply learned rules to segment a text.</li>
+        </ul>
+
+        <p>Let's look at each of them in more detail.</p>
+
+        <h3><font face="arial">Training: learn BPE rules</font></h3>
+        <p>At this step, the algorithm builds a merge table and a vocabulary of tokens.
+            The initial vocabulary consists of characters and an empty merge table. At this step,
+            each word is segmented as a sequence if characters.
+            After that, the algorithm is as follows:
+        </p>
+        <ul>
+            <li>count pairs of symbols: how many times each pair occurs together in the training data;</li>
+            <li>find the most frequent pair of symbols;</li>
+            <li>merge this pair - add a merge to the merge table, and the new token to the vocabulary.</li>
+        </ul>
+
+        <p>In practice, the algorithm first counts how many times each word appeared in the data.
+            Using this information, it can count pairs of symbols more easily. Note also that the tokens do not cross word
+            boundary - everything happens within words.
+        </p>
+
+        <p>Look at the illustration. Here I show you a toy example: here we assume that
+            in training data, we met
+            <font class="data_text"><strong>cat</strong></font> 4 times,
+            <font class="data_text"><strong>mat</strong></font> 5 times and
+            <font class="data_text"><strong>mats</strong></font>,
+            <font class="data_text"><strong>mate</strong></font>,
+            <font class="data_text"><strong>ate</strong></font>,
+            <font class="data_text"><strong>eat</strong></font> 2, 3, 3, 2 times, respectively.
+            We also have to set the maximum number of merges we want; usually, it's going to be about 4k-32k
+            depending on the dataset size,
+            but for our toy example, let's set it to 5.
+        </p>
+
+            <img src="../resources/lectures/seq2seq/bpe/build_merge_table.gif"
+             style="max-width:90%; margin-bottom:10px; "/>
+
+        <p>When we reached the maximum number of merges, not all words were merged into a single token.
+            For example, <font class="data_text"><strong>mats</strong></font>
+            is segmented as two tokens: <font class="data_text"><strong>mat@@ s</strong></font>.
+            Note that after segmentation, we add the special characters
+            <font class="data_text"><strong>@@</strong></font> to distinguish between tokens
+            that represent entire words and tokens that represent parts of words.
+            In our example, <font class="data_text"><strong>mat</strong></font>
+            and <font class="data_text"><strong>mat@@</strong></font> are different tokens.
+        </p>
+
+        <p><u>Implementation note.</u> In an implementation, you need to make sure that a new merge adds only
+            one new token to the vocabulary. For this, you can either add a special end-of-word symbol
+            to each word (as done in <a href="https://arxiv.org/pdf/1508.07909.pdf" target="_blank">the original BPE paper</a>)
+            or replace spaces with a special symbol (as done in e.g.
+            <a href="https://github.com/google/sentencepiece" target="_blank">Sentencepiece</a> and
+            <a href="https://github.com/VKCOM/YouTokenToMe" target="_blank">YouTokenToMe</a>, the fastest implementation),
+            or do something else. In the illustration, I omit this for simplicity.
+        </p>
+
+
+        <h3><font face="arial">Inference: segment a text</font></h3>
+
+        <p>After learning BPE rules, you have a merge table - now, we will use it to segment a new text.
+        </p>
+
+        <img src="../resources/lectures/seq2seq/bpe/bpe_apply.gif"
+             style="max-width:40%; float:right; margin-left:20px;"/>
+
+        <p>The algorithm starts with segmenting a word into a sequence of characters. After that,
+        it iteratively makes the following two steps until no merge it possible:</p>
+        <ul>
+            <li>among all possible merges at this step, find the highest merge in the table;</li>
+            <li>apply this merge.</li>
+        </ul>
+        <p>Note that the merge table is ordered - the merges that are higher in the table were more frequent
+            in the data.
+            That's why in the algorithm, merges that are higher have higher priority: at each step, we merge
+            the most frequent merge among all possible.
+        </p>
+
+    <div class="card_with_ico">
+    <img class="ico" src="../resources/lectures/ico/bulb_empty.png"/>
+    <div class="text_box_yellow">
+    <p class="data_text">
+        Note that while BPE segmentation is deterministic,
+        even with the same vocabulary a word can have different segmentations, e.g.
+                  <font class="data_text"><strong>un relat ed</strong></font>,
+                  <font class="data_text"><strong>u n relate d</strong></font>,
+                  <font class="data_text"><strong>un rel ated</strong></font>,
+                  etc.). Maybe it would be better to use different segmentations in training?
+        <br><br>
+        Well, maybe it would. Learn more in <a href="#research_bpe_dropout">this exercise</a>
+    in the <a href="#research_thinking">Research Thinking</a> section. </p>
+    </div>
+    </div>
+
+
+    </div>
+
+
+<br><br><br>
+<div id="analysis_interpretability">
+        <img height="40" src="../resources/lectures/ico/analysis_empty.png"
+             style="float:left; padding-right:20px; "/>
+        <h1>Analysis and Interpretability</h1>
+
+    <h2>Multi-Head Self-Attention: What are these heads doing?</h2>
+
+    <p>First, let's start with our traditional model analysis method: looking at model components.
+        Previously, we looked at convolutional filters in classifiers, neurons
+        in language models; now, it's time to look at a bigger component: attention.
+        But let's take not the vanilla one,
+        but the heads in Transformer's multi-head attention.
+    </p>
+    <p class="data_text"><font color="#888"><u>Lena</u>: First, why are we doing this? Multi-head attention is an
+        <font face="arial">inductive bias</font> introduced in the Transformer.
+        When creating an inductive bias in a model, we usually have some kind of intuition
+        for why we think this new model component, inductive bias, could be useful.
+        Therefore, it's good to understand how this new thing works - does it learn the things
+        we thought it would? If not, why it helps? If yes, how can we improve it? Hope now you are motivated enough,
+        so let's continue.
+        </font>
+    </p>
+
+    <h3>The Most Important Heads are Interpretable</h3>
+    <p>Here we'll mention some of the results from the ACL 2019 paper
+        <a href="https://www.aclweb.org/anthology/P19-1580.pdf" target="_blank">Analyzing Multi-Head Self-Attention:
+            Specialized Heads Do the Heavy Lifting, the Rest Can Be Pruned</a>.
+            The authors look at individual attention heads in encoder's multi-head attention and
+        evaluate how much, on average, different
+         heads "contribute" to generated translations (for the details on how exactly they did this,
+        look in the paper or <a href="https://lena-voita.github.io/posts/acl19_heads.html" target="_blank">the blog post</a>).
+    As it turns out,
+    </p>
+    <ul>
+        <li>only a small number of heads are important for translation,</li>
+        <li>these heads play interpretable "roles".</li>
+    </ul>
+    <p>These roles are:</p>
+    <ul>
+        <li><font face="arial">positional</font>: attend to a token's immediate neighbors, and
+        the model has several such heads (usually 2-3 heads looking at the previous token and 2 heads
+        looking at the next token);
+        </li>
+        <li><font face="arial">syntactic</font>:
+         learned to track some major syntactic relations in the sentence (subject-verb, verb-object);
+        </li>
+        <li><font face="arial">rare tokens</font>:
+         the most important head on the first layer attends to the least frequent tokens in a sentence
+            (this is true for models trained on different language pairs!).
+        </li>
+    </ul>
+    <p> Look at the examples of positional and syntactic heads below.
+        This means that our intuition for having several heads was right - among other things, the model
+        did learn to track relations between words!
+    </p>
+
+    <div style="display: grid; grid-template-columns: 50% 50%; margin:10px;">
+
+        <div>
+            <h3 style="text-align:center;"><font face="arial">Positional heads</font></h3>
+            <div class="carousel"
+     style="float:left; width:95%; margin-top:0px; margin-bottom:30px; margin-left:0px"
+  data-flickity='{ "imagesLoaded": true, "percentPosition": true}'>
+  <div class="carousel-cell" style="width:90%"><center>
+    <img src="../resources/posts/acl19_heads/position_head/wmt_en_de_prev-min.png"/>
+      <p style="text-align:center;">Model trained on WMT EN-DE</p>
+  </center></div>
+    <div class="carousel-cell" style="width:100%"><center>
+    <img src="../resources/posts/acl19_heads/position_head/wmt_en_de_next-min.png"/>
+      <p style="text-align:center;">Model trained on WMT EN-DE</p>
+  </center></div>
+
+
+    <div class="carousel-cell" style="width:100%"><center>
+    <img src="../resources/posts/acl19_heads/position_head/wmt_en_fr_prev-min.png"/>
+      <p style="text-align:center;">Model trained on WMT EN-FR</p>
+  </center></div>
+    <div class="carousel-cell" style="width:100%"><center>
+    <img src="../resources/posts/acl19_heads/position_head/wmt_en_fr_next-min.png"/>
+      <p style="text-align:center;">Model trained on WMT EN-FR</p>
+  </center></div>
+
+
+    <div class="carousel-cell" style="width:100%"><center>
+    <img src="../resources/posts/acl19_heads/position_head/wmt_en_ru_prev-min.png"/>
+      <p style="text-align:center;">Model trained on WMT EN-RU</p>
+  </center></div>
+    <div class="carousel-cell" style="width:100%"><center>
+    <img src="../resources/posts/acl19_heads/position_head/wmt_en_ru_next-min.png"/>
+      <p style="text-align:center;">Model trained on WMT EN-RU</p>
+  </center></div>
+
+
+    <div class="carousel-cell" style="width:100%"><center>
+    <img src="../resources/posts/acl19_heads/position_head/subs_en_ru_prev-min.png"/>
+      <p style="text-align:center;">Model trained on OpenSubtitles EN-RU</p>
+  </center></div>
+    <div class="carousel-cell" style="width:100%"><center>
+    <img src="../resources/posts/acl19_heads/position_head/subs_en_ru_next-min.png"/>
+      <p style="text-align:center;">Model trained on OpenSubtitles EN-RU</p>
+  </center></div>
+
+</div>
+        </div>
+
+        <div>
+            <h3 style="text-align:center;"><font face="arial">Syntactic heads</font></h3>
+            <div class="carousel"
+     style="float:right; width:95%; margin-top:0px; margin-bottom:30px; "
+  data-flickity='{ "imagesLoaded": true, "percentPosition": true}'>
+  <div class="carousel-cell" style="width:100%"><center>
+    <img src="../resources/posts/acl19_heads/syntactic_head/subs_en_ru_sv_1-min.png"/>
+      <p style="text-align:center;"> subject-> verb</p>
+  </center></div>
+    <div class="carousel-cell" style="width:100%"><center>
+    <img src="../resources/posts/acl19_heads/syntactic_head/subs_en_ru_vs_1-min.png"/>
+      <p style="text-align:center;"> verb -> subject</p>
+  </center></div>
+
+
+    <div class="carousel-cell" style="width:100%"><center>
+    <img src="../resources/posts/acl19_heads/syntactic_head/subs_en_ru_sv_2-min.png"/>
+      <p style="text-align:center;"> subject-> verb</p>
+  </center></div>
+    <div class="carousel-cell" style="width:100%"><center>
+    <img src="../resources/posts/acl19_heads/syntactic_head/subs_en_ru_vs_2-min.png"/>
+      <p style="text-align:center;"> verb -> subject</p>
+  </center></div>
+  <div class="carousel-cell" style="width:100%"><center>
+    <img src="../resources/posts/acl19_heads/syntactic_head/subs_en_ru_vs_3-min.png"/>
+      <p style="text-align:center;"> verb -> subject</p>
+  </center></div>
+
+
+  <div class="carousel-cell" style="width:100%"><center>
+    <img src="../resources/posts/acl19_heads/syntactic_head/wmt_en_ru_ov_2-min.png"/>
+      <p style="text-align:center;"> object -> verb</p>
+  </center></div>
+  <div class="carousel-cell" style="width:100%"><center>
+    <img src="../resources/posts/acl19_heads/syntactic_head/wmt_en_ru_vo_2-min.png"/>
+      <p style="text-align:center;"> verb -> object</p>
+  </center></div>
+
+    <div class="carousel-cell" style="width:100%"><center>
+    <img src="../resources/posts/acl19_heads/syntactic_head/subs_en_ru_ov_1-min.png"/>
+      <p style="text-align:center;"> object -> verb</p>
+  </center></div>
+
+</div>
+        </div>
+    </div>
+
+
+    <div style="float:right; width:40%; margin-left:20px; " >
+<h3 style="text-align:center;"><font face="arial">Rare tokens head</font></h3>
+    <div class="carousel"
+     style="margin-top:10px; margin-bottom:30px; margin-left:10px"
+  data-flickity='{ "imagesLoaded": true, "percentPosition": true}'>
+
+  <div class="carousel-cell" style="width:100%"><center>
+    <img src="../resources/posts/acl19_heads/topic_head/wmt_en_de_1-min.png"/>
+      <p style="text-align:center;">Model trained on WMT EN-DE</p>
+  </center></div>
+    <div class="carousel-cell" style="width:100%"><center>
+    <img src="../resources/posts/acl19_heads/topic_head/wmt_en_de_2-min.png"/>
+      <p style="text-align:center;">Model trained on WMT EN-DE</p>
+  </center></div>
+    <div class="carousel-cell" style="width:100%"><center>
+    <img src="../resources/posts/acl19_heads/topic_head/wmt_en_de_3-min.png"/>
+      <p style="text-align:center;">Model trained on WMT EN-DE</p>
+  </center></div>
+
+    <div class="carousel-cell" style="width:100%"><center>
+    <img src="../resources/posts/acl19_heads/topic_head/wmt_en_fr_1-min.png"/>
+      <p style="text-align:center;">Model trained on WMT EN-FR</p>
+  </center></div>
+    <div class="carousel-cell" style="width:100%"><center>
+    <img src="../resources/posts/acl19_heads/topic_head/wmt_en_fr_2-min.png"/>
+      <p style="text-align:center;">Model trained on WMT EN-FR</p>
+  </center></div>
+    <div class="carousel-cell" style="width:100%"><center>
+    <img src="../resources/posts/acl19_heads/topic_head/wmt_en_fr_3-min.png"/>
+      <p style="text-align:center;">Model trained on WMT EN-FR</p>
+  </center></div>
+
+    <div class="carousel-cell" style="width:100%"><center>
+    <img src="../resources/posts/acl19_heads/topic_head/wmt_en_ru_1-min.png"/>
+      <p style="text-align:center;">Model trained on WMT EN-RU</p>
+  </center></div>
+    <div class="carousel-cell" style="width:100%"><center>
+    <img src="../resources/posts/acl19_heads/topic_head/wmt_en_ru_2-min.png"/>
+      <p style="text-align:center;">Model trained on WMT EN-RU</p>
+  </center></div>
+    <div class="carousel-cell" style="width:100%"><center>
+    <img src="../resources/posts/acl19_heads/topic_head/wmt_en_ru_3-min.png"/>
+      <p style="text-align:center;">Model trained on WMT EN-RU</p>
+  </center></div>
+    <div class="carousel-cell" style="width:100%"><center>
+    <img src="../resources/posts/acl19_heads/topic_head/wmt_en_ru_4-min.png"/>
+      <p style="text-align:center;">Model trained on WMT EN-RU</p>
+  </center></div>
+
+    <div class="carousel-cell" style="width:100%"><center>
+    <img src="../resources/posts/acl19_heads/topic_head/subs_en_ru_1-min.png"/>
+      <p style="text-align:center;">Model trained on OpenSubtitles EN-RU</p>
+  </center></div>
+    <div class="carousel-cell" style="width:100%"><center>
+    <img src="../resources/posts/acl19_heads/topic_head/subs_en_ru_2-min.png"/>
+      <p style="text-align:center;">Model trained on OpenSubtitles EN-RU</p>
+  </center></div>
+    <div class="carousel-cell" style="width:100%"><center>
+    <img src="../resources/posts/acl19_heads/topic_head/subs_en_ru_3-min.png"/>
+      <p style="text-align:center;">Model trained on OpenSubtitles EN-RU</p>
+  </center></div>
+
+    </div>
+  </div>
+    <p>While the rare tokens head surely looks fun,
+        don't overestimate it - most probably, this is a sign of overfitting.
+        By looking at the least frequent tokens, a model
+        tries to hang on to these rare "clues".
+    </p>
+
+    <h3>The Majority of the Heads Can be Pruned</h3>
+
+    <p>Later on in the paper, the authors let the model decide which heads it does not need
+        (again, for more details look in the paper or
+        <a href="https://lena-voita.github.io/posts/acl19_heads.html" target="_blank">the blog post</a>)
+        and iteratively prunes attention heads, i.e. removes them from the model.
+        In addition to confirming that the specialized heads are the most important (because the model
+        keeps them intact and prunes the other ones), the authors find that most of the heads can be removed
+        without significant loss in quality.
+    </p>
+    <p><font face="arial">Why don't we train a model with a small number of heads to begin with?</font></p>
+    <p>Well, you can't - the quality will be much lower. You need many heads in training
+    to let them learn all these useful things.
+    </p>
+
+
+
+    <h2 id="probing">Probing: What Do Representations Capture?</h2>
+
+    <p>Note that looking at model components is a
+        <font face="arial">model-specific</font> approach: the components you may be interested in and ways of "looking" at them
+        depend on the model.
+    </p>
+    <p>Now we are interested in <font face="arial">model-agnostic</font> methods.
+        For example, what do representations in the model learn? Do they learn to encode some
+        linguistic features? Here we will feed the data to a trained network,
+        gather vector representations of this data, and will try to understand whether these vectors
+        encode something interesting.
+    </p>
+
+    <img src="../resources/lectures/seq2seq/analysis/standard_probe-min.png" width=45%
+         style="float:right; margin-left:20px" >
+
+    <p>The most popular approach is to use <font face="arial">probing classifiers</font>
+        (aka probes, probing tasks, diagnostic classifiers).
+       In this setting, you
+    </p>
+    <ul>
+        <li>feed data to a network and get vector representations of this data,</li>
+        <li>train a classifier to predict some linguistic labels from these representations
+            (but the model itself is frozen and is used only to produce representations),</li>
+        <li>use the classifier's accuracy as a measure of how well representations encode labels.</li>
+    </ul>
+
+    <p>This approach for analysis is (for now) the most popular in NLP, and we will meet it again
+        when talking about transfer learning in the next lecture.
+        Now, let's look at some examples of how it can be used to analyze NMT models.
+    </p>
+
+    <p class="data_text"><font color="#888"><u>Lena</u>: Recently,
+        it turned out that the accuracy of a probing classifier is not a good measure, and you need to
+         modify what you evaluate using a probing classifier. But this is a very different story...
+    </font></p>
+
+    <h3>What do NMT Models Learn about Morphology?</h3>
+    <p>In this part, let's look at the ACL 2017 paper
+        <a href="https://arxiv.org/pdf/1704.03471.pdf"
+           target="_blank">What do Neural Machine Translation Models Learn about Morphology?</a>
+        The authors trained NMT systems (LSTM ones) on several language pairs and analyzed
+        the representations of these models. Here I will mention only some results to illustrate
+        how you can use probing for analysis.
+    </p>
+
+    <h4 style="font-size:18px;"><span style="margin-right:15px;font-size:14px;">&#8226;</span>
+                <font face="arial">Part of Speech Tags</font></h4>
+    <p>One of the experiments looks at how well encoder representations capture part-of-speech tags (POS tags).
+        For each of the encoder layers starting from embeddings,
+        the authors trained a classifier to predict POS tags from representations from this layer.
+        The results are shown in the figure (layer 0 - embeddings, layer 1 and 2 - encoder layers).
+    </p>
+    <img src="../resources/lectures/seq2seq/analysis/probing_pos-min.png"
+             style="max-width:40%; margin-left:20px; float:right;"/>
+    <p>We can see that</p>
+    <ul>
+        <li>passing embeddings through encoder improves POS tagging<br>
+        This is expected - while layer 0 knows only current token, representations from
+            encoder layers know its context and can understand part of speech better.
+        </li>
+        <li>layer 1 is better than layer 2<br>
+        The hypothesis is that while layer 1 captures word structure,
+            layer 2 encodes more high-level information (e.g., semantic).
+        </li>
+    </ul>
+
+    <h4 style="font-size:18px;"><span style="margin-right:15px;font-size:14px;">&#8226;</span>
+                <font face="arial">The Effect of Target Language</font></h4>
+    <img src="../resources/lectures/seq2seq/analysis/probing_language-min.png"
+             style="max-width:40%; margin-left:20px; float:right;"/>
+    <p>Another interesting question the authors look at the effect of the target language. Given
+        the same source language (Arabic) and different target languages,
+        encoders trained with which target language will learn more about source morphology?
+        For target languages, the authors took Arabic, Hebrew (morphologically-rich language with
+        similar morphology to the source language), German (a morphologically-rich language with different morphology),
+        and English (a morphologically-poor language).
+    </p>
+    <p>Somewhat unexpectedly, <font face="arial">weaker target morphology forces a model to
+        understand source morphology better</font>.
+    </p>
+
+
+
+</div>
+
+
+
+<br><br><br>
+
+<div id="research_thinking">
+<img height="40" src="../resources/lectures/ico/bulb_empty.png"
+     style="float:left; padding-right:10px; margin-top:-20px;"/>
+<h1 style="margin-left:10px; margin-right:20px; float: left; margin-top:-20px">Research Thinking</h1>
+<hr color="#fced95" style="height:5px">
+<br><br>
+
+
+<fieldset style="border: 1px solid #f0e4a5;
+    border-radius: 5px;">
+            <legend><p class="data_text"><strong>How to</strong></p></legend>
+            <ul class="data_text">
+                <li>Read the  short description at the beginning - this is our starting point,
+        something known.</li>
+                <li>Read a question and think: for a minute, a day, a week, ... -
+        give yourself some time! Even if you are not thinking about it constantly,
+        something can still come to mind.</li>
+                <li>Look at the possible answers - previous attempts to answer/solve this problem.<br>
+                    <u>Important:</u>
+                    You are <strong>not</strong> supposed to come up with
+                    something exactly like here - remember, each paper usually takes the authors several
+                    months of work. It's a habit of thinking about these things that counts!
+                    All the rest a scientist needs is time: to try-fail-think
+                    until it works.</li>
+            </ul>
+
+            <p class="data_text">It's well-known that you will learn something easier if you are not just given the answer right away,
+            but if you think about it first. Even if you don't want to be a researcher, this is still a good way
+            to learn things!</p>
+</fieldset>
+
+            <br><br>
+
+
+        <!--##################################################-->
+        <!--##################################################-->
+        <!--##################################################-->
+
+        <div class="research_circle" style="float:left;"></div>
+        <h2 style="margin-top:-10px; float: left; padding-left:10px; padding-right:10px; color:#786702">
+            Simple LSTMs without Attention</h2>
+
+        <div class="box_yellow_left">
+
+        <!--##################################################-->
+        <div class="researchCard" id="thumbnail_research" >
+            <div class="researchIntro" id="research_reverse_order_in_lstm">
+
+              <div class="cardContent">
+
+                  <div class="research_title">
+                      Training trick to make simple LSTMs w/o attention work
+                  </div>
+
+                <hr color="#dedeca" style="margin:5px;">
+                  Simple LSTMs without attention does not work very well: all dependencies are long-term,
+                  and it is hard for the model. For example,
+                  by the time the decoder has to generate the beginning of a
+                  translation, it may already forget the most relevant early source tokens.
+              </div>
+                <div>
+                      <img width=90% src="../resources/lectures/seq2seq/research/all_long-min.png"
+                           alt="" style="margin-top:20px;" class="center"/>
+
+                </div>
+
+             </div>
+            <hr color="#dedeca" style="margin:5px">
+            <div class="cardContent">
+
+                <span class="research_question">?</span>
+                Can you change the training pipeline (without modifying the model) to make it easier for the model
+                to remember the beginning of the source when it starts to generate the target?
+                <br>
+                <details>
+                    <summary  class="research_summary">
+                       Possible answers</summary>
+                    <br>
+
+                    <h2>Reverse order of source tokens</h2>
+                    <p>The paper
+                        <a href="https://arxiv.org/pdf/1409.3215.pdf" target="_blank">
+                            Sequence to Sequence Learning with Neural Networks</a> introduced an elegant trick
+                        to make simple LSTM seq2seq models work better: reverse the order of the source tokens (but
+                        not the target). After that, a model will have many short-term connections:
+                        the latest source tokens it sees are the most relevant for the beginning of the target.
+                    </p>
+                    <img width=100% src="../resources/lectures/seq2seq/research/reverse_order_before_after-min.png"
+                           alt="" style="margin-top:20px;margin-bottom:20px;" class="center"/>
+
+                </details>
+
+            </div>
+        </div>
+
+        <!--##################################################-->
+        </div>
+        <div class="research_circle" style="float:left;"></div>
+        <!--##################################################-->
+        <!--##################################################-->
+        <!--##################################################-->
+
+    <br><br>
+
+
+        <!--##################################################-->
+        <!--##################################################-->
+        <!--##################################################-->
+
+        <div class="research_circle" style="float:left;"></div>
+        <h2 style="margin-top:-10px; float: left; padding-left:10px; padding-right:10px; color:#786702">
+            Improve Subword Segmentation</h2>
+        <div class="box_yellow_left">
+
+        <!--##################################################-->
+        <div class="researchCard" id="thumbnail_research" >
+            <div class="researchIntro" id="research_bpe_dropout">
+
+              <div class="cardContent">
+
+                  <div class="research_title">
+                      Make BPE stochastic:  segment words differently
+                  </div>
+
+                <hr color="#dedeca" style="margin:5px;">
+                  The standard BPE segmentation is deterministic: at each
+                  step, it always picks the highest merge in the table.
+                  However, even with the same vocabulary, a word can have different segmentations, e.g.
+                  <font class="data_text"><strong>un relat ed</strong></font>,
+                  <font class="data_text"><strong>u n relate d</strong></font>,
+                  <font class="data_text"><strong>un rel ated</strong></font>,
+                  etc.).
+
+                  <br><br>
+                  Imagine that during training of an NMT model
+                  each time we pick one of the several possible segmentations -
+                  i.e. the same word can be segmented differently.
+                  We use the same merge table built by the standard BPE, and
+                the standard segmentation at test time - we modify only training.
+              </div>
+                <div>
+                      <img width=90% src="../resources/lectures/seq2seq/research/bpe-min.png"
+                           alt="" style="margin-top:20px;" class="center"/>
+
+                </div>
+
+             </div>
+            <hr color="#dedeca" style="margin:5px">
+            <div class="cardContent">
+
+                <span class="research_question">?</span>
+                Do you think this would improve model quality? Why?
+                <br>
+                <details>
+                    <summary  class="research_summary">
+                       Possible answers</summary>
+                    <br>
+
+                    <p>Possible reasons why showing different segmentations of the same word can help a model
+                    are:</p>
+                    <ul>
+                        <li>with different segmentations of a word, a model can better understand
+                            the subwords it consists of. Therefore, it can better understand word composition.
+                        </li>
+                        <li>since only rare and unknown words are split into subwords, a model may not learn
+                            representations for subwords very well. With different segmentations, it will see
+                            subwords in many different contexts and will understand them better.
+                        </li>
+                        <li>this may serve as a regularization - a model will learn not to over-rely
+                            on individual tokens and to consider a broader context
+                            (similar to the standard word dropout).
+                        </li>
+                    </ul>
+
+                    <p>To back up these points, let's
+                        pick several rare tokens and
+                        look at their closest neighbors.
+                        To find closest neighbors, we use embeddings from two models trained
+                         with (1) BPE and with (2) a stochastic segmentation (which we will look at
+                        in the next question).
+                    </p>
+                    <img width=90% src="../resources/lectures/seq2seq/research/bpe_drop_closest_neighbors-min.png"
+                           alt="" style="margin:20px;" class="center"/>
+
+                <p>We see that, indeed, a model with stochastic segmentation understands words better.
+                    Closest neighbors in the embeddings space of the stochastic segmentation
+                    share common parts, which is not the case for BPE.
+                    </p>
+                    <p>Note BPE has this problem is only for rare tokens - for frequent ones, the neighbors are
+                    reasonable.</p>
+                </details>
+
+                <span class="research_question">?</span>
+                How would you change the segmentation procedure of BPE to enable different segmentations of the same word?
+                <br>
+                <details>
+                    <summary  class="research_summary">
+                       Possible answers</summary>
+                    <br>
+
+                    <h2>BPE-Dropout: drop some merges from the merge table</h2>
+                    <p>Let's consider <font face="arial">BPE-dropout</font>: the approach proposed in the
+                        ACL 2020 paper
+                        <a href="https://www.aclweb.org/anthology/2020.acl-main.170.pdf" target="_blank">
+                            BPE-Dropout: Simple and Effective Subword Regularization</a>.
+                    </p>
+                    <p>The idea is very simple: if BPE is deterministic because we pick the highest merge,
+                        all we need to do is to (sometimes) pick other merges. For this, the authors
+                        randomly drop some merges (e.g., 10% of all merges) from the BPE merge table.
+                        In this case, the highest merge is sometimes dropped from the table,
+                        we'll have to pick the other one, and the segmentation will be different.
+                    </p>
+
+                    <p>The algorithm and examples of segmentations for the token
+                        <font class="data_text"><strong>unrelated</strong></font> is shown below.
+                        Red underlines show the merges dropped at each step.
+                        Note that the merges to be dropped are chosen at each step again.
+                    </p>
+                    <img width=90% src="../resources/lectures/seq2seq/research/bpe_dropout_alg-min.png"
+                           alt="" style="margin:20px;" class="center"/>
+                    <p>In the paper, there're lots of experiments showing improvements in quality from
+                    using BPE-dropout as well as the analysis of why this happens. You already saw some
+                        part of this analysis in the previous question when looking at the closest neighbors
+                        in the embeddings spaces.
+                    </p>
+                </details>
+
+            </div>
+        </div>
+
+        <!--##################################################-->
+        </div>
+        <div class="research_circle" style="float:left;"></div>
+        <!--##################################################-->
+        <!--##################################################-->
+        <!--##################################################-->
+
+    <br><br>
+
+        <div style="border: 0px solid #ccc;border-radius:15px;margin: 10px; padding: 4px;
+ background-color: #f5f5f5;margin-top:-20px;">
+    <div style="display: grid; grid-template-columns: 75% 25%; margin:10px;">
+                <div>
+                <div style="margin-top:20px;">
+                    <p style="margin:30px; font-size:30px;">Here will be more exercises!</p>
+
+                    <p style="margin:30px;">This part will be expanding from time to time.</p>
+                </div>
+                    </div>
+                <div>
+                    <center>
+                    <img src="../../resources/lectures/main/preview/pusheen_draws_on_white-min.png"
+                       style="width:80%; padding-top:20px; padding-bottom:20px;border-radius:50%">
+                    </center>
+                </div>
+            </div>
+
+        </div>
+
+    <br><br>
+
+</div>
+
+
+
+    <br><br><br>
+
+<div id="related_papers">
+<img height="40" src="../resources/lectures/ico/book_empty.png"
+     style="float:left; padding-right:10px; margin-top:-20px;"/>
+<h1 style="margin-left:10px; margin-right:20px; float: left; margin-top:-20px">Related Papers</h1>
+<hr color="#facae9" style="height:5px">
+
+<br><br>
+
+<fieldset style="border: 1px solid #dec8d6;
+    border-radius: 5px;">
+            <legend><p class="data_text"><strong>How to</strong></p></legend>
+            <ul class="data_text">
+            <li><u>High-level</u>: look at key results in short summaries -
+                get an idea of what's going on in the field.</li>
+            <li><u>A bit deeper</u>: for topics which interest you more,
+                read longer summaries with illustrations and explanations.
+                Take a walk through the authors' reasoning steps and key observations. </li>
+            <li><u>In depth</u>: read the papers you liked. Now, when you got the main idea, this
+            is going to be easier!</li>
+            </ul>
+</fieldset>
+
+        <br><br>
+
+
+<!--
+        <p class="data_text" style="font-size:24px;color:#7a3160">What's inside:</p>
+        <ul class="data_text" style="font-size:20px;color:#7a3160">
+            <li><a href="#papers_common_practice">Common Practice</a></li>
+
+            <li><a href="#papers_architectures">Model Architectures</a></li>
+            <li><a href="#papers_analysis">A Bit of Analysis</a></li>
+            <li><a href="#papers_reading_behavior">Language Models and Human Reading Behavior</a></li>
+            <li><a href="#papers_smoothings">N-gram LMs: More Smoothings</a></li>
+
+            <li>... to be updated</li>
+        </ul>
+
+-->
+        <br><br>
+
+
+    <div style="border: 0px solid #ccc;border-radius:15px;margin: 10px; padding: 4px;
+ background-color: #f5f5f5;margin-top:-20px;">
+    <div style="display: grid; grid-template-columns: 75% 25%; margin:10px;">
+                <div>
+                <div style="margin-top:20px;">
+                    <p style="margin:30px; font-size:30px;">Here will be papers!</p>
+
+                    <p style="margin:30px;">The papers will be gradually appearing.</p>
+                </div>
+                    </div>
+                <div>
+                    <center>
+                    <img src="../../resources/lectures/main/preview/pusheen_reads_on_white-min.png"
+                       style="width:80%; padding-top:20px; padding-bottom:20px;border-radius:50%">
+                    </center>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<br><br><br>
+<div id="have_fun">
+<img height="40" src="../resources/lectures/ico/fun_empty.png"
+     style="float:left; padding-right:10px; margin-top:-20px;"/>
+<h1 style="margin-left:10px; margin-right:20px; float: left; margin-top:-20px">Have Fun!</h1>
+<hr color="#c8edfa" style="height:5px">
+<br><br>
+
+
+    <div style="border: 0px solid #ccc;border-radius:15px;margin: 10px; padding: 4px;
+ background-color: #f5f5f5;margin-top:-20px;">
+    <div style="display: grid; grid-template-columns: 75% 25%; margin:10px;">
+                <div>
+                <div style="margin-top:20px;">
+                    <p style="margin:30px; font-size:30px;">Coming soon!</p>
+
+                    <p style="margin:30px;">We are still working on this!</p>
+                </div>
+                    </div>
+                <div>
+                    <center>
+                    <img src="../../resources/lectures/main/preview/typing.gif"
+                       style="width:80%; padding-top:20px; padding-bottom:20px;border-radius:50%">
+                    </center>
+                </div>
+            </div>
+
+        </div>
+</div>
+
+
+
+
+
+</div>
+
+</div>
