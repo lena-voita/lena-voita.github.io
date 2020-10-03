@@ -4237,7 +4237,7 @@ for (i = 0; i < dropdown.length; i++) {
                       <font class="data_text"><strong>Francisco</strong></font> appears mostly after
                       <font class="data_text"><strong>San</strong></font>, but when backing off,
                       it's large unigram probability will result in a large probability of
-                      <font class="data_text"><strong>San</strong></font> after <font face="arial">any</font>  token!
+                      <font class="data_text"><strong>Francisco</strong></font> after <font face="arial">any</font>  token!
                   </p>
 
 
@@ -4283,9 +4283,14 @@ for (i = 0; i < dropdown.length; i++) {
                     </p>
 
                     <h2>Going Further: Iterative Formula</h2>
+                    <p>For the full formula, we need to define one more count:</p>
+                    <center>
+                    <img width=100% src="../resources/lectures/lang_models/papers/kn_words_follow-min.png"
+                       alt="" style="margin-bottom:20px;"/>
+                    </center>
 
                     <p>The full back-off formula for Kneser-Ney is shown below. </p>
-            <img width=100% src="../resources/lectures/lang_models/papers/kneser_ney_formula-min.png"
+            <img width=100% src="../resources/lectures/lang_models/papers/kneser_ney_formula2-min.png"
                            alt="" style="margin-top:20px;"/>
                 </details>
             </div>
