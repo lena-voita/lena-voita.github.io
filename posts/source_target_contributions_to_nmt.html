@@ -1,0 +1,626 @@
+---
+layout: post
+title: Source and Target Contributions to NMT Predictions
+---
+
+<style>
+    @import url("https://fonts.googleapis.com/css2?family=Comic+Neue&display=swap");
+
+    .data_text {
+        font-family: "Comic Neue", "Arial";
+    }
+</style>
+
+<video width="300" height="auto" style="float: right; margin-left: 15px;" loop autoplay muted>
+  <source src="../resources/posts/src_dst_nmt/src_dst_main.mp4" type="video/mp4">
+</video>
+
+<span style="font-size:15px;">
+This is a post for the paper
+    <a href="https://arxiv.org/pdf/2010.10907.pdf">
+        Analyzing the Source and Target Contributions to Predictions in Neural Machine Translation.
+    </a>
+</span>
+
+
+<br/>
+<br/>
+<span style="font-size:15px;">
+    In NMT, each prediction is based on two types of context: the source and the prefix of the target sentence.
+    We show how to evaluate the relative contributions of source and target to NMT predictions and find that:
+<ul>
+  <li>models suffering from exposure bias are more prone to over-relying on target history (and hence to hallucinating) than
+  the ones where the exposure bias is mitigated;</li>
+  <li>models trained with more data rely on the source more and do it more confidently;</li>
+    <li>the training process is non-monotonic with several distinct stages.</li>
+</ul>
+</span>
+
+
+<a class="pull-right" href="https://arxiv.org/pdf/2010.10907.pdf" onMouseOver="document.readpaper.src='../resources/posts/buttons/button_read_paper_push-min.png';" onMouseOut="document.readpaper.src='../resources/posts/buttons/button_read_paper-min.png';">
+<img src="../resources/posts/buttons/button_read_paper-min.png" name="readpaper" width=120px class="pull-right"></a>
+<a class="pull-right" href="https://github.com/lena-voita/the-story-of-heads" onMouseOver="document.viewcode.src='../resources/posts/buttons/button_view_code_push-min.png';" onMouseOut="document.viewcode.src='../resources/posts/buttons/button_view_code-min.png';">
+<img src="../resources/posts/buttons/button_view_code-min.png" name="viewcode" width=120px></a>
+<span style="font-size:15px; text-align: right; float: right; color:gray">October 2020</span>
+
+<br/>
+<p></p>
+<hr>
+
+<h3>What Influences the Predictions: Source or Target?</h3>
+
+<img src="../resources/posts/src_dst_nmt/two_types_of_context-min.png" style="max-width:55%; margin-left:20px;float:right;"/>
+
+<p>NMT models (and, more generally, conditional language models) generate target sentence word by word, and
+    at each step, they use two types of context: the source and the prefix of the target sentence.
+
+</p>
+
+<img src="../resources/posts/src_dst_nmt/question_what_influences-min.png" style="max-width:30%; margin-left:20px;float:right;"/>
+<p>Intuitively, we may expect that some tokens are predicted based on mostly source information (informative tokens),
+    while others
+    are based mainly on target history (e.g. determiners). But how can we know which information the model used?
+</p>
+<p>So far, we could only look at the most important tokens <font face="arial">within</font> either source or target separately
+    (e.g. by looking at attention weights or using more complicated methods).
+    But there is no way to measure <font face="arial">the trade-off between the source and the target</font>.
+</p>
+<p>This is exactly what we will do! But first, let's understand why do we care about the source-target trade-off.</p>
+
+<h4><u>Why do we care:</u> Hallucinations and beyond.</h4>
+<h4>TL;DR: Models often fail to properly use these two kinds of information.</h4>
+
+
+<p>The main reason for investigating the source-target trade-off is that
+    NMT models often <font face="arial">fail to properly use these two kinds of information</font>.
+        For example, context gates (which learn to weight source
+        and target contexts) help for
+        both RNNs and Transformers.
+</p>
+<p>A more popular and clear example is hallucinations, when a model produces
+    sentences that are fluent but unrelated to the source.
+    The hypothesis is that in this mode, a model ignores information from source and samples
+    from its language model.
+    While we do not know what forces a model to hallucinate in general, previous work showed
+    some anecdotal evidence that when hallucinating, a model does fail to use source properly.
+    Look at the examples of attention maps of hallucinating models: models may put most of the decoder-encoder attention
+    to uninformative source tokens, e.g. EOS and punctuation.
+</p>
+
+    <div style="display:grid;grid-template-columns: 50% 50%;">
+        <div>
+            <p style="text-align: center; float: right; display: block;
+        margin-bottom:20px; margin-left:25px; max-width:100%;">
+            <img src="../resources/posts/src_dst_nmt/attn_map_berard-min.png" style="margin-bottom:15px;" width=90% alt="" /><br />
+            <span style="font-size: small;">The figure is from
+        <a href="https://www.aclweb.org/anthology/W19-5361/" target="_blank">
+                    Berard et al, 2019</a>.</span></p>
+
+        </div>
+
+        <div>
+            <p style="text-align: center; float: right; display: block;
+        margin-bottom:20px; margin-left:25px; max-width:100%;">
+            <img src="../resources/posts/src_dst_nmt/attn_map_lee-min.png" style="margin-bottom:15px;" width=90% alt="" /><br />
+            <span style="font-size: small;">The figure is from
+        <a href="https://openreview.net/forum?id=SkxJ-309FQ" target="_blank">
+                    Lee et al, 2018</a>.</span></p>
+
+        </div>
+    </div>
+
+    <p>While these examples are interesting, note that this evidence is rather anecdotal:
+        these are only a couple of examples when a model is "caught in action" and even for the same Transformer model,
+        researchers found different patterns.
+
+    </p>
+
+
+
+
+<h2>Relative Contributions of Source and Target</h2>
+
+<!--
+<div style="font-size:18px;
+border-left: 5px solid #b7db67;
+    margin: 10px;
+    margin-left: 20px;
+    padding: 0px;
+    background-color: #fafcf5;">
+                <p class="data_text" style="margin-left: 10px;">We want not an abstract quantity, but
+                <strong>relative</strong> contributions: part in the total influence.</p>
+            </div>
+-->
+<!--
+<img src="../resources/posts/src_dst_nmt/we_want_relative-min.png" style="max-width:30%; margin-left:20px;float:right;"/>
+-->
+<center>
+<img src="../resources/posts/src_dst_nmt/what_we_want_long-min.png" style="max-width:80%; margin-bottom:20px;"/>
+</center>
+<p>Note that when we ask what influences a prediction, we are
+    interested not in some abstract quantity but in <font face="arial">relative</font> contributions.
+    In simple words, imagine we have everything that took part in forming a prediction - let's call it
+    "total contribution".
+    What we are interested in is <font face="arial">the part of the total contribution</font>.
+</p>
+
+
+<h3>How: Use Layerwise Relevance Propagation</h3>
+
+<p style="text-align: center; float: right; display: block;
+        margin-bottom:20px; margin-left:25px; max-width:60%;">
+            <img src="../resources/posts/src_dst_nmt/lrp_main-min.png" style="margin-bottom:15px;" width=100% alt="" /><br />
+            <span style="font-size: small;">The figure is adapted from the one taken from
+        <a href="http://danshiebler.com/2017-04-16-deep-taylor-lrp/" target="_blank">
+                    Dan Shiebler's blog post</a>.</span></p>
+
+<p>We show that a natural way to estimate how the source and target contexts
+    contribute to generation is to apply
+    <a href="https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0130140">Layerwise
+        Relevance Propagation (LRP)</a> to NMT models.
+    LRP is one of the attributions method originally designed for computer vision models.
+    In general, attribution methods try to identify those parts of the input (e.g. pixels in an input image)
+    which contribute to a given prediction.
+
+    Layerwise Relevance Propagation does this by recursively propagating a prediction through the network
+    from the output to
+    the input. While the prediction is formed in the forward pass, relevance propagation evaluates
+    relevancies in the backward pass.
+</p>
+
+<h3>LRP is Unique: It Satisfies the Conservation Principle</h3>
+
+<div style="font-size:18px;
+border-left: 5px solid #b7db67;
+    margin: 10px;
+    margin-left: 20px;
+    padding: 0px;
+    background-color: #fafcf5;">
+                <p class="data_text" style="margin-left: 10px;">In LRP, the total contribution is constant ⇒
+                we can evaluate <strong>relative</strong> contributions.</p>
+            </div>
+<p>While there are many attribution methods with different properties,
+    only LRP gives us a straightforward way to evaluate <font face="arial">relative</font>
+    contributions.</p>
+<img src="../resources/posts/src_dst_nmt/lrp_conservation.gif" style="margin-left:20px;float:right;" width=50% alt="" />
+<p> Differently from other methods estimating the influence of individual tokens,
+    LRP evaluates not an abstract quantity reflecting token importance, but the proportion of each token's influence.
+    It is possible because of its <font face="arial">conservation principle</font>:
+    LRP redistributes relevance so that
+    in each layer, the total contribution of all neurons is constant.
+</p>
+
+<h3>LRP for Conditional Language Models</h3>
+
+<p>At first glance, it can be unclear how to apply a layer-wise method to a not completely layered architecture
+    (such as encoder-decoder). However, this is rather straightforward and is done in two steps:</p>
+<ul>
+    <li><font face="arial">total relevance is propagated through the decoder</font><br>
+        Since the decoder uses representations from the final encoder layer,
+        part of the relevance "leaks" to the encoder; this happens at each decoder layer.</li>
+    <li><font face="arial">relevance leaked to the encoder is propagated through the encoder layers.</font></li>
+</ul>
+
+    <p>The total contribution of neurons in each decoder layer is not preserved (part of the relevance leaks to the encoder),
+        but the total contribution of all tokens – across the source and the target prefix – remains equal to the model prediction.
+    </p>
+<p>Look at the illustration: applying LRP at different generation steps,
+we can now say which predictions are based on the source more (or less) than the others.
+</p>
+
+<center>
+<video width=60% height="auto" style="margin-bottom: 20px;" loop autoplay muted>
+  <source src="../resources/posts/src_dst_nmt/src_dst_main.mp4" type="video/mp4">
+</video>
+</center>
+
+<h3>More Details on LRP – Look at the Paper!</h3>
+<p>In the paper, we also explain in detail the following:</p>
+<ul>
+    <li><font face="arial">formal description of how to propagate the relevance</font><br>
+        In the paper, we provide formulas defining the rules for propagating a prediction back.
+    </li>
+    <li><font face="arial">the specific LRP variant</font><br>
+    LRP has several variants; we use the one that keeps all contributions positive.
+    </li>
+    <li><font face="arial">how to extend LRP for Transformer</font><br>
+    Since LRP has originally been designed for computer vision models, it is not directly applicable to the Transformer
+        (e.g., attention layers). In the paper, we explain how we extend LRP for the Transformer.
+    </li>
+    <li><font face="arial">evaluating token relevance</font><br>
+        Formally, we evaluate the relevance of input neurons to the top-1 logit predicted by a model.
+        Then token relevance (or its contribution) is the sum of
+        relevances of its neurons.
+    </li>
+</ul>
+
+
+<br>
+<h2>Experiments: Neural Machine Translation</h2>
+<p>In the experiments, we analyze models trained on the WMT14 English-French dataset. We will vary
+    the prefix on which the model is conditioned during generation (reference, model-generated or random),
+    the training objective, the dataset size, and timesteps during model training.
+    We will come to this very soon, but first, let me explain
+    what we will be looking at.
+</p>
+
+<h4><u>We Look at</u>: Total Contribution and Entropy of Contributions</h4>
+<p>We look at token contributions <font face="arial">for each generation step</font> separately. In this way, we'll
+be able to see what happens during the generation process.
+</p>
+<video width=50% height="auto" style="margin-left: 20px;margin-bottom: 20px; float:right;" loop autoplay muted>
+  <source src="../resources/posts/src_dst_nmt/how_evaluate.mp4" type="video/mp4">
+</video>
+<p><span style="margin-right:15px;">&#8226;</span><font face="arial">
+    total source contribution</font></p>
+<p>The total contribution of source is the sum of contribution of source tokens.
+    Note that since we evaluate relative contributions, \(contr(source) = 1 - contr(prefix)\).
+</p>
+
+<p><span style="margin-right:15px;">&#8226;</span><font face="arial">
+    entropy of contributions</font></p>
+<p>The entropy of contributions tells us how 'focused' the contributions are:
+whether the model is confident in the choice of relevant tokens or spreads its relevance across the whole input.
+    In this blog post, we will see only entropy of source contributions, but in the paper,
+    we do the same for target contributions.
+</p>
+
+
+<h4><u>We are Interested in</u>: General Patterns, i.e. Average Over a Dataset</h4>
+
+<p>For individual predictions, relevance propagation can be inaccurate. For example,
+it can underestimate small contributions; additionally, contributions of input elements (pixels, tokens, etc.) can
+    differ little.
+    Therefore, we look not at individual predictions but at <font face="arial">general patterns</font>.
+</p>
+<center>
+<img src="../resources/posts/src_dst_nmt/we_talk_about-min.png" style="margin-bottom:20px;" width=80% alt="" />
+</center>
+<p>By "general patterns", we mean something that characterizes model behavior in general and not for a
+    single example. For this, we take an average over an evaluation set. In each evaluation set, all source sentences,
+    as well as all target sentences, have the same length. Look at the illustration.
+</p>
+<center>
+<img src="../resources/posts/src_dst_nmt/average_over_set-min.png" style="margin-bottom:20px;" width=90% alt="" />
+</center>
+
+<p>Note also that we do not talk about absolute values of contributions (e.g., we <font face="arial">do not</font>
+    say something of the kind
+    <font class="data_text">"source contribution is usually x%"</font>),
+    but how the general patterns change when varying training objectives, data amount, timestep in training, etc.
+</p>
+
+
+<br>
+<h3>Getting Acquainted</h3>
+
+<p>Before comparing different models,
+     let us first get acquainted with the graphs:
+    let's look at the results for a single model.</p>
+
+<h4><span style="margin-right:15px;">&#8226;</span><font face="arial">
+     source contribution</font>: decreases during generation</h4>
+<p>For each target position, the figure shows the source contribution. We see that, as the generation
+progresses, the influence of source decreases (i.e., the influence of target increases).
+     This is expected:  with a longer prefix,
+    it becomes easier for the model to understand which source tokens to use,
+    and at the same time, it needs to be more careful to generate tokens that agree with the prefix.
+
+</p>
+<center>
+<img src="../resources/posts/src_dst_nmt/general_source_influence-min.png" style="margin-bottom:20px;" width=80% alt="" />
+</center>
+<p>Note also a large drop of source influence
+    for the last token: apparently, to generate the EOS token, the model relies on prefix much
+    more than when generating other tokens.</p>
+
+<h4><span style="margin-right:15px;">&#8226;</span><font face="arial">
+     entropy of source contributions</font></h4>
+<p>During generation, entropy increases until approximately 2/3 of the translation is generated,
+    then decreases when generating the remaining part. Interestingly, for
+    the last punctuation mark and the EOS token, entropy of source contributions is very high:
+    the decision to complete the sentence requires a broader context.
+</p>
+<center>
+<img src="../resources/posts/src_dst_nmt/general_src_entropy-min.png" style="margin-bottom:20px;" width=90% alt="" />
+</center>
+
+<!--
+<h4><span style="margin-right:15px;">&#8226;</span><font face="arial">
+     entropy of target contributions</font></h4>
+<p>Entropy of target contributions increases, which is expected since the prefixes are getting longer.
+This means that the model does use longer contexts in a non-trivial way.
+</p>
+<img src="../resources/posts/src_dst_nmt/general_src_entropy-min.png" style="margin-left:20px;float:right;" width=60% alt="" />
+-->
+
+<br>
+<h3>Reference, Model and Random Prefixes</h3>
+
+<p>Now, let us look at the changes in these patterns when conditioning on different types of target prefixes:
+reference, model translations, and prefixes of random sentences.</p>
+
+<h4><span style="margin-right:15px;">&#8226;</span><font face="arial">
+     model-generated prefixes:</font> the simpler ones</h4>
+<img src="../resources/posts/src_dst_nmt/model_trs_are_simpler-min.png" style="margin-left:20px;float:right;" width=65% alt="" />
+
+<p>First, let us compare how models react to prefixes that come from reference and model translations.
+We know that beam search translations are usually simpler than references: several papers show that they contain
+    fewer rare tokens, have less reorderings and are simpler syntactically.
+</p>
+
+<center>
+<img src="../resources/posts/src_dst_nmt/prefix_model_vs_reference-min.png" style="margin-bottom:20px;" width=90% alt="" />
+</center>
+
+<p>When conditioned on these simpler prefixes, the model relies on the source more and is more
+confident when choosing relevant source tokens (the entropy of source contributions is lower). We hypothesize that
+    these simpler prefixes are more convenient for the model, and they require less reasoning on the target side.
+</p>
+
+
+<h4><span style="margin-right:15px;">&#8226;</span><font face="arial">
+     random prefixes:</font> the unexpected ones</h4>
+<p>Now, let us give a model something unexpected: prefixes of random sentences. In
+this experiment, a model has a source sentence and a prefix of the target sentence, which do not make sense
+    together.
+</p>
+<center>
+<img src="../resources/posts/src_dst_nmt/random_prefix_example-min.png" style="margin-bottom:20px;" width=75% alt="" />
+</center>
+
+<p>On the one hand, sometimes NMT models switch to a <font face="arial">hallucination mode</font>:
+they ignore the source and generate from their language mode. As a result, they generate sentences
+    that are fluent but unrelated to the source. On the other hand, language models can
+    ignore a gibberish prefix: <a href="https://arxiv.org/abs/1905.10617">this cool
+    paper investigating the exposure bias</a>
+    reported this <font face="arial">self-recovery ability</font> of LMs.
+</p>
+
+<center>
+<img src="../resources/posts/src_dst_nmt/random_prefix_previous_work-min.png" style="margin-bottom:20px;" width=80% alt="" />
+</center>
+
+<p><font face="arial">What will our model do: ignore the source or the prefix?</font>
+    According to previous work, it can do either!</p>
+<p>As we see from the results, it depends on the prefix length. When a random prefix is short,
+    the model recovers: it ignores the prefix and bases its predictions mostly on the source. When a random prefix becomes longer,
+    the model's choice shifts towards ignoring the source: source contribution drops drastically. This
+    behavior is what we would expect when a model is hallucinating.
+</p>
+<center>
+<img src="../resources/posts/src_dst_nmt/random_prefix_source_contribution-min.png" style="margin-bottom:20px;" width=85% alt="" />
+</center>
+
+<p>Next, we see that with a random prefix, the entropy of contributions is very high and is roughly constant across
+    positions. This is expected: a model can not understand which source tokens are useful to continue a random prefix.
+</p>
+<center>
+<img src="../resources/posts/src_dst_nmt/random_prefix_entropy-min.png" style="margin-bottom:20px;" width=65% alt="" />
+</center>
+
+
+<br>
+<h3>Exposure Bias and Source Contributions</h3>
+<p>The results we just saw
+    agree with some observations made in previous work studying self-recovery and hallucinations.
+    Now, we illustrate more explicitly how our methodology can be used to shed light on the effects of
+    exposure bias and training objectives.
+</p>
+
+<p><font face="arial">Exposure bias</font>
+    means that in training, a model sees only gold prefixes, but at test time, it
+    uses model-generated prefixes (which can contain errors).
+
+    <a href="https://arxiv.org/abs/1905.10617">This ACL 2020 paper</a> suggests that there is a connection
+    between the hallucination mode and
+    exposure bias: the authors show that Minimum Risk Training (MRT), which does not suffer from exposure bias,
+    reduces hallucinations. However, they did not directly measure the over-reliance on target history.
+    Luckily, now we can do this :)
+</p>
+
+<img src="../resources/posts/src_dst_nmt/exposure_bias_lets_measure-min.png" style="margin-bottom:20px;" width=100% alt="" />
+
+<h4><u>How</u>: Feed Random Prefixes, Look at Contributions</h4>
+
+<p>We want to check to what extent models that suffer from exposure bias to differing extent are prone to hallucinations.
+    For this, we feed fluent but unrelated to source prefixes and look whether a model is likely to fall into a
+    language modeling regime, i.e., <font face="arial">to what extent it ignores the source</font>.
+</p>
+
+<img src="../resources/posts/src_dst_nmt/exposure_bias_models-min.png"
+     style="margin-left:20px;margin-bottom:20px;float:right;" width=40% alt="" />
+<p>In addition to the baseline and the models trained with the Minimum Risk Training objective (considered in previous work),
+    we also experiment with word dropout. This is a data augmentation method: in training, part of tokens are replaced with
+    random. When used on the target side, it may serve as the simplest way to alleviate exposure
+    bias: it exposes a model to something other than gold prefixes.
+    This is not true when used on the source side, but for analysis, we consider both variants.
+
+</p>
+
+<img src="../resources/posts/src_dst_nmt/exposure_bias_results-min.png" style="margin-bottom:20px;" width=100% alt="" />
+
+<p>The results confirm our hypothesis:
+</p>
+<div style="font-size:18px;
+border-left: 5px solid #b7db67;
+    margin: 10px;
+    margin-left: 20px;
+    padding: 0px;
+    background-color: #fafcf5;">
+                <p class="data_text" style="margin-left: 10px;">
+                    Models suffering from exposure bias are more prone to over-relying
+                    on target history (and hence to hallucinating)
+        than those where the exposure bias is mitigated.</p>
+            </div>
+
+<p>Indeed, we see that MRT-trained models ignore source less
+    than any other model; the second best is the target-side word dropout, which also reduces exposure bias.
+</p>
+
+<br>
+
+<h3>Varying the Amount of Data</h3>
+<h4>TL;DR: With more data, models use source more and do it more confidently.</h4>
+
+<p>We know that a large amount of training data is very important for NMT models to perform well.
+    But how the amount of training data influences contributions?
+</p>
+
+<img src="../resources/posts/src_dst_nmt/data_amount_both-min.png" style="margin-bottom:20px;" width=100% alt="" />
+<p>First, we see that, generally, models trained with more data use source more.
+    Surprisingly, this increase is not spread evenly across positions:
+    at approximately 80% of the target length, models trained with more data use
+    source more, but at the last positions, they switch to more actively using the prefix.
+</p>
+<p>Second, with more training data, the model becomes more confident in the choice of important tokens: the entropy
+    of contributions becomes lower (in the paper, we also show entropy of target contributions).</p>
+
+<!--
+    <h4><span style="margin-right:15px;font-size:14px;">&#8226;</span><font face="arial">
+        more data ⇒ higher source contribution</font></h4>
+    <center>
+    <img src="../resources/posts/src_dst_nmt/data_contribution-min.png" style="margin-bottom:20px;" width=70% alt="" />
+    </center>
+
+
+
+    <h4><span style="margin-right:15px;font-size:14px;">&#8226;</span><font face="arial">
+        more data ⇒ more focused contributions</font></h4>
+
+    <center>
+    <img src="../resources/posts/src_dst_nmt/data_entropy-min.png" style="margin-bottom:20px;" width=90% alt="" />
+    </center>
+-->
+
+
+<br>
+<h3>Training Process: Non-Monotonic with Several Distinct Stages</h3>
+<p>Finally, let's look at what happens during model training. All results are summarized in the figure below;
+    on the x-axis are the number of training batches.
+</p>
+
+<center>
+<img src="../resources/posts/src_dst_nmt/timeline-min.png" style="margin-bottom:20px;" width=90% alt="" />
+</center>
+
+<p>Now, let's go over all these results one by one.</p>
+
+<img src="../resources/posts/src_dst_nmt/contributions_converge_early_v2-min.png"
+     style="margin-left:20px;float:right;" width=40% alt="" />
+
+<h4><span style="margin-right:15px;">&#8226;</span><font face="arial">
+     contributions converge early</font></h4>
+
+<p>First, we look at how fast the contributions converge. For this, we evaluate KL
+divergence between token influence distributions of the final converged model and the one in training.
+</p>
+
+<p>The figure shows that contributions converge early. After approximately 12k batches,
+   the model is very close to its final state in the choice of tokens to rely on for a prediction:
+    everything that happens after that is just refining the model.
+</p>
+
+
+<h4><span style="margin-right:15px;">&#8226;</span><font face="arial">
+     changes in contributions are non-monotonic</font></h4>
+<p>The figures below show changes in the amount and entropy of contributions (average over examples and positions).
+    We see that the changes are not monotonic, and different stages can be seen clearly.
+    This means that something qualitatively different is going on during model training, and
+    we hope that someone (maybe you?) will look into this further.
+</p>
+<center>
+<img src="../resources/posts/src_dst_nmt/changes_are_not_monotonic-min.png" style="margin-bottom:20px;" width=85% alt="" />
+</center>
+<p>Look at the changes in the entropy of contributions: it goes down, then up. We hypothesize that
+   first, the model learns something very simple (e.g. word-by-word translation): this is when the entropy goes
+    down. Then, the model learns more complicated stuff and uses broader contexts.
+</p>
+
+<h4><span style="margin-right:15px;">&#8226;</span><font face="arial">
+     early positions change more </font> (and are learned first)</h4>
+<p>Previously we looked at the changes on average over all positions. Now, let's look at all positions.
+In the figures, we show a separate line for each checkpoint; each line shows the entropy of source contributions for each
+target position, and the lines are colored based on the checkpoint number.
+</p>
+<img src="../resources/posts/src_dst_nmt/stages_with_positions-min.png" style="margin-bottom:20px;" width=100% alt="" />
+
+<p>We see that early positions change more: they are the ones where the entropy goes down
+    most at the first stage and the ones where it goes up most in the second stage. Only at the last stage, when
+    very little is going on, all positions change approximately the same.
+</p>
+
+<p>In the paper, we also show that early positions are learned first: at the end of the
+first stage, per-token predictive accuracy at the early target positions is the highest.
+</p>
+
+<h4><font face="arial">Relation to the Lottery Ticket Hypothesis</font></h4>
+
+<p>Interestingly, our stages agree with the ones found by
+    <a href="https://openreview.net/forum?id=Hkl1iRNFwS">Frankle et al, 2020</a>
+    for ResNet-20 trained on CIFAR-10 when investigating, among other things,
+    <a href="https://openreview.net/forum?id=rJl-b3RcF7">the lottery ticket hypothesis</a>.
+Their stages were defined based on the changes in gradient magnitude,
+    in the weight space, in the performance, and in the effectiveness of rewinding in search of
+    the 'winning' subnetwork (for more details on the lottery ticket hypothesis and the rewinding,
+    see e.g. <a href="https://arxiv.org/abs/1903.01611">this paper</a>).
+</p>
+
+<img src="../resources/posts/src_dst_nmt/our_vs_frankle-min.png" style="margin-bottom:20px;" width=100% alt="" />
+
+<p>Comparing those stages with ours, first, we see that their
+    relative sizes in the corresponding timelines match well. Second, the rewinding starts to be effective
+    at the third stage; for our model, this is when the contributions have almost converged.
+    In future work, it would be interesting to look into this relation further.
+</p>
+
+<br>
+<h3>Conclusions</h3>
+<p>Let's summarize what you just saw:</p>
+<ul>
+    <li>we showed how to use LRP to evaluate the relative contribution of source and target to NMT predictions;</li>
+    <li>we analyzed how the contribution of source and target changes when conditioning on different
+        types of prefixes: reference, generated by a model or random translations;</li>
+    <li>we found that (i) models suffering from exposure bias are more prone to over-relying on target
+        history (and hence to hallucinating), (ii) with more data, models rely on source information more
+        and have more sharp token contributions, (iii) the training process is non-monotonic with several
+        distinct stages.
+    </li>
+</ul>
+
+
+<br>
+<h3>What's next?</h3>
+<p>I think the best possible answer is <font face="arial">"It's up to you"</font> :)
+</p>
+<p>But you want our opinion, we do have some ideas
+how this can be useful. For example,</p>
+<ul>
+    <li><font face="arial">measure how different training regimes change contributions</font><br>
+        Some method claims to reduce exposure bias?
+        That's great - now you can measure if indeed increases contribution of source.
+    </li>
+
+    <li><font face="arial">look deeper into a model's pathological behavior</font><br>
+        Something strange is going on in your network?
+        On the one hand, this is not so great. But on the other, you can look at how contributions behave - this can
+        not be boring!
+    </li>
+    <li><font face="arial">look further into training stages</font><br>
+    You care more about language? Then you may look into the training stages from the language perspective:
+        which patterns a model learns at each of them? Alternatively, you can investigate
+        the connection between our stages and the ones from previous work.
+    </li>
+
+</ul>
+
+
+Want to know more?
+
+<a class="pull-right" href="https://arxiv.org/pdf/2010.10907.pdf" onMouseOver="document.readpaper2.src='../resources/posts/buttons/button_read_paper_push-min.png';" onMouseOut="document.readpaper2.src='../resources/posts/buttons/button_read_paper-min.png';">
+<img src="../resources/posts/buttons/button_read_paper-min.png" name="readpaper2" width=120px class="pull-right"></a>
+<a class="pull-right" href="https://github.com/lena-voita/the-story-of-heads" onMouseOver="document.viewcode2.src='../resources/posts/buttons/button_view_code_push-min.png';" onMouseOut="document.viewcode2.src='../resources/posts/buttons/button_view_code-min.png';">
+<img src="../resources/posts/buttons/button_view_code-min.png" name="viewcode2" width=120px></a>
+
+<br/><br/>
+Share: <a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-text="Analyzing Source and Target Contributions to NMT Predictions - a new work by @lena_voita @RicoSennrich @iatitov ! Blog post: " data-url="https://lena-voita.github.io/posts/source_target_contributions_to_nmt.html" data-lang="en" data-show-count="false">Tweet</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>

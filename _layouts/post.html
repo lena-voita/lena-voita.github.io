@@ -9,6 +9,12 @@ layout: default
     <p class="post-meta">{{ page.date | date: "%b %-d, %Y" }}{% if page.tag %} • {{ page.tag }}{% endif %}{% if page.author %} • {{ page.author }}{% endif %}{% if page.meta %} • {{ page.meta }}{% endif %}</p>
   </header>
 
+  <style>
+      p {
+      text-align: justify;
+      }
+  </style>
+
   <article class="post-content">
     {{ content }}
   </article>
