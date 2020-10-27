@@ -1,7 +1,7 @@
 ---
 layout: photolist
 title: Talks & Service
-description: Links to the talks (slides & video) and service info (program/organization committee, etc.)
+description: Links to the talks (slides & video) and service info (reviewing, etc.)
 menu: yes
 order: 3
 ---
@@ -10,8 +10,10 @@ order: 3
 Program committee:
 * EMNLP: 2019 <span style="color:#999">(outstanding reviewer)</span>, 2020
 * ACL 2020
+* NAACL 2021
 * ICML 2020 <span style="color:#999">(top-33% reviewer)</span>
 * NeurIPS 2020
+* ICLR 2021
 * Workshops: [RepL4NLP](https://sites.google.com/view/repl4nlp2020/home) 2020 <span style="font-size:0.9em">(at ACL)</span>, [DeeLIO](https://sites.google.com/view/deelio-ws/program-committee) 2020 <span style="font-size:0.9em">(at EMNLP)</span> 
 
 
@@ -32,11 +34,15 @@ Program committee:
 <br/>&nbsp; &nbsp; &nbsp; [Yandex Research Summit](https://yandex.com/promo/academy/yars_2019), <span style="font-size:0.9em">Moscow, Russia (with David Talbot)</span> 
 
 ### <span style="color:darkblue"> Invited talks </span>
-* 06-08/2020 <span class="talk-title">_Information-Theoretic Probing with Minimum Description Length_</span> <a href="https://drive.google.com/file/d/1iP7P0nld_O8op2SLEEX-q7WSFA1rKlfk/view?usp=sharing" class="label slides">Slides</a>
-<br/>&nbsp; &nbsp; &nbsp; MIT (Massachusetts Institute of Technology) (remotely)
-<br/>&nbsp; &nbsp; &nbsp; DeepMind (remotely)
-<br/>&nbsp; &nbsp; &nbsp; [Grammarly AI](https://grammarly.ai/information-theoretic-probing-with-minimum-description-length/) (remotely) <a href="https://www.youtube.com/watch?v=e1_PFc4b-4Y&feature=youtu.be" class="label video">Video</a>
+* 08/2020 <span class="talk-title">_Evaluating Source and Target Contributions to NMT Predictions_</span>
+<br/>&nbsp; &nbsp; &nbsp; Unbabel 
+* 06-10/2020 <span class="talk-title">_Information-Theoretic Probing with Minimum Description Length_</span> <a href="https://drive.google.com/file/d/1iP7P0nld_O8op2SLEEX-q7WSFA1rKlfk/view?usp=sharing" class="label slides">Slides</a>
+<br/>&nbsp; &nbsp; &nbsp; MIT (Massachusetts Institute of Technology)
+<br/>&nbsp; &nbsp; &nbsp; DeepMind
+<br/>&nbsp; &nbsp; &nbsp; [Grammarly AI](https://grammarly.ai/information-theoretic-probing-with-minimum-description-length/) <a href="https://www.youtube.com/watch?v=e1_PFc4b-4Y&feature=youtu.be" class="label video">Video</a>
 <br/>&nbsp; &nbsp; &nbsp; [NLP with Friends](https://nlpwithfriends.com)    <a href="https://drive.google.com/file/d/1owq2nenNOfh1u87M-ZxS_iHHtZLhBx5v/view?usp=sharing" class="label slides">Slides for Friends</a> <a href="https://youtu.be/27eWB8IYc1A" class="label video">Video</a>
+<br/>&nbsp; &nbsp; &nbsp; [CMU (Carnegie Mellon University)](https://www.cs.cmu.edu/calendar/tue-2020-10-27-1100/language-technologies-institute-seminar)
+
 * 01/2020 <span class="talk-title">_Analyzing Information Flow in Transformers_</span> <a href="https://drive.google.com/file/d/1bEiWUZDNbKAgMkt5PPF9sQl3x9AYNVoZ/view?usp=sharing" class="label slides">Slides</a>
 <br/>&nbsp; &nbsp; &nbsp; [Naver Labs Europe](https://europe.naverlabs.com/research/seminars/analyzing-information-flow-in-transformers/), Grenoble, France
 <br/>&nbsp; &nbsp; &nbsp; Google Research, Berlin, Germany
