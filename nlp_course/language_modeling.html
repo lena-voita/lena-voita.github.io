@@ -4464,7 +4464,10 @@ for (i = 0; i < dropdown.length; i++) {
                     <div style="width: 85%; margin-left: 7%;">
                         <p class="data_text" style="font-size: 16px; color: gray; text-align:left; margin-bottom: -2px;">
                             Write a prefix, for example: "Deep Variational" (without quotes)</p>
-                        <textarea class="input_prompt" style="width: 100%; max-width: 100%; min-height: 72px; resize: vertical; font-size:14px;"></textarea>
+                        <textarea class="input_prompt"
+                                  style="width: 100%; max-width: 100%; min-height: 72px;
+                                         resize: vertical; font-size:14px;">
+                        </textarea>
                     </div>
                     <div class="next" style="opacity:0.2; transform: translate(-32px, 35px);">
                         <div class="next_button"></div>
@@ -4484,7 +4487,8 @@ for (i = 0; i < dropdown.length; i++) {
                        style="font-size: 16px; color: gray; text-align:left; margin-bottom: -2px; margin-left: 5px;">
                         Currently generated text ("@@" is a BPE split). Click on the circles below to add tokens.</p>
                     <textarea class="input_preprocessed"
-                              style="width: 100%; resize: vertical; margin-left: 5px" disabled=true></textarea>
+                              style="width: 100%; resize: vertical; margin-left: 5px; font-size:14px;" disabled=true>
+                    </textarea>
                 </div>
                 <div id="d3_container" style="width: 85%; display:block; margin: 0 auto;">
                     <svg id="d3_beamsearch_svg" width=100% height=240px></svg>
