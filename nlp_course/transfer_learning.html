@@ -1,0 +1,1652 @@
+---
+layout: lecture
+title: Transfer Learning
+description: Introduction to Transfer Learning and Pretrained Models (ELMo, BERT, GPT).
+---
+
+
+<div class="sidebar" id="sidebar">
+    <a href="javascript:void(0)" id="close_sidebar_btn" onclick="closeNav()"
+   style="text-align:center;font-size:30px;padding:0px;">⇤</a>
+    <a class="active" href="../nlp_course.html" style="font-weight: bold;">
+        <img height="18" class='sidebar_ico' src="../resources/lectures/ico/course_logo.png" style="margin-right: 8px;margin-left: 8px;margin-top: 4px;"/>
+        NLP Course <font color="#92bf32" id="for_you_in_sidebar">| For You</font></a>
+  <a  href="#main_content" style="font-weight: bold;">Transfer Learning</a>
+
+    <a href="#intro">What is Transfer Learning?</a>
+    <a href="#word_embeddings">Recap: Word Embeddings</a>
+
+    <div class="dropdown-scope">
+           <a class="dropdown-btn" >Pretrained Models
+            <i class="fa fa-caret-down"></i>
+          </a>
+          <div class="dropdown-container">
+              <a href="#pretrained_models"><span style="margin-right:15px;font-size:14px;">&#8226;</span>
+                  Words ↦ Words in Context</a>
+
+              <a href="#cove"><span style="margin-right:15px;font-size:14px;">&#8226;</span>
+                  CoVe: Context Vectors</a>
+              <a href="#elmo"><span style="margin-right:15px;font-size:14px;">&#8226;</span>
+                  ELMo: Embeddings from LM</a>
+              <a href="#great_idea2"><span style="margin-right:15px;font-size:14px;">&#8226;</span>
+                  Task-Specific Model ↦ Unified</a>
+              <a href="#gpt"><span style="margin-right:15px;font-size:14px;">&#8226;</span>
+                  GPT: Generative Pretraining</a>
+              <a href="#bert"><span style="margin-right:15px;font-size:14px;">&#8226;</span>
+                  BERT: Bidirectional Encoder</a>
+
+          </div>
+        </div>
+
+
+    <!--<a href="#benchmarks">Benchmarks</a>-->
+
+    <a href="#adapters">(A Bit of) Adapters</a>
+    <a href="#benchmarks">(A Note on) Benchmarks</a>
+
+<a href="#analysis_interpretability" id="sidebar_analysis">Analysis and Interpretability <img height="25" src="../resources/lectures/ico/analysis_empty.png" class="sidebar_ico"/></a>
+<div class="extra_components">
+    <a href="#research_thinking" id="sidebar_research_thinking">Research Thinking <img height="30" src="../resources/lectures/ico/bulb_empty.png" class="sidebar_ico"/></a>
+    <!--<hr color="#b7db67">-->
+
+    <a href="#related_papers" id="sidebar_related_papers">Related Papers <img height="22" src="../resources/lectures/ico/book_empty.png" class="sidebar_ico"/></a>
+    <!--<hr color="#b7db67">-->
+
+  <a href="#have_fun" id="sidebar_fun">Have Fun! <img height="30" src="../resources/lectures/ico/fun_empty.png" class="sidebar_ico"/></a>
+</div>
+</div>
+
+
+
+<div class="sidebar" id="sidebar_small">
+
+  <a class="active" onclick="openNav()" style="text-align:center;">☰</a>
+    <a href="../nlp_course.html" >
+        <img height="20" src="../resources/lectures/ico/course_logo.png" style="margin-right: 8px;margin-left: 8px;"/></a>
+    <a href="#main_page_content" style="text-align:center; font-size:20px;color:#7ca81e"> <i class="fa fa-home"></i></a>
+
+<a href="#analysis_interpretability" id="sidebar_analysis"> <img height="25" src="../resources/lectures/ico/analysis_empty.png"/></a>
+<div class="extra_components">
+    <a href="#research_thinking" id="sidebar_research_thinking"><img height="30" src="../resources/lectures/ico/bulb_empty.png"/></a>
+    <!--<hr color="#b7db67">-->
+
+    <a href="#related_papers" id="sidebar_related_papers"><img height="22" src="../resources/lectures/ico/book_empty.png"/></a>
+    <!--<hr color="#b7db67">-->
+
+  <a href="#have_fun" id="sidebar_fun"><img height="30" src="../resources/lectures/ico/fun_empty.png" /></a>
+</div>
+</div>
+
+
+<script>
+function openNav() {
+  document.getElementById("sidebar").style.display = "block";
+  document.getElementById("sidebar_small").style.display = "none";
+  document.getElementById("close_sidebar_btn").style.display = "block";
+}
+
+function closeNav() {
+  document.getElementById("sidebar").style.display = "none";
+  document.getElementById("sidebar_small").style.display = "block";
+  document.getElementById("close_sidebar_btn").style.display = "none";
+}
+
+</script>
+
+
+<script>
+function onResize() {
+  if (window.innerWidth >= 800) {
+     document.getElementById("sidebar").style.display = "block";
+     document.getElementById("sidebar_small").style.display = "none";
+     document.getElementById("close_sidebar_btn").style.display = "none";
+  }
+  else {
+     document.getElementById("sidebar").style.display = "none";
+     document.getElementById("sidebar_small").style.display = "block";
+  }
+}
+window.onresize = onResize;
+onResize();
+</script>
+
+<script>
+/* Loop through all dropdown buttons to toggle between hiding and showing its dropdown content - This allows the user to have multiple dropdowns without any conflict */
+var dropdown = document.getElementsByClassName("dropdown-btn");
+var i;
+
+for (i = 0; i < dropdown.length; i++) {
+  dropdown[i].addEventListener("click", function(event) {
+  this.classList.toggle("active_caret");
+  var dropdownButton = event.target || event.srcElement;
+  while(dropdownButton.className != "dropdown-scope")
+     dropdownButton = dropdownButton.parentElement;
+  var dropdownContent = dropdownButton.getElementsByClassName("dropdown-container")[0];
+
+  if (dropdownContent.style.display === "block") {
+  dropdownContent.style.display = "none";
+  } else {
+  dropdownContent.style.display = "block";
+  }
+  });
+}
+</script>
+
+
+
+
+<div class="wrapper" id="main_page_content">
+    <div class="header"><h1>(Introduction to) Transfer Learning</h1></div>
+
+
+<div class="main_content" id="main_content">
+
+
+<div id="intro">
+
+    <p class="data_text"><font color="#888"><u>Lena</u>: Transfer Learning is huge: therefore,
+        it is not possible to cover it all in a single lecture. Here I will try to give a general idea
+        of transfer and will show some popular ways it is currently done.
+    </font></p>
+
+    <p>Currently, <font face="arial">Transfer Learning</font> is likely to be the most popular NLP area both in research and
+    industry. Most probably you've already heard people talking about ELMo, BERT, and other characters - after this
+        lecture, you will understand why!
+    </p>
+
+    <h2>"Transfer" Knowledge from One Model to Another</h2>
+
+    <p>The general idea of transfer learning is to "transfer" knowledge from one task/model to another.
+        For example, you don't have a huge amount of data for the task you are interested in (e.g., classification),
+        and it is hard to get a good model using only this data.
+        Instead, you can have data for some other task, which is easier to get (e.g., for language modeling
+        you don't need labels at all - plain texts are enough).</p>
+    <center>
+    <img src="../resources/lectures/transfer/intro/idea-min.png"
+             style="max-width:80%; margin-bottom:20px;"/>
+    </center>
+        <p> In this case, you can
+        "transfer" knowledge from the task you are not interested in
+        (let's call it <font face="arial">source task</font>) to the task you care about, i.e.
+        <font face="arial">target task</font>.
+    </p>
+
+<h2>A Taxonomy for Transfer Learning in NLP</h2>
+    <p>There are several types of transfer that are categorized nicely in
+        <a href="https://ruder.io/state-of-transfer-learning-in-nlp/"
+               target="_blank">Sebastian Ruder's blog post</a>.
+        Two large categories are <font face="arial">transductive</font> and
+        <font face="arial">inductive</font> transfer learning:
+        they divide all approaches into the ones where the task is the same
+        and labels are only in the source (<font face="arial">transductive</font>),
+        and where the tasks are different and labels are only in the target
+        (<font face="arial">inductive</font>).
+    </p>
+
+    <p style="text-align: center; display: block;
+            margin-bottom:20px; max-width:100%;">
+           <img src="../resources/lectures/transfer/intro/taxonomy-min.png"
+             style="max-width:90%; margin-bottom:20px;"/>
+                <br />
+            <span style="font-size: small;">This taxonomy is from
+            <a href="https://ruder.io/state-of-transfer-learning-in-nlp/"
+               target="_blank">Sebastian Ruder's blog post</a>.</span>
+    </p>
+    <p>In this lecture, we are interested in the latter, with different tasks, and
+        in its subcategory that learns these tasks sequentially.
+    </p>
+    <p class="data_text"><font color="#888"><u>Lena</u>: I'm usually reluctant to make such claims,
+        but here I believe it is safe to say that
+        sequential transfer learning is currently one of the most popular areas of research.
+    </font></p>
+
+    <h2>What we'll be looking at</h2>
+    <p>In this lecture, we are mostly interested in how the auxiliary models can look like and
+    how the transfer itself looks on the modeling side.</p>
+    <center>
+    <img src="../resources/lectures/transfer/intro/our_questions-min.png"
+             style="max-width:80%; margin-bottom:20px;"/>
+    </center>
+    <!--<p>There are a lot of other questions, <font color="red">link to where I mention this later</font></p>-->
+
+</div>
+
+<div id="word_embeddings">
+
+        <h1>The Simplest Transfer: Word Embeddings</h1>
+
+        <p>When talking about <a href="./text_classification.html" target="_blank">Text Classification</a>,
+            we already discussed that using pretrained word embeddings can help a lot.
+            Let's recap this part here.
+        </p>
+
+        <h3><font face="arial"><u>Recap</u>: Embeddings in Text Classification</font></h3>
+        <img src="../resources/lectures/text_clf/practical_tips/embeddings_what_to_do-min.png"
+             style="max-width:60%; margin-bottom:20px;margin-left:20px;float:right;"/>
+            <p>Input for a network is represented by word embeddings. You have three options
+                on how to get these embeddings for your model:</p>
+                <ul>
+                    <li>train from scratch as part of your model,</li>
+                    <li>take pretrained (Word2Vec, GloVe, etc) and fix them (use them as static vectors),</li>
+                    <li>initialize with pretrained embeddings and train them with the network ("fine-tune").</li>
+                </ul>
+
+        <p>Let's think about these options by looking at the data a model can use.
+            Training data for classification is labeled and task-specific,
+            but labeled data is usually hard to get.
+            Therefore, this corpus is likely to be not huge (at the very least), or not diverse, or both.
+            On the contrary, training data for word embeddings is not labeled - plain texts are enough.
+            Therefore, these datasets
+            can be huge and diverse - a lot to learn from.
+        </p>
+        <img src="../resources/lectures/text_clf/practical_tips/data_types-min.png"
+             style="max-width:100%; margin-bottom:20px;"/>
+
+        <p>Now let us think about what a model will know depending on what we do with the embeddings.
+            If the embeddings are trained from scratch, the model will "know" only
+            the classification data - this may not be enough to learn relationships between words well.
+            But if we use pretrained embeddings, they (and, therefore, the whole model)
+            will know a huge corpus - they will learn a lot about the world.
+            To adapt these embeddings to your task-specific data,
+            you can fine-tune these embeddings by training them with the
+                whole network - this can bring gains in performance (not huge though).
+        </p>
+
+        <img src="../resources/lectures/text_clf/practical_tips/embs_what_to_do_with_data-min.png"
+             style="max-width:100%; margin-bottom:20px;"/>
+        <p>When we use pretrained embeddings, this is an example of
+            <font face="arial">transfer learning</font>: through the embeddings, we "transfer" the knowledge
+            of their training data to our task-specific model.
+
+        </p>
+
+        <h3><font face="arial">Transfer Through Word Embeddings</font></h3>
+        <p>We just stated the main idea of using pretrained word embeddings in task-specific models:</p>
+        <div class="green_left_thought" style="font-size:18px;">
+                <p class="data_text">Through the embeddings, we "transfer" the knowledge
+            of their training data to our task-specific model.</p>
+            </div>
+
+        <p>In a model, this transfer is implemented via replacing randomly initialized embeddings with
+        the pretrained ones (what is the same, copying weights from pretrained embeddings to your model).
+        </p>
+
+        <center>
+        <img src="../resources/lectures/transfer/word_emb/transfer_scheme-min.png"
+             style="max-width:90%; margin-bottom:20px;"/>
+        </center>
+    <p>Note that
+            <font face="arial">we do not change the model</font>: it stays exactly the same.
+            As we will see a bit later, this won't always be the case.</p>
+
+
+    </div>
+
+<div id="pretrained_models">
+
+   <h1>Pretrained Models</h1>
+
+    <p>The idea of knowledge transfer we formulated for embeddings is general and stays the same when
+        coming from word embeddings to pretrained models. I mean, literally the same: you can just
+        replace "word embeddings" with your model's name!
+    </p>
+
+        <div class="green_left_thought" style="font-size:18px;">
+            <p class="data_text">Through <strong>_insert_your_model_</strong>, we "transfer" the knowledge
+            of its training data to a task-specific model.</p>
+            </div>
+
+
+    <h3><u>The Two Great Ideas</u></h3>
+
+    <p>In this part, we are going to see 4 models: CoVe, ELMo, GPT, BERT.
+        Note that now there are lots of variations of these models:
+        ranging from very small modifications (e.g., training data and/or setting) to rather prominent
+        ones (e.g., different training objectives). However,
+        roughly speaking, the transition from word embeddings to the current state-of-the-art models
+        can be explained with just two ideas.
+    </p>
+
+
+    <center>
+        <img src="../resources/lectures/transfer/cove/great_ideas-min.png"
+             style="max-width:90%; margin-bottom:20px;"/>
+        </center>
+
+    <p>The two great ideas:</p>
+    <ul>
+        <li><font face="arial">what is encoded</font>: from words to words-in-context<br>
+            (the transition from Word2Vec/GloVe/etc. to
+        Cove/ELMo);</li>
+        <li><font face="arial">usage for downstream tasks</font>:
+            from replacing only word embeddings in task-specific models to replacing entire task-specific models<br>
+            (the transition from
+        Cove/ELMo to GPT/BERT).</li>
+    </ul>
+
+    <p>Now, I will explain each of these ideas along with the corresponding models.</p>
+
+
+    <div id="words_to_words_in_context">
+
+        <h2><u>Great Idea 1</u>: From Words to Words-in-Context</h2>
+
+        <p>As we just saw, knowledge transfer through learned vector representations
+            existed long before pretrained models: in the simplest case, through representations of words.
+            What made transfer much more effective (and, therefore, popular) is a very simple idea:
+
+        </p>
+        <div class="green_left_thought" style="font-size:18px;">
+            <p class="data_text">Instead of representing individual words, we can learn to represent
+                words <strong>along with the context they are used in</strong>.
+            </p>
+        </div>
+
+        <h3>Well, okay. But how do we do this?</h3>
+        <p>Remember we trained neural language models? To train such a model you need the same kind
+            of data that is used to train word embeddings: plain texts in natural language (e.g.,
+            Wikipedia texts, of anything you want). Note that for this you don't need any kind of labels!
+        </p>
+
+        <p>Imagine now that we have some texts in natural language. We can use them to train word embeddings
+            (Word2Vec, GloVe, etc.) or a neural language model. But by training a language model we get much more
+            than by training word embeddings: language models process not just individual words, but sentences/paragraphs/etc.
+            Inside a model, LMs too build vector representations for each word, but
+            these vectors represent not just words, but <font face="arial">words in context</font>.
+        </p>
+
+        <center>
+        <img src="../resources/lectures/transfer/words_to_context-min.png"
+             style="max-width:90%; margin-bottom:20px;"/>
+        </center>
+
+        <p>For example, let us look at the sentence <span class="data_text"><strong>I saw a cat on a mat</strong></span>
+            and the word <span class="data_text"><strong>cat</strong></span> in it.
+            If we use word embeddings, the vector for
+            <span class="data_text"><strong>cat</strong></span> will contain information about the general notion of
+            <span class="data_text"><strong>cat</strong></span>: this can be any kind of cat you can imagine.
+            But if we take a vector for the <span class="data_text"><strong>cat</strong></span>
+            from somewhere inside a language model, this won't be any <span class="data_text"><strong>cat</strong></span>
+            anymore! Since LMs read the context, this vector representation for
+            <span class="data_text"><strong>cat</strong></span> will know that this is
+            the <span class="data_text"><strong>cat</strong></span>
+            that <span class="data_text"><strong>I saw</strong></span>, the one who
+            <span class="data_text"><strong>sat on the mat</strong></span>.
+        </p>
+
+
+
+        <h3><u>Transfer</u>: Put Representations Instead of Word Embeddings</h3>
+
+
+        <p>We are going to see the two models that first implemented the idea of encoding words with context:
+            <a href="#cove">CoVe</a>
+            and <a href="elmo">ELMo</a>.
+            The way their representations are used for downstream tasks is almost the same
+        as with word embeddings: usually, you just have to put representations instead of word embeddings
+            (the place where previously you put e.g. GloVe). That's it!
+        </p>
+        <center>
+        <img src="../resources/lectures/transfer/elmo/transfer_scheme-min.png"
+             style="max-width:90%; margin-bottom:20px;"/>
+        </center>
+
+        <p>Note that here you still have a task-specific model for each task, and these task-specific models
+            can be quite different. What's changed is the way we encode words before feeding them to
+            these task-specific models.
+        </p>
+        <p class="data_text"><font color="#888"><u>Lena</u>: In the original papers, the authors propose
+            some modifications for the task-specific models. These, however, are rather small, and
+            roughly speaking can be ignored. What does matter is that instead of representing
+            individual words, CoVe and ELMo represent words in context.
+        </font></p>
+
+
+        <h3><u>Now, all that's left</u> is to specify
+        </h3>
+        <ul>
+            <li> this
+        <span class="data_text"><strong>some model</strong></span> from the illustration,</li>
+            <li>which representations to take from this model.</li>
+            <!--<li>how to use these representations for specific tasks.</li>-->
+        </ul>
+
+
+
+    </div>
+
+
+
+    <div id="cove">
+
+        <h2><u>CoVe</u>: Contextualized Word Vectors Learned in Translation</h2>
+
+        <p>CoVe stands for "Context Vectors" and was introduced in the NeurIPS 2017 paper
+        <a href="https://arxiv.org/pdf/1708.00107.pdf" target="_blank">Learned in Translation: Contextualized Word Vectors</a>.
+            The authors first proposed to learn how to encode not only individual words but
+            words along with their context.
+        </p>
+
+
+        <h3><u>Model Training</u>: Neural Machine Translation (LSTMs and Attention)</h3>
+
+        <img src="../resources/lectures/transfer/cove/mt_model-min.png"
+             style="max-width:50%; margin-left:20px; float: right;"/>
+
+        <p>To encode words in the context of a sentence/paragraph, CoVe train an NMT system and use its encoder.
+            The main hypothesis is that to translate a sentence,
+            NMT encoders learn to "understand" the source sentence. Therefore,
+            vector representations from the encoder contain information about a word's context.
+        </p>
+
+        <p>Formally, the authors train an LSTM translation model with attention (e.g.,
+            <a href="./seq2seq_and_attention.html#attention_bahdanau_luong" target="_blank">Bahdanau model
+            we saw in the previous lecture</a>). Since in the end we want to use a trained encoder
+            to process sentences in English (not because we care only about English, but because
+            most of the datasets for downstream tasks are in English),
+            the NMT system has to translate from English to some other language (e.g., German).
+        </p>
+
+        <h4><u>Bidirectional Encoder</u>: Knows Both Left and Right Contexts</h4>
+
+        <img src="../resources/lectures/transfer/cove/bidirectional-min.png"
+             style="max-width:65%; margin-left:20px; float: right;"/>
+
+        <p>Note that in this NMT model, the encoder is bidirectional: it concatenates outputs of
+            the forward and backward LSTMs. Therefore, encoder output contains information about
+            both left and right contexts of a token.
+        </p>
+
+        <h3><u>Getting Representations</u>: Concatenate GloVe and Cove Vectors</h3>
+
+        <img src="../resources/lectures/transfer/cove/concat_glove_cove-min.png"
+             style="max-width:40%; margin-left:20px; float: right;"/>
+
+        <p>Once an NTM model is trained, we need only its encoder.
+        For a given text, CoVe vectors are encoder outputs. For downstream tasks,
+            the authors propose to use the concatenation of both Glove (which represent individual tokens)
+            and CoVe (tokens encoded in context) vectors. The idea is that
+            these vectors encode different kinds of information, and a combination of them can be useful.
+
+        </p>
+
+            <div style="display:grid;grid-template-columns: 50% 50%;">
+            <div>
+                <h3><u>Results</u>: The Improvements are Prominent</h3>
+                <p>Just by using CoVe vectors along with GloVe, the authors got prominent improvements
+                on many downstream tasks: text classification, natural language inference and question answering.</p>
+            </div>
+            <div>
+                <p style="text-align: center; display: block;
+            margin-bottom:20px; max-width:90%; float:right;">
+           <img src="../resources/lectures/transfer/cove/results-min.png"
+             style="max-width:90%; margin-bottom:20px;"/>
+                <br />
+            <span style="font-size: small;">
+                The figure is from the
+            <a href="https://arxiv.org/pdf/1708.00107.pdf"
+               target="_blank">the original CoVe paper</a>.</font></span>
+        </p>
+            </div>
+        </div>
+
+
+
+    </div>
+
+
+    <div id="elmo">
+
+        <h2><u>ELMo</u>: Embeddings from Language Models</h2>
+
+        <p>The ELMo model was introduced in the paper
+            <a href="https://arxiv.org/pdf/1802.05365.pdf" target="_blank">Deep contextualized word representations</a>.
+            Differently from CoVe, ELMo uses representations not from NMT model, but from a language model.
+            Just by replacing word embeddings (GloVe) with embeddings from LM they got a huge improvement for
+            several tasks such as question answering, coreference resolution, sentiment analysis,
+            named entity recognition, and others. And, by the way, the paper got the Best Paper Award at NAACL 2018!
+        </p>
+        <p>Now let's look at ELMo in detail.</p>
+
+
+        <h3><u>Model Training</u>: Forward and Backward LSTM-LMs on top of char-CNN</h3>
+
+        <p>The model is very simple and it consists of the two-layer LSTM language models: forward and backward.
+            The two models are used so that each token could have both contexts: left and right.
+        </p>
+
+        <center>
+        <img src="../resources/lectures/transfer/elmo/training-min.png"
+             style="max-width:90%; margin-bottom:20px;"/>
+        </center>
+
+        <p>What is also interesting, is how the authors get initial word representations (which are then
+            fed to the LSTMs). Let us recall that in the standard word embedding layer,
+            for each word in the vocabulary
+            we train a unique vector. In this case,
+        </p>
+        <ul>
+            <li>word embeddings do not know the characters they consist of (e.g., they don't know that
+            the words <span class="data_text"><strong>represent</strong></span>,
+            <span class="data_text"><strong>represents</strong></span>,
+            <span class="data_text"><strong>represented</strong></span>, and
+            <span class="data_text"><strong>representation</strong></span> are close in writing)</li>
+            <li>we can not represent out-of-vocabulary (OOV) words.</li>
+        </ul>
+            <p>To address these problems,
+                the authors represent words as outputs of a
+                character-level network. As we see from the illustration, this CNN is very simple and consists of
+                the components we already saw before: convolution, global pooling,
+                highway connections, and linear layers.
+                In this way, word representations know their characters by construction,
+                and we can represent even those words we've never seen in training.
+            </p>
+
+
+        <h3><u>Getting Representations</u>: Weight Representations from Different Layers</h3>
+
+        <p>
+        </p>
+        <img src="../resources/lectures/transfer/elmo/bidirectional_explain-min.png"
+             style="max-width:40%; margin-left:20px; float:right;"/>
+        <p>Once the model is trained, we can use it to get word representations. For this, for each word we combine
+            representations from the corresponding layers from the forward and backward LSTMs.
+            By concatenating these forward and backward vectors we construct a
+            word representation that "knows" about both left and right contexts.
+        </p>
+
+        <p>Overall, ELMo representations
+            have three layers:
+        </p>
+        <ul>
+            <li><font face="arial">layer 0 (embeddings)</font> - output of the character-level CNN;</li>
+            <li><font face="arial">layer 1</font> - concatenated representations from layer 1
+                of both forward and backward LSTMs;</li>
+            <li><font face="arial">layer 2</font> - concatenated representations from layer 2
+                of both forward and backward LSTMs.</li>
+        </ul>
+
+        <center>
+        <img src="../resources/lectures/transfer/elmo/gather_layers-min.png"
+             style="max-width:100%; margin-bottom:20px;"/>
+        </center>
+
+        <h4><font face="arial">Layers contain different information → combine them</font></h4>
+        <p>Each of these layers encodes different kinds of information: layer 0 - only word-level,
+            layers 1 and 2 - words in context. Comparing between layers 1 and 2,
+            layer 2 is likely to contain more high-level information:
+            these representations come from the higher layers of the corresponding LMs.
+        </p>
+        <p>Since different downstream tasks need different kinds of information, ELMo
+            uses task-specific weights to combine representations from the three layers. These are scalars that
+            are learned for each downstream task. The resulting vector, the weighted sum of
+            representations from all layers, is used to represent a word.
+        </p>
+
+
+
+
+
+    </div>
+
+
+
+    <div id="great_idea2">
+
+        <h2><u>Great Idea 2</u>: Refuse From Task-Specific Models</h2>
+
+        <p>The next two (classes of) models we are going to see are <a href="#gpt">GPT</a> and <a href="#bert">BERT</a>
+            which are very different from the previous approaches in a way they are used for downstream tasks:
+        </p>
+        <div class="green_left_thought" style="font-size:18px;">
+            <p class="data_text">CoVe/ELMo replace word embeddings,
+                but GPT/BERT replace <strong>entire models</strong>.
+            </p>
+        </div>
+
+
+        <h3><u>Before</u>: Specific model architecture for each downstream task</h3>
+
+        <p>
+            Note that ELMo/CoVe representations were mainly used to replace the embedding layer,
+            and kept task-specific model architectures almost intact. This means e.g. that for coreference resolution,
+            one had to use a specific model designed for this task, for part-of-speech tagging - some other model,
+            for question answering - another, very peculiar model, etc. For each of these tasks, researchers
+            specializing in it
+            kept improving the task-specific model architectures.
+        </p>
+
+        <h3><u>After</u>: Single model which can be fine-tuned for all tasks</h3>
+
+        <img src="../resources/lectures/transfer/bert/before_after-min.png"
+             style="max-width:55%; margin-left:20px; margin-bottom:20px; float:right;"/>
+
+        <p>
+            In contrast to previous models, GPT/BERT act not as a replacement for word embeddings,
+            but as a <font face="arial">replacement for task-specific models</font>.
+
+            In this new setting, a model is first pretrained using a huge amount of unlabeled data (plain texts).
+            Then, this model is fine-tuned on each of the downstream tasks.
+            What is important,
+            now during fine-tuning you have to only
+            use task-aware input transformations (i.e. feed the data in a certain way)
+            <font face="arial">instead of</font>
+            modifying model architecture.
+        </p>
+
+
+
+    </div>
+
+
+    <div id="gpt">
+
+        <h2><u>GPT</u>: Generative Pre-Training for Language Understanding</h2>
+
+
+        <!--<p>Remember our first great idea? We wanted to teach some kind of a model
+            to process texts and make this model to encode a token's context. What is important, is that
+            we wanted to do this by
+            using unlabeled data (i.e., plain texts) because such data is easy to get.
+            For this, the left-to-right language modeling objective (used in ELMo) is the standard thing to do:
+            the language modeling task is complicated enough to teach a model to learn something about
+            language.
+        </p>
+        <p>Well, replacing LSTMs with Transformer and still using left-to-right language modeling pretraining
+            seems a reasonable thing to do (you'd get GPT which we'll see in a couple of minutes).
+            But! Note that BERT stands for "Bidirectional
+            <font face="arial">Encoder</font> Representations from Transformer",
+            <font face="arial">not decoder</font>!
+            <font color="red">CHECK IF THIS IS CORRECT AFTER FINALIZING THE GPT SECTION</font>
+        </p>
+        -->
+
+
+        <h3><u>Pre-Training:</u> Left-to-right Transformer Language Model</h3>
+
+
+
+        <img src="../resources/lectures/transfer/gpt/training.gif"
+             style="max-width:30%; margin-left:20px; margin-bottom:20px; float:right;"/>
+
+        <p>GPT is a Transformer-based left-to-right language model.
+            The architecture is a 12-layer Transformer decoder (without decoder-encoder attention).
+        </p>
+
+        <p>Formally, if \(y_1, \dots, y_n\) is a training token sequence,
+            then at the timestep \(t\) a model predicts a probability distribution
+            \(p^{(t)} = p(\ast|y_1, \dots, y_{t-1})\). The model is trained with the standard cross-entropy loss,
+            and the loss for the whole sequence is
+        </p>
+        \[L_{xent}=-\sum\limits_{t=1}^n\log(p(y_t| y_{\mbox{<}t})).\]
+
+        <p class="data_text"><font color="#888">
+            <u>Lena</u>: For more details on the left-to-right language modeling and/or Transformer model, see the
+            <a href="./language_modeling.html" target="_blank">Language Modeling</a>
+            and <a href="./seq2seq_and_attention.html" target="_blank">Seq2seq and Attention</a>
+            lectures.
+        </font>
+        </p>
+
+
+        <h3><u>Fine-Tuning:</u> Using GPT for Downstream Tasks</h3>
+
+        <p>The fine-tuning loss consists of the task-specific loss, as well as the language modeling loss:</p>
+        \[L = L_{xent} + \lambda \cdot L_{task}.\]
+
+        <p>In the fine-tuning stage, the model architecture stays the same except for the final linear layer.
+            What changes is the input format for each task: look at the illustration below.
+
+        </p>
+
+
+        <p style="text-align: center; display: block;
+            margin-bottom:20px; max-width:100%;">
+           <img src="../resources/lectures/transfer/gpt/input_transformations-min.png"
+             style="max-width:100%; margin-bottom:20px;"/>
+                <br />
+            <span style="font-size: small;">
+                The figure is from
+            <a href="https://cdn.openai.com/research-covers/language-unsupervised/language_understanding_paper.pdf"
+               target="_blank">the original GPT paper</a>.</font></span>
+        </p>
+
+
+
+
+        <h4 style="font-size:18px;">
+            <font face="arial"><u>Single sentence classification</u></font></h4>
+                <p>To classify individual sentences, just feed the data as in training and predict
+                    the label from the final representation of the
+                    last input token.
+                </p>
+
+                <p>Examples of tasks:
+                </p>
+                <ul>
+                    <li><font face="arial">SST-2</font> - binary sentiment classification (the one
+                        <a href="./text_classification.html#dataset_examples" target="_blank">
+                            we saw in the Text Classification lecture</a>);</li>
+                    <li><font face="arial">CoLA (Corpus of Linguistic Acceptability)</font> -
+                    say whether a sentence is linguistically acceptable.</li>
+                </ul>
+
+
+        <h4 style="font-size:18px;">
+            <font face="arial"><u>Sentence pairs classification</u></font></h4>
+                <p>To classify sentence pairs, feed the two fragments with a special token-separator (e.g.
+                <span class="data_text"><strong>delim</strong></span>). Then,
+                    predict
+                    the label from the final representation of the
+                    last input token.
+                </p>
+
+                <p>Examples of tasks:
+                </p>
+                <ul>
+                    <li><font face="arial">SNLI</font> - entailment classification.
+                        Given a pair of sentences, say if the second is an
+                        <span class="data_text"><strong>entailment</strong></span>,
+                        <span class="data_text"><strong>contradiction</strong></span> or
+                        <span class="data_text"><strong>neutral</strong></span>);</li>
+                    <li><font face="arial">QQP (Quora Question Pairs)</font> -
+                    given two questions say if they are semantically equivalent;</li>
+                    <li><font face="arial">STS-B</font> -
+                    given two sentences return a similarity score from 1 to 5.</li>
+                </ul>
+
+
+        <h4 style="font-size:18px;">
+            <font face="arial"><u>Question answering and commonsense reasoning</u></font></h4>
+
+                <p>In these tasks,
+                    we are given a context document \(z\), a question \(q\), and a set of possible answers
+                    \(\{a_k\}\).
+
+                    Concatenate document and question, and after the <span class="data_text"><strong>delim</strong></span>
+                token add a possible answer. For each of the possible answers,
+                    process the corresponding sequences independently
+                with the GPT model; then normalize via a
+                softmax layer to produce an output distribution over possible answers.
+                </p>
+
+                <p>Examples of tasks:
+                </p>
+                <ul>
+                    <li><font face="arial"><a href="https://www.aclweb.org/anthology/D17-1082/"
+                                              target="_blank">RACE</a></font> - reading comprehension.
+                        Given a passage, a question and several answer options, pick the correct one.
+                    </li>
+
+                    <li><font face="arial"><a href="https://www.aclweb.org/anthology/W17-0906/"
+                                              target="_blank">Story Cloze</a></font> -
+                        story understanding and script learning.
+                        Given a four-sentence story and two possible endings,
+                        choose the correct ending to the story.
+                    </li>
+
+                </ul>
+
+
+
+
+        <h3><u>What is left</u>: GPT-1-2-3 , Lots of Hype, and a Bit of Unicorns</h3>
+
+        <p>So far, there are three GPT models:</p>
+        <ul>
+            <li><font face="arial">GPT-1</font>: <a href="https://cdn.openai.com/research-covers/language-unsupervised/language_understanding_paper.pdf" target="_blank">
+                Improving Language Understanding by Generative Pre-Training</a></li>
+            <li><font face="arial">GPT-2</font>: <a href="https://cdn.openai.com/better-language-models/language_models_are_unsupervised_multitask_learners.pdf" target="_blank">
+                Language Models are Unsupervised Multitask Learners</a></li>
+            <li><font face="arial">GPT-3</font>: <a href="https://arxiv.org/pdf/2005.14165.pdf" target="_blank">
+                Language Models are Few-Shot Learners</a></li>
+        </ul>
+
+        <p>These models are different mostly in the amount of training data and the number of parameters
+            (see, for example, <a href="https://medium.com/walmartglobaltech/the-journey-of-open-ai-gpt-models-32d95b7b7fb2" target="_blank">this blog post</a>.
+            Note that these models are so big, that only huge companies can afford to train one.
+            This gave rise to lots of discussions of concerns related to the use of such huge models
+            (ethical, environmental, etc.). If you are interested in these, you can easily find
+            lots of information on the internet.
+        </p>
+        <p>But what you absolutely need to see, is
+            <a href="https://openai.com/blog/better-language-models/" target="_blank">
+                the generated by GPT-2 story about unicorns</a> in
+            the Open AI blog post</a>.
+        </p>
+
+
+
+
+
+
+
+
+    </div>
+
+
+    <div id="bert">
+
+        <h2><u>BERT</u>: Bidirectional Encoder Representations from Transformers</h2>
+
+        <p>BERT was introduced in the paper <a href="https://arxiv.org/pdf/1810.04805.pdf" target="_blank">
+            BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding</a>.
+            If ELMo received the Best Paper Award at NAACL 2018, BERT did the same a year later,
+            at NAACL 2019 :) Let's try to
+            understand why.
+        </p>
+
+        <p>BERT's model architecture is very simple and you already know how it works:
+            it's just the Transformer's encoder. What is new, is the training objectives and the way
+            BERT is used for downstream tasks.
+        </p>
+
+        <center>
+        <img src="../resources/lectures/transfer/bert/intro-min.png"
+             style="max-width:90%; margin-bottom:20px;"/>
+        </center>
+
+        <p>How can we train a (bidirectional) <font face="arial">encoder</font> using plain texts?
+            We know only the left-to-right language modeling objective, but it is applicable only for
+            decoders where each token can use only previous ones (and does not see the future).
+            The BERT's authors came up with
+            other training objectives for unlabeled data. Before we come to them, let's first
+            look at what BERT gives as input to the Transformer's encoder.
+        </p>
+
+
+        <h3><u>Training Input</u>: Pairs of Sentences with Special Tokens</h3>
+
+        <p>In training, BERT sees pairs of sentences separated with a special token-separator
+            <span class="data_text"><strong>[SEP]</strong></span>. To let the model easily distinguish
+            between these sentences, in addition to token and positional embeddings it uses
+            segment embeddings.
+        </p>
+
+        <p style="text-align: center; display: block;
+            margin-bottom:20px; max-width:100%;">
+           <img src="../resources/lectures/transfer/bert/bert_input.gif"
+             style="max-width:90%; margin-bottom:20px;"/>
+                <br />
+            <span class="data_text"><font color="#888" size="small">
+                <u>Lena</u>: For this gif, I used the figure from
+            <a href="https://arxiv.org/pdf/1810.04805.pdf"
+               target="_blank">the original BERT paper</a>.</font></span>
+        </p>
+
+        <p>Another special token is <span class="data_text"><strong>[CLS]</strong></span>. In training,
+            it is used for the NSP objective we'll see next. Once a model is trained, it is
+            used for downstream tasks.
+        </p>
+
+        <h3><u>Pre-Training Objectives</u>: Next Sentence Prediction (NSP) Objective</h3>
+
+        <p>The Next Sentence Prediction (NSP) objective is a binary classification task. From
+            the final-layer representation of the special token
+            <span class="data_text"><strong>[CLS]</strong></span>, the model predicts whether the
+            two sentences are consecutive sentences in some text or not. Note that in training,
+            50% of examples contain consecutive sentences extracted from
+            training texts
+            and another 50% - a random pair of sentences. Look at a couple of examples from
+            <a href="https://arxiv.org/pdf/1810.04805.pdf" target="_blank">the original paper</a>.
+        </p>
+
+        <p class="data_text"><font color="#888"><u>Input</u>:</font> <strong>[CLS] the man went to [MASK] store [SEP] he bought a gallon [MASK] milk [SEP]</strong><br>
+        <font color="#888"><u>Label</u>:</font> isNext</p>
+        <p class="data_text"><font color="#888"><u>Input</u>:</font> <strong>[CLS] the man went to [MASK] store [SEP] penguin [MASK] are flight ##less birds [SEP]
+</strong><br>
+        <font color="#888"><u>Label</u>:</font> notNext</p>
+
+        <p>This task teaches the model to understand the relationships between
+        sentences. As we'll see later, this will enable to use BERT for complicated tasks
+            requiring some kind of reasoning.
+        </p>
+
+
+        <h3><u>Pre-Training Objectives</u>: Masked Language Modeling (MLM) Objective</h3>
+
+        <p>BERT has two training objectives, and the most important of them is the
+            Masked Language Modeling (MLM) objective. is  With the MLM objective,
+            at step the following happens:
+        </p>
+        <ul>
+            <li><font face="arial">select some tokens</font><br>
+            (each token is selected with the probability of 15%)
+            </li>
+            <li><font face="arial">replace these selected tokens</font><br>
+                (with the special token <span class="data_text"><strong>[MASK]</strong></span> - with p=80%,
+                with a random token - with p=10%, with the original token (remain unchanged) - with p=10%)
+            </li>
+            <li><font face="arial">predict original tokens (compute loss)</font>.
+            </li>
+        </ul>
+
+                <p>The illustration below shows an example of a training step for one sentence.
+                    You can go over the slides to see the whole process.
+                </p>
+       <!-- <img height="20" src="../resources/lectures/ico/paw_empty.png" style="float:left; margin-top:-10px;"/>
+        <div class="box_green_left">
+
+            <div class="text_box_green">
+              <p class="data_text"><u>How to:</u> You see the full picture for one training step.
+                  Go over the slides from the beginning and see the whole process. </p>
+            </div>
+-->
+            <div class="carousel" data-flickity='{ "imagesLoaded": true, "percentPosition": true,
+            "selectedAttraction": 1, "friction": 1, "wrapAround": true }'
+     style="width:100%; margin-top:10px; margin-bottom:30px; margin-left:10px;">
+              <div class="carousel-cell" style="width:100%"><center>
+                    <img width=90% src="../resources/lectures/transfer/bert/mlm7-min.png"/></center>
+              </div>
+                <div class="carousel-cell" style="width:100%"><center>
+                    <img width=90% src="../resources/lectures/transfer/bert/mlm1-min.png"/></center>
+              </div>
+                <div class="carousel-cell" style="width:100%"><center>
+                    <img width=90% src="../resources/lectures/transfer/bert/mlm2-min.png"/></center>
+              </div>
+                <div class="carousel-cell" style="width:100%"><center>
+                    <img width=90% src="../resources/lectures/transfer/bert/mlm3-min.png"/></center>
+              </div>
+                <div class="carousel-cell" style="width:100%"><center>
+                    <img width=90% src="../resources/lectures/transfer/bert/mlm4-min.png"/></center>
+              </div>
+                <div class="carousel-cell" style="width:100%"><center>
+                    <img width=90% src="../resources/lectures/transfer/bert/mlm5-min.png"/></center>
+              </div>
+                <div class="carousel-cell" style="width:100%"><center>
+                    <img width=90% src="../resources/lectures/transfer/bert/mlm6-min.png"/></center>
+              </div>
+
+
+            </div>
+
+        <!--</div>
+        <img height="20" src="../resources/lectures/ico/paw_empty.png" style="float:left; margin-top:-10px;"/>
+        <br><br>-->
+
+        <p>MLM is still language modeling: the goal is to predict some tokens in a sentence/text
+        based on some part of this text. To make it more clear, let us compare MLM with the standard left-to-right
+            language modeling objective.
+        </p>
+
+        <img src="../resources/lectures/transfer/bert/lm_vs_mlm-min.png"
+             style="max-width:60%; margin-left:20px; float:right;"/>
+
+        <p>At each step, the standard left-to-right LMs predict the next token based on the previous ones.
+        This means that final representations, the ones from the final layer that are
+            used for prediction, encode only previous context, i.e. they
+            <font face="arial">do not see the future</font>.
+        </p>
+        <p>Differently, MLMs see the whole text at once, but some tokens are corrupted: that's why
+            BERT is <font face="arial">bidirectional</font>. Note that to let ELMo know both left and right
+            contexts, the authors had to train two different unidirectional LMs and then concatenate representations
+            of both of them. In BERT, we don't need to do that: one model is enough.
+        </p>
+
+
+       <!-- <div class="card_with_ico">
+            <img class="ico" src="../../resources/lectures/ico/analysis_empty.png" width="30px"/>
+            <div class="text_box_green">
+            <p class="data_text"> In the
+            <a href="#analysis_interpretability">Analysis and Interpretability</a> section,
+                we will see how different training objectives (MT, LM, MLM) define
+                the way tokens representations evolve between layers.
+                More details are <a href="#evolution">here</a>.
+
+                <font color="red">MAKE SURE IT EXISTS</font>
+            </div>
+            </div>
+
+    -->
+
+
+        <h3><u>Fine-Tuning:</u> Using BERT for Downstream Tasks</h3>
+
+        <p>Now let's look at how to apply BERT for different tasks. For now, we will
+            only at the simple setting: when the pretrained model is fine-tuned
+            on each of the downstream tasks. Later, we'll see other ways to adapt
+            a model for different applications (e.g., in the <a href="#adapters">Adapters</a> section).
+        </p>
+
+        <p>In this part, I'll mention only some of the tasks. For more details on the popular evaluation datasets,
+            take a look at the <a href="https://gluebenchmark.com" target="_blank">GLUE benchmark website</a>.
+        </p>
+
+        <br>
+
+        <img src="../resources/lectures/transfer/bert/single_sentence_clf-min.png"
+             style="max-width:30%; margin-left:20px; float:right;"/>
+
+        <h4 style="font-size:18px;">
+            <font face="arial"><u>Single sentence classification</u></font></h4>
+                <p>To classify individual sentences, feed the data as shown on the illustration and predict
+                    the label from the final representation of the
+                    <span class="data_text"><strong>[CLS]</strong></span> token.
+                </p>
+
+                <p>Examples of tasks:
+                </p>
+                <ul>
+                    <li><font face="arial">SST-2</font> - binary sentiment classification (the one
+                        <a href="./text_classification.html#dataset_examples" target="_blank">
+                            we saw in the Text Classification lecture</a>);</li>
+                    <li><font face="arial">CoLA (Corpus of Linguistic Acceptability)</font> -
+                    say whether a sentence is linguistically acceptable.</li>
+                </ul>
+
+
+<br>
+
+         <div style="display:grid;grid-template-columns: 70% 30%;">
+            <div>
+                <h4 style="font-size:18px;">
+                    <font face="arial"><u>Sentence Pair Classification</u></font></h4>
+                <p>To classify pairs of sentences, feed the data as you did in training.
+                    Similar to the single sentence classification, predict
+                    the label from the final representation of the
+                    <span class="data_text"><strong>[CLS]</strong></span> token.
+                </p>
+
+                <p>Examples of tasks:
+                </p>
+                <ul>
+                    <li><font face="arial">SNLI</font> - entailment classification.
+                        Given a pair of sentences, say if the second is an
+                        <span class="data_text"><strong>entailment</strong></span>,
+                        <span class="data_text"><strong>contradiction</strong></span>, or
+                        <span class="data_text"><strong>neutral</strong></span>);</li>
+                    <li><font face="arial">QQP (Quora Question Pairs)</font> -
+                    given two questions, say if they are semantically equivalent;</li>
+                    <li><font face="arial">STS-B</font> -
+                    given two sentences, return a similarity score from 1 to 5.</li>
+                </ul>
+            </div>
+            <div>
+                <img src="../resources/lectures/transfer/bert/sentence_pair_clf-min.png"
+             style="max-width:90%; margin-bottom:20px; margin-left:20px; float:right;"/>
+            </div>
+        </div>
+
+<br>
+
+        <div style="display:grid;grid-template-columns: 60% 40%;">
+            <div>
+                <h4 style="font-size:18px;">
+                    <font face="arial"><u>Question Answering</u></font></h4>
+                <p>For QA, the BERT authors used only one dataset, <font face="arial">SQuAD v1.1</font>.
+                    In this task, you are given a text passage and a question. The answer to this question
+                    is always a part of the passage, and the task is to find the correct segment of
+                    the passage.
+                </p>
+
+        <p>To use BERT for this task, feed a question and a passage as shown in the illustration.
+        Then, for each token in the passage use final BERT representations to predict whether this token
+        is the start or the end of the correct segment.
+        </p>
+            </div>
+            <div>
+                <img src="../resources/lectures/transfer/bert/question_answering-min.png"
+             style="max-width:90%; margin-bottom:20px; margin-left:20px; float:right;"/>
+            </div>
+        </div>
+
+
+<br>
+
+        <div style="display:grid;grid-template-columns: 75% 25%;">
+            <div>
+                <h4 style="font-size:18px;">
+                    <font face="arial"><u>Single sentence tagging</u></font></h4>
+                <p>In tagging tasks, you have to predict tags for each token. For example,
+                    in <font face="arial">Named Entity Recognition (NER)</font>, you have to predict
+                    if a word is a named entity and its type (e.g.,
+                    <span class="data_text"><strong>location</strong></span>,
+                    <span class="data_text"><strong>person</strong></span>, etc).
+            </div>
+            <div>
+                <img src="../resources/lectures/transfer/bert/single_sentence_tagging-min.png"
+             style="max-width:90%; margin-bottom:20px; margin-left:20px; float:right;"/>
+            </div>
+        </div>
+
+
+    </div>
+
+
+
+
+</div>
+
+
+
+
+
+    <div id="adapters">
+
+        <h1>(A Bit of) Adapters: Parameter-Efficient Transfer</h1>
+
+        <p>So far, we considered only the standard way of transferring knowledge from pretrained models (e.g. BERT)
+            to downstream tasks: fine-tuning. "Fine-tuning" means that you take a pretrained model
+            and train in for the task you are interested in (e.g., sentiment classification)
+            with a rather small learning rate. This means that
+            firstly,
+            you update the whole (large) model, and secondly,
+            for each task, you need to fine-tune a separate copy of your pretrained model.
+            In the end, for several downstream tasks you end up with a lot of large models - this is highly inefficient!</p>
+        <center>
+        <img src="../resources/lectures/transfer/adapters/idea-min.png"
+             style="max-width:100%; margin-bottom:20px;"/>
+        </center>
+
+        <p>As an alternative, the ICML 2019 paper
+        <a href="https://arxiv.org/pdf/1902.00751.pdf" target="_blank">Parameter-Efficient Transfer Learning for NLP</a>
+            proposed transfer
+            with adapter modules. In this setting, the parameters of the original model are fixed,
+            and one has to train only a few trainable parameters per task: these new task-specific parameters
+            are called <font face="arial">adaptors</font>.
+
+            With adapter modules, transfer becomes very efficient: the largest part, the pretrained model,
+            is shared between all downstream tasks.
+        </p>
+
+        <p style="text-align: center;  display: block;
+         margin-top:0px; max-width:100%;">
+            <img width=100% src="../resources/lectures/transfer/adapters/adapter-min.png" alt="" /><br />
+            <span style="font-size: small;">
+                The figure is from the paper
+          <a href="https://arxiv.org/pdf/1902.00751.pdf" target="_blank">Parameter-Efficient Transfer Learning for NLP</a>.
+            </span>
+        </p>
+
+        <p>An example of an adapter module and a transformer layer with adapters is shown in the figure.
+        As you can see, an adapter module is very simple: it's just a two-layer feed-forward network with a nonlinearity.
+            What is important, the hidden dimensionality of this network is small,
+            which means that the total number of parameters in the adapter is also small. This is what
+            makes adaptors very efficient.
+        </p>
+
+
+        <h2>Other Adapters and Some Resources</h2>
+
+        <p>Now, there are many different modifications of adaptors for lots of tasks and models.
+            For example, the <a href="https://adapterhub.ml" target="_blank">AdapterHub</a> repository contains pre-trained adapter modules.
+            Since this was a system demo at EMNLP 2020, it can be a good starting point
+            if you want to find links to the latest adapter versions
+            (<font class="data_text" color="#888"><u>Lena</u>: At least, at the moment I'm writing this: beginning
+            of December 2020, i.e. only a couple of weeks after EMNLP 2020</font>).
+        </p>
+
+
+
+    </div>
+
+
+    <div id="benchmarks">
+
+        <h1>(A Note on) Benchmarks</h1>
+
+        <p>The most popular benchmark is GLUE and its version SuperGLUE. The
+            <a href="https://gluebenchmark.com" target="_blank">GLUE benchmark website</a> contains dataset descriptions,
+            leaderboard, etc.
+        </p>
+
+    </div>
+
+<br><br><br>
+<div id="analysis_interpretability">
+        <img height="40" src="../resources/lectures/ico/analysis_empty.png"
+             style="float:left; padding-right:20px; "/>
+        <h1>Analysis and Interpretability</h1>
+
+
+
+    <!--<h2 id="evolution"><u>Evolution of Representations</u>: MT, LM, MLM Training Objectives</h2>-->
+
+    <p>First, let us recap the analysis methods we already used in the previous lectures:
+        looking at model components (e.g. neurons in CNNs/LSTMs and attention heads in Transformer),
+        probing for linguistic structure (e.g., whether NMT representations encode information about morphology),
+        and evaluating specific phenomena by looking at a model's predictions (e.g.,
+        evaluating subject-verb agreement in language models).
+        Today, we will see what happens when the same methods are applied to BERT.
+    </p>
+
+    <center>
+    <img src="../resources/lectures/transfer/analysis/methods-min.png"
+             style="max-width:90%; margin-bottom:20px;"/>
+    </center>
+
+    <br>
+
+
+    <h2 id="bert_attention"><font color="#888">Model Components:</font> BERT's Attention Heads</h2>
+
+    <p>In the previous lectures, we looked at
+        <a href="./text_classification.html#analysis_interpretability" target="_blank">CNN filters in Text Classification</a>,
+        <a href="./language_modeling.html#analysis_interpretability" target="_blank">LSTM neurons in Language Models</a>
+        and
+        <a href="./seq2seq_and_attention.html#analysis_interpretability" target="_blank">
+            attention heads in NMT Transformer</a>. Now, let's look at what researchers found in the attention patterns of
+        BERT's heads!
+    </p>
+
+    <h3><u>Simple patterns</u>: Positional Heads, Attention to <span class="data_text"><strong>[SEP]</strong></span> and Period</h3>
+
+    <p>Remember the
+        <a ref="./seq2seq_and_attention.html#analysis_interpretability" target="_blank">positional self-attention heads</a>
+    we saw in the machine translation Transformer? Turns out, BERT also has such heads.
+        The paper <a href="https://arxiv.org/pdf/1906.04341.pdf" target="_blank">What Does BERT Look At? An Analysis of BERT’s Attention</a>
+        shows that some of the BERT's heads have simple patterns: not only positional (when all tokens attend to
+        the previous or next token) but also heads putting all their attention mass to some tokens,
+        e.g. the special token <span class="data_text"><strong>[SEP]</strong></span> of the period.
+    </p>
+    <p style="text-align: center;  display: block;
+         margin-top:-10px; max-width:100%;">
+            <img width=70% src="../resources/lectures/transfer/analysis/heads/simple_patterns-min.png" alt="" /><br />
+            <span style="font-size: small;">
+                The examples are from the paper
+          <a href="https://arxiv.org/pdf/1906.04341.pdf" target="_blank">What Does BERT Look At? An Analysis of BERT’s Attention</a>.</span></p>
+
+
+
+    <div class="carousel"
+     style="width:60%; margin-top:10px; margin-bottom:30px; margin-left:10px; float:right;"
+  data-flickity='{ "imagesLoaded": true, "percentPosition": true, "wrapAround": true}'>
+
+  <div class="carousel-cell" style="width:90%; padding-left:20px;padding-right:20px;"><center>
+    <img src="../resources/lectures/transfer/analysis/heads/synt1-min.png"/>
+      <p style="text-align:center; font-size: small;">Examples of syntactic heads from the paper
+          <a href="https://arxiv.org/pdf/1906.04341.pdf" target="_blank">What Does BERT Look At? An Analysis of BERT’s Attention</a></p>
+  </center></div>
+
+        <div class="carousel-cell" style="width:90%; padding-left:20px;padding-right:20px;"><center>
+    <img src="../resources/lectures/transfer/analysis/heads/synt2-min.png"/>
+      <p style="text-align:center; font-size: small;">Examples of syntactic heads from the paper
+          <a href="https://arxiv.org/pdf/1906.04341.pdf" target="_blank">What Does BERT Look At? An Analysis of BERT’s Attention</a></p>
+  </center></div>
+
+        <div class="carousel-cell" style="width:90%; padding-left:20px;padding-right:20px;"><center>
+    <img src="../resources/lectures/transfer/analysis/heads/synt3-min.png"/>
+      <p style="text-align:center; font-size: small;">Examples of syntactic heads from the paper
+          <a href="https://arxiv.org/pdf/1906.04341.pdf" target="_blank">What Does BERT Look At? An Analysis of BERT’s Attention</a></p>
+  </center></div>
+
+        <div class="carousel-cell" style="width:90%; padding-left:20px;padding-right:20px;"><center>
+    <img src="../resources/lectures/transfer/analysis/heads/synt4-min.png"/>
+      <p style="text-align:center; font-size: small;">Examples of syntactic heads from the paper
+          <a href="https://arxiv.org/pdf/1906.04341.pdf" target="_blank">What Does BERT Look At? An Analysis of BERT’s Attention</a></p>
+  </center></div>
+
+        <div class="carousel-cell" style="width:90%; padding-left:20px;padding-right:20px;"><center>
+    <img src="../resources/lectures/transfer/analysis/heads/synt5-min.png"/>
+      <p style="text-align:center; font-size: small;">Examples of syntactic heads from the paper
+          <a href="https://arxiv.org/pdf/1906.04341.pdf" target="_blank">What Does BERT Look At? An Analysis of BERT’s Attention</a></p>
+  </center></div>
+
+    </div>
+
+    <h3><u>Syntactic Heads</u> </h3>
+
+    <p>Similar to
+        <a ref="./seq2seq_and_attention.html#analysis_interpretability" target="_blank">syntactic self-attention heads found
+        for NMT Transformer</a>,
+        there were also found several BERT heads that specialize in tracking certain syntactic functions.
+        Look at the illustration.
+    </p>
+    <p>Note that there are also some other works looking at attention functions in BERT. For example,
+        <a href="https://arxiv.org/pdf/1911.12246.pdf" target="_blank">Do Attention Heads in BERT Track Syntactic Dependencies?</a>
+        confirm that some BERT heads are indeed syntactic, while some other works
+        fail to find heads that do this confidently. As always, you need to be very careful :)
+    </p>
+
+
+    <br><br>
+
+
+    <h2 id="nlp_pipeline"><font color="#888">Probing:</font>  BERT Rediscovers the Classical NLP Pipeline</h2>
+
+    <p>Now there are plenty of papers applying probing to BERT.
+    In this part, let's look at the ACL 2020 short paper
+    <a href="https://arxiv.org/pdf/1905.05950.pdf" target="_blank">BERT Rediscovers the Classical NLP Pipeline</a>.
+    </p>
+
+    <h3><u>How:</u> Probing with a Bit of Creativity </h3>
+
+    <p>In the previous lecture we learned about
+        <a href="./seq2seq_and_attention.html#probing" target="_blank">standard probing for linguistic structure</a>:
+    </p>
+    <ul>
+        <li>feed the data to your pretrained model,</li>
+        <li>get vector representations from some layer,</li>
+        <li>train a probing
+        classifier to predict linguistic labels from representations,</li>
+        <li>use its accuracy as a measure of how well representations encode these labels.</li>
+    </ul>
+
+    <p>Of course, this can be done for BERT, too. But BERT has lots of layers (e.g., 18 or 24) and
+        to understand which layers better encode a certain task we would have to train 18 (or 24)
+        probing classifiers for each task - this is lots of work!
+    </p>
+
+    <center>
+    <img src="../resources/lectures/transfer/analysis/probing-min.png"
+             style="max-width:80%; margin-bottom:20px;"/>
+    </center>
+
+    <p>Luckily, the authors came up with a way to evaluate all layers at once.
+        Instead of picking representations from each layer separately,
+        to train a probing classifier
+        they weight representations
+        from all layers and learn the weights with a probing classifier (just like in ELMo!).
+        Once the probing classifier is trained,
+        the weights can serve as a measure of a layer's importance for a certain task.
+    </p>
+
+
+
+    <h3><u>What:</u> Edge Probing Tasks</h3>
+
+
+    <p>The authors experiment with a set of
+        <a href="https://openreview.net/forum?id=SJzSgnRcKX" target="_blank"> edge probing tasks</a>.
+        These are test sets for several linguistic tasks. Look at some examples below.
+    </p>
+
+    <p><span style="margin-right:15px;font-size:14px;">&#8226;</span>part of speech<br>
+        <span class="data_text" style="margin-left:20px;">
+        <font color="#888">I want to find more ,</font> [something] <font color="#888">bigger or deeper .
+        </font>  → NN (Noun)</span>
+    </p>
+
+    <p><span style="margin-right:15px;font-size:14px;">&#8226;</span>constituents<br>
+        <span class="data_text" style="margin-left:20px;">
+        <font color="#888">I want to find more ,</font> [something bigger or deeper]<font color="#888"> .</font>  → NP (Noun Phrase)</span>
+    </p>
+
+    <p><span style="margin-right:15px;font-size:14px;">&#8226;</span>dependencies<br>
+        <span class="data_text" style="margin-left:20px;">
+        [I]\(_1\) <font color="#888">am not</font> [sure]\(_2\) <font color="#888">how reliable it is , though .</font>  →  nsubj (nominal subject)</span>
+    </p>
+
+    <p><span style="margin-right:15px;font-size:14px;">&#8226;</span>entities<br>
+        <span class="data_text" style="margin-left:20px;">
+        <font color="#888">The most fascinating is the maze known as</font> [Wind Cave] <font color="#888">.</font>  → LOC (location)</span>
+    </p>
+
+    <p><span style="margin-right:15px;font-size:14px;">&#8226;</span>semantic role labeling<br>
+        <span class="data_text" style="margin-left:20px;">
+        <font color="#888">I want to</font> [find]\(_1\) [something bigger or deeper]\(_2\) <font color="#888">.</font>  → Arg1 (Agent)</span>
+    </p>
+
+    <p><span style="margin-right:15px;font-size:14px;">&#8226;</span>coreference<br>
+        <span class="data_text" style="margin-left:20px;">
+        <font color="#888">So</font> [the followers]\(_1\)
+            <font color="#888">wanted to say anything about what</font> [they]\(_2\)
+            <font color="#888">saw .</font>  → True</span>
+    </p>
+
+
+
+    <br>
+    <h3><u>Results:</u> BERT Follows the Classical NLP Pipeline</h3>
+
+
+    <p style="text-align: center;  display: block;
+         margin-top:-10px; margin-left:15px; max-width:65%;float:right;">
+            <img width=100% src="../resources/lectures/transfer/analysis/pipeline_results-min.png" alt="" /><br />
+            <span style="font-size: small;">
+                The figure with the results is from the paper
+          <a href="https://arxiv.org/pdf/1905.05950.pdf" target="_blank">
+              BERT Rediscovers the Classical NLP Pipeline</a>.</span></p>
+
+<p>The results are shown in the figure to the right.
+    The layers are shown from left to right, the weights for each layer are shown in dark blue.
+</p>
+
+    <p>We see that
+        as you go from bottom to top layer, a layer's influence for each goes up, then down.
+But the main result is not in the values per se, but in the way BERT represents different
+        linguistic tasks. In the classical NLP, there was an ordering of different tasks (this is the order
+        shown in the figure and the order in which I showed you the examples for each task).
+        To solve a subsequent task in classical NLP, one had to solve all the previous ones.
+        What is interesting, <font face="arial">BERT represents these tasks in the same order</font>!
+        For example, dependencies are represented later than part-of-speech tags, and coreference is learned
+        later than both these tasks.
+    </p>
+
+
+
+    <br>
+    <h2 id="predictions"><font color="#888">Looking at Predictions:</font>  Do ELMo and BERT Know Facts? </h2>
+
+    <p>In the <a href="./language_modeling.html" target="_blank">Language Modeling</a> lecture, we learned how
+        to evaluate language models for specific phenomena by looking at their predictions. In that lecture,
+        we looked at a very popular subject-verb agreement task. Today,
+        we will do something way more fun - check if a model <font face="arial">knows facts</font>!
+        As an example, we use the EMNLP 2019 paper <a href="https://www.aclweb.org/anthology/D19-1250/" target="_blank">
+              Language Models as Knowledge Bases?</a>.
+    </p>
+
+    <p style="text-align: center;  display: block;
+         margin-top:-10px; margin-left:15px; max-width:50%;float:right;">
+            <img width=100% src="../resources/lectures/transfer/analysis/kb-min.png" alt="" /><br />
+            <span style="font-size: small;">
+                The figure with the results is from the paper
+          <a href="https://www.aclweb.org/anthology/D19-1250/" target="_blank">
+              Language Models as Knowledge Bases?</a></span>
+    </p>
+
+    <p>Usually, factual knowledge is stored in knowledge bases that contain triples
+        <span class="data_text"><strong>(subject, relation, object)</strong></span>, for example,
+        <span class="data_text"><strong>(Dante, born-in, Florence)</strong></span> as shown in the figure.
+        However, these knowledge bases are hard to obtain:
+        to extract knowledge, one usually has to use complicated pipelines.
+    </p>
+    <p>But what if pretrained language models (ELMo, BERT) already know the facts? Let's check!
+        Instead of relation triplets,
+        we will feed to a model a cloze-style sentence with a masked object. For example,
+        we give our model a sentence <span class="data_text"><strong>Dante was born in ___</strong></span>
+        and ask it to predict a token in place of a mask. Note that we do it without any fine-tuning -
+        just a plain language model!
+    </p>
+
+    <p>Turns out, pretrained models can know facts quite well. Note that by "know" here we do not mean
+        that they understand anything, but just that the training data statistics captured in
+        these models can be used to extract facts. Look at some examples below (the original paper has more!).
+    </p>
+
+    <p style="text-align: center;  display: block;
+         margin-top:0px; max-width:100%; ">
+            <img width=100% src="../resources/lectures/transfer/analysis/facts-min.png" alt="" /><br />
+            <span style="font-size: small;">
+                The examples are from the paper
+          <a href="https://www.aclweb.org/anthology/D19-1250/" target="_blank">
+              Language Models as Knowledge Bases?</a></span>
+    </p>
+
+    <p>What is more fun, we can look at not only formal facts, but also common knowledge: look at the examples.
+    For more details on the test set construction, see the paper.
+    </p>
+
+    <p style="text-align: center;  display: block;
+         margin-top:0px; max-width:100%; ">
+            <img width=100% src="../resources/lectures/transfer/analysis/common_knowledge-min.png" alt="" /><br />
+            <span style="font-size: small;">
+                The examples are from the paper
+          <a href="https://www.aclweb.org/anthology/D19-1250/" target="_blank">
+              Language Models as Knowledge Bases?</a></span>
+    </p>
+
+
+
+
+
+
+</div>
+
+
+
+<br><br><br>
+
+<div id="research_thinking">
+<img height="40" src="../resources/lectures/ico/bulb_empty.png"
+     style="float:left; padding-right:10px; margin-top:-20px;"/>
+<h1 style="margin-left:10px; margin-right:20px; float: left; margin-top:-20px">Research Thinking</h1>
+<hr color="#fced95" style="height:5px">
+<br><br>
+
+
+<fieldset style="border: 1px solid #f0e4a5;
+    border-radius: 5px;">
+            <legend><p class="data_text"><strong>How to</strong></p></legend>
+            <ul class="data_text">
+                <li>Read the  short description at the beginning - this is our starting point,
+        something known.</li>
+                <li>Read a question and think: for a minute, a day, a week, ... -
+        give yourself some time! Even if you are not thinking about it constantly,
+        something can still come to mind.</li>
+                <li>Look at the possible answers - previous attempts to answer/solve this problem.<br>
+                    <u>Important:</u>
+                    You are <strong>not</strong> supposed to come up with
+                    something exactly like here - remember, each paper usually takes the authors several
+                    months of work. It's a habit of thinking about these things that counts!
+                    All the rest a scientist needs is time: to try-fail-think
+                    until it works.</li>
+            </ul>
+
+            <p class="data_text">It's well-known that you will learn something easier if you are not just given the answer right away,
+            but if you think about it first. Even if you don't want to be a researcher, this is still a good way
+            to learn things!</p>
+</fieldset>
+
+            <br><br>
+
+
+        <div style="border: 0px solid #ccc;border-radius:15px;margin: 10px; padding: 4px;
+ background-color: #f5f5f5;margin-top:-20px;">
+    <div style="display: grid; grid-template-columns: 75% 25%; margin:10px;">
+                <div>
+                <div style="margin-top:20px;">
+                    <p style="margin:30px; font-size:30px;">Here will be exercises!</p>
+
+                    <p style="margin:30px;">This part will be expanding from time to time.</p>
+                </div>
+                    </div>
+                <div>
+                    <center>
+                    <img src="../../resources/lectures/main/preview/pusheen_draws_on_white-min.png"
+                       style="width:80%; padding-top:20px; padding-bottom:20px;border-radius:50%">
+                    </center>
+                </div>
+            </div>
+
+        </div>
+
+    <br><br>
+
+</div>
+
+
+
+    <br><br><br>
+
+<div id="related_papers">
+<img height="40" src="../resources/lectures/ico/book_empty.png"
+     style="float:left; padding-right:10px; margin-top:-20px;"/>
+<h1 style="margin-left:10px; margin-right:20px; float: left; margin-top:-20px">Related Papers</h1>
+<hr color="#facae9" style="height:5px">
+
+<br><br>
+
+<fieldset style="border: 1px solid #dec8d6;
+    border-radius: 5px;">
+            <legend><p class="data_text"><strong>How to</strong></p></legend>
+            <ul class="data_text">
+            <li><u>High-level</u>: look at key results in short summaries -
+                get an idea of what's going on in the field.</li>
+            <li><u>A bit deeper</u>: for topics which interest you more,
+                read longer summaries with illustrations and explanations.
+                Take a walk through the authors' reasoning steps and key observations. </li>
+            <li><u>In depth</u>: read the papers you liked. Now, when you got the main idea, this
+            is going to be easier!</li>
+            </ul>
+</fieldset>
+
+        <br><br>
+
+
+<!--
+        <p class="data_text" style="font-size:24px;color:#7a3160">What's inside:</p>
+        <ul class="data_text" style="font-size:20px;color:#7a3160">
+            <li><a href="#papers_common_practice">Common Practice</a></li>
+
+            <li><a href="#papers_architectures">Model Architectures</a></li>
+            <li><a href="#papers_analysis">A Bit of Analysis</a></li>
+            <li><a href="#papers_reading_behavior">Language Models and Human Reading Behavior</a></li>
+            <li><a href="#papers_smoothings">N-gram LMs: More Smoothings</a></li>
+
+            <li>... to be updated</li>
+        </ul>
+
+-->
+        <br><br>
+
+
+    <div style="border: 0px solid #ccc;border-radius:15px;margin: 10px; padding: 4px;
+ background-color: #f5f5f5;margin-top:-20px;">
+    <div style="display: grid; grid-template-columns: 75% 25%; margin:10px;">
+                <div>
+                <div style="margin-top:20px;">
+                    <p style="margin:30px; font-size:30px;">Here will be papers!</p>
+
+                    <p style="margin:30px;">The papers will be gradually appearing.</p>
+                </div>
+                    </div>
+                <div>
+                    <center>
+                    <img src="../../resources/lectures/main/preview/pusheen_reads_on_white-min.png"
+                       style="width:80%; padding-top:20px; padding-bottom:20px;border-radius:50%">
+                    </center>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<br><br><br>
+<div id="have_fun">
+<img height="40" src="../resources/lectures/ico/fun_empty.png"
+     style="float:left; padding-right:10px; margin-top:-20px;"/>
+<h1 style="margin-left:10px; margin-right:20px; float: left; margin-top:-20px">Have Fun!</h1>
+<hr color="#c8edfa" style="height:5px">
+<br><br>
+
+
+    <div style="border: 0px solid #ccc;border-radius:15px;margin: 10px; padding: 4px;
+ background-color: #f5f5f5;margin-top:-20px;">
+    <div style="display: grid; grid-template-columns: 75% 25%; margin:10px;">
+                <div>
+                <div style="margin-top:20px;">
+                    <p style="margin:30px; font-size:30px;">Coming soon!</p>
+
+                    <p style="margin:30px;">We are still working on this!</p>
+                </div>
+                    </div>
+                <div>
+                    <center>
+                    <img src="../../resources/lectures/main/preview/typing.gif"
+                       style="width:80%; padding-top:20px; padding-bottom:20px;border-radius:50%">
+                    </center>
+                </div>
+            </div>
+
+        </div>
+</div>
+
+
+
+
+
+</div>
+
+</div>

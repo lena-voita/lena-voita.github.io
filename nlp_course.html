@@ -690,7 +690,7 @@ flkty_word_emb.on( 'staticClick', function( event, pointer, cellElement, cellInd
             <li><span style="float: left;">Bonus: </span>
                 <div class="research_circle" style="margin: 8px; float: left;"></div>
                 <div class="paper_circle" style="margin: 8px; float: left;"></div>
-                <div class="fun_circle" style="margin: 8px; float: left;"></div></li>
+                <!--<div class="fun_circle" style="margin: 8px; float: left;"></div>--></li>
             </ul>
 
             <hr color="#e9f5d0" style="margin:5px;">
@@ -944,7 +944,7 @@ flkty_lm.on( 'staticClick', function( event, pointer, cellElement, cellIndex ) {
             <li><span style="float: left;">Bonus: </span>
                 <div class="research_circle" style="margin: 8px; float: left;"></div>
                 <div class="paper_circle" style="margin: 8px; float: left;"></div>
-                <div class="fun_circle" style="margin: 8px; float: left;"></div></li>
+                <!--<div class="fun_circle" style="margin: 8px; float: left;"></div>--></li>
             </ul>
 
             <hr color="#e9f5d0" style="margin:5px;">
@@ -1048,22 +1048,26 @@ flkty_attn.on( 'staticClick', function( event, pointer, cellElement, cellIndex )
                 <a href="./nlp_course/page_not_ready.html" style="color:black">Transfer Learning</a></h2>
             <ul class="data_text">
                 <li>What is Transfer Learning?</li>
-                <li>Pretrained Models (ELMO, BERT and other)</li>
-                <li>Adaptors</li>
-                <li>...to be continued</li>
+                <li>From Words to Words-in-Context (CoVe, ELMo)</li>
+                <li>From Replacing Embeddings to Replacing Models (GPT, BERT)</li>
+                <li>(A Bit of) Adaptors</li>
              <li><img height="20" src="../resources/lectures/ico/analysis_empty.png" style="margin-right:10px;"/>
             Analysis and Interpretability</li>
-            <li><span style="float: left;">Bonus: </span>
+            <!--<li><span style="float: left;">Bonus: </span>
                 <div class="research_circle" style="margin: 8px; float: left;"></div>
                 <div class="paper_circle" style="margin: 8px; float: left;"></div>
                 <div class="fun_circle" style="margin: 8px; float: left;"></div></li>
-            </ul>
+            </ul>-->
 
             <hr color="#e9f5d0" style="margin:5px;">
 
             <h3 style="margin-bottom:2px;">Seminar & Homework</h3>
 
-            <p class="data_text">Will appear in
+            <p class="data_text">
+                Weeks <a href="https://github.com/yandexdataschool/nlp_course/tree/2020/week05_transfer" target="_blank">5</a>
+                and
+                <a href="https://github.com/yandexdataschool/nlp_course/tree/2020/week06_da" target="_blank">6</a>
+                in
                 <a href="https://github.com/yandexdataschool/nlp_course" target="_blank">the course repo</a>.
             </p>
 
@@ -1079,13 +1083,61 @@ flkty_attn.on( 'staticClick', function( event, pointer, cellElement, cellIndex )
       <div class="carousel carousel_transfer"
          style="width:100%; margin-left:-5px; margin-right:-5px;"
       data-flickity='{ "imagesLoaded": true, "percentPosition": true, "wrapAround": true, "prevNextButtons": false}'>
-      <div class="carousel-cell" style="width:100%"><center>
+
+      <!--
+            <div class="carousel-cell" style="width:100%"><center>
             <img src="../resources/lectures/main/preview/pusheen_tea.gif" style="width:50%; margin-top:60px;">
-          </center>
-      <p style="text-align: center; font-size:20px;">Wait for the release!<br>(December 10)</p></div>
+            </center>
+            <p style="text-align: center; font-size:20px;">Wait for the release!<br>(December 10)</p></div>
+      -->
+
+          <div class="carousel-cell" style="width:100%"><center>
+            <img src="../resources/lectures/main/preview/transfer/morda-min.png" style="width:90%">
+          </center></div>
+
+          <div class="carousel-cell" style="width:100%"><center>
+            <img src="../resources/lectures/main/preview/transfer/words_to_context-min.png" style="width:90%">
+          </center></div>
+
+          <div class="carousel-cell" style="width:100%"><center>
+            <img src="../resources/lectures/main/preview/transfer/cove-min.png" style="width:90%">
+          </center></div>
+
+          <div class="carousel-cell" style="width:100%"><center>
+            <img src="../resources/lectures/main/preview/transfer/elmo1-min.png" style="width:90%">
+          </center></div>
+
+          <div class="carousel-cell" style="width:100%"><center>
+            <img src="../resources/lectures/main/preview/transfer/elmo2-min.png" style="width:90%">
+          </center></div>
+
+          <div class="carousel-cell" style="width:100%"><center>
+            <img src="../resources/lectures/main/preview/transfer/elmo3-min.png" style="width:90%">
+          </center></div>
+
+          <div class="carousel-cell" style="width:100%"><center>
+            <img src="../resources/lectures/main/preview/transfer/idea2-min.png" style="width:90%">
+          </center></div>
+
+          <div class="carousel-cell" style="width:100%"><center>
+            <img src="../resources/lectures/main/preview/transfer/bert-min.png" style="width:90%">
+          </center></div>
+
+          <div class="carousel-cell" style="width:100%"><center>
+            <img src="../resources/lectures/main/preview/transfer/analysis1-min.png" style="width:90%">
+          </center></div>
+
+          <div class="carousel-cell" style="width:100%"><center>
+            <img src="../resources/lectures/main/preview/transfer/analysis2-min.png" style="width:90%">
+          </center></div>
+
+          <div class="carousel-cell" style="width:100%"><center>
+            <img src="../resources/lectures/main/preview/transfer/analysis3-min.png" style="width:90%">
+          </center></div>
 
 
     </div>
+        <p style="text-align: center; font-size:20px;margin-top:30px;"><a href="./nlp_course/transfer_learning.html">read more ⇨</a></p>
 </div>
 </div>
 </div>
