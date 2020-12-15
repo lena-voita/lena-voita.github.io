@@ -34,14 +34,16 @@ Program committee:
 <br/>&nbsp; &nbsp; &nbsp; [Yandex Research Summit](https://yandex.com/promo/academy/yars_2019), <span style="font-size:0.9em">Moscow, Russia (with David Talbot)</span> 
 
 ### <span style="color:darkblue"> Invited talks </span>
-* 08/2020 <span class="talk-title">_Evaluating Source and Target Contributions to NMT Predictions_</span>
-<br/>&nbsp; &nbsp; &nbsp; Unbabel 
+* 08-12/2020 <span class="talk-title">_Evaluating Source and Target Contributions to NMT Predictions_</span> <a href="https://drive.google.com/file/d/1ZW51j6Eas7qONdHyLf59EY1bMNrvhOBQ/view?usp=sharing" class="label slides">Slides</a>
+<br/>&nbsp; &nbsp; &nbsp; Unbabel
+<br/>&nbsp; &nbsp; &nbsp; ENS Paris  
 * 06-10/2020 <span class="talk-title">_Information-Theoretic Probing with Minimum Description Length_</span> <a href="https://drive.google.com/file/d/1iP7P0nld_O8op2SLEEX-q7WSFA1rKlfk/view?usp=sharing" class="label slides">Slides</a>
 <br/>&nbsp; &nbsp; &nbsp; MIT (Massachusetts Institute of Technology)
 <br/>&nbsp; &nbsp; &nbsp; DeepMind
 <br/>&nbsp; &nbsp; &nbsp; [Grammarly AI](https://grammarly.ai/information-theoretic-probing-with-minimum-description-length/) <a href="https://www.youtube.com/watch?v=e1_PFc4b-4Y&feature=youtu.be" class="label video">Video</a>
 <br/>&nbsp; &nbsp; &nbsp; [NLP with Friends](https://nlpwithfriends.com)    <a href="https://drive.google.com/file/d/1owq2nenNOfh1u87M-ZxS_iHHtZLhBx5v/view?usp=sharing" class="label slides">Slides for Friends</a> <a href="https://youtu.be/27eWB8IYc1A" class="label video">Video</a>
 <br/>&nbsp; &nbsp; &nbsp; [CMU (Carnegie Mellon University)](https://www.cs.cmu.edu/calendar/tue-2020-10-27-1100/language-technologies-institute-seminar)
+<br/>&nbsp; &nbsp; &nbsp; [USC ISI](https://nlg.isi.edu/nl-seminar/) <a href="https://www.youtube.com/watch?v=CakeVH_svdo&feature=youtu.be" class="label video">Video</a>
 
 * 01/2020 <span class="talk-title">_Analyzing Information Flow in Transformers_</span> <a href="https://drive.google.com/file/d/1bEiWUZDNbKAgMkt5PPF9sQl3x9AYNVoZ/view?usp=sharing" class="label slides">Slides</a>
 <br/>&nbsp; &nbsp; &nbsp; [Naver Labs Europe](https://europe.naverlabs.com/research/seminars/analyzing-information-flow-in-transformers/), Grenoble, France
