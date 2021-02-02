@@ -22,7 +22,7 @@ I (still) [teach NLP](https://github.com/yandexdataschool/nlp_course) at the [Ya
 
 ## <span style="color:darkblue">News </span>
 
-* 10-12/2020 Invited talks at: CMU, [USC ISI](https://nlg.isi.edu/nl-seminar/), ENS Paris.
+* 10-12/2020 Invited talks at: CMU, [USC ISI](https://nlg.isi.edu/nl-seminar/), ENS Paris, [ML Street Talk](https://www.youtube.com/watch?v=Q0kN_ZHHDQY).
 * 09/2020 __2__ papers _accepted to __EMNLP__ 2020_.
 * 06-08/2020 Invited talks at: MIT, DeepMind, [Grammarly AI](https://grammarly.ai/information-theoretic-probing-with-minimum-description-length/), Unbabel, [NLP with Friends](https://nlpwithfriends.com).
 * 04/2020 Our [BPE-dropout](https://arxiv.org/pdf/1910.13267.pdf) is _accepted to __ACL__ 2020_. 

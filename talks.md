@@ -50,7 +50,12 @@ Program committee:
 <br/>&nbsp; &nbsp; &nbsp; Google Research, Berlin, Germany
 * 01/2020 <span class="talk-title">_Evolution of Representations in the Transformer_</span> <a href="https://drive.google.com/file/d/1bEiWUZDNbKAgMkt5PPF9sQl3x9AYNVoZ/view?usp=sharing" class="label slides">Slides</a> <a href="https://youtu.be/h5N7sbAKBhA" class="label video">Video</a> 
 <br/>&nbsp; &nbsp; &nbsp; [Rasa](https://www.meetup.com/ru-RU/Bots-Berlin-Build-better-conversational-interfaces-with-AI/events/267058207/), Berlin, Germany
-* 11/2019 [NLP Highlights](https://soundcloud.com/nlp-highlights) podcast
+
+### <span style="color:darkblue"> Podcasts </span>
+
+* 01/2021 [ML Street Talk](https://www.youtube.com/channel/UCMLtBahI5DMrt0NPvDSoIRQ)
+<iframe width="300" height="160" src="https://www.youtube.com/embed/Q0kN_ZHHDQY" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+* 11/2019 [NLP Highlights](https://soundcloud.com/nlp-highlights)
 <iframe width="100%" height="170" scrolling="no" frameborder="no" allow="autoplay" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/725286211&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=false&show_artwork=false&visual=false"></iframe>
 
 
