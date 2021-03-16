@@ -13,7 +13,7 @@ description: I'm Elena (Lena) Voita and I work on Natural Language Processing. M
 
 I am Elena (Lena) Voita, a __Ph.D. student__ at the University of Edinburgh and University of Amsterdam. I'm very happy to be supervised by [Ivan Titov]({{site:ivan_page}}) and [Rico Sennrich]({{site.rico_page}}).
 
-I'm a [__Facebook PhD Fellow__](https://research.fb.com/blog/2020/01/announcing-the-recipients-of-the-2020-facebook-fellowship-awards/) (2020-2022).
+I'm supported by the [__Facebook PhD Fellowship__](https://research.fb.com/blog/2020/01/announcing-the-recipients-of-the-2020-facebook-fellowship-awards/) (2020-2022).
 
 Previously, I was a __research scientist__ at [Yandex Research]({{site.yandex_research_main}}) and worked closely with the [Yandex Translate](https://translate.yandex.com) team<a onMouseOver="document.fox.src='/img/people/foxie.jpeg';" onMouseOut="document.fox.src='/img/people/lena-min.png';">.</a>
 I (still) [teach NLP](https://github.com/yandexdataschool/nlp_course) at the [Yandex School of Data Analysis](https://yandexdataschool.com).
@@ -22,6 +22,7 @@ I (still) [teach NLP](https://github.com/yandexdataschool/nlp_course) at the [Ya
 
 ## <span style="color:darkblue">News </span>
 
+* 03-06/2021 Invited talks at: [Stanford NLP Seminar](https://nlp.stanford.edu/seminar/), <span style="color:#888">CornellNLP, CambridgeNLP, ...TBU.</span>
 * 10-12/2020 Invited talks at: CMU, [USC ISI](https://nlg.isi.edu/nl-seminar/), ENS Paris, [ML Street Talk](https://www.youtube.com/watch?v=Q0kN_ZHHDQY).
 * 09/2020 __2__ papers _accepted to __EMNLP__ 2020_.
 * 06-08/2020 Invited talks at: MIT, DeepMind, [Grammarly AI](https://grammarly.ai/information-theoretic-probing-with-minimum-description-length/), Unbabel, [NLP with Friends](https://nlpwithfriends.com).
