@@ -22,7 +22,7 @@ I (still) [teach NLP](https://github.com/yandexdataschool/nlp_course) at the [Ya
 
 ## <span style="color:darkblue">News </span>
 
-* 03-06/2021 Invited talks at: [Stanford NLP Seminar](https://nlp.stanford.edu/seminar/), <span style="color:#888">CornellNLP, CambridgeNLP, ...TBU.</span>
+* 03-06/2021 Invited talks at: [Stanford NLP Seminar](https://nlp.stanford.edu/seminar/), CornellNLP, [MT@UPC](https://mt.cs.upc.edu/seminars/), <span style="color:#888">CambridgeNLP, [DeeLIO workshop at NAACL 2021](https://sites.google.com/view/deelio-ws/), ...TBU.</span>
 * 10-12/2020 Invited talks at: CMU, [USC ISI](https://nlg.isi.edu/nl-seminar/), ENS Paris, [ML Street Talk](https://www.youtube.com/watch?v=Q0kN_ZHHDQY).
 * 09/2020 __2__ papers _accepted to __EMNLP__ 2020_.
 * 06-08/2020 Invited talks at: MIT, DeepMind, [Grammarly AI](https://grammarly.ai/information-theoretic-probing-with-minimum-description-length/), Unbabel, [NLP with Friends](https://nlpwithfriends.com).

@@ -13,7 +13,7 @@ Program committee:
 * NAACL 2021
 * ICML 2020 <span style="color:#999">(top-33% reviewer)</span>
 * NeurIPS 2020
-* ICLR 2021
+* ICLR 2021 <span style="color:#999">(outstanding reviewer)</span>
 * Workshops: [RepL4NLP](https://sites.google.com/view/repl4nlp2020/home) 2020 <span style="font-size:0.9em">(at ACL)</span>, [DeeLIO](https://sites.google.com/view/deelio-ws/program-committee) 2020 <span style="font-size:0.9em">(at EMNLP)</span> 
 
 
@@ -34,6 +34,13 @@ Program committee:
 <br/>&nbsp; &nbsp; &nbsp; [Yandex Research Summit](https://yandex.com/promo/academy/yars_2019), <span style="font-size:0.9em">Moscow, Russia (with David Talbot)</span> 
 
 ### <span style="color:darkblue"> Invited talks </span>
+
+* 03-06/2021 <span class="talk-title">_NMT Analysis: The Trade-Off Between Source and Target, and (a bit of) the Training Process_</span> <a href="https://drive.google.com/file/d/1oBh9ajjFJ-VUJ_f8-VOTb9FZY4VcjxKf/view?usp=sharing" class="label slides">Slides</a>
+<br/>&nbsp; &nbsp; &nbsp; [Stanford NLP Seminar](https://nlp.stanford.edu/seminar/)
+<br/>&nbsp; &nbsp; &nbsp; Cornell NLP
+<br/>&nbsp; &nbsp; &nbsp; [MT@UPC](https://mt.cs.upc.edu/seminars/)
+
+
 * 08-12/2020 <span class="talk-title">_Evaluating Source and Target Contributions to NMT Predictions_</span> <a href="https://drive.google.com/file/d/1ZW51j6Eas7qONdHyLf59EY1bMNrvhOBQ/view?usp=sharing" class="label slides">Slides</a>
 <br/>&nbsp; &nbsp; &nbsp; Unbabel
 <br/>&nbsp; &nbsp; &nbsp; ENS Paris  
