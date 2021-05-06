@@ -8,8 +8,8 @@
   title: "Analyzing the Source and Target Contributions to Predictions in Neural Machine Translation"
   authors: "<u>Elena Voita</u>, Rico Sennrich, Ivan Titov"
   doc-url:
-  conf_name:
-  conf_year:
+  conf_name: ACL
+  conf_year: 2021
   url: "https://arxiv.org/pdf/2010.10907.pdf"
   code: "https://github.com/lena-voita/the-story-of-heads"
   blog: "https://lena-voita.github.io/posts/source_target_contributions_to_nmt.html"
