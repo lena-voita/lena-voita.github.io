@@ -1,0 +1,1433 @@
+---
+layout: post
+title: Neural Machine Translation Inside Out
+description: Lena Voita's keynote at NAACL 2021 workshop DeeLIO.
+---
+
+<style>
+    @import url("https://fonts.googleapis.com/css2?family=Comic+Neue&display=swap");
+
+    .data_text {
+        font-family: "Comic Neue", "Arial";
+    }
+</style>
+
+<!-- the next two lines are inserted once per page even if there are several shtukovinas,
+     the rest is one-per-shtukovina; read more: https://flickity.metafizzy.co/options.html -->
+<link rel="stylesheet" href="https://unpkg.com/flickity@2/dist/flickity.min.css" media="screen">
+<script src="https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js"></script>
+
+<a class="float-right">
+            <img src="../resources/posts/nmt_inside_out/morda_test.png" alt=""
+                 style="max-width:300px; height:auto; float: right; margin-left:15px; margin-top:25px"/>
+        </a>
+
+        <span style="font-size:14px;">
+        This is a blog version of my talk at the NAACL 2021 workshop
+            <a href="https://sites.google.com/view/deelio-ws/" target="_blank">
+                Deep Learning Inside Out (DeeLIO).
+            </a>
+        </span>
+
+
+        <br/>
+        <br/>
+        <span style="font-size:15px;">
+            In the last decade, machine translation shifted from the traditional statistical approaches
+            with distinct components and hand-crafted features to the end-to-end neural ones.
+            We try to understand how NMT works and show that:
+        <ul>
+          <li>NMT model components can learn to extract features which in SMT were modelled explicitly;</li>
+          <li>for NMT, we can also look at how it balances the two different types of context: the source and the prefix;</li>
+          <li>NMT training consists of the stages where it focuses on competences
+               mirroring three core SMT components.</li>
+        </ul>
+        </span>
+
+        <a class="pull-right" href="/posts/nmt_inside_out.html" onMouseOver="document.readmore.src='../resources/posts/buttons/button_read_more_push-min.png';" onMouseOut="document.readmore5.src='../resources/posts/buttons/button_read_more-min.png';">
+        <img src="../resources/posts/buttons/button_read_more-min.png" name="readmore" width=120px class="pull-right"></a>
+
+        <span style="font-size:15px; text-align: right; float: right; color:gray">June 2021</span>
+
+<br/>
+<p></p>
+<hr>
+
+
+<h3>Machine Translation Task: Traditional vs Neural Mindsets</h3>
+
+<p>In the last decade, machine translation came all the way from traditional statistical approaches
+    to end-to-end neural ones. And this transition is rather remarkable: it changed the way we think
+    about the machine translation task, its components, and, in a way, what it means to translate.
+</p>
+<p>
+    <font face="arial">Traditional approaches</font> split the translation task into several components: here humans
+    decide which competences a model needs.
+In SMT, translation is split into target-side language modeling (which helps a model to generate
+    fluent sentences in the target language) and a translation model (which is responsible for the
+    connection to the source). The translation model, in turn, is split into lexical translation and
+    alignment. Usually, there are also lots of hand-crafted features.
+Note that here the components and features are obtained separately and then combined in a model.
+</p>
+
+
+<center>
+<img src="../resources/posts/nmt_inside_out/traditional_neural_main-min.png" style="max-width:90%; margin-bottom:15px; "/>
+</center>
+
+<p>
+    In <font face="arial">neural approaches</font>, everything is end-to-end: there is a single neural network that just reads lots of parallel data
+    and somehow gets to learn the translation task directly, without splitting it into subtasks.
+</p>
+
+
+<h4>From Humans to Model, or From Model to Humans?</h4>
+
+<p>Let me give you an intuitive illustration of the differences between these two mindsets. In the two approaches,
+    we have humans and a model. In SMT, humans tell the model:
+    <span class="data_text"><strong>“Hey, model, take this and that and this other stuff -
+        this is how you solve the task”</strong></span>. And the model replies
+    <span class="data_text"><strong>“Okay”</strong></span> (well, what else can it do, right?)</p>
+
+<center>
+<img src="../resources/posts/nmt_inside_out/humans_model_main-min.png" style="max-width:90%; margin-bottom:15px; "/>
+</center>
+
+<p>
+In NMT, the model tells us: <span class="data_text"><strong>“Hey,
+    look how good I am! Reading lots of stuff made me understand things!”</strong></span>
+
+</p>
+
+<!--
+<div class="green_left_thought" style="font-size:18px;">
+            <p class="data_text">And here we are: confused, surprised, and asking <strong>“How?”</strong>
+            </p>
+</div>
+-->
+
+<h4><u>And here we are</u>: confused, surprised, and asking <span class="data_text"><strong>“How?”</strong></span></h4>
+
+<p>The question of <span class="data_text"><strong>“How?”</strong></span> is the main question
+of this talk :)
+I look at it keeping in mind how things used to be done in SMT. From this perspective, there can be different questions:
+</p>
+
+<ul>
+    <li style="margin:10px;"><a href="#model_components">Can NMT model components take the roles mirroring SMT components and/or features?</a></li>
+    <li style="margin:10px;"><a href="#contributions">How does NMT balance being fluent (target-side LM) and adequate (translation model)?</a></li>
+    <li style="margin:10px;"><a href="#mt_training">How does NMT acquire different competences during training, and how does this mirror
+        the different models in traditional SMT?</a></li>
+</ul>
+
+
+
+<h2 id="model_components">Model Components and their Roles</h2>
+
+<p class="data_text"><font color="#888"><u>Lena</u>: This part will be high-level,
+    just to illustrate the main idea. The two other questions we'll discuss in more detail.
+    </font></p>
+
+<p style="text-align: center; display: block;
+margin-bottom:20px; margin-left:20px; margin-top:-10px; max-width:40%; float:right;">
+<img src="../resources/posts/nmt_inside_out/bahdanau_example-min.png"
+ style="max-width:100%; margin-bottom:10px;"/>
+    <br />
+<span style="font-size: small;">The example is from:
+<a href="https://arxiv.org/pdf/1409.0473.pdf" target="_blank">Neural Machine Translation
+    by Jointly Learning to Align and Translate</a>.</span>
+</p>
+<p>Here our question is: </p>
+<!--
+<ul>
+    <li>Can NMT model components take the roles mirroring SMT components or features?</li>
+</ul>
+-->
+<div class="green_left_thought" style="font-size:18px;">
+    <p class="data_text"><strong>Can NMT model components take the roles mirroring SMT components or features?</strong>
+            </p>
+</div>
+
+<p>Of course they can - everybody knows that! Decoder-encoder attention is closely related to word alignment.</p>
+
+<p>But don't worry: I have something more interesting for you:</p>
+<ul>
+    <li><a href="#context_aware">Model Components in Context-Aware NMT</a></li>
+    <li><a href="#attention_heads">The Roles of Attention Heads in Multi-Head Self-Attention</a></li>
+</ul>
+
+
+</br></br>
+
+
+<h3 id="context_aware">Context-Aware NMT Learns Anaphora Resolution</h3>
+
+<p class="data_text"><font color="#888"><u>Lena</u>: This part is based on our ACL 2018 paper
+    <a href="https://www.aclweb.org/anthology/P18-1117/" target="_blank">Context-Aware Neural
+        Machine Translation Learns Anaphora Resolution</a>.
+    </font></p>
+
+<img src="../resources/posts/nmt_inside_out/columns_example_with_comment-min.png"
+ style="max-width:50%; margin-bottom:10px;margin-left:15px; float:right;"/>
+<h4>What is Context-Aware NMT?</h4>
+<p>Standard NMT processes a single source sentence and generates the target sentence. But sometimes,
+    the source sentence does not contain enough information to translate it. For example,
+    here our source sentence contains  the pronoun <span class="data_text"><strong>"it"</strong></span>
+    which can have several correct
+    translations into Russian (or any other language with gendered nouns) and to
+    translate it we need to know what it means: for this, we need additional context.
+    Also, the word <span class="data_text"><strong>"columns:</strong></span> is ambiguous
+    and can have several correct translations.
+</p>
+
+<h4>Context-Aware NMT Model with Limited Interaction with Context</h4>
+
+<p>What we do, is we take one previous sentence, and plug it in. Specifically, we take the standard
+    Transformer and in the final encoder layer, we add one attention layer to the context sentence.
+     </p>
+<center>
+<img src="../resources/posts/nmt_inside_out/ctx_model-min.png"
+ style="max-width:80%; margin-bottom:10px;"/>
+</center>
+<p>Note that we design very limited interaction with context to be able to look at what happens.</p>
+
+
+<p>
+
+We got some improvements in quality, but this is not what we care about. We are interested in whether model components can learn something interesting.
+
+So let’s look at the attention to context.
+
+Since the model interacts with the context only through this attention layer, we can see what information
+    the model takes from context.
+
+</p>
+
+<h4>Attention Learned to Resolve Anaphora!</h4>
+
+
+
+<!--<center>
+<img src="../resources/posts/nmt_inside_out/ctx_source_antecedent-min.png"
+ style="max-width:70%; margin-bottom:10px;"/>
+</center>-->
+
+
+<p>Let's look at the example of two consecutive sentences: the first is the context, the second is the source,
+    the one we need to translate.</p>
+
+<img src="../resources/posts/nmt_inside_out/ctx_source_antecedent-min.png"
+ style="max-width:70%; margin-bottom:10px; margin-left:15px; float:right;"/>
+
+<p> There's an ambiguous pronoun <span class="data_text"><strong>"it"</strong></span>
+    in the source sentence, which refers to the <span class="data_text"><strong>"heart"</strong></span>
+    in the preceding sentence.
+</p>
+
+<img src="../resources/posts/nmt_inside_out/ctx_attention_map_arrows-min.png"
+ style="max-width:50%; margin-bottom:10px;margin-left:15px; float:right;"/>
+<p>The heatmap shows which context words the model used for each source word.
+On the x-axis is the context sentence and on the y-axis is the source sentence.
+</p>
+<p> If we look at the ambiguous pronoun <span class="data_text"><strong>"it"</strong></span> in the source sentence, we will see
+    that it takes information from the noun it refers to: the <span class="data_text"><strong>"heart"</strong></span>. We show that this is a general
+    pattern: the model learned to identify nouns these ambiguous pronouns refer to, i.e. it learned to resolve anaphora.
+</p>
+
+
+<h4>Traditional vs Neural Mindsets: Dealing with Features</h4>
+
+<p>What is important: while traditional approaches engineered special-purpose features to handle various phenomena,
+in neural models, some components can learn to take specific roles (e.g., roles of extracting specific features).
+Sometimes, these features are the ones that used to be modelled explicitly in SMT
+    (for example, anaphora).
+Note that this happened without any specific supervision, except for the translation task.
+</p>
+
+<div style="width:100%; margin-left:0px;display: grid;
+    grid-template-columns: 50% 50%;" >
+    <div>
+
+        <img src="../resources/posts/nmt_inside_out/smt_nmt_features_text_left-min.png" style="max-width:80%;"/>
+
+        </br></br>
+        <div style="max-width:65%;margin-left:15%;">
+            <p style="font-size:small;">
+                <font color="#888">
+                (<a href="https://www.aclweb.org/anthology/W10-1737/" target="_blank">Le Nagard & Koehn, 2010</a>;
+                <a href="https://www.diva-portal.org/smash/get/diva2:420761/FULLTEXT01.pdf" target="_blank">Hardmeier & Federico, 2010</a>;
+                <a href="https://www.aclweb.org/anthology/W15-2501/" target="_blank">Hardmeier et al, 2015</a>;
+                <a href="http://publications.idiap.ch/downloads/papers/2012/Meyer_AMTA_2012.pdf" target="_blank">Meyer et al, 2012</a>;
+                <a href="https://www.aclweb.org/anthology/D12-1026/" target="_blank">Gong et al, 2012</a>;
+                <a href="https://www.aclweb.org/anthology/W09-2404/" target="_blank">Carpuat, 2009</a>;
+                <a href="https://www.aclweb.org/anthology/W10-2602" target="_blank">Tiedemann, 2010</a>
+                among others)
+
+                </font>
+            </p>
+            </div>
+
+    </div>
+    <div>
+        <img src="../resources/posts/nmt_inside_out/smt_nmt_features_text_right-min.png" style="max-width:80%;"/>
+
+    </div>
+</div>
+
+<p>If we come back to our sketch, in SMT, humans used to tell models
+    <span class="data_text"><strong>“Hey, this feature is good for you - take it!”</strong></span>
+        But in NMT, a model learned to translate well,
+    and we are again confused about how it did this. Of course, this is hard for us to fully understand how neural
+    networks work, but as a consolation prize, we get to see that there is a specific model component
+    that learned to extract a feature that previously, in SMT, was put into a model explicitly.
+</p>
+
+<center>
+<img src="../resources/posts/nmt_inside_out/humans_model_features-min.png" style="max-width:90%; margin-bottom:15px; "/>
+</center>
+
+
+</br></br>
+
+
+<h3 id="attention_heads">The Roles of Attention Heads in Multi-Head Self-Attention</h3>
+<p class="data_text"><font color="#888"><u>Lena</u>: This part is based on our ACL 2019 paper
+    <a href="https://www.aclweb.org/anthology/P19-1580/" target="_blank">Analyzing Multi-Head Self-Attention:
+        Specialized Heads Do the Heavy Lifting, the Rest Can Be Pruned</a>.
+    </font></p>
+
+<p>Okay, we just saw that model components can be interpretable. But that model was constructed in
+    a way that we knew where to look: we made interaction with context limited to be able to analyze it.
+
+</p>
+
+<center>
+<img src="../resources/posts/nmt_inside_out/components_before_now_question-min.png" style="max-width:100%; margin-bottom:20px; margin-top:20px;"/>
+</center>
+
+
+
+<!--
+    <img src="../resources/posts/nmt_inside_out/question_which_components_important-min.png"
+     style="max-width:60%; margin-bottom:15px; float:right;"/>
+-->
+<p>But what about standard machine translation models, for example Transformer? These models have a
+    lot of layers and a lot of components in each layer. For example, a typical encoder has 48 attention heads!
+    How can we understand which of them are more important?</p>
+
+
+<p style="text-align: center; float: right; display: block;
+        margin-bottom:20px; margin-left:25px; max-width:50%;">
+            <img src="../resources/posts/src_dst_nmt/lrp_main-min.png" style="margin-bottom:15px;" width=100% alt="" /><br />
+            <span style="font-size: small;">The figure is adapted from the one taken from
+        <a href="http://danshiebler.com/2017-04-16-deep-taylor-lrp/" target="_blank">
+                    Dan Shiebler's blog post</a>.</span></p>
+<p>Here we took an idea from computer vision, where there are methods that propagate
+    prediction to pixels in an input image to find parts of the image that contributed
+    to the prediction.
+</p>
+
+<p>We will also propagate predictions through the network. But we will do it differently from computer vision methods:
+</p>
+<ul>
+    <li>propagate till model components (e.g., attention heads) and not till input,</li>
+    <li>compute importance on average over a dataset and not for a single prediction.</li>
+</ul>
+
+<p>Then we ask: on average over all predictions, which components contribute to predictions more?
+    This is how we get the importance of attention heads.
+     Look at the illustration of this process.
+</p>
+<center>
+<img src="../resources/posts/nmt_inside_out/heads_propagating.gif" style="max-width:80%; margin-bottom:15px; "/>
+</center>
+
+<p>What we found is that there are only a few heads that are important.
+    If we look at these important attention heads,
+    surprisingly we will see that they play interpretable roles, for example, some are
+    responsible for syntactic relations in a sentence. Below are  examples of the important attention heads.
+</p>
+
+<!--
+    <div style="display: grid; grid-template-columns: 50% 50%; margin:10px;">
+
+        <div style="max-width:80%;">
+            <h3 style="text-align:center;"><font face="arial">Positional heads</font></h3>
+            <div class="carousel"
+     style="float:left; width:95%; margin-top:0px; margin-bottom:30px; margin-left:0px"
+  data-flickity='{ "imagesLoaded": true, "percentPosition": true}'>
+  <div class="carousel-cell" style="width:90%"><center>
+    <img src="../resources/posts/acl19_heads/position_head/wmt_en_de_prev-min.png"/>
+      <p style="text-align:center;">Model trained on WMT EN-DE</p>
+  </center></div>
+    <div class="carousel-cell" style="width:100%"><center>
+    <img src="../resources/posts/acl19_heads/position_head/wmt_en_de_next-min.png"/>
+      <p style="text-align:center;">Model trained on WMT EN-DE</p>
+  </center></div>
+
+
+    <div class="carousel-cell" style="width:100%"><center>
+    <img src="../resources/posts/acl19_heads/position_head/wmt_en_fr_prev-min.png"/>
+      <p style="text-align:center;">Model trained on WMT EN-FR</p>
+  </center></div>
+    <div class="carousel-cell" style="width:100%"><center>
+    <img src="../resources/posts/acl19_heads/position_head/wmt_en_fr_next-min.png"/>
+      <p style="text-align:center;">Model trained on WMT EN-FR</p>
+  </center></div>
+
+
+    <div class="carousel-cell" style="width:100%"><center>
+    <img src="../resources/posts/acl19_heads/position_head/wmt_en_ru_prev-min.png"/>
+      <p style="text-align:center;">Model trained on WMT EN-RU</p>
+  </center></div>
+    <div class="carousel-cell" style="width:100%"><center>
+    <img src="../resources/posts/acl19_heads/position_head/wmt_en_ru_next-min.png"/>
+      <p style="text-align:center;">Model trained on WMT EN-RU</p>
+  </center></div>
+
+
+    <div class="carousel-cell" style="width:100%"><center>
+    <img src="../resources/posts/acl19_heads/position_head/subs_en_ru_prev-min.png"/>
+      <p style="text-align:center;">Model trained on OpenSubtitles EN-RU</p>
+  </center></div>
+    <div class="carousel-cell" style="width:100%"><center>
+    <img src="../resources/posts/acl19_heads/position_head/subs_en_ru_next-min.png"/>
+      <p style="text-align:center;">Model trained on OpenSubtitles EN-RU</p>
+  </center></div>
+
+</div>
+        </div>
+
+        <div  style="max-width:80%;">
+            <h3 style="text-align:center;"><font face="arial">Syntactic heads</font></h3>
+            <div class="carousel"
+     style="float:right; width:95%; margin-top:0px; margin-bottom:30px; "
+  data-flickity='{ "imagesLoaded": true, "percentPosition": true}'>
+  <div class="carousel-cell" style="width:100%"><center>
+    <img src="../resources/posts/acl19_heads/syntactic_head/subs_en_ru_sv_1-min.png"/>
+      <p style="text-align:center;"> subject-> verb</p>
+  </center></div>
+    <div class="carousel-cell" style="width:100%"><center>
+    <img src="../resources/posts/acl19_heads/syntactic_head/subs_en_ru_vs_1-min.png"/>
+      <p style="text-align:center;"> verb -> subject</p>
+  </center></div>
+
+
+    <div class="carousel-cell" style="width:100%"><center>
+    <img src="../resources/posts/acl19_heads/syntactic_head/subs_en_ru_sv_2-min.png"/>
+      <p style="text-align:center;"> subject-> verb</p>
+  </center></div>
+    <div class="carousel-cell" style="width:100%"><center>
+    <img src="../resources/posts/acl19_heads/syntactic_head/subs_en_ru_vs_2-min.png"/>
+      <p style="text-align:center;"> verb -> subject</p>
+  </center></div>
+  <div class="carousel-cell" style="width:100%"><center>
+    <img src="../resources/posts/acl19_heads/syntactic_head/subs_en_ru_vs_3-min.png"/>
+      <p style="text-align:center;"> verb -> subject</p>
+  </center></div>
+
+
+  <div class="carousel-cell" style="width:100%"><center>
+    <img src="../resources/posts/acl19_heads/syntactic_head/wmt_en_ru_ov_2-min.png"/>
+      <p style="text-align:center;"> object -> verb</p>
+  </center></div>
+  <div class="carousel-cell" style="width:100%"><center>
+    <img src="../resources/posts/acl19_heads/syntactic_head/wmt_en_ru_vo_2-min.png"/>
+      <p style="text-align:center;"> verb -> object</p>
+  </center></div>
+
+    <div class="carousel-cell" style="width:100%"><center>
+    <img src="../resources/posts/acl19_heads/syntactic_head/subs_en_ru_ov_1-min.png"/>
+      <p style="text-align:center;"> object -> verb</p>
+  </center></div>
+
+</div>
+        </div>
+    </div>
+
+
+    <div style="float:right; width:40%; margin-left:20px; " >
+<h3 style="text-align:center;"><font face="arial">Rare tokens head</font></h3>
+    <div class="carousel"
+     style="margin-top:10px; margin-bottom:30px; margin-left:10px"
+  data-flickity='{ "imagesLoaded": true, "percentPosition": true}'>
+
+  <div class="carousel-cell" style="width:100%"><center>
+    <img src="../resources/posts/acl19_heads/topic_head/wmt_en_de_1-min.png"/>
+      <p style="text-align:center;">Model trained on WMT EN-DE</p>
+  </center></div>
+    <div class="carousel-cell" style="width:100%"><center>
+    <img src="../resources/posts/acl19_heads/topic_head/wmt_en_de_2-min.png"/>
+      <p style="text-align:center;">Model trained on WMT EN-DE</p>
+  </center></div>
+    <div class="carousel-cell" style="width:100%"><center>
+    <img src="../resources/posts/acl19_heads/topic_head/wmt_en_de_3-min.png"/>
+      <p style="text-align:center;">Model trained on WMT EN-DE</p>
+  </center></div>
+
+    <div class="carousel-cell" style="width:100%"><center>
+    <img src="../resources/posts/acl19_heads/topic_head/wmt_en_fr_1-min.png"/>
+      <p style="text-align:center;">Model trained on WMT EN-FR</p>
+  </center></div>
+    <div class="carousel-cell" style="width:100%"><center>
+    <img src="../resources/posts/acl19_heads/topic_head/wmt_en_fr_2-min.png"/>
+      <p style="text-align:center;">Model trained on WMT EN-FR</p>
+  </center></div>
+    <div class="carousel-cell" style="width:100%"><center>
+    <img src="../resources/posts/acl19_heads/topic_head/wmt_en_fr_3-min.png"/>
+      <p style="text-align:center;">Model trained on WMT EN-FR</p>
+  </center></div>
+
+    <div class="carousel-cell" style="width:100%"><center>
+    <img src="../resources/posts/acl19_heads/topic_head/wmt_en_ru_1-min.png"/>
+      <p style="text-align:center;">Model trained on WMT EN-RU</p>
+  </center></div>
+    <div class="carousel-cell" style="width:100%"><center>
+    <img src="../resources/posts/acl19_heads/topic_head/wmt_en_ru_2-min.png"/>
+      <p style="text-align:center;">Model trained on WMT EN-RU</p>
+  </center></div>
+    <div class="carousel-cell" style="width:100%"><center>
+    <img src="../resources/posts/acl19_heads/topic_head/wmt_en_ru_3-min.png"/>
+      <p style="text-align:center;">Model trained on WMT EN-RU</p>
+  </center></div>
+    <div class="carousel-cell" style="width:100%"><center>
+    <img src="../resources/posts/acl19_heads/topic_head/wmt_en_ru_4-min.png"/>
+      <p style="text-align:center;">Model trained on WMT EN-RU</p>
+  </center></div>
+
+    <div class="carousel-cell" style="width:100%"><center>
+    <img src="../resources/posts/acl19_heads/topic_head/subs_en_ru_1-min.png"/>
+      <p style="text-align:center;">Model trained on OpenSubtitles EN-RU</p>
+  </center></div>
+    <div class="carousel-cell" style="width:100%"><center>
+    <img src="../resources/posts/acl19_heads/topic_head/subs_en_ru_2-min.png"/>
+      <p style="text-align:center;">Model trained on OpenSubtitles EN-RU</p>
+  </center></div>
+    <div class="carousel-cell" style="width:100%"><center>
+    <img src="../resources/posts/acl19_heads/topic_head/subs_en_ru_3-min.png"/>
+      <p style="text-align:center;">Model trained on OpenSubtitles EN-RU</p>
+  </center></div>
+
+    </div>
+  </div>
+-->
+
+    <div style="display: grid; grid-template-columns: 33% 33% 33%; margin-bottom:10px;">
+
+        <div style="max-width:100%;">
+            <p style="text-align:center;"><font face="arial">Positional heads</font></p>
+            <div class="carousel"
+     style="float:left; width:95%; margin-top:0px; margin-bottom:30px; margin-left:0px"
+  data-flickity='{ "imagesLoaded": true, "percentPosition": true}'>
+  <div class="carousel-cell" style="width:90%"><center>
+    <img src="../resources/posts/acl19_heads/position_head/wmt_en_de_prev-min.png"/>
+      <p style="text-align:center;font-size:small;">Model trained on WMT EN-DE</p>
+  </center></div>
+    <div class="carousel-cell" style="width:100%"><center>
+    <img src="../resources/posts/acl19_heads/position_head/wmt_en_de_next-min.png"/>
+      <p style="text-align:center;font-size:small;">Model trained on WMT EN-DE</p>
+  </center></div>
+
+
+    <div class="carousel-cell" style="width:100%"><center>
+    <img src="../resources/posts/acl19_heads/position_head/wmt_en_fr_prev-min.png"/>
+      <p style="text-align:center;font-size:small;">Model trained on WMT EN-FR</p>
+  </center></div>
+    <div class="carousel-cell" style="width:100%"><center>
+    <img src="../resources/posts/acl19_heads/position_head/wmt_en_fr_next-min.png"/>
+      <p style="text-align:center;font-size:small;">Model trained on WMT EN-FR</p>
+  </center></div>
+
+
+    <div class="carousel-cell" style="width:100%"><center>
+    <img src="../resources/posts/acl19_heads/position_head/wmt_en_ru_prev-min.png"/>
+      <p style="text-align:center;font-size:small;">Model trained on WMT EN-RU</p>
+  </center></div>
+    <div class="carousel-cell" style="width:100%"><center>
+    <img src="../resources/posts/acl19_heads/position_head/wmt_en_ru_next-min.png"/>
+      <p style="text-align:center;font-size:small;">Model trained on WMT EN-RU</p>
+  </center></div>
+
+
+    <div class="carousel-cell" style="width:100%"><center>
+    <img src="../resources/posts/acl19_heads/position_head/subs_en_ru_prev-min.png"/>
+      <p style="text-align:center;font-size:small;">Model trained on OpenSubtitles EN-RU</p>
+  </center></div>
+    <div class="carousel-cell" style="width:100%"><center>
+    <img src="../resources/posts/acl19_heads/position_head/subs_en_ru_next-min.png"/>
+      <p style="text-align:center;font-size:small;">Model trained on OpenSubtitles EN-RU</p>
+  </center></div>
+
+</div>
+        </div>
+
+        <div  style="max-width:100%;">
+            <p style="text-align:center;"><font face="arial">Syntactic heads</font></p>
+            <div class="carousel"
+     style="float:right; width:95%; margin-top:0px; margin-bottom:30px; "
+  data-flickity='{ "imagesLoaded": true, "percentPosition": true}'>
+  <div class="carousel-cell" style="width:100%"><center>
+    <img src="../resources/posts/acl19_heads/syntactic_head/subs_en_ru_sv_1-min.png"/>
+      <p style="text-align:center;font-size:small;"> subject-> verb</p>
+  </center></div>
+    <div class="carousel-cell" style="width:100%"><center>
+    <img src="../resources/posts/acl19_heads/syntactic_head/subs_en_ru_vs_1-min.png"/>
+      <p style="text-align:center;font-size:small;"> verb -> subject</p>
+  </center></div>
+
+
+    <div class="carousel-cell" style="width:100%"><center>
+    <img src="../resources/posts/acl19_heads/syntactic_head/subs_en_ru_sv_2-min.png"/>
+      <p style="text-align:center;font-size:small;"> subject-> verb</p>
+  </center></div>
+    <div class="carousel-cell" style="width:100%"><center>
+    <img src="../resources/posts/acl19_heads/syntactic_head/subs_en_ru_vs_2-min.png"/>
+      <p style="text-align:center;font-size:small;"> verb -> subject</p>
+  </center></div>
+  <div class="carousel-cell" style="width:100%"><center>
+    <img src="../resources/posts/acl19_heads/syntactic_head/subs_en_ru_vs_3-min.png"/>
+      <p style="text-align:center;font-size:small;"> verb -> subject</p>
+  </center></div>
+
+
+  <div class="carousel-cell" style="width:100%"><center>
+    <img src="../resources/posts/acl19_heads/syntactic_head/wmt_en_ru_ov_2-min.png"/>
+      <p style="text-align:center;font-size:small;"> object -> verb</p>
+  </center></div>
+  <div class="carousel-cell" style="width:100%"><center>
+    <img src="../resources/posts/acl19_heads/syntactic_head/wmt_en_ru_vo_2-min.png"/>
+      <p style="text-align:center;font-size:small;"> verb -> object</p>
+  </center></div>
+
+    <div class="carousel-cell" style="width:100%"><center>
+    <img src="../resources/posts/acl19_heads/syntactic_head/subs_en_ru_ov_1-min.png"/>
+      <p style="text-align:center;font-size:small;"> object -> verb</p>
+  </center></div>
+
+</div>
+        </div>
+
+    <div style="width:100%; margin-left:0px; " >
+    <p style="text-align:center;"><font face="arial">Rare tokens head</font></p>
+    <div class="carousel"
+     style="margin-top:10px; margin-bottom:30px; margin-left:10px"
+  data-flickity='{ "imagesLoaded": true, "percentPosition": true}'>
+
+  <div class="carousel-cell" style="width:100%"><center>
+    <img src="../resources/posts/acl19_heads/topic_head/wmt_en_de_1-min.png"/>
+      <p style="text-align:center;font-size:small;">Model trained on WMT EN-DE</p>
+  </center></div>
+    <div class="carousel-cell" style="width:100%"><center>
+    <img src="../resources/posts/acl19_heads/topic_head/wmt_en_de_2-min.png"/>
+      <p style="text-align:center;font-size:small;">Model trained on WMT EN-DE</p>
+  </center></div>
+    <div class="carousel-cell" style="width:100%"><center>
+    <img src="../resources/posts/acl19_heads/topic_head/wmt_en_de_3-min.png"/>
+      <p style="text-align:center;font-size:small;">Model trained on WMT EN-DE</p>
+  </center></div>
+
+    <div class="carousel-cell" style="width:100%"><center>
+    <img src="../resources/posts/acl19_heads/topic_head/wmt_en_fr_1-min.png"/>
+      <p style="text-align:center;font-size:small;">Model trained on WMT EN-FR</p>
+  </center></div>
+    <div class="carousel-cell" style="width:100%"><center>
+    <img src="../resources/posts/acl19_heads/topic_head/wmt_en_fr_2-min.png"/>
+      <p style="text-align:center;font-size:small;">Model trained on WMT EN-FR</p>
+  </center></div>
+    <div class="carousel-cell" style="width:100%"><center>
+    <img src="../resources/posts/acl19_heads/topic_head/wmt_en_fr_3-min.png"/>
+      <p style="text-align:center;font-size:small;">Model trained on WMT EN-FR</p>
+  </center></div>
+
+    <div class="carousel-cell" style="width:100%"><center>
+    <img src="../resources/posts/acl19_heads/topic_head/wmt_en_ru_1-min.png"/>
+      <p style="text-align:center;font-size:small;">Model trained on WMT EN-RU</p>
+  </center></div>
+    <div class="carousel-cell" style="width:100%"><center>
+    <img src="../resources/posts/acl19_heads/topic_head/wmt_en_ru_2-min.png"/>
+      <p style="text-align:center;font-size:small;">Model trained on WMT EN-RU</p>
+  </center></div>
+    <div class="carousel-cell" style="width:100%"><center>
+    <img src="../resources/posts/acl19_heads/topic_head/wmt_en_ru_3-min.png"/>
+      <p style="text-align:center;font-size:small;">Model trained on WMT EN-RU</p>
+  </center></div>
+    <div class="carousel-cell" style="width:100%"><center>
+    <img src="../resources/posts/acl19_heads/topic_head/wmt_en_ru_4-min.png"/>
+      <p style="text-align:center;font-size:small;">Model trained on WMT EN-RU</p>
+  </center></div>
+
+    <div class="carousel-cell" style="width:100%"><center>
+    <img src="../resources/posts/acl19_heads/topic_head/subs_en_ru_1-min.png"/>
+      <p style="text-align:center;font-size:small;">Model trained on OpenSubtitles EN-RU</p>
+  </center></div>
+    <div class="carousel-cell" style="width:100%"><center>
+    <img src="../resources/posts/acl19_heads/topic_head/subs_en_ru_2-min.png"/>
+      <p style="text-align:center;font-size:small;">Model trained on OpenSubtitles EN-RU</p>
+  </center></div>
+    <div class="carousel-cell" style="width:100%"><center>
+    <img src="../resources/posts/acl19_heads/topic_head/subs_en_ru_3-min.png"/>
+      <p style="text-align:center;font-size:small;">Model trained on OpenSubtitles EN-RU</p>
+  </center></div>
+
+    </div>
+  </div>
+    </div>
+
+<h4>Here we are, again</h4>
+
+<p>And we are again here: the model used some of its components to represent those features that previously were
+    given to a model explicitly, in this case, syntax.
+</p>
+<center>
+<img src="../resources/posts/nmt_inside_out/humans_model_features-min.png" style="max-width:90%; margin-bottom:15px; "/>
+</center>
+
+<h4>Why is this important?</h4>
+<p>Turns out, such analysis of model components (e.g., attention heads) can also be useful. For example, it can lead to
+    simpler models, for example with fixed attention heads that perform simple functions.
+    Or, it can lead to better models through regularization or supervision of some components.
+</p>
+
+<center>
+<img src="../resources/posts/nmt_inside_out/components_important1-min.png" style="max-width:80%; margin-bottom:10px; "/>
+</center>
+<div style="max-width:30%;float:right;margin-right:15%;">
+            <p style="font-size:small;">
+                <font color="#888">
+                (<a href="https://www.aclweb.org/anthology/2020.findings-emnlp.49/" target="_blank">Raganato et al, 2020</a>;
+                <a href="https://www.aclweb.org/anthology/2020.acl-main.687/" target="_blank">You et al, 2020</a>;
+                <a href="https://arxiv.org/abs/2005.00743" target="_blank">Tay et al, 2020</a>
+                among others)
+
+                </font>
+            </p>
+            </div>
+<center>
+<img src="../resources/posts/nmt_inside_out/components_important2-min.png" style="max-width:80%; margin-bottom:10px; "/>
+</center>
+<div style="max-width:30%;float:right;margin-right:15%;">
+            <p style="font-size:small;">
+                <font color="#888">
+                (<a href="https://openreview.net/forum?id=SylO2yStDr" target="_blank">Fan et al, 2020</a>;
+                <a href="https://www.aclweb.org/anthology/2020.findings-emnlp.178/" target="_blank">Zhou et al, 2020</a>;
+                <a href="https://www.aclweb.org/anthology/2020.acl-main.587/" target="_blank">Peng et al, 2020</a>
+                among others)
+
+                </font>
+            </p>
+            </div>
+
+
+
+</br></br></br>
+
+<h2 id="contributions">Source and Target Contributions to NMT Predictions</h2>
+<p class="data_text"><font color="#888"><u>Lena</u>: This part is based on our ACL 2021 paper
+    <a href="https://arxiv.org/pdf/2010.10907.pdf" target="_blank">Analyzing the
+        Source and Target Contributions to Predictions in Neural Machine Translation</a>.
+    </font></p>
+
+<p>We just looked at model components and found that
+    sometimes they are related to SMT features.
+    Now, let us talk about something more global: <font face="arial">fluency</font> and <font face="arial">adequacy</font>.
+    Fluency is agreement on the target side, adequacy - connection to the source.
+
+</p>
+
+<center>
+<img src="../resources/posts/nmt_inside_out/fluency_adequacy_basic_mt-min.png" style="max-width:90%; margin-bottom:10px; "/>
+</center>
+
+<p>In traditional models, these were modelled separately: with a target-side language model (responsible
+    for using information from the target prefix)
+    and a translation model (responsible for using information from the source).
+    They were trained separately, then put together.
+    But standard neural models have to learn how to do this at once, within a single neural network.</p>
+<center>
+<img src="../resources/posts/nmt_inside_out/fluency_adequacy_smt_nmt-min.png" style="max-width:90%; margin-bottom:10px; "/>
+</center>
+
+<p>Here our question is: </p>
+
+<div class="green_left_thought" style="font-size:18px;">
+    <p class="data_text">How does NMT balance being <strong>fluent</strong> (target-side LM) and
+        <strong>adequate</strong> (translation model)?
+    </p>
+</div>
+
+
+<h4>What Influences the Predictions: Source or Target?</h4>
+
+<p>Let me put it a bit differently. In neural machine translation, each prediction is based on
+    two different types of context: prefix of the target sentence (i.e. previously generated tokens)
+    and the source sentence. But it is not clear how NMT uses these types of context and what
+    influences the predictions: source or target. Recall that in SMT, the source and the prefix
+    were used by separate models.
+</p>
+
+<center>
+<img src="../resources/posts/nmt_inside_out/two_types_of_context_question-min.png" style="max-width:100%; margin-bottom:20px;"/>
+</center>
+
+
+<p>In this part, we will try to understand how NMT balances these two different types of context.
+    But first, let's think about why we care about the source-target trade-off.
+</p>
+
+<h4><u>Why do we care:</u> Hallucinations and beyond.</h4>
+<h4>TL;DR: Models often fail to properly use these two kinds of information.</h4>
+
+
+<div style="max-width:35%; float:right; margin-left: 20px;">
+    <img src="../resources/posts/nmt_inside_out/why_src_dst_important1-min.png" style="max-width:100%; margin-bottom:10px;"/>
+    <div style="margin-left:10%;">
+            <p style="font-size:small;">
+                <font color="#888">
+                for both RNNs
+                (<a href="https://www.aclweb.org/anthology/Q17-1007/" target="_blank">Tu et al, 2017</a>;
+                <a href="https://www.aclweb.org/anthology/C18-1124/" target="_blank">Wang et al, 2018</a>)
+                    and Transformer (<a href="https://www.aclweb.org/anthology/2020.acl-main.757/" target="_blank">Li et al, 2020</a>)
+                </font>
+            </p>
+    </div>
+    <img src="../resources/posts/nmt_inside_out/why_src_dst_important2-min.png" style="max-width:100%; margin-bottom:10px;"/>
+    <div style="margin-left:10%;">
+            <p style="font-size:small;">
+                <font color="#888">
+                (<a href="https://openreview.net/forum?id=SkxJ-309FQ" target="_blank">Lee et al, 2018</a>;
+                <a href="https://www.aclweb.org/anthology/W19-5361/" target="_blank">Berard et al, 2019</a>)
+
+                </font>
+            </p>
+    </div>
+</div>
+
+<p>The main reason for investigating the source-target trade-off is that
+    NMT models often <font face="arial">fail to properly use these two kinds of information</font>.
+        For example, context gates (which learn to weight source
+        and target contexts) help for
+        both RNNs and Transformers.
+</p>
+<p>A more popular and clear example is hallucinations, when a model produces
+    sentences that are fluent but unrelated to the source.
+    The hypothesis is that in this mode, a model ignores information from the source and samples
+    from its language model.
+    While we do not know what forces a model to hallucinate in general, previous work showed
+    some anecdotal evidence that when hallucinating, a model does fail to use source properly.
+    Look at the examples of attention maps of hallucinating models: models may put most of the decoder-encoder attention
+    to uninformative source tokens, e.g. EOS and punctuation.
+</p>
+
+    <div style="display:grid;grid-template-columns: 50% 50%;">
+        <div>
+            <p style="text-align: center; float: right; display: block;
+        margin-bottom:20px; margin-left:25px; max-width:100%;">
+            <img src="../resources/posts/src_dst_nmt/attn_map_berard-min.png" style="margin-bottom:15px;" width=90% alt="" /><br />
+            <span style="font-size: small;">The figure is from
+        <a href="https://www.aclweb.org/anthology/W19-5361/" target="_blank">
+                    Berard et al, 2019</a>.</span></p>
+
+        </div>
+
+        <div>
+            <p style="text-align: center; float: right; display: block;
+        margin-bottom:20px; margin-left:25px; max-width:100%;">
+            <img src="../resources/posts/src_dst_nmt/attn_map_lee-min.png" style="margin-bottom:15px;" width=90% alt="" /><br />
+            <span style="font-size: small;">The figure is from
+        <a href="https://openreview.net/forum?id=SkxJ-309FQ" target="_blank">
+                    Lee et al, 2018</a>.</span></p>
+
+        </div>
+    </div>
+
+    <p>While these examples are interesting, note that this evidence is rather anecdotal:
+        these are only a couple of examples when a model is "caught in action" and even for the same Transformer model,
+        researchers found different patterns.
+
+    </p>
+
+    <p>If we knew how to evaluate the source and target contributions to NMT prediction,
+        this could be useful to evaluate techniques that force a model to rely on the source more
+        (for example, different kinds of regularizations or training objectives) and it could help
+        in other tasks where reliance on source is important.
+    </p>
+
+
+
+
+<h4><u>We want:</u> Relative Contributions of Source and Target</h4>
+
+
+<center>
+<img src="../resources/posts/src_dst_nmt/what_we_want_long-min.png" style="max-width:80%; margin-bottom:20px;"/>
+</center>
+
+
+<p style="text-align: center; float: right; display: block;
+        margin-bottom:20px; margin-left:25px; max-width:45%;">
+            <img src="../resources/posts/src_dst_nmt/lrp_main-min.png" style="margin-bottom:15px;" width=100% alt="" /><br />
+            <span style="font-size: small;">The figure is adapted from the one taken from
+        <a href="http://danshiebler.com/2017-04-16-deep-taylor-lrp/" target="_blank">
+                    Dan Shiebler's blog post</a>.</span></p>
+
+<p>Let us come back to what we want. We want to understand what influences NMT predictions: source or target.
+    Specifically, we want to evaluate their <font face="arial">relative</font> contributions.
+    Intuitively, imagine we have everything that takes part in forming a prediction - let's call it
+    "the total contribution".
+    What we are interested in is <font face="arial">part in the total contribution</font>.
+</p>
+
+<p>I’m not going to explain our method in detail here (for this - look at the
+    <a href="https://arxiv.org/pdf/2010.10907.pdf" target="_blank">paper</a>),
+    but I’ll just give you an intuitive explanation.
+    It is a variation of the same attribution method we already used to evaluate the importance
+    of different attention heads. We also propagate a prediction back from output to input to
+    identify input parts that contribute to the prediction.
+</p>
+
+
+
+
+
+<h4><u>Intuition</u>: Relative Token Contributions</h4>
+<video width=50% height="auto" style="margin-bottom:20px; margin-left:20px; float:right;" loop autoplay muted>
+  <source src="../resources/posts/src_dst_nmt/src_dst_main.mp4" type="video/mp4">
+</video>
+
+
+<p>Look at the illustration for NMT. We have a prediction,
+    propagate it back and end up with token contributions; their total contribution
+    equals to the prediction we propagate. Without loss of generality, we can assume that
+    the total contribution is always 1 and we can evaluate relative token contributions.
+</p>
+
+<p>For different generation steps, we are likely to see that the trade-off between source and
+    target changes from token to token. Of course, for the first token source contribution is
+    always 1 (because there is no prefix yet), but during generation, this changes.
+</p>
+
+
+
+
+
+<h4><u>We Look at</u>: Total Contribution and Entropy of Contributions</h4>
+<p>We look at token contributions <font face="arial">for each generation step</font> separately. In this way, we'll
+be able to see what happens during the generation process.
+</p>
+<video width=50% height="auto" style="margin-left: 20px;margin-bottom: 20px; float:right;" loop autoplay muted>
+  <source src="../resources/posts/src_dst_nmt/how_evaluate.mp4" type="video/mp4">
+</video>
+<p><span style="margin-right:15px;">&#8226;</span><font face="arial">
+    total source contribution</font></p>
+<p>The total contribution of the source is the sum of contributions of source tokens.
+    Note that since we evaluate relative contributions, \(contr(source) = 1 - contr(prefix)\).
+</p>
+
+
+<p><span style="margin-right:15px;">&#8226;</span><font face="arial">
+    entropy of contributions</font></p>
+<p>The entropy of contributions tells us how 'focused' the contributions are:
+whether the model is confident in the choice of relevant tokens or spreads its relevance across the whole input.
+    In this talk (blog post), we will mostly see the total source contribution,
+    but in the paper,
+    we also consider the entropy of source and target contributions.
+</p>
+
+
+
+
+<br>
+<h3>Source Contribution to Different Target Positions</h3>
+
+<p>We are mainly interested not in the absolute values of contributions, but in how
+    these patterns change depending on data, training objective, or timestep in training.
+    But first, let’s look at the source contribution for a single model.
+</p>
+
+
+<h4><span style="margin-right:15px;">&#8226;</span><font face="arial">
+     source contribution</font>: decreases during generation</h4>
+<p>For each target position, the figure shows the source contribution. We see that, as the generation
+progresses, the influence of source decreases (i.e., the influence of target increases).
+     This is expected:  with a longer prefix,
+    it becomes easier for the model to understand which source tokens to use,
+    and at the same time, it needs to be more careful to generate tokens that agree with the prefix.
+
+</p>
+<center>
+<img src="../resources/posts/src_dst_nmt/general_source_influence-min.png" style="margin-bottom:20px;" width=80% alt="" />
+</center>
+<p>Note also a large drop of source influence
+    for the last token: apparently, to generate the EOS token, the model relies on prefix much
+    more than when generating other tokens.</p>
+
+
+
+
+<br>
+<h3>Reference, Model and Random Prefixes</h3>
+
+<p>Now, let us look at the changes in these patterns when conditioning on different types of target prefixes:
+reference, model translations, and prefixes of random sentences.</p>
+
+<h4><span style="margin-right:15px;">&#8226;</span><font face="arial">
+     model-generated prefixes:</font> the simpler ones</h4>
+<img src="../resources/posts/src_dst_nmt/model_trs_are_simpler-min.png" style="margin-left:20px;float:right;" width=65% alt="" />
+
+<p>First, let us compare how models react to prefixes that come from reference and model translations.
+We know that beam search translations are usually simpler than references: several papers show that they contain
+    fewer rare tokens, have fewer reorderings, and are simpler syntactically.
+</p>
+
+<center>
+<img src="../resources/posts/src_dst_nmt/prefix_model_vs_reference-min.png" style="margin-bottom:20px;" width=90% alt="" />
+</center>
+
+<p>When conditioned on these simpler prefixes, the model relies on the source more and is more
+confident when choosing relevant source tokens (the entropy of source contributions is lower). We hypothesize that
+    these simpler prefixes are more convenient for the model, and they require less reasoning on the target side.
+</p>
+
+
+<h4><span style="margin-right:15px;">&#8226;</span><font face="arial">
+     random prefixes:</font> the unexpected ones</h4>
+<p>Now, let us give a model something unexpected: prefixes of random sentences. In
+this experiment, a model has a source sentence and a prefix of the target sentence, which do not make sense
+    together.
+</p>
+<center>
+<img src="../resources/posts/src_dst_nmt/random_prefix_example-min.png" style="margin-bottom:20px;" width=75% alt="" />
+</center>
+
+
+
+
+<h4>Why random prefixes?</h4>
+<p>We are interested in this setting, because</p>
+<ul>
+    <li>we want to understand what happens when a model is hallucinating;</li>
+    <li>a random prefixe is a simple way to simulate hallucination mode.</li>
+</ul>
+
+
+<h4>What will our model do?</h4>
+
+<p>Our model is given source and prefix which do not make sense together. What will it do?
+    Previous work tells us that, in principle, NMT models can ignore the source: this is when they
+    fall into hallucination mode. On the other hand, another work studied exposure bias and showed that
+    language models have the self-recovery ability: when a model is given a gibberish prefix, it
+    ignores it and continues to generate reasonable things.
+</p>
+
+
+<div style="margin-bottom:40px;">
+<center>
+<img src="../resources/posts/src_dst_nmt/random_prefix_previous_work-min.png" style="margin-bottom:20px;" width=80% alt="" />
+</center>
+<div style="margin-left:15%;max-width:20%;float:left;margin-top:-20px;">
+            <p style="font-size:small;">
+                <font color="#888">
+                (<a href="https://www.aclweb.org/anthology/W17-3204/" target="_blank">Koehn & Knowles, 2017</a>;
+                <a href="https://www.aclweb.org/anthology/W19-5361/" target="_blank">Berard et al, 2019</a>)
+                </font>
+            </p>
+    </div>
+    <div style="margin-right:15%;max-width:30%;float:right;margin-top:-20px;">
+            <p style="font-size:small;">
+                <font color="#888">
+                (<a href="https://arxiv.org/abs/1905.10617" target="_blank">He et al, 2019</a>)
+                </font>
+            </p>
+    </div>
+</div>
+
+<p><font face="arial">What will our model do: ignore the source or the prefix?</font>
+    Previous work shows that, in principle, our model can ignore either the source or the prefix.
+</p>
+<p>We see that at early generation steps, when the prefix is short, the model “recovers”.
+    It ignores the prefix: we see very high source contribution.
+
+    But later, when the prefix is long, the model starts to ignore the source: the source contribution
+    drops down significantly.
+</p>
+
+<center>
+<img src="../resources/posts/src_dst_nmt/random_prefix_source_contribution-min.png" style="margin-bottom:20px;" width=85% alt="" />
+</center>
+
+<p>Overall, a model’s decision of which of these two contradicting parts to support
+    changes depending on the prefix length. If the prefix is short, it relies on the source;
+    if the prefix is long, it relies on the prefix.
+</p>
+
+
+<h3>More in the paper:</h3>
+<h4>Exposure Bias and Source Contribution</h4>
+<ul style="list-style-type: circle;">
+<li>Models suffering from exposure bias are more prone to over-relying on target history (and hence to hallucinating)</li>
+</ul>
+<h4>Varying the Amount of Data</h4>
+<ul style="list-style-type: circle;">
+<li>Models trained with more data use source more and do it more confidently</li>
+</ul>
+<p>For more details on this, see <a href="https://arxiv.org/pdf/2010.10907.pdf" target="_blank">the paper</a> or
+    <a href="https://lena-voita.github.io/posts/source_target_contributions_to_nmt.html" target="_blank">its blog post</a>.
+</p>
+
+
+<br>
+<h3>Training Process: Non-Monotonic with Several Distinct Stages</h3>
+<p>Finally, we look at what happens during model training. For model checkpoints during training,
+    we look at the changes in the contribution patterns.
+</p>
+
+<center>
+<img src="../resources/posts/src_dst_nmt/timeline-min.png" style="margin-bottom:20px;" width=90% alt="" />
+</center>
+
+<p>In the paper, we have a lot of experiments and we end up with such a training pipeline:
+    it shows what happens during each stage of the training (on the x-axis is the number of training batches).
+    For more details on this pipeline,
+    look at the paper. Here I’ll mention only the results we need for the next part.
+</p>
+
+
+<h4><span style="margin-right:15px;">&#8226;</span><font face="arial">
+     changes in contributions are non-monotonic</font></h4>
+<p>These figures show how the total contribution of source and the entropy of source contributions
+    change during training. On the x-axis is
+    the training step, and the graph shows average over target positions and examples.
+</p>
+
+<p>We see that the changes are not monotonic: first source contribution goes down, then up, then little is going on.
+    For the entropy of contributions, the behavior is the same. Overall, the changes during training are not
+    monotonic, which means that NMT training has several stages with qualitatively different changes.
+</p>
+<center>
+<img src="../resources/posts/src_dst_nmt/changes_are_not_monotonic-min.png" style="margin-bottom:20px;" width=85% alt="" />
+</center>
+<p>We hypothesize that when the entropy of contributions decreases, the model learns simple patterns,
+    for example, word-by-word translation. When source contribution and its entropy do up, we think that
+    the model starts to rely on a broader context and learns more complicated things.
+</p>
+
+<p>So far, we just hypothesize that this is what happens. But what is really going on? Let's find out.</p>
+
+
+
+
+
+<h2 id="mt_training">NMT Training through the Lens of Classical SMT</h2>
+<p class="data_text"><font color="#888"><u>Lena</u>: This part is based on the OpenReview paper
+    <a href="https://openreview.net/pdf?id=D_KnLV10St" target="_blank">Language Modeling, Lexical Translation, Reordering:
+The Training Process of NMT through the Lens of Classical SMT</a>.
+    </font></p>
+
+
+<p>Let us recall that classical SMT splits the translation task into several components corresponding
+    to the competences which researchers think the model should have. The typical components are:
+    <font face="arial">target-side
+        language model</font>, <font face="arial">lexical translation model</font>, and a
+    <font face="arial">reordering model</font>. Overall, in SMT different competences
+    are modelled with distinct model components which are trained separately and then put together.
+
+</p>
+
+<center>
+<img src="../resources/posts/nmt_inside_out/traditional_neural_components-min.png" style="max-width:90%; margin-bottom:10px; "/>
+</center>
+
+
+<p>In NMT, the whole translation task is modelled with a single neural network. And the question is: </p>
+<div class="green_left_thought" style="font-size:18px;">
+    <p class="data_text">How does NMT acquire different competences during training?
+    </p>
+</div>
+<p>For example, are there any stages where
+    NMT focuses on fluency or adequacy, or does it improve everything at the same rate? Does it learn
+    word-by-word translation first and more complicated patterns later, or is there a different behavior?
+</p>
+
+<p>This is especially interesting in light of our ACL 2021 paper we just discussed. There we looked at a model’s
+    inner working (namely, how the predictions are formed) and we saw that the training process is non-monotonic,
+    which means that there are stages with qualitatively different changes.
+    This other paper looks at the model’s output and focuses on the competences related to three core SMT
+    components: target-side language modeling, lexical translation, and reordering.
+</p>
+<center>
+<img src="../resources/posts/nmt_inside_out/mt_training_compare_papers_with_evaluate-min.png" style="max-width:100%; margin-bottom:10px; "/>
+</center>
+
+<h3>Target-Side Language Modeling</h3>
+
+<p>Let’s start with the language modeling scores. Here the x-axis shows the training step. We see that most of
+    the change happens at the beginning of training. Also, the scores peak much higher than that of references
+    (shown with the dashed line here). This means that the model probably generates very frequent n-grams
+    rather than diverse texts similar to references.
+</p>
+<center>
+<img src="../resources/posts/nmt_inside_out/lm_scores-min.png" style="max-width:100%; margin-top:20px; margin-bottom:20px;"/>
+</center>
+
+<p>Let’s look at this early stage more closely and consider KenLM models with different context lengths:
+    from bigram to 5-gram models. We see that for some part of training, scores for simpler models
+    are higher than for the more complicated ones. For example, the 2-gram score is the highest and the
+    5-gram score is the lowest. This means that the model generates frequent words and n-grams, but larger
+    subsequences are not necessarily fluent.
+</p>
+
+<p>Below is an example of how a translation evolves at this early stage. This is English-German,
+    our source sentence is <span class="data_text"><strong>six months of construction works, that’s brutal</strong></span>.
+    On the left are model translations, and on the right is their approximate version in English.
+</p>
+
+<center>
+<img src="../resources/posts/nmt_inside_out/lm_stage_example-min.png" style="max-width:100%; margin-top:20px; margin-bottom:20px;"/>
+</center>
+
+<p>We see that first, the model hallucinates the most frequent token, then bigram, the three-gram, then
+    combinations of frequent phrases. After that, words related to the source start to appear, and only
+    later we see something reasonable.
+</p>
+
+
+<h3>Translation Quality</h3>
+
+<p>Let’s now turn to translation quality. In addition to the BLEU score (which is the standard automatic
+    evaluation metric for machine translation), the paper also shows token-level accuracy for target tokens
+    of different frequency ranks. Token-level accuracy is the proportion of cases where the correct next
+    token is the most probable choice. Note that this is exactly what the model is trained to do: in a
+    classification setting, it is trained to predict the next token.
+</p>
+<center>
+<img src="../resources/posts/nmt_inside_out/translation_quality.gif" style="max-width:80%; margin-top:20px; margin-bottom:20px;"/>
+</center>
+
+<p>We see that for rare tokens, accuracy improves slower than for the rest. This is expected: rare phenomena
+    are learned later in training.
+    <font face="arial">What is not clear</font>, is what happens during the last half of the training: changes in both BLEU and
+    accuracy are almost invisible, even for rare tokens.
+</p>
+
+
+<h3>Monotonicity of Alignments</h3>
+
+<p>Luckily, we have one more thing to look at: monotonicity of alignments. The graph shows how the monotonicity
+    of alignments changes during training. For more details on the metric, look at
+    <a href="https://openreview.net/pdf?id=D_KnLV10St" target="_blank">the paper</a>,
+    but everything we need to know now is that lower scores mean less monotonic (or more complicated)
+    alignments in generated translations.</p>
+
+<center>
+<img src="../resources/posts/nmt_inside_out/alignments.gif" style="max-width:80%; margin-top:20px; margin-bottom:20px;"/>
+</center>
+
+<p>First, let's look again at the second half of the training we just looked at. While changes
+    in quality are almost invisible, reorderings change significantly. In the absolute values
+    this does not look like a lot, a bit later I’ll show you some examples and how this analysis
+    can be used in practice to improve non-autoregressive NMT - you’ll see that these changes are quite prominent.
+</p>
+
+<p>What is interesting, is that changes in the alignments are visible even after the model converges
+    in terms of BLEU. This relates to one of our previous works on context-aware NMT
+    (<a href="https://www.aclweb.org/anthology/P19-1116/" target="_blank">Voita et al, 2019</a>): we observed
+    that even after BLEU converges, discourse phenomena continue to improve.
+</p>
+
+<p>Here are a couple of examples of how translations change during this last part of the training:
+    the examples are for English-German and English-Russian, and same-colored chunks are approximately
+    aligned to each other.
+</p>
+
+<center>
+<img src="../resources/posts/nmt_inside_out/alignment_example.gif" style="max-width:100%; margin-top:20px; margin-bottom:20px;"/>
+</center>
+
+<p>I don’t expect you to understand all the translations,
+    but visually we can see that first, the translations are almost word-by-word,
+    then the reordering becomes more complicated. For example, for English-Russian,
+    the last phrase (shown in green) finally gets reordered to the beginning of the sentence.
+    Note that the reorderings at these later training steps are more natural for the corresponding target language.
+</p>
+
+
+<h3>Characterizing Training Stages</h3>
+
+<p>Summarizing all the observations, we can say that NMT training undergoes three stages:
+</p>
+<ul>
+    <li>target-side language modeling,</li>
+    <li>learning how to use source and approaching word-by-word translation,</li>
+    <li>refining translations, which is visible only by changes in the reordering and not visible by standard metrics.</li>
+</ul>
+
+<img src="../resources/posts/nmt_inside_out/stages.gif" style="max-width:50%; margin-left:20px;float:right;"/>
+
+
+<p>Now let’s look at how these results agree with the stages we looked at in the previous paper.
+    First, the source contribution goes down. Here the model relies on the target-side prefix
+    and ignores the source, and looking at translations confirmed that here it learns language modeling.
+    Then, the source contribution increases rapidly: the model starts to use the source, and we saw
+    that the quality improves quickly. After these two stages, translations are close to word-by-word ones.
+    Finally, where very little is going on, reorderings continue to become significantly more complicated.
+</p>
+
+
+<h3>Practical Applications of the Analysis</h3>
+
+
+<p>Finally, not only this is fun, but it can also be useful in practice. First, there are various settings
+    where data complexity is important: therefore, translations from specific training stages can be useful.
+    Next, there are a lot of SMT-inspired modeling modifications, and our analysis can help modeling modifications.
+</p>
+
+<div>
+    <center>
+    <img src="../resources/posts/nmt_inside_out/mt_training_why_useful1-min.png" style="max-width:90%; "/>
+    </center>
+
+    <div style="margin-left:8%;max-width:40%;margin-top:10px;">
+            <p style="font-size:small;">
+                <font color="#888">
+                (<a href="https://arxiv.org/pdf/1911.02727.pdf" target="_blank">Zhou et al, 2020</a>;
+                <a href="https://arxiv.org/pdf/2002.01365.pdf" target="_blank">Ren et al, 2020</a>)
+                </font>
+            </p>
+    </div>
+
+    <center>
+    <img src="../resources/posts/nmt_inside_out/mt_training_why_useful2-min.png" style="max-width:90%; "/>
+    </center>
+
+    <div style="margin-left:8%;max-width:40%; margin-top:10px;">
+            <p style="font-size:small;">
+                <font color="#888">
+                    (using target-side language models, lexical tables, alignments, modeling phrases, etc.)</font></p>
+                <details style="margin-bottom:20px;">
+                    <summary style="margin-top:-10px;"><span style="font-size:small;"><font color="#888">Links</font></span></summary>
+                    <p style="font-size:small;"><font color="#888">
+                    <a href="https://www.aclweb.org/anthology/D16-1162/" target="_blank">Athur et al, 2016</a>;
+                    <a href="https://www.aaai.org/ocs/index.php/AAAI/AAAI16/paper/view/12189" target="_blank">He et al, 2016</a>;
+                    <a href="https://arxiv.org/pdf/1606.01792.pdf" target="_blank">Tang et al, 2016</a>;
+                    <a href="https://www.aclweb.org/anthology/D17-1149/" target="_blank">Wang et al, 2017</a>;
+                    <a href="https://www.aclweb.org/anthology/P17-1139/" target="_blank">Zhang et al, 2017a</a>;
+                    <a href="https://www.aclweb.org/anthology/D17-1148/" target="_blank">Dahlmann et al, 2017</a>;
+                    <a href="https://arxiv.org/abs/1503.03535" target="_blank">Gülçehre et al, 2015</a>;
+                    <a href="https://dl.acm.org/doi/abs/10.1016/j.csl.2017.01.014" target="_blank">Gülçehre et al, 2017</a>;
+                    <a href="https://www.aclweb.org/anthology/W18-6321/" target="_blank">Stahlberg et al, 2018</a>;
+                    <a href="https://www.aclweb.org/anthology/D16-1249/" target="_blank">Mi et al, 2016</a>;
+                    <a href="https://www.aclweb.org/anthology/C16-1291/" target="_blank">Liu et al, 2016</a>;
+                    <a href="https://arxiv.org/abs/1607.01628" target="_blank">Chen et al, 2016</a>;
+                    <a href="https://www.aclweb.org/anthology/W16-2206/" target="_blank">Alkhouli et al, 2016</a>;
+                    <a href="https://www.aclweb.org/anthology/W17-4711/" target="_blank">Alkhouli & Ney, 2017</a>;
+                    <a href="https://www.aclweb.org/anthology/D19-5626/" target="_blank">Park & Tsvetkov, 2019</a>;
+                    <a href="https://ojs.aaai.org//index.php/AAAI/article/view/6418" target="_blank">Song et al, 2020</a>
+                        among others</font></p>
+                    </details>
+    </div>
+
+</div>
+
+
+
+
+<h4>Non-Autoregressive Neural Machine Translation</h4>
+
+<p>The paper focuses only on the first point, and as an example considers non-autoregressive NMT.
+    For non-autoregressive models, it is standard to use sequence-level distillation. This means that
+    targets for these models are not references but translations from an autoregressive teacher.
+</p>
+
+
+<center>
+<img src="../resources/posts/nmt_inside_out/nat_idea-min.png" style="max-width:90%; margin-top:20px;"/>
+</center>
+
+<div style="margin-left:8%;max-width:40%;margin-top:-10px;">
+        <p style="font-size:small;">
+            <font color="#888">
+            (<a href="https://arxiv.org/pdf/1911.02727.pdf" target="_blank">Zhou et al, ICLR 2020</a>)
+            </font>
+        </p>
+</div>
+
+<p>Previous work showed that complexity of the distilled data matters, and varying it can improve a model.
+
+    While usually, a teacher is a fully converged model, this paper proposes to use as teachers intermediate checkpoints
+    during model’s training to get targets of varying complexity. For example, these earlier translations have
+    more monotonic alignments.
+</p>
+
+
+<center>
+<img src="../resources/posts/nmt_inside_out/nat_results.gif" style="max-width:80%; margin-top:20px;margin-bottom:20px;"/>
+</center>
+
+
+<p>Let us look at a vanilla non-autoregressive model trained with different teachers.
+    The standard teacher is the fully converged model,
+    in this case after 200k training steps. But earlier checkpoints, for example after 40k-steps,
+    have not much worse BLEU score, but significantly more monotonic alignments.
+    And using these less trained teachers improves a vanilla NAT model by <font face="arial">more than 1 bleu</font>!
+</p>
+
+
+
+<br>
+<h3>Takeaway</h3>
+
+<p>We started by noting that the two machine translation paradigms, traditional SMT and currently standard NMT,
+    are very different conceptually.
+    Statistical MT (SMT) decomposes the translation task into several components
+    which are learned separately and then combined in a translation model. Differently,
+    neural MT (NMT) models the entire translation process with a single neural network that is trained end-to-end.
+</p>
+
+<center>
+<img src="../resources/posts/nmt_inside_out/humans_model_main-min.png" style="max-width:90%; margin-bottom:15px; "/>
+</center>
+
+<p>
+    In this talk, I tried to shed some light on the workings of neural MT while keeping in mind how things used to be done in SMT. We saw that:
+</p>
+
+
+<div class="green_left_thought" style="font-size:18px;">
+
+        <ul class="data_text">
+    <li>NMT model components can learn to extract features that were put explicitly in SMT;</li>
+    <li>while using the prefix and the source co-exist in the same model in NMT, we can still look at how NMT does this;</li>
+    <li>NMT training consists of the stages where it focuses on competences mirroring three core SMT components:
+        language modeling, translation, reordering.
+    </li>
+</ul>
+
+</div>
+
+
+
+
+<br>
+<h3>Want to know more?</h3>
+
+<ul>
+    <li>Context-Aware Neural Machine Translation Learns Anaphora Resolution: <a href="http://aclweb.org/anthology/P18-1117" target="_blank">[paper]</a>
+    </li>
+
+    <li>Analyzing Multi-Head Self-Attention: Specialized Heads Do the Heavy Lifting, the Rest Can Be Pruned:
+        <a href="http://www.aclweb.org/anthology/P19-1580" target="_blank">[paper]</a>  <a href="https://lena-voita.github.io/posts/acl19_heads.html" target="_blank">[blog]</a>
+    </li>
+
+    <li>Analyzing the Source and Target Contributions to Predictions in Neural Machine Translation:
+        <a href="https://arxiv.org/pdf/2010.10907.pdf" target="_blank">[paper]</a>  <a href="https://lena-voita.github.io/posts/source_target_contributions_to_nmt.html" target="_blank">[blog]</a>
+    </li>
+
+    <li>Language Modeling, Lexical Translation, Reordering: The Training Process of NMT through the Lens of Classical SMT:
+        <a href="https://openreview.net/pdf?id=D_KnLV10St" target="_blank">[paper]</a>
+    </li>
+
+</ul>
+
+
+<br/>
+Share: <a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-text="Neural Machine Translation Inside Out - a blog version of @lena_voita's talk at DeeLIO workshop at #NAACL2021: " data-url="https://lena-voita.github.io/posts/nmt_inside_out.html" data-lang="en" data-show-count="false">Tweet</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
