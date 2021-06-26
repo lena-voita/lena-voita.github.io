@@ -377,19 +377,38 @@ they ignore the source and generate from their language mode. As a result, they 
     reported this <font face="arial">self-recovery ability</font> of LMs.
 </p>
 
+<div style="margin-bottom:40px;">
 <center>
 <img src="../resources/posts/src_dst_nmt/random_prefix_previous_work-min.png" style="margin-bottom:20px;" width=80% alt="" />
 </center>
+<div style="margin-left:15%;max-width:20%;float:left;margin-top:-20px;">
+            <p style="font-size:small;">
+                <font color="#888">
+                (<a href="https://www.aclweb.org/anthology/W17-3204/" target="_blank">Koehn & Knowles, 2017</a>;
+                <a href="https://www.aclweb.org/anthology/W19-5361/" target="_blank">Berard et al, 2019</a>)
+                </font>
+            </p>
+    </div>
+    <div style="margin-right:15%;max-width:30%;float:right;margin-top:-20px;">
+            <p style="font-size:small;">
+                <font color="#888">
+                (<a href="https://arxiv.org/abs/1905.10617" target="_blank">He et al, 2019</a>)
+                </font>
+            </p>
+    </div>
+</div>
 
 <p><font face="arial">What will our model do: ignore the source or the prefix?</font>
     According to previous work, it can do either!</p>
-<p>As we see from the results, it depends on the prefix length. When a random prefix is short,
-    the model recovers: it ignores the prefix and bases its predictions mostly on the source. When a random prefix becomes longer,
-    the model's choice shifts towards ignoring the source: source contribution drops drastically. This
-    behavior is what we would expect when a model is hallucinating.
+<p>
+    As we see from the results, the model tends to fall into hallucination mode even when a random prefix
+    is very short, e.g.
+    one token: we see a large drop of source influence for all positions.
+    This
+    behavior is what we would expect when a model is hallucinating, and there is no self-recovery ability.
 </p>
 <center>
-<img src="../resources/posts/src_dst_nmt/random_prefix_source_contribution-min.png" style="margin-bottom:20px;" width=85% alt="" />
+<img src="../resources/posts/src_dst_nmt/random_prefix_source_contribution-min.png" style="margin-bottom:20px;" width=65% alt="" />
 </center>
 
 <p>Next, we see that with a random prefix, the entropy of contributions is very high and is roughly constant across
@@ -421,11 +440,15 @@ they ignore the source and generate from their language mode. As a result, they 
 
 <img src="../resources/posts/src_dst_nmt/exposure_bias_lets_measure-min.png" style="margin-bottom:20px;" width=100% alt="" />
 
-<h4><u>How</u>: Feed Random Prefixes, Look at Contributions</h4>
+<h4><u>How</u>: Feed Different Prefixes, Look at Contributions</h4>
 
 <p>We want to check to what extent models that suffer from exposure bias to differing extent are prone to hallucinations.
-    For this, we feed fluent but unrelated to source prefixes and look whether a model is likely to fall into a
-    language modeling regime, i.e., <font face="arial">to what extent it ignores the source</font>.
+    For this, we feed different types of prefixes,
+    prefixes of either model-generated translations or random sentences, and look at model behavior.
+    While conditioning on model-generated prefixes shows what happens in the standard setting at model's inference,
+    random prefixes (fluent but unrelated to source prefixes) show
+    whether the model is likely to fall into a
+    language modeling regime, i.e., <font face="arial">to what extent it ignores the source and hallucinates</font>.
 </p>
 
 <img src="../resources/posts/src_dst_nmt/exposure_bias_models-min.png"
@@ -438,9 +461,9 @@ they ignore the source and generate from their language mode. As a result, they 
 
 </p>
 
-<img src="../resources/posts/src_dst_nmt/exposure_bias_results-min.png" style="margin-bottom:20px;" width=100% alt="" />
+<img src="../resources/posts/src_dst_nmt/mrt_all_prefixes_src_contribution-min.png" style="margin-bottom:20px;" width=100% alt="" />
 
-<p>The results confirm our hypothesis:
+<p>The results for both types of prefixes confirm our hypothesis:
 </p>
 <div style="font-size:18px;
 border-left: 5px solid #b7db67;
@@ -455,8 +478,18 @@ border-left: 5px solid #b7db67;
             </div>
 
 <p>Indeed, we see that MRT-trained models ignore source less
-    than any other model; the second best is the target-side word dropout, which also reduces exposure bias.
+    than any other model; the second best for random prefixes is the target-side word dropout, which also reduces exposure bias.
 </p>
+
+
+<p>It is also interesting to look at the entropy of source contributions to see whether these objectives
+    make the model more or less "focused". We see that only MRT leads to more confident contributions
+    of source tokens: the entropy is lower. In contrast, both word dropout variants teach
+    the model to use broader context.
+</p>
+<center>
+<img src="../resources/posts/src_dst_nmt/mrt_all_prefixes_entropy-min.png" style="margin-bottom:20px;" width=80% alt="" />
+</center>
 
 <br>
 
@@ -469,11 +502,7 @@ border-left: 5px solid #b7db67;
 
 <img src="../resources/posts/src_dst_nmt/data_amount_both-min.png" style="margin-bottom:20px;" width=100% alt="" />
 <p>First, we see that, generally, models trained with more data use source more.
-    Surprisingly, this increase is not spread evenly across positions:
-    at approximately 80% of the target length, models trained with more data use
-    source more, but at the last positions, they switch to more actively using the prefix.
-</p>
-<p>Second, with more training data, the model becomes more confident in the choice of important tokens: the entropy
+   Second, with more training data, the model becomes more confident in the choice of important tokens: the entropy
     of contributions becomes lower (in the paper, we also show entropy of target contributions).</p>
 
 <!--
@@ -598,7 +627,7 @@ how this can be useful. For example,</p>
 <ul>
     <li><font face="arial">measure how different training regimes change contributions</font><br>
         Some method claims to reduce exposure bias?
-        That's great - now you can measure if indeed increases contribution of source.
+        That's great - now you can measure if it indeed increases contribution of source.
     </li>
 
     <li><font face="arial">look deeper into a model's pathological behavior</font><br>

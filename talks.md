@@ -24,6 +24,8 @@ Program committee:
 
 ### <span style="color:darkblue"> Speaker </span>
 
+* 06/2021 <span class="talk-title">_Neural Machine Translation Inside Out_</span> <span style="font-size:0.9em">(keynote)</span> 
+<br/>&nbsp; &nbsp; &nbsp; [DeeLIO workshop at NAACL 2021](https://sites.google.com/view/deelio-ws/)
 * 01/2020 <span class="talk-title">_Evolution of Representations in the Transformer_</span> <span style="font-size:0.9em">(keynote)</span> <a href="https://drive.google.com/file/d/1bEiWUZDNbKAgMkt5PPF9sQl3x9AYNVoZ/view?usp=sharing" class="label slides">Slides</a> <a href="https://youtu.be/ZyWLrBGiEpI" class="label video">Video</a>
 <br/>&nbsp; &nbsp; &nbsp; AI & NLP track at [Applied Machine Learning Days at EPFL](https://appliedmldays.org/tracks/ai-nlp), <span style="font-size:0.9em">Lausanne, Switzerland</span>  
 * 08/2019 <span class="talk-title">_Inside the Transformer_</span>
@@ -39,7 +41,7 @@ Program committee:
 <br/>&nbsp; &nbsp; &nbsp; [Stanford NLP Seminar](https://nlp.stanford.edu/seminar/)
 <br/>&nbsp; &nbsp; &nbsp; Cornell NLP
 <br/>&nbsp; &nbsp; &nbsp; [MT@UPC](https://mt.cs.upc.edu/seminars/)
-
+<br/>&nbsp; &nbsp; &nbsp; Cambridge NLP
 
 * 08-12/2020 <span class="talk-title">_Evaluating Source and Target Contributions to NMT Predictions_</span> <a href="https://drive.google.com/file/d/1ZW51j6Eas7qONdHyLf59EY1bMNrvhOBQ/view?usp=sharing" class="label slides">Slides</a>
 <br/>&nbsp; &nbsp; &nbsp; Unbabel

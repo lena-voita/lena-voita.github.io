@@ -1048,21 +1048,18 @@ this experiment, a model has a source sentence and a prefix of the target senten
 <p><font face="arial">What will our model do: ignore the source or the prefix?</font>
     Previous work shows that, in principle, our model can ignore either the source or the prefix.
 </p>
-<p>We see that at early generation steps, when the prefix is short, the model “recovers”.
-    It ignores the prefix: we see very high source contribution.
-
-    But later, when the prefix is long, the model starts to ignore the source: the source contribution
-    drops down significantly.
+<p>As we see from the results, the model tends to fall into hallucination mode even when a random prefix
+    is very short, e.g.
+    one token: we see a large drop of source influence for all positions.
+    This
+    behavior is what we would expect when a model is hallucinating, and there is no self-recovery ability.
 </p>
 
 <center>
-<img src="../resources/posts/src_dst_nmt/random_prefix_source_contribution-min.png" style="margin-bottom:20px;" width=85% alt="" />
+<img src="../resources/posts/src_dst_nmt/random_prefix_source_contribution-min.png" style="margin-bottom:20px;" width=65% alt="" />
 </center>
 
-<p>Overall, a model’s decision of which of these two contradicting parts to support
-    changes depending on the prefix length. If the prefix is short, it relies on the source;
-    if the prefix is long, it relies on the prefix.
-</p>
+
 
 
 <h3>More in the paper:</h3>
