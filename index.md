@@ -22,8 +22,10 @@ I (still) [teach NLP](https://github.com/yandexdataschool/nlp_course) at the [Ya
 
 ## <span style="color:darkblue">News </span>
 
+* 08/2021 <span style="color:#888"><u>Keynote at</u></span>: [RepL4NLP workshop at ACL 2021](https://sites.google.com/view/repl4nlp-2021/home).
 * 06/2021 Our [Source and Target Contributions paper](https://arxiv.org/pdf/2010.10907.pdf) is _accepted to __ACL__ 2021_.
-* 03-06/2021 <span style="color:#888"><u>Invited talks at</u></span>: [Stanford NLP Seminar](https://nlp.stanford.edu/seminar/), CornellNLP, [MT@UPC](https://mt.cs.upc.edu/seminars/), CambridgeNLP, [DeeLIO workshop at NAACL 2021](https://sites.google.com/view/deelio-ws/).
+* 06/2021 <span style="color:#888"><u>Keynote at</u></span>: [DeeLIO workshop at NAACL 2021](https://sites.google.com/view/deelio-ws/).
+* 03-06/2021 <span style="color:#888"><u>Invited talks at</u></span>: [Stanford NLP Seminar](https://nlp.stanford.edu/seminar/), CornellNLP, [MT@UPC](https://mt.cs.upc.edu/seminars/), CambridgeNLP.
 * 10-12/2020 <span style="color:#888"><u>Invited talks at</u></span>: CMU, [USC ISI](https://nlg.isi.edu/nl-seminar/), ENS Paris, [ML Street Talk](https://www.youtube.com/watch?v=Q0kN_ZHHDQY).
 * 09/2020 __2__ papers _accepted to __EMNLP__ 2020_.
 * 06-08/2020 <span style="color:#888"><u>Invited talks at</u></span>: MIT, DeepMind, [Grammarly AI](https://grammarly.ai/information-theoretic-probing-with-minimum-description-length/), Unbabel, [NLP with Friends](https://nlpwithfriends.com).
