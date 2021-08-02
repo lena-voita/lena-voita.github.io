@@ -31,7 +31,8 @@ I (still) [teach NLP](https://github.com/yandexdataschool/nlp_course) at the [Ya
 * 06-08/2020 <span style="color:#888"><u>Invited talks at</u></span>: MIT, DeepMind, [Grammarly AI](https://grammarly.ai/information-theoretic-probing-with-minimum-description-length/), Unbabel, [NLP with Friends](https://nlpwithfriends.com).
 * 04/2020 Our [BPE-dropout](https://arxiv.org/pdf/1910.13267.pdf) is _accepted to __ACL__ 2020_. 
 * 01/2020 I'm [awarded Facebook PhD Fellowship](https://research.fb.com/blog/2020/01/announcing-the-recipients-of-the-2020-facebook-fellowship-awards/).
-* 01/2020 <span style="color:#888"><u>Invited talks at</u></span>: [Rasa](https://www.meetup.com/ru-RU/Bots-Berlin-Build-better-conversational-interfaces-with-AI/events/267058207/), Google Research Berlin, [Naver Labs Europe](https://europe.naverlabs.com/research/seminars/analyzing-information-flow-in-transformers/), NLP track at [Applied Machine Learning Days at EPFL](https://appliedmldays.org/tracks/ai-nlp).
+* 01/2020 <span style="color:#888"><u>Keynote at</u></span>: NLP track at [Applied Machine Learning Days at EPFL](https://appliedmldays.org/tracks/ai-nlp).
+* 01/2020 <span style="color:#888"><u>Invited talks at</u></span>: [NLP Highlights podcast](https://soundcloud.com/nlp-highlights/98-analyzing-information-flow-in-transformers-with-elena-voita), [Rasa](https://www.meetup.com/ru-RU/Bots-Berlin-Build-better-conversational-interfaces-with-AI/events/267058207/), Google Research Berlin, [Naver Labs Europe](https://europe.naverlabs.com/research/seminars/analyzing-information-flow-in-transformers/).
 * 08-09/2019 __2__ papers _accepted to __EMNLP__ 2019_, one at __NeurIPS__ _2019_.
 * 05/2019 __2__ papers _accepted to __ACL__ 2019_, one is oral.
 
