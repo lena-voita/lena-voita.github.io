@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Neural Machine Translation Inside Out
-description: Lena Voita's keynote at NAACL 2021 workshop DeeLIO.
+description: Lena Voita's keynote at ACL 2021 workshop RepL4NLP and NAACL 2021 workshop DeeLIO.
 ---
 
 <style>
@@ -27,10 +27,12 @@ description: Lena Voita's keynote at NAACL 2021 workshop DeeLIO.
         </a>
 
         <span style="font-size:14px;">
-        This is a blog version of my talk at the NAACL 2021 workshop
+        This is a blog version of my talk at the ACL 2021 workshop
+            <a href="https://sites.google.com/view/repl4nlp-2021/" target="_blank">Representation
+                Learning for NLP</a> (and updated version
+            of that at NAACL 2021 workshop
             <a href="https://sites.google.com/view/deelio-ws/" target="_blank">
-                Deep Learning Inside Out (DeeLIO).
-            </a>
+                Deep Learning Inside Out (DeeLIO)</a>).
         </span>
 
 
@@ -51,7 +53,7 @@ description: Lena Voita's keynote at NAACL 2021 workshop DeeLIO.
         <a class="pull-right" href="/posts/nmt_inside_out.html" onMouseOver="document.readmore.src='../resources/posts/buttons/button_read_more_push-min.png';" onMouseOut="document.readmore5.src='../resources/posts/buttons/button_read_more-min.png';">
         <img src="../resources/posts/buttons/button_read_more-min.png" name="readmore" width=120px class="pull-right"></a>
 
-        <span style="font-size:15px; text-align: right; float: right; color:gray">June 2021</span>
+        <span style="font-size:15px; text-align: right; float: right; color:gray">July 2021</span>
 
 <br/>
 <p></p>
@@ -1060,13 +1062,82 @@ this experiment, a model has a source sentence and a prefix of the target senten
 </center>
 
 
+<br>
+<h3>Exposure Bias and Source Contributions</h3>
+<p>The results we just saw
+    agree with some observations made in previous work studying self-recovery and hallucinations.
+    Now, we illustrate more explicitly how our methodology can be used to shed light on the effects of
+    exposure bias and training objectives.
+</p>
 
+<p><font face="arial">Exposure bias</font>
+    means that in training, a model sees only gold prefixes, but at test time, it
+    uses model-generated prefixes (which can contain errors).
+
+    <a href="https://arxiv.org/abs/1905.10617">This ACL 2020 paper</a> suggests that there is a connection
+    between the hallucination mode and
+    exposure bias: the authors show that Minimum Risk Training (MRT), which does not suffer from exposure bias,
+    reduces hallucinations. However, they did not directly measure the over-reliance on target history.
+    Luckily, now we can do this :)
+</p>
+
+<img src="../resources/posts/src_dst_nmt/exposure_bias_lets_measure-min.png" style="margin-bottom:20px;" width=100% alt="" />
+
+<h4><u>How</u>: Feed Different Prefixes, Look at Contributions</h4>
+
+<p>We want to check to what extent models that suffer from exposure bias to differing extent are prone to hallucinations.
+    For this, we feed different types of prefixes,
+    prefixes of either model-generated translations or random sentences, and look at model behavior.
+    While conditioning on model-generated prefixes shows what happens in the standard setting at model's inference,
+    random prefixes (fluent but unrelated to source prefixes) show
+    whether the model is likely to fall into a
+    language modeling regime, i.e., <font face="arial">to what extent it ignores the source and hallucinates</font>.
+</p>
+
+<img src="../resources/posts/src_dst_nmt/exposure_bias_models-min.png"
+     style="margin-left:20px;margin-bottom:20px;float:right;" width=40% alt="" />
+<p>In addition to the baseline and the models trained with the Minimum Risk Training objective (considered in previous work),
+    we also experiment with word dropout. This is a data augmentation method: in training, part of tokens are replaced with
+    random. When used on the target side, it may serve as the simplest way to alleviate exposure
+    bias: it exposes a model to something other than gold prefixes.
+    This is not true when used on the source side, but for analysis, we consider both variants.
+
+</p>
+
+<img src="../resources/posts/src_dst_nmt/mrt_all_prefixes_src_contribution-min.png" style="margin-bottom:20px;" width=100% alt="" />
+
+<p>The results for both types of prefixes confirm our hypothesis:
+</p>
+<div style="font-size:18px;
+border-left: 5px solid #b7db67;
+    margin: 10px;
+    margin-left: 20px;
+    padding: 0px;
+    background-color: #fafcf5;">
+                <p class="data_text" style="margin-left: 10px;">
+                    Models suffering from exposure bias are more prone to over-relying
+                    on target history (and hence to hallucinating)
+        than those where the exposure bias is mitigated.</p>
+            </div>
+
+<p>Indeed, we see that MRT-trained models ignore source less
+    than any other model; the second best for random prefixes is the target-side word dropout, which also reduces exposure bias.
+</p>
+
+
+<p>It is also interesting to look at the entropy of source contributions to see whether these objectives
+    make the model more or less "focused". We see that only MRT leads to more confident contributions
+    of source tokens: the entropy is lower. In contrast, both word dropout variants teach
+    the model to use broader context.
+</p>
+<center>
+<img src="../resources/posts/src_dst_nmt/mrt_all_prefixes_entropy-min.png" style="margin-bottom:20px;" width=80% alt="" />
+</center>
+
+<br>
 
 <h3>More in the paper:</h3>
-<h4>Exposure Bias and Source Contribution</h4>
-<ul style="list-style-type: circle;">
-<li>Models suffering from exposure bias are more prone to over-relying on target history (and hence to hallucinating)</li>
-</ul>
+
 <h4>Varying the Amount of Data</h4>
 <ul style="list-style-type: circle;">
 <li>Models trained with more data use source more and do it more confidently</li>
@@ -1431,4 +1502,4 @@ The Training Process of NMT through the Lens of Classical SMT</a>.
 
 
 <br/>
-Share: <a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-text="Neural Machine Translation Inside Out - a blog version of @lena_voita's talk at DeeLIO workshop at #NAACL2021: " data-url="https://lena-voita.github.io/posts/nmt_inside_out.html" data-lang="en" data-show-count="false">Tweet</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+Share: <a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-text="Neural Machine Translation Inside Out - a blog version of @lena_voita's talk at #RepL4NLP workshop at #ACL2021NLP: " data-url="https://lena-voita.github.io/posts/nmt_inside_out.html" data-lang="en" data-show-count="false">Tweet</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
