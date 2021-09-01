@@ -1,0 +1,406 @@
+---
+layout: post
+title: NMT Training through the Lens of SMT
+---
+
+<style>
+    @import url("https://fonts.googleapis.com/css2?family=Comic+Neue&display=swap");
+
+    .data_text {
+        font-family: "Comic Neue", "Arial";
+    }
+</style>
+
+<header>
+<meta name="robots" content="noindex, nofollow" />
+</header>
+
+<!-- the next two lines are inserted once per page even if there are several shtukovinas,
+     the rest is one-per-shtukovina; read more: https://flickity.metafizzy.co/options.html -->
+<link rel="stylesheet" href="https://unpkg.com/flickity@2/dist/flickity.min.css" media="screen">
+<script src="https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js"></script>
+
+        <span style="font-size:14px;">
+        This is a post for the EMNLP 2021 paper
+            <a href="" target="_blank">
+                Language Modeling, Lexical Translation, Reordering:
+                The Training Process of NMT through the Lens of Classical SMT.
+            </a>
+        </span>
+
+        <a class="float-right">
+            <img src="../resources/posts/nmt_training/morda-min.png" alt=""
+                 style="max-width:300px; height:auto; float: right; margin-left:15px; margin-top:25px"/>
+        </a>
+
+
+
+        <br/>
+        <br/>
+        <span style="font-size:15px;">
+
+            <p>In SMT, model competences are modelled with distinct models.
+                In NMT, the whole translation task is modelled
+                with a single neural network.
+                How and when does NMT get to learn all the competences? We show that</p>
+        <ul>
+            <li>during training, NMT undergoes three different stages:</li>
+            <ul style="margin-left:30px;">
+                <li>target-side language modeling,</li>
+                <li>learning how to use source and approaching word-by-word translation,</li>
+                <li>refining translations, visible by increasingly complex reorderings,
+                    but almost invisible to standard metrics (e.g. BLEU);</li>
+            </ul>
+
+            <li>not only this is fun, but it can also help in practice! For example, in settings where
+                data complexity matters, such as non-autoregressive NMT.
+            </li>
+        </ul>
+        </span>
+
+        <a class="pull-right" href="" onMouseOver="document.readpaper.src='../resources/posts/buttons/button_read_paper_push-min.png';" onMouseOut="document.readpaper.src='../resources/posts/buttons/button_read_paper-min.png';">
+        <img src="../resources/posts/buttons/button_read_paper-min.png" name="readpaper" width=120px class="pull-right"></a>
+
+
+        <span style="font-size:15px; text-align: right; float: right; color:gray">September 2021</span>
+
+<br/>
+<p></p>
+<hr>
+
+
+
+
+
+
+
+
+<h3 id="mt_training">Machine Translation Task: Traditional vs Neural Mindsets</h3>
+
+
+<p>In the last couple of decades, the two main machine translation paradigms have been statistical and neural MT (SMT
+    and NMT).
+
+    Classical SMT splits the translation task into several components corresponding
+    to the competences which researchers think the model should have. The typical components are:
+    <font face="arial">target-side
+        language model</font>, <font face="arial">lexical translation model</font>, and a
+    <font face="arial">reordering model</font>. Overall, in SMT different competences
+    are modelled with distinct model components which are trained separately and then put together
+    in a translation model.
+</p>
+
+<center>
+<img src="../resources/posts/nmt_training/competences_smt_nmt-min.png" style="max-width:90%; margin-bottom:10px; "/>
+</center>
+
+<img src="../resources/posts/nmt_training/main_question-min.png" style="max-width:30%; margin-left:30px;float:right;"/>
+<p>Differently, in NMT, the whole translation task is modelled with a single neural network.
+    While NMT is the de-facto standard paradigm,
+    it is still not clear <font face="arial">how and when NMT acquires these competences during training</font>.
+</p>
+<p>For example, are there any stages where
+    NMT focuses on fluency or adequacy, or does it improve everything at the same rate? Does it learn
+    word-by-word translation first and more complicated patterns later, or is there a different behavior?
+</p>
+
+<h4><u>We know</u>: NMT training has distinct stages</h4>
+
+<p>This is especially interesting in light of
+    <a href="https://arxiv.org/pdf/2010.10907.pdf" target="_blank">our ACL 2021 paper</a> (here's the
+    <a href="https://lena-voita.github.io/posts/source_target_contributions_to_nmt.html" target="_blank">blog
+        post</a>!). There we looked at a model’s
+    inner working (namely, how the predictions are formed) and we saw that the training process is non-monotonic,
+    which means that there are stages with qualitatively different changes.
+</p>
+
+<div style="width:100%; margin-left:0px;display: grid;
+    grid-template-columns: 50% 50%;" >
+    <div>
+        <p><u>Previously (ACL 2021)</u></p>
+        <p style="font-size:small;width:80%;">
+                <a href="https://arxiv.org/pdf/2010.10907.pdf" target="_blank">
+                    Analyzing the Source and Target Contributions to Predictions in Neural Machine Translation
+                </a>
+            </p>
+    </div>
+    <div>
+        <p><u>Now (EMNLP 2021)</u></p>
+        <p style="font-size:small;width:100%;">
+                <a href="" target="_blank">
+                    Language Modeling, Lexical Translation, Reordering:
+                    The Training Process of NMT through the Lens of Classical SMT
+                </a>
+            </p>
+    </div>
+</div>
+<center>
+<img src="../resources/posts/nmt_training/acl_vs_emnlp-min.png" style="max-width:95%; margin-bottom:10px; "/>
+</center>
+<p>Differently, now we look at the model’s output and focuse on the competences related to three core SMT
+    components: target-side language modeling, lexical translation, and reordering.</p>
+<!--<p>For more details on the previous work, you can look through the
+    <a href="https://lena-voita.github.io/posts/source_target_contributions_to_nmt.html" target="_blank">blog
+        post on the ACL 2021 paper on source and target contributions to NMT predictions</a>.
+    But here let's come further.
+</p>-->
+
+<h4><u>We look at</u>: LM scores, translation quality, monotonicity of alignments</h4>
+<p>For these competences, we evaluate language modeling scores, translation quality and
+monotonicity of alignments.</p>
+<center>
+<img src="../resources/posts/nmt_training/what_we_evaluate-min.png" style="max-width:80%; margin-bottom:10px; "/>
+</center>
+
+
+<h3>Target-Side Language Modeling</h3>
+
+<p>Let’s start with the language modeling scores. Here the x-axis shows the training step. We see that most of
+    the change happens at the beginning of training. Also, the scores peak much higher than that of references
+    (shown with the dashed line here). This means that the model probably generates very frequent n-grams
+    rather than diverse texts similar to references.
+</p>
+<center>
+<img src="../resources/posts/nmt_inside_out/lm_scores-min.png" style="max-width:100%; margin-top:20px; margin-bottom:20px;"/>
+</center>
+
+<p>Let’s look at this early stage more closely and consider KenLM models with different context lengths:
+    from bigram to 5-gram models. We see that for some part of training, scores for simpler models
+    are higher than for the more complicated ones. For example, the 2-gram score is the highest and the
+    5-gram score is the lowest. This means that the model generates frequent words and n-grams, but larger
+    subsequences are not necessarily fluent.
+</p>
+
+<p>Below is an example of how a translation evolves at this early stage. This is English-German,
+    our source sentence is <span class="data_text"><strong>six months of construction works, that’s brutal</strong></span>.
+    On the left are model translations, and on the right is their approximate version in English.
+</p>
+
+<center>
+<img src="../resources/posts/nmt_inside_out/lm_stage_example-min.png" style="max-width:100%; margin-top:20px; margin-bottom:20px;"/>
+</center>
+
+<p>We see that first, the model hallucinates the most frequent token, then bigram, the three-gram, then
+    combinations of frequent phrases. After that, words related to the source start to appear, and only
+    later we see something reasonable.
+</p>
+
+
+<h3>Translation Quality</h3>
+
+<p>Let’s now turn to translation quality. In addition to the BLEU score (which is the standard automatic
+    evaluation metric for machine translation), we also show token-level accuracy for target tokens
+    of different frequency ranks. Token-level accuracy is the proportion of cases where the correct next
+    token is the most probable choice. Note that this is exactly what the model is trained to do: in a
+    classification setting, it is trained to predict the next token.
+</p>
+<center>
+<img src="../resources/posts/nmt_inside_out/translation_quality.gif" style="max-width:80%; margin-top:20px; margin-bottom:20px;"/>
+</center>
+
+<p>We see that for rare tokens, accuracy improves slower than for the rest. This is expected: rare phenomena
+    are learned later in training.
+    <font face="arial">What is not clear</font>, is what happens during the last half of the training:
+    changes in both BLEU and
+    accuracy are almost invisible, even for rare tokens.
+</p>
+
+
+<h3>Monotonicity of Alignments</h3>
+
+<p>Luckily, we have one more thing to look at: monotonicity of alignments. The graph shows how the monotonicity
+    of alignments changes during training. For more details on the metric, look at
+    <a href="https://openreview.net/pdf?id=D_KnLV10St" target="_blank">the paper</a>,
+    but everything we need to know now is that lower scores mean less monotonic (or more complicated)
+    alignments in generated translations.
+</p>
+
+<center>
+<img src="../resources/posts/nmt_inside_out/alignments.gif" style="max-width:80%; margin-top:20px; margin-bottom:20px;"/>
+</center>
+
+<p>First, let's look again at the second half of the training we just looked at. While changes
+    in quality are almost invisible, reorderings change significantly. In the absolute values
+    this does not look like a lot, a bit later I’ll show you some examples and how this analysis
+    can be used in practice to improve non-autoregressive NMT - you’ll see that these changes are quite prominent.
+</p>
+
+<p>What is interesting, is that changes in the alignments are visible even after the model converges
+    in terms of BLEU. This relates to one of our previous works on context-aware NMT
+    (<a href="https://www.aclweb.org/anthology/P19-1116/" target="_blank">Voita et al, 2019</a>): we observed
+    that even after BLEU converges, discourse phenomena continue to improve.
+</p>
+
+<p>Here are a couple of examples of how translations change during this last part of the training:
+    the examples are for English-German and English-Russian, and same-colored chunks are approximately
+    aligned to each other.
+</p>
+
+<center>
+<img src="../resources/posts/nmt_inside_out/alignment_example.gif" style="max-width:100%; margin-top:20px; margin-bottom:20px;"/>
+</center>
+
+<p>I don’t expect you to understand all the translations,
+    but visually we can see that first, the translations are almost word-by-word,
+    then the reordering becomes more complicated. For example, for English-Russian,
+    the last phrase (shown in green) finally gets reordered to the beginning of the sentence.
+    Note that the reorderings at these later training steps are more natural for the corresponding target language.
+</p>
+
+
+<h3>Characterizing Training Stages</h3>
+
+<p>Summarizing all the observations, we can say that NMT training undergoes three stages:
+</p>
+<ul>
+    <li>target-side language modeling,</li>
+    <li>learning how to use source and approaching word-by-word translation,</li>
+    <li>refining translations, which is visible only by changes in the reordering and not visible by standard metrics.</li>
+</ul>
+
+<p>Now let’s look at how these results agree with the stages we looked at in the
+    <a href="https://lena-voita.github.io/posts/source_target_contributions_to_nmt.html" target="_blank"> ACL 2021 paper</a>.
+</p>
+
+<center>
+<video width="90%" height="auto" style="margin: 15px;" loop autoplay muted>
+  <source src="../resources/posts/nmt_training/stages.mp4" type="video/mp4">
+</video>
+</center>
+
+<p>
+    First, the source contribution goes down. Here the model relies on the target-side prefix
+    and ignores the source, and looking at translations confirmed that here it learns language modeling.
+    Then, the source contribution increases rapidly: the model starts to use the source, and we saw
+    that the quality improves quickly. After these two stages, translations are close to word-by-word ones.
+    Finally, where very little is going on, reorderings continue to become significantly more complicated.
+</p>
+
+
+<h3>Practical Applications of the Analysis</h3>
+
+
+<p>Finally, not only this is fun, but it can also be useful in practice. First, there are various settings
+    where data complexity is important: therefore, translations from specific training stages can be useful.
+    Next, there are a lot of SMT-inspired modeling modifications, and our analysis can help modeling modifications.
+</p>
+
+<div>
+    <center>
+    <img src="../resources/posts/nmt_inside_out/mt_training_why_useful1-min.png" style="max-width:90%; "/>
+    </center>
+
+    <div style="margin-left:8%;max-width:40%;margin-top:10px;">
+            <p style="font-size:small;">
+                <font color="#888">
+                (<a href="https://arxiv.org/pdf/1911.02727.pdf" target="_blank">Zhou et al, 2020</a>;
+                <a href="https://arxiv.org/pdf/2002.01365.pdf" target="_blank">Ren et al, 2020</a>)
+                </font>
+            </p>
+    </div>
+
+    <center>
+    <img src="../resources/posts/nmt_inside_out/mt_training_why_useful2-min.png" style="max-width:90%; "/>
+    </center>
+
+    <div style="margin-left:8%;max-width:40%; margin-top:10px;">
+            <p style="font-size:small;">
+                <font color="#888">
+                    (using target-side language models, lexical tables, alignments, modeling phrases, etc.)</font></p>
+                <details style="margin-bottom:20px;">
+                    <summary style="margin-top:-10px;"><span style="font-size:small;"><font color="#888">Links</font></span></summary>
+                    <p style="font-size:small;"><font color="#888">
+                    <a href="https://www.aclweb.org/anthology/D16-1162/" target="_blank">Athur et al, 2016</a>;
+                    <a href="https://www.aaai.org/ocs/index.php/AAAI/AAAI16/paper/view/12189" target="_blank">He et al, 2016</a>;
+                    <a href="https://arxiv.org/pdf/1606.01792.pdf" target="_blank">Tang et al, 2016</a>;
+                    <a href="https://www.aclweb.org/anthology/D17-1149/" target="_blank">Wang et al, 2017</a>;
+                    <a href="https://www.aclweb.org/anthology/P17-1139/" target="_blank">Zhang et al, 2017a</a>;
+                    <a href="https://www.aclweb.org/anthology/D17-1148/" target="_blank">Dahlmann et al, 2017</a>;
+                    <a href="https://arxiv.org/abs/1503.03535" target="_blank">Gülçehre et al, 2015</a>;
+                    <a href="https://dl.acm.org/doi/abs/10.1016/j.csl.2017.01.014" target="_blank">Gülçehre et al, 2017</a>;
+                    <a href="https://www.aclweb.org/anthology/W18-6321/" target="_blank">Stahlberg et al, 2018</a>;
+                    <a href="https://www.aclweb.org/anthology/D16-1249/" target="_blank">Mi et al, 2016</a>;
+                    <a href="https://www.aclweb.org/anthology/C16-1291/" target="_blank">Liu et al, 2016</a>;
+                    <a href="https://arxiv.org/abs/1607.01628" target="_blank">Chen et al, 2016</a>;
+                    <a href="https://www.aclweb.org/anthology/W16-2206/" target="_blank">Alkhouli et al, 2016</a>;
+                    <a href="https://www.aclweb.org/anthology/W17-4711/" target="_blank">Alkhouli & Ney, 2017</a>;
+                    <a href="https://www.aclweb.org/anthology/D19-5626/" target="_blank">Park & Tsvetkov, 2019</a>;
+                    <a href="https://ojs.aaai.org//index.php/AAAI/article/view/6418" target="_blank">Song et al, 2020</a>
+                        among others</font></p>
+                    </details>
+    </div>
+
+</div>
+
+
+
+
+<h4>Non-Autoregressive Neural Machine Translation</h4>
+
+<p>We focus only on the first point, and as an example considers non-autoregressive NMT.
+    For non-autoregressive models, it is standard to use sequence-level distillation. This means that
+    targets for these models are not references but translations from an autoregressive teacher.
+</p>
+
+
+<center>
+<img src="../resources/posts/nmt_inside_out/nat_idea-min.png" style="max-width:90%; margin-top:20px;"/>
+</center>
+
+<div style="margin-left:8%;max-width:40%;margin-top:-10px;">
+        <p style="font-size:small;">
+            <font color="#888">
+            (<a href="https://arxiv.org/pdf/1911.02727.pdf" target="_blank">Zhou et al, ICLR 2020</a>)
+            </font>
+        </p>
+</div>
+
+<p>Previous work showed that complexity of the distilled data matters, and varying it can improve a model.
+
+    While usually, a teacher is a fully converged model, we propose to use as teachers intermediate checkpoints
+    during model’s training to get targets of varying complexity. For example, these earlier translations have
+    more monotonic alignments.
+</p>
+
+
+<center>
+<img src="../resources/posts/nmt_inside_out/nat_results.gif" style="max-width:80%; margin-top:20px;margin-bottom:20px;"/>
+</center>
+
+
+<p>Let us look at a vanilla non-autoregressive model trained with different teachers.
+    The standard teacher is the fully converged model,
+    in this case after 200k training steps. But earlier checkpoints, for example after 40k-steps,
+    have not much worse BLEU score, but significantly more monotonic alignments.
+    And using these less trained teachers improves a vanilla NAT model by <font face="arial">more than 1 bleu</font>!
+</p>
+
+
+<br>
+<h3>Conclusions:</h3>
+<ul>
+    <li>during training, NMT undergoes three different stages:</li>
+    <ul style="margin-left:30px;">
+        <li>target-side language modeling,</li>
+        <li>learning how to use source and approaching word-by-word translation,</li>
+        <li>refining translations, visible by increasingly complex reorderings,
+            but almost invisible to standard metrics (e.g. BLEU);</li>
+    </ul>
+    <li>this is true not only for the standard encoder-decoder Transformer, but also
+        for other models (e.g. LSTM) and modeling paradigms (e.g. LM-style NMT) - for this, see
+        <a href="" target="_blank">the paper</a>;
+    </li>
+    <li>not only this is fun, but it can also help in practice! For example, in settings where
+        data complexity matters, such as non-autoregressive NMT.
+    </li>
+</ul>
+
+
+Want to know more?
+
+<a class="pull-right" href="" onMouseOver="document.readpaper2.src='../resources/posts/buttons/button_read_paper_push-min.png';" onMouseOut="document.readpaper2.src='../resources/posts/buttons/button_read_paper-min.png';">
+<img src="../resources/posts/buttons/button_read_paper-min.png" name="readpaper2" width=120px class="pull-right"></a>
+
+
+<br/><br/>
+Share: <a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-text="NMT Training through the Lens of Classical SMT - a new #EMNLP2021 paper by @lena_voita @RicoSennrich @iatitov ! Blog post: " data-url="https://lena-voita.github.io/posts/nmt_training_through_smt_lens.html" data-lang="en" data-show-count="false">Tweet</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
