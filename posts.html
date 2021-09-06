@@ -40,6 +40,66 @@ order: 1
 <div class="fullCard" id="thumbnail" >
     <div class="cardContent">
 
+        <!--<h1 style="font-size:28px;">Language Modeling, Lexical Translation, Reordering</h1>-->
+        <h1 style="font-size:28px;">NMT Training Process though the Lens of SMT</h1>
+
+        <span style="font-size:14px;">
+        This is a post for the EMNLP 2021 paper
+            <a href="" target="_blank">
+                Language Modeling, Lexical Translation, Reordering:
+                The Training Process of NMT through the Lens of Classical SMT.
+            </a>
+        </span>
+
+        <a class="float-right">
+            <img src="../resources/posts/nmt_training/morda-min.png" alt=""
+                 style="max-width:300px; height:auto; float: right; margin-left:15px; margin-top:25px"/>
+        </a>
+
+
+
+        <br/>
+        <br/>
+        <span style="font-size:15px;">
+
+            <p>In SMT, model competences are modelled with distinct models.
+                In NMT, the whole translation task is modelled
+                with a single neural network.
+                How and when does NMT get to learn all the competences? We show that</p>
+        <ul>
+            <li>during training, NMT undergoes three different stages:</li>
+            <ul style="margin-left:30px;">
+                <li>target-side language modeling,</li>
+                <li>learning how to use source and approaching word-by-word translation,</li>
+                <li>refining translations, visible by increasingly complex reorderings
+                    but not visible by e.g. BLEU;</li>
+            </ul>
+
+            <li>not only this is fun, but it can also help in practice! For example, in settings where
+                data complexity matters, such as non-autoregressive NMT.
+            </li>
+        </ul>
+        </span>
+
+        <a class="pull-right" href="/posts/nmt_training_through_smt_lens.html" onMouseOver="document.readmore7.src='../resources/posts/buttons/button_read_more_push-min.png';" onMouseOut="document.readmore7.src='../resources/posts/buttons/button_read_more-min.png';">
+        <img src="../resources/posts/buttons/button_read_more-min.png" name="readmore7" width=120px class="pull-right"></a>
+        <a class="pull-right" href="https://arxiv.org/abs/2109.01396" onMouseOver="document.readpaper7.src='../resources/posts/buttons/button_read_paper_push-min.png';" onMouseOut="document.readpaper7.src='../resources/posts/buttons/button_read_paper-min.png';">
+        <img src="../resources/posts/buttons/button_read_paper-min.png" name="readpaper7" width=120px class="pull-right"></a>
+
+
+        <span style="font-size:15px; text-align: right; float: right; color:gray">September 2021</span>
+
+    </div>
+</div>
+
+
+<!-- ################################################################################### -->
+
+
+
+<div class="fullCard" id="thumbnail" >
+    <div class="cardContent">
+
         <h1 style="font-size:28px;">Neural Machine Translation Inside Out</h1>
 
         <a class="float-right">

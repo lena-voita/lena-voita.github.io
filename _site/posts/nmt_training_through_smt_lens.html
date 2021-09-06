@@ -1,9 +1,153 @@
----
-layout: post
-title: NMT Training through the Lens of SMT
----
+<!DOCTYPE html>
+<html>
 
-<style>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width initial-scale=1" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>NMT Training through the Lens of SMT</title>
+    <meta name="description" content="">
+
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="canonical" href="http://localhost:4000/posts/nmt_training_through_smt_lens.html">
+
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+
+
+</head>
+
+
+  <!--style>
+  p {
+    text-align: justify;
+  }
+  </style-->
+
+  <body>
+
+    <header class="site-header">
+
+  <div class="wrapper">
+
+    <a class="site-title" href="/">Lena Voita</a>
+
+    <nav class="site-nav">
+      <a href="#" class="menu-icon">
+        <svg viewBox="0 0 18 15">
+          <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+          <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+          <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+        </svg>
+      </a>
+
+      <div class="trigger">
+        
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+          <a class="page-link" href="/posts.html">Blog</a>
+          
+        
+          
+          <a class="page-link" href="/papers.html">Publications</a>
+          
+        
+          
+          <a class="page-link" href="/talks.html">Talks & Service</a>
+          
+        
+          
+          <a class="page-link" href="/nlp_course.html">NLP Course | For You</a>
+          
+        
+          
+        
+<!--        <a href="">
+            <img src="image/UoS.ico" alt="DCS">
+        </a>-->
+      </div>
+    </nav>
+
+  </div>
+
+</header>
+
+
+    <div class="page-content">
+      <div class="wrapper">
+        <div class="post">
+
+  <header class="post-header">
+    <h1 style="font-size:38px;" class="post-title">NMT Training through the Lens of SMT</h1>
+    <p class="post-meta"></p>
+  </header>
+
+  <style>
+      p {
+      text-align: justify;
+      }
+
+      .green_left_thought {
+        border-left: 5px solid #b7db67;
+        margin: 10px;
+        margin-left: 20px;
+        padding: 0px;
+        background-color: #fafcf5;
+      }
+      .green_left_thought p {
+
+        margin-left: 10px;
+        padding: 5px;
+      }
+
+  </style>
+
+  <article class="post-content">
+    <style>
     @import url("https://fonts.googleapis.com/css2?family=Comic+Neue&display=swap");
 
     .data_text {
@@ -404,3 +548,94 @@ Want to know more?
 
 <br/><br/>
 Share: <a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-text="NMT Training through the Lens of Classical SMT - a new #EMNLP2021 paper by @lena_voita @RicoSennrich @iatitov ! Blog post: " data-url="https://lena-voita.github.io/posts/nmt_training_through_smt_lens.html" data-lang="en" data-show-count="false">Tweet</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+  </article>
+
+</div>
+
+      </div>
+    </div>
+
+    <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col  footer-col-1">
+        <table >
+          <tr class="contact-list">
+            <!-- yandex research
+            <td>
+              <div class="media">
+                <a class="pull-left thumbnail" href="https://research.yandex.com">
+                  <img src="/img/ico/yr-min.png" height=20px alt=""/>
+                </a>
+              </div>
+            </td>
+            -->
+            <!-- EdnNLP-->
+            <td>
+              <div class="media">
+                <a class="pull-left thumbnail" href="https://edinburghnlp.inf.ed.ac.uk/index.php/people/">
+                  <img src="/img/ico/edn_uni-min.png" height=30px alt=""/>
+                </a>
+              </div>
+            </td>
+            <!-- UvA-->
+            <td>
+              <div class="media">
+                <a class="pull-left thumbnail" href="https://msclogic.illc.uva.nl/people/students/">
+                  <img src="/img/ico/uva-min.png" height=20px alt=""/>
+                </a>
+              </div>
+            </td>
+
+
+            <td>
+              <div class="media">
+                <a class="pull-left thumbnail" href="mailto:lena-voita@hotmail.com">
+                  <img src="/img/ico/mail-min.png" height=20px alt=""/>
+                </a>
+              </div>
+            </td>
+            <td>
+              <div class="media">
+                <a class="pull-left thumbnail" href="https://scholar.google.com/citations?user=EcN9o7kAAAAJ">
+                  <img src="/img/ico/gs-min-round.png" height=20px alt=""/>
+                </a>
+              </div>
+            </td>
+            <td>
+              <div class="media">
+                <a class="pull-left thumbnail" href="https://github.com/lena-voita">
+                  <img src="/img/ico/git.png" height=20px alt=""/>
+                </a>
+              </div>
+            </td>
+            <td>
+              <div class="media">
+                <a class="pull-left thumbnail" href="https://twitter.com/lena_voita">
+                  <img src="/img/ico/twitter-min.png" height=20px alt=""/>
+                </a>
+              </div>
+            </td>
+
+          </tr>
+        </table>
+      </div>
+
+      <!--<div class="footer-col  footer-col-2">
+      </div> -->
+
+      <div class="footer-col  footer-col-3">
+          <p class="text" align="right">Last updated September 06, 2021.</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+
+
+  </body>
+
+</html>

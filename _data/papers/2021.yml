@@ -1,0 +1,36 @@
+
+
+-
+  layout: paper
+  paper-type: inproceedings
+  selected: y
+  year: 2021
+  img: emnlp21_nmt_training-min.png
+  title: "Language Modeling, Lexical Translation, Reordering: The Training Process of NMT through the Lens of Classical SMT"
+  authors: "<u>Elena Voita</u>, Rico Sennrich, Ivan Titov"
+  doc-url:
+  conf_name: EMNLP
+  conf_year: 2021
+  url: "https://arxiv.org/abs/2109.01396"
+  code:
+  blog: "https://lena-voita.github.io/posts/nmt_training_through_smt_lens.html"
+  abstract: ""
+
+
+
+-
+  layout: paper
+  paper-type: inproceedings
+  selected: y
+  year: 2021
+  img: src_dst_contributions-min.png
+  title: "Analyzing the Source and Target Contributions to Predictions in Neural Machine Translation"
+  authors: "<u>Elena Voita</u>, Rico Sennrich, Ivan Titov"
+  doc-url:
+  conf_name: ACL
+  conf_year: 2021
+  url: "https://arxiv.org/pdf/2010.10907.pdf"
+  code: "https://github.com/lena-voita/the-story-of-heads"
+  blog: "https://lena-voita.github.io/posts/source_target_contributions_to_nmt.html"
+  abstract: "In Neural Machine Translation (and, more generally, conditional language modeling), the generation of a target token is influenced by two types of context: the source and the prefix of the target sequence. While many attempts to understand the internal workings of NMT models have been made, none of them explicitly evaluates relative source and target contributions to a generation decision. We argue that this relative contribution can be evaluated by adopting a variant of Layerwise Relevance Propagation (LRP). Its underlying 'conservation principle' makes relevance propagation unique: differently from other methods, it evaluates not an abstract quantity reflecting token importance, but the proportion of each token's influence. We extend LRP to the Transformer and conduct an analysis of NMT models which explicitly evaluates the source and target relative contributions to the generation process. We analyze changes in these contributions when conditioning on different types of prefixes, when varying the training objective or the amount of training data, and during the training process. We find that models trained with more data tend to rely on source information more and to have more sharp token contributions; the training process is non-monotonic with several stages of different nature."
+
