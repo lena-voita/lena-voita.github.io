@@ -2300,7 +2300,7 @@ carousels.forEach(function(elem) {
 
     <p>Here we assume that document \(x\) is represented as a set of features, e.g., a set
     of its words \((x_1, \dots, x_n)\):
-    \[P(x| y=k)=P(x_1, \dots, x_n|y).\]
+    \[P(x| y=k)=P(x_1, \dots, x_n|y=k).\]
     </p>
 
     <p><font face="arial">The Naive Bayes assumptions</font> are</p>
@@ -2324,7 +2324,7 @@ carousels.forEach(function(elem) {
     </p>
 
     <p>With these <font face="arial">"naive"</font> assumptions we get:
-    \[P(x| y=k)=P(x_1, \dots, x_n|y)=\prod\limits_{t=1}^nP(x_t|y=k).\]
+    \[P(x| y=k)=P(x_1, \dots, x_n|y=k)=\prod\limits_{t=1}^nP(x_t|y=k).\]
 
         The probabilities \(P(x_i|y=k)\) are estimated as the proportion of times the word \(x_i\)
         appeared in documents of class \(k\) among all tokens in these documents:
