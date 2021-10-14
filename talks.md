@@ -8,7 +8,7 @@ order: 3
 
 ### <span style="color:darkblue"> Service </span>
 Program committee:
-* EMNLP: 2019 <span style="color:#999">(outstanding reviewer)</span>, 2020
+* EMNLP: 2019 <span style="color:#999">(outstanding reviewer)</span>, 2020, 2021
 * ACL 2020
 * NAACL 2021
 * ICML 2020 <span style="color:#999">(top-33% reviewer)</span>
@@ -24,6 +24,8 @@ Program committee:
 
 ### <span style="color:darkblue"> Speaker </span>
 
+* 08/2021 <span class="talk-title">_Neural Machine Translation Inside Out_</span> <span style="font-size:0.9em">(keynote)</span> 
+<br/>&nbsp; &nbsp; &nbsp; [RepL4NLP workshop at ACL 2021](https://sites.google.com/view/repl4nlp-2021/home)
 * 06/2021 <span class="talk-title">_Neural Machine Translation Inside Out_</span> <span style="font-size:0.9em">(keynote)</span> 
 <br/>&nbsp; &nbsp; &nbsp; [DeeLIO workshop at NAACL 2021](https://sites.google.com/view/deelio-ws/)
 * 01/2020 <span class="talk-title">_Evolution of Representations in the Transformer_</span> <span style="font-size:0.9em">(keynote)</span> <a href="https://drive.google.com/file/d/1bEiWUZDNbKAgMkt5PPF9sQl3x9AYNVoZ/view?usp=sharing" class="label slides">Slides</a> <a href="https://youtu.be/ZyWLrBGiEpI" class="label video">Video</a>
@@ -36,6 +38,13 @@ Program committee:
 <br/>&nbsp; &nbsp; &nbsp; [Yandex Research Summit](https://yandex.com/promo/academy/yars_2019), <span style="font-size:0.9em">Moscow, Russia (with David Talbot)</span> 
 
 ### <span style="color:darkblue"> Invited talks </span>
+
+* 10-11/2021 <span class="talk-title">_Neural Machine Translation Inside Out_</span> 
+<br/>&nbsp; &nbsp; &nbsp; [Helsinki LT Seminar](https://blogs.helsinki.fi/language-technology/research-seminar/)
+<br/>&nbsp; &nbsp; &nbsp; ["Shannon meets Turing" Colloquium](https://www.youtube.com/channel/UCjltmKOomhdXQELWi6asoBg)
+<br/>&nbsp; &nbsp; &nbsp; Glasgow IR seminar
+<br/>&nbsp; &nbsp; &nbsp; "Young Innovators" talks (Austria)
+
 
 * 03-06/2021 <span class="talk-title">_NMT Analysis: The Trade-Off Between Source and Target, and (a bit of) the Training Process_</span> <a href="https://drive.google.com/file/d/1oBh9ajjFJ-VUJ_f8-VOTb9FZY4VcjxKf/view?usp=sharing" class="label slides">Slides</a>
 <br/>&nbsp; &nbsp; &nbsp; [Stanford NLP Seminar](https://nlp.stanford.edu/seminar/)
