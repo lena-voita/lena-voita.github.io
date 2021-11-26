@@ -390,12 +390,12 @@ for (i = 0; i < dropdown.length; i++) {
         a lot of sentences will not occur in the corpus.
         While among these sentences some are clearly more likely than the others,
         all of them will receive zero probability, i.e., will look equally bad for the model.
-        This means, the method is not good and we have to do something mode clever.
+        This means, the method is not good and we have to do something more clever.
     </p>
 
     <h3><u>Sentence Probability: Decompose Into Smaller Parts</u></h3>
 
-    <p>We can not reliably estimate sentence probabilities is we treat them as atomic units.
+    <p>We can not reliably estimate sentence probabilities if we treat them as atomic units.
         Instead, let's decompose the probability of a sentence into probabilities of smaller parts.</p>
 
     <p>For example, let's take the sentence
@@ -703,7 +703,7 @@ for (i = 0; i < dropdown.length; i++) {
 
 <h3 id="ngram_sample_examples"><u>Examples of generated text</u></h3>
 
-        <p>To show you some examples, we trained a 3-gram model on 2.5 million of English sentences.</p>
+        <p>To show you some examples, we trained a 3-gram model on 2.5 million English sentences.</p>
 
             <p class="data_text" style="font-size:14px"><font color="#888"><u>Dataset details.</u>
                 The data is the English
@@ -1556,7 +1556,7 @@ for (i = 0; i < dropdown.length; i++) {
             from top to bottom
             through a deep network. To avoid this, we can use
             <font face="arial">residual connections</font> or a more complicated
-            variant <font face="arial"><a href="https://arxiv.org/pdf/1505.00387.pdf" target="_blank">highway connections</a></font>.
+            variant, <font face="arial"><a href="https://arxiv.org/pdf/1505.00387.pdf" target="_blank">highway connections</a></font>.
         </p>
         <img src="../resources/lectures/lang_models/neural/cnn/residual_highway-min.png"
              style="max-width:100%; margin-bottom:20px; "/>
@@ -1940,7 +1940,7 @@ for (i = 0; i < dropdown.length; i++) {
 
                 <p class="data_text">
                     <u>How to:</u> Play with the temperature and see how the probability distribution changes.
-                Note how changes the difference between the probability of
+                Note the changes in the difference between the probability of
                     the most likely class (green) and others.</p>
                 <ul class="data_text" style="padding-left:15px; padding-right:15px;">
                     <li>What happens when the temperature is close to zero?</li>
@@ -3148,7 +3148,7 @@ for (i = 0; i < dropdown.length; i++) {
     </center>
 
     <p>This is log-likelihood: the same as our loss function, but without negation.
-        Note also the logarithm base: in the optimization, the logarithm us usually natural
+        Note also the logarithm base: in the optimization, the logarithm is usually natural
         (because it is faster to compute), but in the evaluation, it's log base 2.
         Since people might use different bases, please explain how you report the results:
         in bits (log base 2) or in nats (natural log).
@@ -3342,10 +3342,10 @@ for (i = 0; i < dropdown.length; i++) {
 
     <h3><u>Use Interpretable Neurons to Control Generated Texts</u></h3>
 
-    <p>Interpretable neurons not only fun, but also can be used to control your language model.
+    <p>Interpretable neurons are not only fun, but also can be used to control your language model.
     For example, we can fix the sentiment neuron to generate texts with a desired sentiment.
     Below are the examples of samples starting from the same prefix
-    <font class="data_text"><strong>I couldn't figure out</strong></font>
+    <font class="data_text"><strong>"I couldn't figure out"</strong></font>
     (more examples in <a href="https://openai.com/blog/unsupervised-sentiment-neuron/" target="_blank">
         the original Open-AI's blog post</a>).</p>
 
@@ -3380,7 +3380,7 @@ for (i = 0; i < dropdown.length; i++) {
          src="../resources/lectures/lang_models/analysis/contrastive_idea-min.png"/></center>
 
         <p>A very popular
-        phenomenon to look at is subject-verb agreement, initially proposed in
+        phenomenon to look at is subject-verb agreement, initially proposed in the
     <a href="https://www.aclweb.org/anthology/Q16-1037.pdf" target="_blank">
         Assessing the Ability of LSTMs to Learn Syntax-Sensitive Dependencies</a> paper.
         In this task, contrastive examples consist of two sentences: one where the verb agrees in number
@@ -3393,7 +3393,7 @@ for (i = 0; i < dropdown.length; i++) {
     <p>
         Examples can be of different complexity depending on the number of
         <font face="arial">attractors</font>:
-        other nouns in a sentence,
+        other nouns in a sentence
         that have different grammatical number and can "distract" a model from the subject.
     </p>
 <br>
@@ -3641,7 +3641,7 @@ for (i = 0; i < dropdown.length; i++) {
                 <hr color="#f2e4ee" style="margin:5px;">
                   <p>One of the papers discussing weight tying trick in neural LMs:
                     use the same parameters for input and output word embedding layers.
-                    Theoretically show that
+                    Theoretically shows that
                     this has an effect similar to a regularizer forcing a model
                       to give similar probabilities to the words close in the input embedding space.
                   </p>
@@ -4071,12 +4071,12 @@ for (i = 0; i < dropdown.length; i++) {
                     </p>
 
                     <p>The key point of this paper is that a language model can be used to estimate
-                        the "predictability" of word given context.
+                        the "predictability" of a word given context.
                     </p>
 
                     <h2>Computational LM instead of a Human one - a very novel idea</h2>
 
-                    <p>Previously, the predictability of word given context was estimated
+                    <p>Previously, the predictability of a word given context was estimated
                     in cloze-style tasks: humans were asked to guess the next word given context.
                         For example, to continue the sentences
                     </p>
@@ -4449,6 +4449,28 @@ for (i = 0; i < dropdown.length; i++) {
 -->
 
 
+<fieldset style="border: 1px solid #008cbf;
+    border-radius: 5px;font-size:18px;">
+            <legend><p class="data_text" style="font-size:24px;">
+                <font color="#008cbf"><strong>Bla Bla Bla</strong></font></p></legend>
+            <p class="data_text">
+            Usually, we want word embeddings to reason as humans do. But let's try the opposite:
+                <strong>you</strong> will try to think as word embeddings.
+            </p>
+    <p class="data_text">You will see the analogical example, e.g. <strong>king - man + woman = ?</strong>,
+        and several possible answers. The task is to guess what word embeddings think.
+    </p>
+
+    <p></p>
+
+    <p class="data_text" style="font-size:14px;">
+        <font color="#888">Big thanks
+        <a href="https://github.com/justheuristic">Just Heuristic</a> for the help with technical issues! Just Heuristic - Just Fun!
+        </font> </p>
+</fieldset>
+
+        <br><br>
+
 
 
     <center>
@@ -4466,8 +4488,7 @@ for (i = 0; i < dropdown.length; i++) {
                             Write a prefix, for example: "Deep Variational" (without quotes)</p>
                         <textarea class="input_prompt"
                                   style="width: 100%; max-width: 100%; min-height: 72px;
-                                         resize: vertical; font-size:14px;">
-                        </textarea>
+                                         resize: vertical; font-size:14px;"></textarea>
                     </div>
                     <div class="next" style="opacity:0.2; transform: translate(-32px, 35px);">
                         <div class="next_button"></div>
@@ -4487,8 +4508,7 @@ for (i = 0; i < dropdown.length; i++) {
                        style="font-size: 16px; color: gray; text-align:left; margin-bottom: -2px; margin-left: 5px;">
                         Currently generated text ("@@" is a BPE split). Click on the circles below to add tokens.</p>
                     <textarea class="input_preprocessed"
-                              style="width: 100%; resize: vertical; margin-left: 5px; font-size:14px;" disabled=true>
-                    </textarea>
+                              style="width: 100%; resize: vertical; margin-left: 5px; font-size:14px;" disabled=true></textarea>
                 </div>
                 <div id="d3_container" style="width: 85%; display:block; margin: 0 auto;">
                     <svg id="d3_beamsearch_svg" width=100% height=240px></svg>
