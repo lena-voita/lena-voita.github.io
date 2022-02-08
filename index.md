@@ -11,7 +11,7 @@ description: I'm Elena (Lena) Voita and I work on Natural Language Processing. M
 <img src="/img/people/lena-min.png" name="readmore_1" width=204px height=240px></a> -->
 
 
-I am Elena (Lena) Voita, a __Ph.D. student__ at the University of Edinburgh and University of Amsterdam. I'm very happy to be supervised by [Ivan Titov]({{site:ivan_page}}) and [Rico Sennrich]({{site.rico_page}}).
+I am Elena (Lena) Voita, a __Ph.D. student__ at the University of Edinburgh supervised by [Ivan Titov]({{site:ivan_page}}) and [Rico Sennrich]({{site.rico_page}}). Currently visiting [Instituto Superior Técnico](https://tecnico.ulisboa.pt/pt/) in Lisbon.
 
 I'm supported by the [__Facebook PhD Fellowship__](https://research.fb.com/blog/2020/01/announcing-the-recipients-of-the-2020-facebook-fellowship-awards/) (2020-2022).
 
@@ -22,9 +22,13 @@ I (still) [teach NLP](https://github.com/yandexdataschool/nlp_course) at the [Ya
 
 ## <span style="color:darkblue">News </span>
 
+__2022__
+
+* __Feb-...__ A visiting PhD student in [André Martins](https://andre-martins.github.io)'s group at [Instituto Superior Técnico](https://tecnico.ulisboa.pt/pt/). 
+
 __2021__
 
-* __Oct-Nov__ <span style="color:#888"><u>Invited talks at:</u></span> [Helsinki LT Seminar](https://blogs.helsinki.fi/language-technology/research-seminar/), ["Shannon meets Turing" Colloquium](https://www.youtube.com/channel/UCjltmKOomhdXQELWi6asoBg), <span style="color:#888">Glasgow IR seminar, "Young Innovators" talks (Austria), ... TBU</span>.
+* __Oct-Nov__ <span style="color:#888"><u>Invited talks at:</u></span> [Helsinki LT Seminar](https://blogs.helsinki.fi/language-technology/research-seminar/), ["Shannon meets Turing" Colloquium](https://www.youtube.com/channel/UCjltmKOomhdXQELWi6asoBg), "Young Innovators" talks (Austria), [Glasgow IR seminar](https://samoa.dcs.gla.ac.uk/events/viewtalk.jsp?id=18008).
 * __September__ <span style="color:#888"><u>Papers:</u></span> [NMT Training through the Lens of SMT](https://arxiv.org/abs/2109.01396) is _accepted to __EMNLP__ 2021_.
 * __August__ <span style="color:#888"><u>Keynote at:</u></span> [RepL4NLP workshop at ACL 2021](https://sites.google.com/view/repl4nlp-2021/home).
 * __June__ <span style="color:#888"><u>Papers:</u></span> [Source and Target Contributions paper](https://arxiv.org/pdf/2010.10907.pdf) is _accepted to __ACL__ 2021_.
