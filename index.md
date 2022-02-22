@@ -4,18 +4,19 @@ description: I'm Elena (Lena) Voita and I work on Natural Language Processing. M
 ---
 
 <!-- (comment) the image below can be found in img folder of this very project-->
-![i_am_a_fox](./img/people/lena_large-min.png){: style="float: right; margin: 0px 20px; width: 180px;" name="fox"}
+<!--![i_am_a_fox](./img/people/lena_large-min.png){: style="float: right; margin: 0px 20px; width: 180px;" name="fox"}-->
+![i_am_a_fox](./img/people/orange_lena-min.jpg){: style="float: right; margin: 0px 20px; width: 180px;" name="fox"}
 
 
-<!-- <a href= onMouseOver="document.readmore_1.src='/img/people/foxie.jpeg';" onMouseOut="document.readmore_1.src='/img/people/lena-min.png';">
-<img src="/img/people/lena-min.png" name="readmore_1" width=204px height=240px></a> -->
+<!-- <a href= onMouseOver="document.readmore_1.src='/img/people/foxie.jpeg';" onMouseOut="document.readmore_1.src='/img/people/orange_lena-min.jpg';">
+<img src="/img/people/orange_lena-min.jpg" name="readmore_1" width=204px height=240px></a> -->
 
 
 I am Elena (Lena) Voita, a __Ph.D. student__ at the University of Edinburgh supervised by [Ivan Titov]({{site:ivan_page}}) and [Rico Sennrich]({{site.rico_page}}). Currently visiting [Instituto Superior Técnico](https://tecnico.ulisboa.pt/pt/) in Lisbon.
 
 I'm supported by the [__Facebook PhD Fellowship__](https://research.fb.com/blog/2020/01/announcing-the-recipients-of-the-2020-facebook-fellowship-awards/) (2020-2022).
 
-Previously, I was a __research scientist__ at [Yandex Research]({{site.yandex_research_main}}) and worked closely with the [Yandex Translate](https://translate.yandex.com) team<a onMouseOver="document.fox.src='/img/people/foxie.jpeg';" onMouseOut="document.fox.src='/img/people/lena-min.png';">.</a>
+Previously, I was a __research scientist__ at [Yandex Research]({{site.yandex_research_main}}) and worked closely with the [Yandex Translate](https://translate.yandex.com) team<a onMouseOver="document.fox.src='/img/people/foxie.jpeg';" onMouseOut="document.fox.src='/img/people/orange_lena-min.jpg';">.</a>
 I (still) [teach NLP](https://github.com/yandexdataschool/nlp_course) at the [Yandex School of Data Analysis](https://yandexdataschool.com).
 
 <span style="color:red">__New!__</span>    NLP Course <span style="color:#92bf32">For You</span> - look [here](https://lena-voita.github.io/nlp_course.html).
