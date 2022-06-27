@@ -697,7 +697,7 @@ for (i = 0; i < dropdown.length; i++) {
 
             <h3> <u>Bahdanau Model</u> </h3>
             <ul><li><font face="arial">encoder: bidirectional</font><br>
-            To better encoder each source word, the encoder has two RNNs, forward and backward,
+            To better encode each source word, the encoder has two RNNs, forward and backward,
                 which read input in the opposite directions. For each token, states of the two RNNs are concatenated.
             </li>
                 <li><font face="arial">attention score: multi-layer perceptron</font><br>
@@ -723,7 +723,7 @@ for (i = 0; i < dropdown.length; i++) {
             <p>While the <a href="https://arxiv.org/abs/1508.04025" target="_blank">paper</a> considers several model variants,
             the one which is usually called "Luong attention" is the following:
             </p>
-            <ul><li><font face="arial">encoder: unirectional</font> (simple)
+            <ul><li><font face="arial">encoder: unidirectional</font> (simple)
             </li>
                 <li><font face="arial">attention score: bilinear function</font>
                 </li>
@@ -752,7 +752,7 @@ for (i = 0; i < dropdown.length; i++) {
             <h2>Attention Learns (Nearly) Alignment</h2>
 
             <p>Remember the motivation for attention? At different steps,
-                the decoder may need to focus different
+                the decoder may need to focus on different
             source tokens, the ones which are more relevant at this step. Let's look at attention weights -
                 which source words does the decoder use?
             </p>
