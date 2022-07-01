@@ -12,7 +12,7 @@ description: I'm Elena (Lena) Voita and I work on Natural Language Processing. M
 <img src="/img/people/orange_lena-min.jpg" name="readmore_1" width=204px height=240px></a> -->
 
 
-I am Elena (Lena) Voita, a __Ph.D. student__ at the University of Edinburgh supervised by [Ivan Titov]({{site:ivan_page}}) and [Rico Sennrich]({{site.rico_page}}). Currently visiting [Instituto Superior Técnico](https://tecnico.ulisboa.pt/pt/) in Lisbon.
+I am Elena (Lena) Voita, a __Ph.D. student__ at the University of Edinburgh supervised by [Ivan Titov]({{site:ivan_page}}) and [Rico Sennrich]({{site.rico_page}}). 
 
 I'm supported by the [__Facebook PhD Fellowship__](https://research.fb.com/blog/2020/01/announcing-the-recipients-of-the-2020-facebook-fellowship-awards/) (2020-2022).
 
@@ -24,8 +24,9 @@ I (still) [teach NLP](https://github.com/yandexdataschool/nlp_course) at the [Ya
 ## <span style="color:darkblue">News </span>
 
 __2022__
-
-* __Feb-...__ A visiting PhD student in [André Martins](https://andre-martins.github.io)'s group at [Instituto Superior Técnico](https://tecnico.ulisboa.pt/pt/). 
+* __June-Sept__ Area Chair at [EMNLP 2022](https://2022.emnlp.org/).
+* __May-Sept__ Senior Area Chair at [AACL-IJCNLP 2022](https://www.aacl2022.org/). 
+* __Feb-June__ Visiting [SARDINE Lab](https://sardine-lab.github.io): [André Martins](https://andre-martins.github.io)'s group at [Instituto Superior Técnico](https://tecnico.ulisboa.pt/pt/). 
 
 __2021__
 
