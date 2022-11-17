@@ -1,0 +1,17 @@
+
+-
+  layout: paper
+  paper-type: inproceedings
+  selected: y
+  year: 2021
+  img: hallucinations-min.png
+  title: "Looking for a needle in a haystack: A comprehensive study of hallucinations in neural machine translation"
+  authors: "Nuno Guerreiro, <u>Elena Voita</u>,  André Martins"
+  doc-url:
+  conf_name:
+  conf_year: 2022
+  url: "https://arxiv.org/pdf/2208.05309.pdf"
+  code:
+  blog:
+  abstract: ""
+

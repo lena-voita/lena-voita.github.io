@@ -7,13 +7,21 @@ order: 3
 ---
 
 ### <span style="color:darkblue"> Service </span>
+
+Senior Area Chair:
+* AACL-IJCNLP 2022
+
+Area Chair:
+* EMNLP 2022
+* EACL 2023
+
 Program committee:
 * EMNLP: 2019 <span style="color:#999">(outstanding reviewer)</span>, 2020, 2021
 * ACL 2020
 * NAACL 2021
 * ICML 2020 <span style="color:#999">(top-33% reviewer)</span>
 * NeurIPS 2020
-* ICLR 2021 <span style="color:#999">(outstanding reviewer)</span>
+* ICLR 2021 <span style="color:#999">(outstanding reviewer)</span>, 2023
 * Workshops: [RepL4NLP](https://sites.google.com/view/repl4nlp2020/home) 2020 <span style="font-size:0.9em">(at ACL)</span>, [DeeLIO](https://sites.google.com/view/deelio-ws/program-committee) 2020 <span style="font-size:0.9em">(at EMNLP)</span> 
 
 
@@ -24,6 +32,8 @@ Program committee:
 
 ### <span style="color:darkblue"> Speaker </span>
 
+* 12/2022 <span class="talk-title">_The Two Viewpoints on the NMT Training Process_</span> <span style="font-size:0.9em">(keynote)</span> 
+<br/>&nbsp; &nbsp; &nbsp; [BlackBoxNLP workshop at EMNLP 2022](https://blackboxnlp.github.io)
 * 08/2021 <span class="talk-title">_Neural Machine Translation Inside Out_</span> <span style="font-size:0.9em">(keynote)</span> 
 <br/>&nbsp; &nbsp; &nbsp; [RepL4NLP workshop at ACL 2021](https://sites.google.com/view/repl4nlp-2021/home)
 * 06/2021 <span class="talk-title">_Neural Machine Translation Inside Out_</span> <span style="font-size:0.9em">(keynote)</span> 
