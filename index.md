@@ -13,16 +13,25 @@ description: I'm Elena (Lena) Voita and I work on Natural Language Processing. M
 <img src="/img/people/orange_lena-min.jpg" name="readmore_1" width=204px height=240px></a> -->
 
 
-I am Elena (Lena) Voita, a __Research Scientist__ at [__FAIR__](https://ai.facebook.com) working on Natural Language Processing.
+I am Elena (Lena) Voita, a __Research Scientist__ at [__FAIR__](https://ai.facebook.com) working on Analysis and Interpetability for NLP. 
+
+Also, [__NLP Course__ <span style="color:#92bf32">__For You__</span>](https://lena-voita.github.io/nlp_course.html) creator and current [SIGREP](https://www.sigrep.org) president.
+<!--* a __Research Scientist__ at [__FAIR__](https://ai.facebook.com) working on NLP,* current [SIGREP](https://www.sigrep.org) president,* NLP Course <span style="color:#92bf32">For You</span> creator - look [here](https://lena-voita.github.io/nlp_course.html).-->
+
 
 
 Before that, I was Ph.D. student at the University of Edinburgh supervised by [Ivan Titov]({{site:ivan_page}}) and [Rico Sennrich]({{site.rico_page}}),  was awarded [Facebook PhD Fellowship](https://research.fb.com/blog/2020/01/announcing-the-recipients-of-the-2020-facebook-fellowship-awards/),
 worked as a Research Scientist at [Yandex Research]({{site.yandex_research_main}}) side by side with the [Yandex Translate](https://translate.yandex.com) team, 
 while enjoying writing [blog posts](https://lena-voita.github.io/posts.html) and [teaching](https://lena-voita.github.io/nlp_course.html)<a onMouseOver="document.fox.src='/img/people/foxie.jpeg';" onMouseOut="document.fox.src='/img/people/orange_lena-min.jpg';">.</a> 
 
-<span style="color:red">__Blog-course:__</span>    NLP Course <span style="color:#92bf32">For You</span> - look [here](https://lena-voita.github.io/nlp_course.html).
+<!--<span style="color:red">__Blog-course:__</span>    NLP Course <span style="color:#92bf32">For You</span> - look [here](https://lena-voita.github.io/nlp_course.html).-->
 
 ## <span style="color:darkblue">News </span>
+
+__2023__
+
+* __January__ <span style="color:#888"><u>Invited talks:</u></span> [TTI Chicago](https://www.ttic.edu/young-researcher/), [RISE Learning Machines seminar](https://www.ri.se/en/learningmachinesseminars).
+* __Jan-Apr__ <span style="color:#888"><u>Area Chair:</u></span> [ACL 2023](https://2023.aclweb.org).
 
 __2022__
 
