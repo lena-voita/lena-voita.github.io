@@ -30,7 +30,7 @@ while enjoying writing [blog posts](https://lena-voita.github.io/posts.html) and
 
 __2023__
 
-* __January__ <span style="color:#888"><u>Invited talks:</u></span> [TTI Chicago](https://www.ttic.edu/young-researcher/), [RISE Learning Machines seminar](https://www.ri.se/en/learningmachinesseminars).
+* __Jan-March__ <span style="color:#888"><u>Invited talks:</u></span> [TTI Chicago](https://www.ttic.edu/young-researcher/), [RISE Learning Machines seminar](https://www.ri.se/en/learningmachinesseminars), [University of Melbourne](https://cis.unimelb.edu.au/research/artificial-intelligence/research/Natural-Language-Processing).
 * __Jan-Apr__ <span style="color:#888"><u>Area Chair:</u></span> [ACL 2023](https://2023.aclweb.org).
 
 __2022__
