@@ -1,0 +1,17 @@
+
+-
+  layout: paper
+  paper-type: inproceedings
+  selected: y
+  year: 2023
+  img: neurons.png
+  title: "Neurons in Large Language Models: Dead, N-gram, Positional"
+  authors: "<u>Elena Voita</u>,  Javier Ferrando, Christoforos Nalmpantis"
+  doc-url:
+  conf_name: 
+  conf_year: 2023
+  url: "https://arxiv.org/pdf/2309.04827.pdf"
+  code:
+  blog:
+  abstract: " "
+

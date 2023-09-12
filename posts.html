@@ -41,6 +41,62 @@ order: 1
     <div class="cardContent">
 
         <!--<h1 style="font-size:28px;">Language Modeling, Lexical Translation, Reordering</h1>-->
+        <h1 style="font-size:28px;">Neurons in LLMs: Dead, N-gram, Positional</h1>
+
+        <span style="font-size:14px;">
+        This is a post for the paper
+            <a href="https://arxiv.org/pdf/2309.04827.pdf" target="_blank">
+                Neurons in Large Language Models: Dead, N-gram,  Positional.
+            </a>
+        </span>
+
+        <a class="float-right">
+            <img src="../resources/posts/ffn_neurons/suppressed_concepts-min.png" alt=""
+                 style="max-width:300px; height:auto; float: right; margin-left:15px; margin-top:25px"/>
+        </a>
+
+
+
+        <br/>
+        <br/>
+        <span style="font-size:15px;">
+
+            <p>With scale, LMs become more exciting but, at the same time, harder to analyze.
+                We show that even with
+                simple methods and a single GPU, you can do a lot! We analyze OPT models up to 66b and find that
+            </p>
+        <ul>
+            <li>neurons inside LLMs can be:</li>
+            <ul style="margin-left:30px;">
+                <li><u>dead</u>, i.e. never activate on a large dataset,</li>
+                <li><u>n-gram</u> detectors that explicitly remove information about current input token;</li>
+                <li><u>positional</u>, i.e. encode "where" regardless of "what" and question the key-value memory view of FFNs;</li>
+            </ul>
+
+            <li>with scale, models have more dead neurons and token detectors and are less focused on absolute position.
+            </li>
+        </ul>
+        </span>
+
+        <a class="pull-right" href="/posts/neurons_in_llms_dead_ngram_positional.html" onMouseOver="document.readmore8.src='../resources/posts/buttons/button_read_more_push-min.png';" onMouseOut="document.readmore8.src='../resources/posts/buttons/button_read_more-min.png';">
+        <img src="../resources/posts/buttons/button_read_more-min.png" name="readmore8" width=120px class="pull-right"></a>
+        <a class="pull-right" href="https://arxiv.org/pdf/2309.04827.pdf" onMouseOver="document.readpaper8.src='../resources/posts/buttons/button_read_paper_push-min.png';" onMouseOut="document.readpaper8.src='../resources/posts/buttons/button_read_paper-min.png';">
+        <img src="../resources/posts/buttons/button_read_paper-min.png" name="readpaper8" width=120px class="pull-right"></a>
+
+
+        <span style="font-size:15px; text-align: right; float: right; color:gray">September 2023</span>
+
+    </div>
+</div>
+
+
+<!-- ################################################################################### -->
+
+
+<div class="fullCard" id="thumbnail" >
+    <div class="cardContent">
+
+        <!--<h1 style="font-size:28px;">Language Modeling, Lexical Translation, Reordering</h1>-->
         <h1 style="font-size:28px;">NMT Training Process though the Lens of SMT</h1>
 
         <span style="font-size:14px;">
@@ -131,7 +187,7 @@ order: 1
         </ul>
         </span>
 
-        <a class="pull-right" href="/posts/nmt_inside_out.html" onMouseOver="document.readmore6.src='../resources/posts/buttons/button_read_more_push-min.png';" onMouseOut="document.readmore5.src='../resources/posts/buttons/button_read_more-min.png';">
+        <a class="pull-right" href="/posts/nmt_inside_out.html" onMouseOver="document.readmore6.src='../resources/posts/buttons/button_read_more_push-min.png';" onMouseOut="document.readmore6.src='../resources/posts/buttons/button_read_more-min.png';">
         <img src="../resources/posts/buttons/button_read_more-min.png" name="readmore6" width=120px class="pull-right"></a>
 
         <span style="font-size:15px; text-align: right; float: right; color:gray">July 2021</span>

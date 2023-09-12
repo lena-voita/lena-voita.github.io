@@ -1,0 +1,482 @@
+---
+layout: post
+title: Neurons in LLMs - Dead, N-gram, Positional
+---
+
+<style>
+    @import url("https://fonts.googleapis.com/css2?family=Comic+Neue&display=swap");
+
+    .data_text {
+        font-family: "Comic Neue", "Arial";
+    }
+</style>
+
+<header>
+<meta name="robots" content="noindex, nofollow" />
+</header>
+
+<!-- the next two lines are inserted once per page even if there are several shtukovinas,
+     the rest is one-per-shtukovina; read more: https://flickity.metafizzy.co/options.html -->
+<link rel="stylesheet" href="https://unpkg.com/flickity@2/dist/flickity.min.css" media="screen">
+<script src="https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js"></script>
+
+        <span style="font-size:14px;">
+        This is a post for the paper
+            <a href="https://arxiv.org/pdf/2309.04827.pdf" target="_blank">
+                Neurons in Large Language Models: Dead, N-gram,  Positional.
+            </a>
+        </span>
+
+        <a class="float-right">
+            <img src="../resources/posts/ffn_neurons/suppressed_concepts-min.png" alt=""
+                 style="max-width:300px; height:auto; float: right; margin-left:15px; margin-top:25px"/>
+        </a>
+
+
+
+        <br/>
+        <br/>
+        <span style="font-size:15px;">
+
+            <p>With scale, LMs become more exciting but, at the same time, harder to analyze.
+                We show that even with
+                simple methods and a single GPU, you can do a lot! We analyze OPT models up to 66b and find that
+            </p>
+        <ul>
+            <li>neurons inside LLMs can be:</li>
+            <ul style="margin-left:30px;">
+                <li><u>dead</u>, i.e. never activate on a large dataset,</li>
+                <li><u>n-gram</u> detectors that explicitly remove information about current input token;</li>
+                <li><u>positional</u>, i.e. encode "where" regardless of "what" and question the key-value memory view of FFNs;</li>
+            </ul>
+
+            <li>with scale, models have more dead neurons and token detectors and are less focused on absolute position.
+            </li>
+        </ul>
+        </span>
+
+        <a class="pull-right" href="https://arxiv.org/pdf/2309.04827.pdf" onMouseOver="document.readpaper.src='../resources/posts/buttons/button_read_paper_push-min.png';" onMouseOut="document.readpaper.src='../resources/posts/buttons/button_read_paper-min.png';">
+        <img src="../resources/posts/buttons/button_read_paper-min.png" name="readpaper" width=120px class="pull-right"></a>
+
+
+        <span style="font-size:15px; text-align: right; float: right; color:gray">September 2023</span>
+
+<br/>
+<p></p>
+<hr>
+
+
+
+
+
+
+
+
+<h3 id="mt_training">What, Why, and How</h3>
+
+
+
+<h4><u>What and Why</u>: Neurons Inside FFN and Their Properties</h4>
+<img src="../resources/posts/ffn_neurons/which_neurons-min.png" width="300" style="float:right; margin-left:20px" >
+
+<p>
+    Usually, neural models have lots of neurons everywhere. In case of Transformer, we could analyze neurons from
+    the representations coming from the residual stream, attention queries/keys/values, etc. Yet, we choose to focus on the neurons
+    inside FFNs. Why? Well,
+</p>
+<ul>
+    <li><u>they are more likely to be interpretable</u> than e.g. neurons from the residual stream
+    <span style="color:silver">(the elementwise nonlinearity breaks the rotational invariance of this representation and encourages
+        features to align with the basis dimensions)</span></li>
+    <li><u>some other cool results also come from FFNs</u>:
+    <a href="https://aclanthology.org/2022.acl-long.581.pdf" target="_blank">knowledge neurons</a>,
+        <a href="https://aclanthology.org/2021.emnlp-main.446.pdf" target="_blank">key-value memory view</a>, etc.
+    </li>
+</ul>
+<p>This was our <span class="data_text"><strong>what</strong></span> and
+    <span class="data_text"><strong>why</strong></span> — now let's come to
+    <span class="data_text"><strong>how</strong></span> :) </p>
+
+</br>
+
+<h4 id="two_ways_to_interpret"><u>How</u>: The Two Ways to Interpret a Neuron Role</h4>
+<!--<img src="../resources/posts/ffn_neurons/activated_not_activated-min.png" width="500" style="float:right; margin-left:20px" >-->
+<p>Since we are looking at the OPT models which have the ReLU activation function,
+    the simplest thing to look at is when a neuron
+    is <font face="arial">activated</font> (non-zero) and when it is
+    <font face="arial">not activated</font> (zero). Indeed, if a neuron is not activated, it does not influence the
+    residual stream! Therefore, understanding when a neuron is active is equivalent to understanding
+    the types of input where it influences the predictions.
+</p>
+
+<center>
+<img src="../resources/posts/ffn_neurons/activated_not_activated-min.png" style="max-width:70%; margin-bottom:15px; "/>
+</center>
+
+<p>Next, when a neuron is activated, it triggers the corresponding row of the second FFN layer, and
+    this row is added to the residual stream. If we understand how this row influences the residual stream, we will
+    understand the way our neuron influences predictions.
+</p>
+<center>
+<img src="../resources/posts/ffn_neurons/how_to_interpret-min.png" style="max-width:75%; margin-bottom:15px; "/>
+</center>
+<p>Overall, we are going to understand  <span class="data_text"><strong>when</strong></span> and
+    <span class="data_text"><strong>how</strong></span> various neurons influence model predictions.
+</p>
+
+</br>
+<h3 id="dead_neurons"><u>Dead</u>: The Ones That Never Activate</h3>
+
+<p>Let us start with <span class="data_text"><strong>when</strong></span> different neurons are activated. For this,
+we take a large diverse collection of data, feed to a network and record neron activations. Overall,
+our dataset consists of over 20m tokens and contains various subsets if the Pile, Codeparrot, Reddit, etc.</p>
+
+<center>
+<img src="../resources/posts/ffn_neurons/dead_activation_frequency-min.png" style="max-width:90%; margin-bottom:15px; "/>
+</center>
+
+<p>We see that</p>
+<ul>
+    <li>many neurons are dead <span style="color:silver">(in the 66b model, some layers are <u>more than 70% dead</u>!),</span></li>
+    <li>at the same time, alive neurons activate rarely,</li>
+    <li>larger models are more sparse <span style="color:silver">(more dead neurons and lower neuron activation frequency),</span></li>
+    <li>this is happening only in the first half of the network.</li>
+</ul>
+
+<h4>Why Only the First Half is Sparse?</h4>
+
+<p>When thinking about the reasons why sparsity with dead and rarely-activating neurons is only in the first half of the network,
+let us imagine how a network encodes "concepts" (i.e., input patterns) available in each layer in this layer's representations.
+    Intuitively,
+</p>
+<span style="background-color:#f6faed">
+    <font face="arial">
+    The model has to "spread" sets of encoded in a layer concepts across available neurons.</font>
+</span>
+</br></br>
+
+<p>Now, let us recall that early layers encode largely shallow lexical patterns while later layers encode
+high-level semantics. Since
+the number of possible shallow patterns is not large and, potentially, enumerable, in the early layers the
+    model can (and, as we will see later, does) assign dedicated neurons to some features. The more neurons
+    are available to the model, the easier it is to do so — this agrees with the results in the previous picture
+    showing that larger models are more sparse.
+
+</p>
+
+<center>
+<img src="../resources/posts/ffn_neurons/sparsity_hypothesis-min.png" style="max-width:90%; margin-bottom:15px; "/>
+</center>
+
+<p>Differently, the space of fine-grained semantic concepts is too large compared to the number of available neurons. This
+ makes it hard to reserve many dedicated neuron-concept pairs. There can be some (e.g.,
+    <a href="https://aclanthology.org/2022.acl-long.581.pdf" target="_blank">knowledge neurons</a>),
+    but the number of neurons relatively small to have many highly specialized neurons.</p>
+
+</br>
+<h3 id="ngram_neurons"><u>N-gram</u>: The Ones That Detect and Suppress N-grams</h3>
+
+<p>Now, let us look more closely into the patterns encoded in the lower half of the models and try to understand the
+    nature of the sparsity we saw above. Specifically, we analyze how neuron activations depend on an input n-gram.
+</p>
+
+<p>Long story short, we find that our hypothesis for the lower half of the network was right!
+    When packing concepts into neurons in the lower half of the network, the model reserves many neurons for
+    specific features. For example,
+    here many neurons act as token and n-gram detectors — neurons specialized on shallow lexical patterns.</p>
+
+<span style="background-color:#f6faed">
+    <font face="arial">
+    N-gram detectors: activate (roughly) <u>if and only if</u> the input is one of a few specific n-grams.</font>
+</span>
+
+<p><span style="color:silver">Note: In this post, we focus on unigram/token detectors. For the rest, see the paper.</span></p>
+
+<p>Each of these token detectors is responsible for a group of several tokens that, in most of the cases,
+    are variants of the same word: differences are only in capitalization, presence of the space-before-word
+    special symbol, morphological form, etc. — look at the examples below.</p>
+
+<center>
+<img src="../resources/posts/ffn_neurons/ffn_concepts_examples_tokens-min.png" style="max-width:100%; margin-bottom:15px; "/>
+</center>
+
+<h4>Layers Collaborate, i.e. Detect Different Tokens</h4>
+
+<p>Interestingly, across layers, token-detecting neurons are responsible for largely differing tokens.
+    Look at the figure below: in each following layer, detected tokens mostly differ from all
+    the tokens covered by the layers below.
+</p>
+
+<center>
+<img src="../resources/posts/ffn_neurons/token_detectors_and_tokens-min.png" style="max-width:90%; margin-bottom:15px; "/>
+</center>
+
+<p>All in all, this points to an ensemble-like (as opposed to sequential) behavior of the
+    layers: layers collaborate so that token-detecting neurons cover largely different
+    tokens in different layers. This divide-and-conquer-style strategy allows larger models to cover many tokens overall
+    and use their capacity more effectively.</p>
+
+<h4>Token Detectors <u>Explicitly Suppress</u> Triggering them Tokens</h4>
+
+<p>So far, we looked only at <span class="data_text"><strong>when</strong></span> a neuron is activated,
+i.e. used only <a href="#two_ways_to_interpret">the first way</a> of interpreting a neuron.
+Now, let us also understand <span class="data_text"><strong>how</strong></span> token detectors influence the residual stream.
+</p>
+
+<img src="../resources/posts/ffn_neurons/suppressed_concepts_full-min.png" style="max-width:60%; float:right; margin-left:20px" >
+
+<p>For this, we project the update coming from a neuron to the residual stream onto vocabulary.
+Differently from previous work, we look not only at the top projections, <font face="arial">but also at the bottom</font>:
+    bottom negative projections show <font face="arial">which tokens are suppressed</font>.
+</p>
+
+<p> We find that often token-detecting neurons <u>deliberately suppress the tokens they detect</u>.
+The figure below shows several examples of token-detecting neurons along with the top promoted and
+    suppressed concepts. While the top promoted concepts are in line with
+    <a href="https://aclanthology.org/2021.emnlp-main.446.pdf" target="_blank">previous work</a>
+    (they are potential next token candidates),
+    the top suppressed concepts are rather unexpected: they are exactly the tokens triggering this neuron.
+    This means that vector updates corresponding to these neurons point in the direction of the next token candidates
+    at the same time as they point away from the tokens triggering the neuron. Note that this is not trivial since
+    these updates play two very different roles at the same time.
+</p>
+
+<center>
+<img src="../resources/posts/ffn_neurons/ffn_concepts_examples-min.png" style="max-width:100%; margin-bottom:15px; "/>
+</center>
+<p>Overall, for over 80% of token-detecting
+    neurons their corresponding updates point in the negative direction from the triggering them tokens
+    (although, the triggering tokens are not always at the very top suppressed concepts as in the
+    examples above).</p>
+
+<h4>Overall, this is an example of model mechanism targeted at removing information!</h4>
+
+
+</br>
+<h3 id="positional_neurons"><u>Positional</u>: "Where" Regardless of "What"</h3>
+
+<p>Finally, let us come to the last type of neurons we consider. Earlier when looking at
+    <a href="#dead_neurons">dead neurons</a> we noticed that some
+    neurons never activate except for a few first token positions.
+    This motivates us to look further into how position is encoded in the model  and,
+    specifically, whether some neurons are responsible for encoding positional information.
+</p>
+
+<h4>What Are Positional Neurons?</h4>
+
+<p>Intuitively,</p>
+<span style="background-color:#f6faed">
+    <font face="arial">
+    Positional neurons are the ones whose activation patterns are defined by or, at least, strongly depend on token position.</font>
+</span>
+</br>
+<p>Formally, we identify neurons whose activations have high mutual information with position.</p>
+
+
+<center>
+<img src="../resources/posts/ffn_neurons/mi_with_position-min.png" style="max-width:75%; margin-bottom:15px; "/>
+</center>
+
+<p>We gather neuron activations for many texts, evaluate activation frequency for each neuron and position and evaluate
+mutual information between neuron activation pattern and token position. If this mutual information is high, we call such a
+    neuron positional. Indeed, high MI means that we can say whether a neuron is activated or not just
+    by looking at token position (regardless of content).
+</p>
+
+<h4>Types of Positional Neurons</h4>
+
+<p>We categorized positional neurons by the type if of their activation pattern: dependency of activation frequency on position.
+As expected, we see that often activation of such neurons is defined solely by position
+    regardless of content: many positional neurons
+    act as <u>position range indicators</u>, i.e. they
+    <font face="arial">activate within certain position ranges and do not activate otherwise</font>.
+</p>
+<center>
+<img src="../resources/posts/ffn_neurons/positional_types-min.png" style="max-width:100%; margin-bottom:15px; "/>
+</center>
+<p>Let us now briefly discuss each of these types.</p>
+
+
+<img src="../resources/posts/ffn_neurons/purple-min.png" style="max-width:45%; float:right; margin-left:20px; margin-bottom:20px" >
+<span style="color:purple"><strong>Oscillatory</strong>: up, down, repeat</span></br>
+<p>These neurons have oscillatory activation pattern: their activation frequency is an oscillatory function of position.
+    When such a pattern is strong, the activation pattern is an <font face="arial">indicator function</font> of
+    position ranges. In other words, such a neuron is activated if and only if the position falls into a
+    certain set.
+</p>
+<p>Note that this activation pattern does not change across data domains. Therefore, it is defined <font face="arial">solely
+    by position <u>with no regard of textual content</u></font>.</p>
+
+<img src="../resources/posts/ffn_neurons/red-min.png" style="max-width:40%; float:right; margin-left:20px; margin-bottom:20px" >
+<span style="color:red"><strong>Both types of activation extremes</strong></span></br>
+<p>
+These are the neurons whose activation pattern is not oscillatory but still has intervals where activation
+    frequency reaches both "activation extremes": 0 (never activated) and 1 (always activated).
+    Similarly to oscillatory neurons, when such a pattern is strong, it is also (almost) an indicator function.
+</p>
+
+<p>
+    Typically, these neurons implement <font face="arial">"<u>less than</u>" or "<u>greater than</u>" logic</font> for position.
+</p>
+
+<img src="../resources/posts/ffn_neurons/green-min.png" style="max-width:50%; float:right; margin-left:20px; margin-bottom:20px" >
+<span style="color:#6aad26"><strong>Only one of the two activation extremes</strong></span></br>
+<p>Differently from the previous two types, activation patterns for these neurons can reach only one of the extreme
+    values 0 or 1. While this means that they never behave as indicator functions, there are
+    position ranges where a neuron being activated or not depends solely on token position.
+</p></br>
+
+
+
+<img src="../resources/posts/ffn_neurons/yellow-min.png" style="max-width:40%; float:right; margin-left:20px; margin-bottom:20px" >
+<span style="color:#d9c729"><strong>Other</strong>: depend on but are not defined by position</span></br>
+<p>Finally, these are the neurons whose activation pattern strongly depends on position
+but does not have intervals where activation frequency stays 0 or 1.
+    Typically, these activation patterns have lower mutual information with position than the previous three types.</p>
+
+
+
+<h4>Positional Neurons Inside Models</h4>
+<p>Now that we classified positional neurons into several types according to their activation pattern, let us look
+inside our models and see how they encode position. For each of the models, the figure below shows all
+positional neurons found in each of their layers. Each circle corresponds to a single neuron, and
+colors indicate the types we discussed above.</p>
+
+<center>
+<img src="../resources/posts/ffn_neurons/positional_neurons_in_models-min.png" style="max-width:100%; margin-bottom:15px; "/>
+</center>
+
+
+<p>Overall,
+    we notice that smaller models rely substantially on <span style="color:purple">oscillatory neurons</span>:
+    this is the most frequent type of positional neurons for
+    models smaller than 6.7b of parameters. In combination with  many
+    <span style="color:red">less than/greater than</span> neurons, <font face="arial"><u>the model is able to derive
+        token's absolute position</u></font> rather accurately.
+    Interestingly, larger models do not have oscillatory neurons and rely on more generic patterns shown with red-
+    and green-colored circles.
+</p>
+
+<h4>Positional Neurons Collaborate :)</h4>
+<p>
+    Interestingly, positional neurons seem to collaborate to cover the full set of positions together.
+    For example, let us look more closely at the 10 strongly oscillatory neurons in the second
+    layer of the 125m model. Since they act as indicator functions, we can plot position ranges indicated by
+    each of these neurons.
+</p>
+
+<center>
+<img src="../resources/posts/ffn_neurons/neurons_collaborate_full-min.png" style="max-width:100%; margin-bottom:15px; "/>
+</center>
+
+<p>We see that</p>
+<ul>
+    <li>indicated position ranges for these neurons are similar up to a shift,</li>
+    <li>the shifts are organized in a "perfect" order in a sense that altogether,
+        these ten neurons efficiently cover all positions such that none of these neurons is redundant.</li>
+</ul>
+
+
+<h4>Positional Neurons Are Learned Even <u>Without</u> Positional Encoding!</h4>
+<p>Recently, it turned out that <a href="https://aclanthology.org/2022.findings-emnlp.99.pdf" target="_blank">even without positional encoding,
+    autoregressive language models still learn positional information</a>.
+    What if the mechanism these "NoPos" models use to encode position is positional neurons? Let us find out!</p>
+
+<center>
+<img src="../resources/posts/ffn_neurons/nopos-min.png" style="max-width:100%; margin-bottom:15px; "/>
+</center>
+
+<p>We took a replica of the GPT-2 training data (smaller dataset than was used in OPT training) and trained
+two 125m models: with (standard) and without positional encodings. We see that even when trained without
+    positional encoding, the model still has a lot of strong positional neurons! Patterns, however, are different
+    fromt the standard training. For example, the NoPos model does not have oscillatory neurons: apparently, figuring out
+    absolute position without positional encoding is hard.
+</p>
+
+
+<h4>Positional Neurons Question FFNs as Key-Value Memories</h4>
+
+<p>Finally, positional neurons are not only cool, but they also question the widely accepted view of
+feed-forward Transformer layers as key-value memories. The way it is stated in
+    <a href="https://aclanthology.org/2021.emnlp-main.446.pdf" target="_blank">the original paper (Geva et al, 2021)</a>,
+    <font face="arial">each key correlates with textual patterns in the training examples, and each value induces a distribution over the output vocabulary</font>.
+    My illustration of this view if below.
+</p>
+
+<center>
+<img src="../resources/posts/ffn_neurons/key_value_view_general-min.png" style="max-width:80%; margin-bottom:15px; "/>
+</center>
+
+<p>While some parts of FFNs do behave this way,
+    <font face="arial"><u>positional neurons do not fit this view</u></font>.
+Indeed, if these neurons are triggered only based on position (e.g., the position range indicators we saw above),
+    then the keys have nothing to do with textual patterns!
+</p>
+
+<center>
+<img src="../resources/posts/ffn_neurons/doubting_key_value-min.png" style="max-width:80%; margin-bottom:15px; "/>
+</center>
+<p>Overall, these are good news for the researchers: it means that the role of FFNs in the Transformer
+is still poorly understood. Hence, we have work to do :)</p>
+
+</br>
+<h3 id="350m">The Weird Case of the 350m Model, or Modeling Matters</h3>
+
+<p>Most of the things we discussed so far are found in all the models...except for the 350m! This was
+surprizing, so we looked at
+    <a href="https://github.com/huggingface/transformers/blob/main/src/transformers/models/opt/modeling_opt.py" target="_blank">the code</a>
+    and noticed that in the 350m model, the LayerNorm is applied after the layer, not before as for the rest.
+</p>
+
+<center>
+<img src="../resources/posts/ffn_neurons/350m-min.png" style="max-width:80%; margin-bottom:15px; "/>
+</center>
+
+<p>This seemingly minor difference (although, if you trained Transformers long enough you should know
+    that this is very, very important) influences interpretability of the models quite a lot.
+    Nevertheless, we do think that the 350m model learns roughly same things as the rest of the models,
+    the way it shows up (or, to be precise, does not show up) is different from the rest. Potentially,
+    we could find some alternative to dead and n-gram neurons in some other way rather than by
+    looking at neurons, but that would be a completely different story.
+</p>
+<p>In the paper, we also mention other examples where changing modeling bits affected interpretability -
+    if interested, look there!</p>
+
+<br>
+<h3>Wait a Minute, What About Single GPU?</h3>
+
+<p>That's right, all the main experiments in this paper were done on a single GPU! This means,
+    analysis of large language models can be done in a way that is accessible to academic labs.
+    In this work, we achieved this by choosing very simple analysis tools.
+    We use only sets of neuron values for some data, i.e. we run only forward passes of the full model or
+    its several first layers. Since large models do not fit in a single GPU, we load one layer at a time keeping
+    the rest of the layers on CPU. This allows us to pre-record neuron activations for large models,
+    save them and analyze later.
+</p>
+
+
+
+<br>
+<h3>Conclusions:</h3>
+        <ul>
+            <li>neurons inside LLMs can be:</li>
+            <ul style="margin-left:30px;">
+                <li><u>dead</u>, i.e. never activate on a large dataset,</li>
+                <li><u>n-gram</u> detectors that explicitly remove information about current input token;</li>
+                <li><u>positional</u>, i.e. encode "where" regardless of "what" and question the key-value memory view of FFNs;</li>
+            </ul>
+
+            <li>with scale, models have more dead neurons and token detectors and are less focused on absolute position;
+            </li>
+            <li>you can find out all this with a single gpu!</li>
+        </ul>
+
+
+Want to know more?
+
+<a class="pull-right" href="https://arxiv.org/pdf/2309.04827.pdf" onMouseOver="document.readpaper2.src='../resources/posts/buttons/button_read_paper_push-min.png';" onMouseOut="document.readpaper2.src='../resources/posts/buttons/button_read_paper-min.png';">
+<img src="../resources/posts/buttons/button_read_paper-min.png" name="readpaper2" width=120px class="pull-right"></a>
+
+
+<br/><br/>
+Share: <a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-text="Neurons in LLMs: Dead, N-gram, Positional - a new paper by @lena_voita @javifer_96 @christofernal! Blog post: " data-url="https://lena-voita.github.io/posts/neurons_in_llms_dead_ngram_positional.html" data-lang="en" data-show-count="false">Tweet</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>

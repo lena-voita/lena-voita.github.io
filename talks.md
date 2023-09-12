@@ -12,9 +12,11 @@ Senior Area Chair:
 * AACL-IJCNLP 2022
 
 Area Chair:
-* EMNLP 2022
-* EACL 2023
 * ACL 2023
+* EMNLP 2022, 2023
+* EACL 2023
+* AACL-IJCNLP 2023
+
 
 Program committee:
 * EMNLP: 2019 <span style="color:#999">(outstanding reviewer)</span>, 2020, 2021
@@ -54,6 +56,7 @@ Program committee:
 <br/>&nbsp; &nbsp; &nbsp; EPFL
 <br/>&nbsp; &nbsp; &nbsp; [TTI Chicago](https://www.ttic.edu/young-researcher/)
 <br/>&nbsp; &nbsp; &nbsp; [RISE Learning Machines seminar](https://www.ri.se/en/learningmachinesseminars)
+<br/>&nbsp; &nbsp; &nbsp; [University of Melbourne](https://cis.unimelb.edu.au/research/artificial-intelligence/research/Natural-Language-Processing)
 
 * 07/2022 <span class="talk-title">_From Count-Based Methods to GPT-3: Main Developments in Natural Language Processing_</span>
 <br/>&nbsp; &nbsp; &nbsp; [SICSS-Oxford](https://sicss.io/2022/oxford/)
