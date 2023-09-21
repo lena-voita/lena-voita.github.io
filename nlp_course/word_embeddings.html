@@ -1896,7 +1896,7 @@ We want to find a transformation matrix W such that \(W\color{#547dbf}{z_i}\) ap
                     \mathbb{R}^{d\times |V|}\)
                     be embedding sets trained on different corpora.
                     To align the learned embeddings, the authors find the rotation
-                    \(R = \arg \max\limits_{Q^TQ=I}\parallel \color{#547dbf}{W_2}\color{black}Q - \color{#88a635}{W_1}\color{black}\parallel_F\) - this
+                    \(R = \arg \min\limits_{Q^TQ=I}\parallel \color{#547dbf}{W_2}\color{black}Q - \color{#88a635}{W_1}\color{black}\parallel_F\) - this
                     is called Orthogonal Procrustes. Using this rotation, we can align embedding sets
                     and find words which do not match well: these are the words that change
                     meaning with the corpora.
