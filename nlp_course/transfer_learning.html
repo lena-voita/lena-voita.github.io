@@ -149,7 +149,8 @@ for (i = 0; i < dropdown.length; i++) {
         of transfer and will show some popular ways it is currently done.
     </font></p>
 
-    <p>Currently, <font face="arial">Transfer Learning</font> is likely to be the most popular NLP area both in research and
+    <p>Before the era of Large Language Models (such as e.g. ChatGPT),
+        <font face="arial">Transfer Learning</font> was likely to be the most popular NLP area both in research and
     industry. Most probably you've already heard people talking about ELMo, BERT, and other characters - after this
         lecture, you will understand why!
     </p>
@@ -858,25 +859,30 @@ for (i = 0; i < dropdown.length; i++) {
         <h3><u>Training Input</u>: Pairs of Sentences with Special Tokens</h3>
 
         <p>In training, BERT sees pairs of sentences separated with a special token-separator
-            <span class="data_text"><strong>[SEP]</strong></span>. To let the model easily distinguish
-            between these sentences, in addition to token and positional embeddings it uses
-            segment embeddings.
+            <span class="data_text"><strong>[SEP]</strong></span>. Another special token is <span class="data_text"><strong>[CLS]</strong></span>. In training,
+            it is used for the NSP objective we'll see next. Once a model is trained, it is
+            used for downstream tasks.
         </p>
 
         <p style="text-align: center; display: block;
             margin-bottom:20px; max-width:100%;">
-           <img src="../resources/lectures/transfer/bert/bert_input.gif"
+           <img src="../resources/lectures/transfer/bert/input_text-min.png"
              style="max-width:90%; margin-bottom:20px;"/>
-                <br />
-            <span class="data_text"><font color="#888" size="small">
-                <u>Lena</u>: For this gif, I used the figure from
-            <a href="https://arxiv.org/pdf/1810.04805.pdf"
-               target="_blank">the original BERT paper</a>.</font></span>
         </p>
 
-        <p>Another special token is <span class="data_text"><strong>[CLS]</strong></span>. In training,
-            it is used for the NSP objective we'll see next. Once a model is trained, it is
-            used for downstream tasks.
+        <p>To let the model easily distinguish
+            between these sentences, in addition to token and positional embeddings it uses
+            segment embeddings. Overall, input for the model is sum of token, positional and segment embeddings.
+            These representations are fed into transformer encoder, and the representations on top are used
+            first for training, then for downstream applications.
+        </p>
+        <p><font class="data_text" color="#888"><u>Lena</u>: Although, for downstream applications we can also
+        use representations from the middle of the model. We will learn about this later.</font></p>
+
+        <p style="text-align: center; display: block;
+            margin-bottom:20px; max-width:100%;">
+           <img src="../resources/lectures/transfer/bert/input_with_model_full-min.png"
+             style="max-width:100%; margin-bottom:20px;"/>
         </p>
 
         <h3><u>Pre-Training Objectives</u>: Next Sentence Prediction (NSP) Objective</h3>
@@ -1301,6 +1307,54 @@ for (i = 0; i < dropdown.length; i++) {
 
     <br><br>
 
+    <h2 id="ffns_key_value_memory"><font color="#888">Model Components:</font> FFNs as Key-Value Memories</h2>
+
+    <h4 style="font-size:18px;">
+                    <font face="arial">Transformer and the Residual Stream</font></h4>
+    <div style="display:grid;grid-template-columns: 50% 50%;">
+            <div>
+                <p>As we learned in <a href="./seq2seq_and_attention.html#transformer_model_architecture" target="_blank">the
+                    previous lecture</a>,
+                    in the Transformer (either encoder or decoder)
+                    a token representation evolves from the input token embedding to the final layer prediction.
+                    Via residual connections, attention and feed-forward blocks update the original
+                    representation by adding new information.
+                    This sequence of evolving representations for the same token is called
+                    <font face="arial">the residual stream</font>.
+                </p>
+
+        <p>Note that while attention layers allow exchanging information
+            across tokens, FFNs operate within the same residual stream. Now, let us look at this
+            layer more closely.
+        </p>
+            </div>
+            <div>
+                <img src="../resources/lectures/transfer/analysis/which_neurons-min.png"
+             style="max-width:90%; margin-bottom:20px; margin-left:20px; float:right;"/>
+            </div>
+        </div>
+
+    <h4 style="font-size:18px;">
+                    <font face="arial">The Key-Value View of FFNs</font></h4>
+
+    <p>In <a href="https://arxiv.org/pdf/2012.14913.pdf" target="_blank">this paper</a>,
+        the authors propose to view feed-forward layers in transformer-based language models as key-value memories.
+        In this view, the columns of the first FFN layer encode textual concepts and
+        the rows of the second FFN layer encode distributions over vocabulary.
+    </p>
+
+    <center>
+    <img src="../resources/lectures/transfer/analysis/ffns-min.png"
+             style="max-width:90%; margin-bottom:20px;"/>
+    </center>
+    <p>When our input vector goes into the FFN block, it first matches some of
+        the concepts encoded in the first layer and receives the weights - in our illustration,
+        this is shown in yellow.
+        Then, these weights trigger the corresponding rows or the second FFN layer.
+        These rows (multiplied by the weights) will update the output token distribution encoded in the residual stream.</p>
+
+    <br><br>
+
 
     <h2 id="nlp_pipeline"><font color="#888">Probing:</font>  BERT Rediscovers the Classical NLP Pipeline</h2>
 
@@ -1477,9 +1531,31 @@ But the main result is not in the values per se, but in the way BERT represents 
     </p>
 
 
+    </br>
 
+    <h4 style="font-size:18px;">
+                    <font face="arial">Back to The Key-Value View of FFNs</font></h4>
 
+    <p>We saw that BERT and others seem to know some facts. But how are these facts stored in the model?
+    Turns out, some of them are encoded in FFNs!</p>
 
+    <p style="text-align: center;  display: block;
+         margin-top:0px; max-width:100%; ">
+            <img width=100% src="../resources/lectures/transfer/analysis/knowledge_neurons-min.png" alt="" /><br />
+            <span style="font-size: small;">
+                The figure is from the paper
+          <a href="https://aclanthology.org/2022.acl-long.581.pdf" target="_blank">
+              Knowledge Neurons in Pretrained Transformers</a>.</span>
+    </p>
+    <p>Let us come back to the key-value memory view of FFNs.
+        The paper
+        <a href="https://aclanthology.org/2022.acl-long.581.pdf" target="_blank">
+              Knowledge Neurons in Pretrained Transformers</a> looked at
+    <font face="arial">(subject, relation) -> object</font> triplets and found that some neurons inside FFNs
+    encode these relations! Specifically, each neuron activates whenever
+    <font face="arial">(subject, relation)</font> pair is in the input, and
+    triggers the row that encodes the <font face="arial">object</font>.
+    </p>
 
 </div>
 
