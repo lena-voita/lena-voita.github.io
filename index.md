@@ -30,13 +30,16 @@ while enjoying writing [blog posts](https://lena-voita.github.io/posts.html) and
 
 __2023__
 
+* <span style="color:#7fa827">Senior Area Chair:</span>  [EACL 2024](https://2024.eacl.org).
 * <span style="color:#7fa827">Area Chair:</span> [ACL 2023](https://2023.aclweb.org), [EMNLP 2023](https://2023.emnlp.org), [IJCNLP-AACL 2023](http://www.ijcnlp-aacl2023.org).
-* <span style="color:#7fa827">Teaching:</span> [Oxford-LLMs summer school](https://www.llmsforsocialsciene.dev/about/).
-* <span style="color:#7fa827">Invited talks:</span> [TTI Chicago](https://www.ttic.edu/young-researcher/), [RISE Learning Machines seminar](https://www.ri.se/en/learningmachinesseminars), [University of Melbourne](https://cis.unimelb.edu.au/research/artificial-intelligence/research/Natural-Language-Processing).
+* <span style="color:#7fa827">Teaching:</span> [Oxford-LLMs summer school](https://www.llmsforsocialsciene.dev/about/), [Practical Generative AI at AI&DT School](https://ai-dt.school/generative-ai).
+* <span style="color:#7fa827">Invited talks:</span> [TTI Chicago](https://www.ttic.edu/young-researcher/), [RISE Learning Machines seminar](https://www.ri.se/en/learningmachinesseminars), [University of Melbourne](https://cis.unimelb.edu.au/research/artificial-intelligence/research/Natural-Language-Processing),
+[Instituto Superior Técnico](https://sardine-lab.github.io), [UKP-CIS Joint Invited Talk Series](), [OII Oxford](https://www.oii.ox.ac.uk).
 
 __2022__
 
-* <span style="color:#7fa827">Area Chair:</span>  [AACL-IJCNLP 2022](https://www.aacl2022.org/) (senior AC),  [EMNLP 2022](https://2022.emnlp.org/), [EACL 2023](https://2023.eacl.org).
+* <span style="color:#7fa827">Senior Area Chair:</span>  [AACL-IJCNLP 2022](https://www.aacl2022.org/).
+* <span style="color:#7fa827">Area Chair:</span> [EMNLP 2022](https://2022.emnlp.org/), [EACL 2023](https://2023.eacl.org).
 * <span style="color:#7fa827">Keynote:</span> [BlackBoxNLP workshop at EMNLP 2022](https://blackboxnlp.github.io).
 * <span style="color:#7fa827">Teaching:</span> [SICSS-Oxford](https://sicss.io/2022/oxford/), invited lecture at EPFL.
 * <span style="color:#7fa827">Job started:</span> Research Scientist at [FAIR](https://ai.facebook.com) <span style="color:#888">(November)</span>.
