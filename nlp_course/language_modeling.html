@@ -288,7 +288,7 @@ for (i = 0; i < dropdown.length; i++) {
 
     <h2>What about language?</h2>
 
-    <p>For language, the intuition is exactly the same! What is different, is the notion of an
+    <p>For language, intuition is exactly the same! What is different, is the notion of an
     <font face="arial">event</font>.
     In language, an <font face="arial">event</font> is a linguistic unit (text, sentence, token, symbol),
         and a goal of a language model is to estimate the probabilities of these events.</p>
@@ -318,7 +318,7 @@ for (i = 0; i < dropdown.length; i++) {
       </div>
 <h2>We deal with LMs every day!</h2>
 
-    <p>We see language models in action every day - look at some examples. Usually models
+    <p>We see language models in action every day - look at some examples. Usually, models
     in large commercial services
     are a bit more complicated than the ones we will discuss today, but the idea is the same:
     if we can estimate probabilities of words/sentences/etc, we can use them in
@@ -569,9 +569,9 @@ for (i = 0; i < dropdown.length; i++) {
         </center>
 
         <p>What if either denominator or numerator is zero? Both these cases are not really good for the model.
-        To avoid these problems (and some other),
+        To avoid these problems (and some others),
             it is common to use <font face="arial">smoothings</font>. Smoothings redistribute
-            probability mass: they "steal" some mass from seen events and give to the unseen ones.
+            probability mass: they "steal" some mass from seen events and give it to the unseen ones.
         </p>
 
         <p class="data_text"><font color="#888"><u>Lena</u>: at this point, usually I'm
@@ -1319,7 +1319,7 @@ for (i = 0; i < dropdown.length; i++) {
     <ul>
         <li>feed word embedding for previous (context) words into a network;</li>
         <li>get vector representation of context from the network;</li>
-        <li>from this vector representation, predict a probability distribution for the next token.</li>
+        <li>from this vector representation, predict probability distribution for the next token.</li>
     </ul>
     <center>
         <img src="../resources/lectures/lang_models/neural/nn_lm_idea_linear-min.png"
@@ -1389,7 +1389,7 @@ for (i = 0; i < dropdown.length; i++) {
 
         <p>Neural LMs are trained to predict a probability distributions
             of the next token given the previous context.
-            Intuitively, at each step we maximize the probability a model assigns to the correct token.</p>
+            Intuitively, at each step, we maximize the probability a model assigns to the correct token.</p>
         <p>
             Formally, if \(y_1, \dots, y_n\) is a training token sequence,
             then at the timestep \(t\) a model predicts a probability distribution
@@ -1528,7 +1528,7 @@ for (i = 0; i < dropdown.length; i++) {
                 (or be very careful in how you do it).
             </li>
             <li><font face="arial">if you stack many layers, do not forget about residual connections</font><br>
-                If you stack many layers, it may difficult to train a very deep network well. To avoid this,
+                If you stack many layers, it may be difficult to train a very deep network well. To avoid this,
                 use residual connections - look for the details below.
             </li>
         </ul>
@@ -1542,7 +1542,7 @@ for (i = 0; i < dropdown.length; i++) {
                     your model will inevitably have a fixed-sized context. This might seem undesirable:
                     the fixed context size problem is exactly what we didn't like in the n-gram models!
                 </p>
-                <p>However, if for n-gram models typical context size is 1-4,
+                <p>However, if for n-gram models the typical context size is 1-4,
                     contexts in convolutional models can be quite long. Look at the illustration:
                     with only 3 convolutional layers with small kernel size 3, a network has
                     a context of 7 tokens. If you stack many layers, you can get a very large context length.
@@ -1560,19 +1560,19 @@ for (i = 0; i < dropdown.length; i++) {
         </p>
         <img src="../resources/lectures/lang_models/neural/cnn/residual_highway-min.png"
              style="max-width:100%; margin-bottom:20px; "/>
-        <p>Residual connections are very simple: they add input of a block to its output. In this way,
+        <p>Residual connections are very simple: they add the input of a block to its output. In this way,
         the gradients over inputs will flow not only indirectly through the block, but also directly
         through the sum.
         </p>
-        <p>Highway connections have the same motivation, but a use a gated sum of input and output instead of
+        <p>Highway connections have the same motivation, but use a gated sum of input and output instead of
         the simple sum. This is similar to LSTM gates where a network can learn the types of information
-        it may want to carry on from bottom to top (or, in case of LSTMs, from left to right).
+        it may want to carry on from bottom to top (or, in the case of LSTMs, from left to right).
         </p>
         <div style="display:grid;grid-template-columns: 40% 60%;">
             <div>
                 <p>Look at the example of a convolutional network with residual connections.
                     Typically, we put residual connections around blocks with several layers.
-                    A network can several such blocks
+                    A network can have several such blocks
                      - remember, you need a lot of layers to get a decent receptive field.
                 </p>
             </div>
@@ -1961,7 +1961,7 @@ for (i = 0; i < dropdown.length; i++) {
         <h3><u>Examples</u>: Samples with Temperatures 2 and 0.2</h3>
 
         <p>Now when you understand how the temperature changes the distributions, it's time to look at the samples with
-        different temperature.</p>
+        different temperatures.</p>
 
 
         <img height="20" src="../resources/lectures/ico/paw_empty.png" style="float:left; margin-top:-10px;"/>
@@ -3161,7 +3161,7 @@ for (i = 0; i < dropdown.length; i++) {
         its transformation called
         <font face="arial">perplexity</font>:
         \[Perplexity(y_{1:M})=2^{-\frac{1}{M}L(y_{1:M})}.\]</p>
-    <p>A better model has higher log-likelihood and lower perplexity.</p>
+    <p>A better model has a higher log-likelihood and lower perplexity.</p>
 
     <p>To better understand which values we can expect, let's evaluate the
     <font face="arial">best</font> and the <font face="arial">worst</font>
@@ -3216,9 +3216,9 @@ for (i = 0; i < dropdown.length; i++) {
         it allows us to use the same parameters to different blocks.
     </p>
 
-        <p><u>Practical point of view</u>. Usually, substantial part of model parameters
+        <p><u>Practical point of view</u>. Usually, a substantial part of model parameters
             comes from embeddings - these matrices are huge! With weight tying,
-            you can significantly reduce a model size.
+            you can significantly reduce model size.
         </p>
 
         <div class="card_with_ico">
@@ -3272,7 +3272,7 @@ for (i = 0; i < dropdown.length; i++) {
               <p class="data_text">Look at the examples from the
                   <a href="https://arxiv.org/abs/1506.02078" target="_blank">Visualizing and Understanding Recurrent Networks</a> paper.
                   <br>
-              Why do you think the model leaned these things?</p>
+              Why do you think the model learned these things?</p>
             </div>
 
             <div class="carousel" data-flickity='{ "imagesLoaded": true, "percentPosition": true, "wrapAround": true}'
@@ -3333,7 +3333,7 @@ for (i = 0; i < dropdown.length; i++) {
 
     <p>Note that this result is qualitatively different from the previous one. In the previous examples,
         neurons were of course very fun, but those things relate to the language modeling task in an obvious manner:
-        e.g., tracking quotes is needed for predicting next tokens. Here, sentiment is a more high-level concept.
+        e.g., tracking quotes is needed for predicting the next tokens. Here, sentiment is a more high-level concept.
         Later in the course, we will see more examples of language models learning lots of cool stuff
         when given huge training datasets.
     </p>
@@ -3342,8 +3342,8 @@ for (i = 0; i < dropdown.length; i++) {
 
     <h3><u>Use Interpretable Neurons to Control Generated Texts</u></h3>
 
-    <p>Interpretable neurons are not only fun, but also can be used to control your language model.
-    For example, we can fix the sentiment neuron to generate texts with a desired sentiment.
+    <p>Interpretable neurons are not only fun but also can be used to control your language model.
+    For example, we can fix the sentiment neuron to generate texts with the desired sentiment.
     Below are the examples of samples starting from the same prefix
     <font class="data_text"><strong>"I couldn't figure out"</strong></font>
     (more examples in <a href="https://openai.com/blog/unsupervised-sentiment-neuron/" target="_blank">
@@ -3461,7 +3461,7 @@ for (i = 0; i < dropdown.length; i++) {
                     until it works.</li>
             </ul>
 
-            <p class="data_text">It's well-known that you will learn something easier if you are not just given the answer right away,
+            <p class="data_text">It's well-known that you will learn something easier if you are not answered right away,
             but if you think about it first. Even if you don't want to be a researcher, this is still a good way
             to learn things!</p>
 </fieldset>
@@ -4123,7 +4123,7 @@ for (i = 0; i < dropdown.length; i++) {
                             now known: it is
                             logarithmic (i.e.,
                             the relationship between word log-probability and reading time is (near-)linear - this
-                            is what we see on the figure).</li>
+                            is what we see in the figure).</li>
                     </ul>
 
                     Of course,
