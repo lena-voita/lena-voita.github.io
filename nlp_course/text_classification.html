@@ -2197,7 +2197,7 @@ carousels.forEach(function(elem) {
             or learned (e.g., with <a href="#neural_approaches">neural networks</a>).
         </li>
         <li><font face="arial">classifier</font><br>
-        A classifier has to assign class probabilities given feature representation of a text.
+        A classifier has to assign class probabilities given the feature representation of a text.
             The most common way to do this is using <a href="#logistic_regression">logistic regression</a>,
             but other variants are also possible (e.g., <a href="#naive_bayes">Naive Bayes</a> classifier or
             <a href="#svm">SVM</a>).
@@ -2246,7 +2246,7 @@ carousels.forEach(function(elem) {
 <h1>Classical Methods for Text Classification</h1>
 
     <p>In this part, we consider classical approaches for text classification. They were developed long before
-    neural networks became popular, and for small datasets can still perform comparably to neural models.</p>
+    neural networks became popular, and with small datasets can still perform comparably to neural models.</p>
 
     <p class="data_text"><font color="#888"><u>Lena</u>: Later in the course, we will learn
     about <strong>transfer learning</strong> which can make neural approaches better even for very small datasets.
@@ -2339,7 +2339,7 @@ carousels.forEach(function(elem) {
         <p>What if \(N(x_i, y=k)=0\), i.e. in training we haven't seen the token \(x_i\) in the documents
         with class \(k\)?
         This will null out the probability of the whole document,
-        and this is not what we want! For example, if we haven't seen some rare words
+        and this is not what we want! For example if we haven't seen some rare words
         (e.g., <span class="data_text" style="font-weight:bold;">pterodactyl</span>
         or <span class="data_text" style="font-weight:bold;">abracadabra</span>)
     in training positive examples, it does not mean that a positive document can never
@@ -2376,12 +2376,12 @@ carousels.forEach(function(elem) {
     <span class="data_text" style="font-weight:bold;">awesome</span>,
         <span class="data_text" style="font-weight:bold;">brilliant</span>,
         <span class="data_text" style="font-weight:bold;">great</span>
-        will have higher probability given positive class then negative. Similarly,
+        will have a higher probability given positive class than negative. Similarly,
         tokens
         <span class="data_text" style="font-weight:bold;">awful</span>,
         <span class="data_text" style="font-weight:bold;">boring</span>,
         <span class="data_text" style="font-weight:bold;">bad</span>
-        will have higher probability given negative class then positive.
+        will have a higher probability given negative class than positive.
     </p>
 
     <center>
@@ -2430,7 +2430,7 @@ carousels.forEach(function(elem) {
     <img class="ico" src="../resources/lectures/ico/bulb_empty.png"/>
     <div class="text_box_yellow">
     <p class="data_text">
-        Even if your data is a plain text (without fancy things such as URL, user id, etc),
+        Even if your data is plain text (without fancy things such as URL, user id, etc),
         you can still design features in different ways.
         Learn how to improve Naive Bayes in <a href="#research_improve_bayes">this exercise</a>
     in the <a href="#research_thinking">Research Thinking</a> section. </p>
@@ -2575,7 +2575,7 @@ carousels.forEach(function(elem) {
         <li><font face="arial">text representation: manual</font><br>
         Both methods use manually defined feature representation (in Naive Bayes, BOW is the standard choice,
             but you still choose this yourself). While manually defined features are good for interpretability,
-            they may be no so good for performance - you are likely to miss something which can be useful for the task.
+            they may be not so good for performance - you are likely to miss something which can be useful for the task.
         </li>
 
     </ul>
@@ -2641,7 +2641,7 @@ carousels.forEach(function(elem) {
         </p>
 
         <h3>Classification Part: This is Logistic Regression!</h3>
-        <p>Let us look closer to the neural network classifier. The way we use vector representation
+        <p>Let us look closer at the neural network classifier. The way we use vector representation
             of the input text is exactly the same as we did with logistic regression:
             we weigh features according to feature weights for each class.
             <font face="arial">The only difference
@@ -2735,7 +2735,7 @@ carousels.forEach(function(elem) {
 
         <p>Neural classifiers are trained to predict probability distributions
             over classes.
-            Intuitively, at each step we maximize the probability a model assigns to the correct class.</p>
+            Intuitively, at each step, we maximize the probability a model assigns to the correct class.</p>
 
         <p>The standard loss function is the <font face="arial">cross-entropy loss</font>.
         Cross-entropy loss for the target probability distribution \(p^{\ast} = (0, \dots, 0, 1, 0, \dots)\)
@@ -2759,9 +2759,9 @@ carousels.forEach(function(elem) {
             we iterate over training examples (or batches of examples) and
             make gradient updates.
             At each step, we maximize the probability a model assigns to the correct class.
-            At the same time, we minimize sum of the probabilities of incorrect classes:
-            since sum of all probabilities is constant, by increasing one probability we decrease
-            sum of all the rest
+            At the same time, we minimize the sum of the probabilities of incorrect classes:
+            since the sum of all probabilities is constant, by increasing one probability we decrease
+            the sum of all the rest
             (<span class="data_text"><font color="#888"><u>Lena</u>:
                 Here I usually imagine a bunch of kittens eating from the same bowl:
                 one kitten always eats at the expense of the others</font></span>).</p>
@@ -2849,7 +2849,7 @@ carousels.forEach(function(elem) {
         </p>
         <p>Note also that to use a weighted sum of embeddings, you need to come up with a way to get weights.
             However, this is exactly what we wanted to avoid by using neural networks: we don't want
-            to introduce manual features, but rather let a network to learn useful patterns.</p>
+            to introduce manual features, but rather let a network learn useful patterns.</p>
 
         <h3>Bag of Embeddings as Features for SVM</h3>
         <p>You can use SVM on top of BOE!
@@ -2864,7 +2864,7 @@ carousels.forEach(function(elem) {
     <h2>Models: Recurrent (RNN/LSTM/etc)</h2>
         <p>Recurrent networks are a natural way to process text in a sense that, similar to humans,
         they "read" a sequence of tokens one by one and process the information. Hopefully,
-        at each step the network will "remember" everything it has read before.</p>
+        at each step, the network will "remember" everything it has read before.</p>
 
         <!--
         <div style="display:grid;grid-template-columns: 30% 70%;">
@@ -3019,7 +3019,7 @@ carousels.forEach(function(elem) {
     <div id="nn_models_cnn">
     <h2>Models: Convolutional (CNN)</h2>
 
-        <p class="data_text"><font color="#888">The detailed description of convolutional models in general is in
+        <p class="data_text"><font color="#888">The detailed description of convolutional models, in general, is in
         <a href="./models/convolutional.html" target="_blank">Convolutional Models Supplementary</a>.
             In this part, we consider only convolutions for text classification.</font>
         </p>
@@ -3096,14 +3096,14 @@ carousels.forEach(function(elem) {
         <h4 style="font-size:18px;">
                 <font face="arial">A Typical Model: Convolution+Pooling Blocks</font></h4>
             <p>Following the intuition above, we want to detect some patterns, but we don't
-        care much where exactly these patterns are. This behavior is implemented with
+        care much about where exactly these patterns are. This behavior is implemented with
         two layers:</p>
     <ul>
         <li><font face="arial">convolution</font>: finds matches with patterns (as the cat head we saw above);</li>
         <li><font face="arial">pooling</font>: aggregates these matches over positions (either locally or globally).</li>
     </ul>
 
-        <p>A typical convolutional model for text classification is shown on the figure.
+        <p>A typical convolutional model for text classification is shown in the figure.
             To get a vector representation of an input text,
             a convolutional layer is applied to word embedding,
             which is followed by a non-linearity
@@ -3310,11 +3310,11 @@ carousels.forEach(function(elem) {
 
 
         <p>
-        The basic convolutional model for text classification is shown on the figure.
+        The basic convolutional model for text classification is shown in the figure.
         It is almost the same as we saw before: the only thing that's changed is that we specified the type of
             pooling used. Specifically, after the convolution, we use <font face="arial">global-over-time pooling</font>.
             This is the key operation: it allows to compress a text into a single vector.
-            The model itself can be different, but at some point it has to use the global pooling to
+            The model itself can be different, but at some point, it has to use the global pooling to
             compress input in a single vector.
         </p>
 
@@ -3409,7 +3409,7 @@ carousels.forEach(function(elem) {
     </p>
     <p>
         For single-label problems, we used softmax: it converts \(K\) values into a probability distribution,
-        i.e. sum of all probabilities is 1. It means that the classes
+        i.e. the sum of all probabilities is 1. It means that the classes
         share the same probability mass:
         if the probability of one class is high, other classes can not have large probability
         (<span class="data_text"><font color="#888"><u>Lena</u>: Once again, imagine a bunch of kittens eating from the same bowl:
@@ -3460,14 +3460,14 @@ carousels.forEach(function(elem) {
             Training data for classification is labeled and task-specific,
             but labeled data is usually hard to get.
             Therefore, this corpus is likely to be not huge (at the very least), or not diverse, or both.
-            On the contrary, training data for word embeddings is not labeled - plain texts are enough.
+            On the contrary, training data for word embeddings are not labeled - plain texts are enough.
             Therefore, these datasets
             can be huge and diverse - a lot to learn from.
         </p>
         <img src="../resources/lectures/text_clf/practical_tips/data_types-min.png"
              style="max-width:100%; margin-bottom:20px;"/>
 
-        <p>Now let us think what a model will know depending on what we do with the embeddings.
+        <p>Now let us think about what a model will know depending on what we do with the embeddings.
             If the embeddings are trained from scratch, the model will "know" only
             the classification data - this may not be enough to learn relationships between words well.
             But if we use pretrained embeddings, they (and, therefore, the whole model)
@@ -3517,7 +3517,7 @@ carousels.forEach(function(elem) {
         </p>
         <ul>
             <li><font face="arial">the amount of data</font><br>
-                Quality of your model depends a lot on your data. For deep learning models, having
+                The quality of your model depends a lot on your data. For deep learning models, having
                 large datasets is very (very!) important.
             </li>
             <li><font face="arial">diversity of data</font><br>
@@ -3547,7 +3547,7 @@ carousels.forEach(function(elem) {
         <img src="../../resources/lectures/text_clf/practical_tips/word_dropout-min.png"
          style="max-width:100%; margin-bottom:20px;"/>
         <p>The motivation here is simple: we teach a model not to over-rely on individual tokens,
-            but take into consideration context of the whole text. For example, here we masked
+            but take into consideration the context of the whole text. For example, here we masked
             <font class="data_text"><strong>great</strong></font>, and a model has to understand
             the sentiment based on other words.
         </p>
@@ -3720,7 +3720,7 @@ carousels.forEach(function(elem) {
                     until it works.</li>
             </ul>
 
-            <p class="data_text">It's well-known that you will learn something easier if you are not just given the answer right away,
+            <p class="data_text">It's well-known that you will learn something easier if you are not just answered right away,
             but if you think about it first. Even if you don't want to be a researcher, this is still a good way
             to learn things!</p>
 </fieldset>
@@ -4069,7 +4069,7 @@ carousels.forEach(function(elem) {
                 <details>
                     <summary style="margin-left:10px;">More details</summary>
                     <br>
-                    <p>The CNN model is shown on the figure: on top of embeddings, it has three convolutions
+                    <p>The CNN model is shown in the figure: on top of embeddings, it has three convolutions
                         with max-over-time pooling (in parallel). The results are concatenated and used for classification.
                         This is a very simple model
                         <a href="#Several_Convolutions_Different_Kernels">we discussed
