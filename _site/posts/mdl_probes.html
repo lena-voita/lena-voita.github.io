@@ -7,13 +7,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
     <title>Information-Theoretic Probing with MDL</title>
-    <meta name="description" content="Hi! I'm Lena and here you will find what I do.
-">
+    <meta name="description" content="">
 
     <link rel="stylesheet" href="/css/main.css">
     <link rel="canonical" href="http://localhost:4000/posts/mdl_probes.html">
 
-    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
 
 
 </head>
@@ -62,6 +61,28 @@
           
         
           
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
           <a class="page-link" href="/posts.html">Blog</a>
           
         
@@ -74,7 +95,9 @@
           
         
           
-          <a class="page-link" href="/teaching.html">Teaching & Supervising</a>
+          <a class="page-link" href="/nlp_course.html">NLP Course | For You</a>
+          
+        
           
         
 <!--        <a href="">
@@ -97,6 +120,26 @@
     <p class="post-meta"></p>
   </header>
 
+  <style>
+      p {
+      text-align: justify;
+      }
+
+      .green_left_thought {
+        border-left: 5px solid #b7db67;
+        margin: 10px;
+        margin-left: 20px;
+        padding: 0px;
+        background-color: #fafcf5;
+      }
+      .green_left_thought p {
+
+        margin-left: 10px;
+        padding: 5px;
+      }
+
+  </style>
+
   <article class="post-content">
     <a class="float-right">
     <img src="../resources/posts/mdl_probes/probe_main_orange-min.png" alt=""
@@ -106,8 +149,8 @@
 
 <span style="font-size:14px;">
 
-This is a post for the paper
-    <a href="">
+This is a post for the EMNLP 2020 paper
+    <a href="https://arxiv.org/pdf/2003.12298.pdf">
             Information-Theoretic Probing with Minimum Description Length.
     </a>
 </span>
@@ -124,9 +167,9 @@ This is a post for the paper
 
 <ul>
     <li>we propose information-theoretic probing which measures
-        <font face="symbol">minimum description length</font> (MDL) of labels given representations;</li>
-    <li>we show that MDL characterizes both <font face="symbol">probe quality</font> and
-      <font face="symbol">the amount of effort</font> needed to achieve it;</li>
+        <font face="arial">minimum description length</font> (MDL) of labels given representations;</li>
+    <li>we show that MDL characterizes both <font face="arial">probe quality</font> and
+      <font face="arial">the amount of effort</font> needed to achieve it;</li>
     <li>we explain how to easily measure MDL on top of standard probe-training pipelines;</li>
     <li>we show that results of MDL probes are more informative and stable than those of standard probes.</li>
 </ul>
@@ -211,7 +254,7 @@ for other tasks? Well, we do not (if you do, please tell!).
 
 </br></br>
 
-All in all, <font face="symbol">we want a probing method which does not require a human to tell it what to say</font>.
+All in all, <font face="arial">we want a probing method which does not require a human to tell it what to say</font>.
 
 </br></br>
 
@@ -232,7 +275,7 @@ Our idea can be summarized in two sentences.
 <!--<span style="background-color:#ebf0df">-->
 <span style="background-color:#f6faed">
 
-    <font face="symbol">
+    <font face="arial">
     <u>Regularity</u> in representations with respect to labels can be <u>exploited to compress</u> the data.</br>
     Better compression &#8596; stronger regularity &#8596; representations better encode labels.</font>
 </span>
@@ -259,9 +302,9 @@ Formally, the task is to encode labels <img src="../resources/posts/mdl_probes/d
 knowing representations <img src="../resources/posts/mdl_probes/data_x_prefix-min.png" height="19"> in an optimal way,
 i.e., with minimal codelength (in bits) needed to transmit
 <img src="../resources/posts/mdl_probes/data_y_prefix-min.png" height="22">.
-The resulting minimal number of bits is <font face="symbol">minimum description length (MDL)</font>
+The resulting minimal number of bits is <font face="arial">minimum description length (MDL)</font>
 of labels given representations, and we will refer to probes measuring MDL as
-<font face="symbol">description length probes</font> or <font face="symbol">MDL probes</font>.
+<font face="arial">description length probes</font> or <font face="arial">MDL probes</font>.
 
 </br></br>
 
@@ -284,14 +327,14 @@ transmit the model, either explicitly or implicitly. Thus, the overall codelengt
 of quality-of-fit of the model (compressed data length), together with the cost of transmitting the model itself.
 </br></br>
 
-Intuitively, codelength characterizes not only <font face="symbol">final quality</font> of a probe
+Intuitively, codelength characterizes not only <font face="arial">final quality</font> of a probe
 (data codelength), but also
-the <font face="symbol">amount of effort</font> needed to achieve this quality.
+the <font face="arial">amount of effort</font> needed to achieve this quality.
 
 </br></br>
-<!--<font face="symbol" color="#dea404">model</font> <font face="symbol" color="#85a81d">data</font>-->
+<!--<font face="arial" color="#dea404">model</font> <font face="arial" color="#85a81d">data</font>-->
 
-<h3>The <font face="symbol">Data</font> Part</h3>
+<h3>The <font face="arial">Data</font> Part</h3>
 <h4>TL;DR: cross-entropy is the data codelength</h4>
 
 Let's assume for now Alice and Bob have agreed in advance on a model
@@ -304,7 +347,7 @@ losslessly with codelength
 <center>
 <img src="../resources/posts/mdl_probes/data_codelength-min.png" height="60">
 </center>
-This is the <font face="symbol">Shannon-Huffman code</font>, which gives the optimal bound on the codelength
+This is the <font face="arial">Shannon-Huffman code</font>, which gives the optimal bound on the codelength
 if the data are independent and come from a conditional probability distribution
 <img src="../resources/posts/mdl_probes/p_y_x-min.png" height="22">.
 
@@ -312,9 +355,9 @@ if the data are independent and come from a conditional probability distribution
 
 <h4>Learning is Compression</h4>
 Note that (1) is exactly the categorical cross-entropy
-loss evaluated on the model <i>p</i>. This shows that <font face="symbol">the task of compressing labels</font>
+loss evaluated on the model <i>p</i>. This shows that <font face="arial">the task of compressing labels</font>
 <img src="../resources/posts/mdl_probes/data_y_prefix-min.png" height="22">
-is <font face="symbol">equivalent to learning a model</font> <img src="../resources/posts/mdl_probes/p_y_x-min.png" height="22">
+is <font face="arial">equivalent to learning a model</font> <img src="../resources/posts/mdl_probes/p_y_x-min.png" height="22">
 of data:</br>
 quality of a learned model <img src="../resources/posts/mdl_probes/p_y_x-min.png" height="22">
     is the codelength needed to transmit the data.
@@ -323,7 +366,7 @@ quality of a learned model <img src="../resources/posts/mdl_probes/p_y_x-min.png
 
 <h4>Compression is compared against Uniform Code</h4>
 
-Compression is usually compared against <font face="symbol">uniform encoding</font>
+Compression is usually compared against <font face="arial">uniform encoding</font>
 which does not require any learning from data. For <i>K</i> classes,
 it assumes <img src="../resources/posts/mdl_probes/p_uniform-min.png" height="24">, and yields
 codelength <img src="../resources/posts/mdl_probes/code_uniform-min.png" height="21"> bits.
@@ -332,13 +375,13 @@ codelength <img src="../resources/posts/mdl_probes/code_uniform-min.png" height=
 
 </br></br>
 
-<h3>The <font face="symbol">Amount of Effort</font> Part: <span style="font-size:20px;">Strength of the Regularity in the Data</span></h3>
+<h3>The <font face="arial">Amount of Effort</font> Part: <span style="font-size:20px;">Strength of the Regularity in the Data</span></h3>
 
 <img src="../resources/posts/mdl_probes/regularity-min.png" width="700">
 </br>
 <span style="font-size:12px;">
     <u>Based on real events!</u> These are t-sne projections of representations of different occurrences of
-    the token <font face="symbol">is</font> from the last layer of MT encoder (strong) and the last LM layer (weak).
+    the token <font face="arial">is</font> from the last layer of MT encoder (strong) and the last LM layer (weak).
     The colors show CCG tags (only 4 most frequent tags). </br>
     Curious why MT and LM behave this way? Look at our
     <a href="https://lena-voita.github.io/posts/emnlp19_evolution.html">Evolution of Representations</a> post!
@@ -346,9 +389,9 @@ codelength <img src="../resources/posts/mdl_probes/code_uniform-min.png" height=
 </br></br>
 Now we come to the other component of the total codelength, which
 characterizes how hard it is to achieve final quality of a trained probe. Intuitively,
-if representations have some <font face="symbol">clear structure</font> with respect to labels, this structure can be
+if representations have some <font face="arial">clear structure</font> with respect to labels, this structure can be
 understood with
-<font face="symbol">less effort</font>; for example,
+<font face="arial">less effort</font>; for example,
 <ul>
     <li>the "rule" explaining this structure (i.e., a probing model) can be
         simple, and/or</li>
@@ -356,18 +399,18 @@ understood with
 </ul>
 This is exactly how our vague (so far) notion of the "amount of effort" is translated into codelength.
 We explain this more formally when describing the two methods for evaluating MDL we use:
-<font face="symbol">variational coding</font> and <font face="symbol">online coding</font>;
+<font face="arial">variational coding</font> and <font face="arial">online coding</font>;
 they differ in a way they incorporate
 model cost: directly or indirectly.
 </br></br>
 
 
-<h4><u><font face="symbol">Variational Code</font></u>: Explicit Transmission of the Model</h4>
+<h4><u><font face="arial">Variational Code</font></u>: Explicit Transmission of the Model</h4>
 
 
 <img src="../resources/posts/mdl_probes/variational_scheme-min.png" width="300" style="float:right; margin-left:30px" >
 
-Variational code is an  instance  of <font face="symbol">two-part codes</font>,
+Variational code is an  instance  of <font face="arial">two-part codes</font>,
 where a model (probe weights) is transmitted explicitly and then used to encode the data.
 <a href="https://ieeexplore.ieee.org/document/1310354">It has been known for quite a while</a> that
 this joint cost (model and data codes) is exactly the loss function of a variational learning methods.
@@ -386,7 +429,7 @@ What is happening in this part:
 <h4>Codelength: Formal Derivations</h4>
 
 <details>
-    <summary><font face="symbol" color="#658a01">I hereby confirm that I'm not afraid of scary formulas
+    <summary><font face="arial" color="#658a01">I hereby confirm that I'm not afraid of scary formulas
           <img src="../resources/posts/mdl_probes/ghost-min.png" height="24">
         </font></summary>
     </br>
@@ -426,7 +469,7 @@ is a distribution encoding uncertainty about the parameter values.
 The distribution <img src="../resources/posts/mdl_probes/beta_of_theta-min.png" height="19">
 is chosen by minimizing the codelength given in Eq. (3).
 In you are interested in the formal justification for the description length,
-it relies on the <font face="symbol">bits-back</font> argument and can be found, for example,
+it relies on the <font face="arial">bits-back</font> argument and can be found, for example,
 <a href="http://www.cs.toronto.edu/~fritz/absps/colt93.pdf">here</a>.
 However, the underlying intuition is straightforward:
 <u>parameters we are uncertain about can be transmitted
@@ -470,11 +513,11 @@ sparsity-inducing priors on the parameters, you can get
 <a href="https://github.com/senya-ashukha/variational-dropout-sparsifies-dnn">variational dropout</a>.
 What is more interesting, you can do this in such way that you prune the whole neurons (not just individual weights): this is the
 <a href="https://github.com/KarenUllrich/Tutorial_BayesianCompressionForDL">
-    <font face="symbol">Bayesian network compression method</font></a> we use.
+    <font face="arial">Bayesian network compression method</font></a> we use.
  This allows us to assess the  probe complexity
 both using its description length
 <img src="../resources/posts/mdl_probes/kl_beta_alpha-min.png" height="19">
-and <font face="symbol">by inspecting the  discovered architecture</font>.
+and <font face="arial">by inspecting the  discovered architecture</font>.
 
 
 </br></br>
@@ -482,15 +525,15 @@ and <font face="symbol">by inspecting the  discovered architecture</font>.
 <h4>Intuition</h4>
 <img src="../resources/posts/mdl_probes/regularity_separate_h_model-min.png" width="300" style="float:right; margin-left:15px; margin-bottom:15px" >
 
-If <font face="symbol">regularity</font> in the data <font face="symbol">is strong</font>,
-it can be <font face="symbol">explained with a "simple rule"</font> (i.e., a small probing model).
+If <font face="arial">regularity</font> in the data <font face="arial">is strong</font>,
+it can be <font face="arial">explained with a "simple rule"</font> (i.e., a small probing model).
 A small probing model is easy to communicate, i.e., only a few parameters require high precision.
 As we will see in the experiments,
 similar probe accuracies often come at a very different model cost, i.e. different total codelength.
 
 </br></br>
 Note that the variational code gives us probe architecture (and model size) as a
-<font face="symbol">byproduct of training</font>, and <font face="symbol">does not require
+<font face="arial">byproduct of training</font>, and <font face="arial">does not require
     manual search</font> over probe hyperparameters.
 
 </br></br>
@@ -498,9 +541,9 @@ Note that the variational code gives us probe architecture (and model size) as a
 
 
 
-<h4><u><font face="symbol">Online Code</font></u>: Implicit Transmission of the Model</h4>
+<h4><u><font face="arial">Online Code</font></u>: Implicit Transmission of the Model</h4>
 
-Online code provides a way to transmit data <font face="symbol">without directly transmitting the model</font>. Intuitively, it
+Online code provides a way to transmit data <font face="arial">without directly transmitting the model</font>. Intuitively, it
 measures the ability to learn from different amounts of data.</br></br>
 <img src="../resources/posts/mdl_probes/online_scheme-min.png" width="350"
      style="float:right; margin-left:30px; margin-top:2px; margin-bottom:15px" >
@@ -556,11 +599,11 @@ is codelength of the data if one knows model parameters,
 
 Online code
 measures the ability to learn from different amounts of data, and
-it is related to the <font face="symbol">area under the learning curve</font>, which plots quality
+it is related to the <font face="arial">area under the learning curve</font>, which plots quality
 as a function of the number of training examples.
 </br></br>
-Intuitively, if the <font face="symbol">regularity</font> in the data <font face="symbol">is strong</font>, it can be
-<font face="symbol">revealed
+Intuitively, if the <font face="arial">regularity</font> in the data <font face="arial">is strong</font>, it can be
+<font face="arial">revealed
     using a small subset of the data</font>, i.e., early in the transmission process, and can be exploited to efficiently
 transmit the rest of the dataset.
 
@@ -583,7 +626,7 @@ transmit the rest of the dataset.
         larger as we move up from the embedding layer</br>
         (this is expected since the control task measures the ability to remember word types);
     </li>
-    <li><font face="symbol">codelengths for the control task are substantially larger than for
+    <li><font face="arial">codelengths for the control task are substantially larger than for
         the linguistic task</font>.
     </li>
 </ul>
@@ -591,11 +634,11 @@ transmit the rest of the dataset.
 
 <h4><u>Layer 0</u>: MDL is correct, accuracy is not.</h4>
 
-What is even more surprising, <font face="symbol">codelength identifies the control task even when accuracy indicates the opposite</font>:
+What is even more surprising, <font face="arial">codelength identifies the control task even when accuracy indicates the opposite</font>:
 for layer 0, accuracy for the control task is higher, but
 the code is twice longer than for the linguistic task.
 This is because codelength characterizes how hard it is to achieve this accuracy:
-for the control task, <font face="symbol">accuracy is higher, but the cost of achieving this score is very big</font>.
+for the control task, <font face="arial">accuracy is higher, but the cost of achieving this score is very big</font>.
 We will illustrate this a bit later when looking at the model component of the code.</br></br>
 
 <h4><u>Embedding vs contextual</u>:  drastic difference.</h4>
@@ -619,9 +662,9 @@ Let us now look at the data and model components of code separately
 The trends for the two compression methods are similar:
 for the control
 task, model size is several times larger than for the linguistic task. This is something that
-<font face="symbol">probe accuracy alone is not able to reflect</font>:
+<font face="arial">probe accuracy alone is not able to reflect</font>:
 while representations have structure with respect to the linguistic task labels,
-the same <font face="symbol">representations do not have structure with
+the same <font face="arial">representations do not have structure with
     respect to random labels</font>.</br></br>
 For variational code, it means that the linguistic task labels can be "explained"
 with a small model, but random labels can be learned only using a larger model.
@@ -658,8 +701,8 @@ This relates to the <a href="https://www.aclweb.org/anthology/D19-1275.pdf">cont
 paper which proposed to use random label baselines.
 The authors considered several predefined
 probe architectures and picked one of them based on a manually defined criterion. In contrast, variational
-code gives probe architecture as a <font face="symbol">byproduct of training</font> and
-<font face="symbol">does not require human guidance</font>.
+code gives probe architecture as a <font face="arial">byproduct of training</font> and
+<font face="arial">does not require human guidance</font>.
 
 </br></br>
 
@@ -671,12 +714,12 @@ code gives probe architecture as a <font face="symbol">byproduct of training</fo
 <img src="../resources/posts/mdl_probes/control_settings_with_annotation-min.png" width="400" style="float:right; margin-left:15px; margin-bottom:15px" >
 
  While here we discussed in detail results for the default settings, we also tried
-10 different settings and saw that <font face="symbol">accuracy varies greatly with the settings</font>.
+10 different settings and saw that <font face="arial">accuracy varies greatly with the settings</font>.
 For example,  for layer 0 there are settings with contradictory
 results: accuracy can be higher either for the linguistic or for the control task depending on the settings
 (look at the figure). In striking contrast to accuracy,
-<font face="symbol">MDL results are stable across settings</font>, thus
-<font face="symbol">MDL does not require search for probe settings</font>.
+<font face="arial">MDL results are stable across settings</font>, thus
+<font face="arial">MDL does not require search for probe settings</font>.
 </br></br>
 
 <h4><u>Random Seed</u>: affects accuracy but not MDL.</h4>
@@ -688,7 +731,7 @@ rankings of layers depending on a random seed, making it hard to draw conclusion
 For example, accuracy for layer 1 and layer 2 are 97.48 and 97.31 for seed 1, but 97.38 and 97.48
 for seed 0.
 </br>
-On the contrary, the <font face="symbol">MDL results are stable and the scores given to different layers are well separated</font>.
+On the contrary, the <font face="arial">MDL results are stable and the scores given to different layers are well separated</font>.
 
 </br></br>
 
@@ -715,13 +758,13 @@ Here we will only briefly mention our findings: if you are interested in more de
 
 <h4>We find, that:</h4>
 <ul style="list-style-type:circle;">
-    <li><font face="symbol">layer 0 vs contextual: even random contextual representations are better</font></br>
+    <li><font face="arial">layer 0 vs contextual: even random contextual representations are better</font></br>
         As we already saw in the previous part, codelength shows a drastic difference between the
         embedding layer (layer 0) and contextualized representations: codelengths differ about twice for most tasks.
         Both compression methods show that even for the randomly initialized model,
         contextualized representations are better than lexical representations.
         </li></br>
-    <li><font face="symbol">codelengths for the randomly initialized model are larger than for the trained one</font></br>
+    <li><font face="arial">codelengths for the randomly initialized model are larger than for the trained one</font></br>
 This is more prominent when not just looking at the bare scores, but comparing compression against
         context-agnostic representations. For all tasks, compression bounds for the randomly
         initialized model are closer to those of context-agnostic Layer 0 than to representations
@@ -729,7 +772,7 @@ This is more prominent when not just looking at the bare scores, but comparing c
         This shows that <u>gain from using context for the randomly initialized model is at least twice smaller than
             for the trained model</u>.
     </li></br>
-    <li><font face="symbol">randomly initialized layers do not evolve</font></br>
+    <li><font face="arial">randomly initialized layers do not evolve</font></br>
         For all tasks, MDL (and data/model components of code separately) for layers of the randomly initialized model is identical.
 For the trained model, this is not the case: layer 2 is worse than layer 1 for all tasks.
         This is one more illustration of the general process explained
@@ -743,10 +786,10 @@ For the trained model, this is not the case: layer 2 is worse than layer 1 for a
 
 <h1>Conclusions</h1>
 
-We propose information-theoretic probing which measures <font face="symbol">minimum description length (MDL)</font>
-of labels given representations. We show that MDL naturally characterizes not only <font face="symbol">probe quality</font>,
-but also <font face="symbol">the amount of effort</font> needed to achieve it (or, intuitively,
-<font face="symbol">strength of the regularity</font> in representations with respect to the labels);
+We propose information-theoretic probing which measures <font face="arial">minimum description length (MDL)</font>
+of labels given representations. We show that MDL naturally characterizes not only <font face="arial">probe quality</font>,
+but also <font face="arial">the amount of effort</font> needed to achieve it (or, intuitively,
+<font face="arial">strength of the regularity</font> in representations with respect to the labels);
 this is done in a  theoretically justified way without manual search for settings.
 We explain how to easily measure MDL on top of standard probe-training pipelines. We show that results of
 MDL probing are more informative and stable compared to the standard probes.
@@ -777,31 +820,6 @@ Share: <a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-sh
       <div class="footer-col  footer-col-1">
         <table >
           <tr class="contact-list">
-            <!-- yandex research
-            <td>
-              <div class="media">
-                <a class="pull-left thumbnail" href="https://research.yandex.com">
-                  <img src="/img/ico/yr-min.png" height=20px alt=""/>
-                </a>
-              </div>
-            </td>
-            -->
-            <!-- EdnNLP-->
-            <td>
-              <div class="media">
-                <a class="pull-left thumbnail" href="https://edinburghnlp.inf.ed.ac.uk/index.php/people/">
-                  <img src="/img/ico/edn_uni-min.png" height=30px alt=""/>
-                </a>
-              </div>
-            </td>
-            <!-- UvA-->
-            <td>
-              <div class="media">
-                <a class="pull-left thumbnail" href="https://msclogic.illc.uva.nl/people/students/">
-                  <img src="/img/ico/uva-min.png" height=20px alt=""/>
-                </a>
-              </div>
-            </td>
 
 
             <td>
@@ -841,7 +859,7 @@ Share: <a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-sh
       </div> -->
 
       <div class="footer-col  footer-col-3">
-          <p class="text" align="right">Last updated March 30, 2020.</p>
+          <p class="text" align="right">Last updated June 11, 2025.</p>
       </div>
     </div>
 

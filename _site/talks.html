@@ -16,6 +16,18 @@
     <!--[if lt IE 9]>
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
+
+      <style>
+        .label {
+          color: darkblue;
+          padding: 3px;
+          font-family: Arial;
+        }
+        .video {background-color: #c7db4d;}
+        .slides {background-color: #f0d043;}
+        .talk-title {color: #5a8f3b}
+      </style>
+    <!-- #f7e17e #cbe691 -->
   </head>
   <head>
     <meta charset="utf-8">
@@ -23,13 +35,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
     <title>Talks & Service</title>
-    <meta name="description" content="Hi! I'm Lena and here you will find what I do.
-">
+    <meta name="description" content="Links to the talks (slides & video) and service info (reviewing, etc.)">
 
     <link rel="stylesheet" href="/css/main.css">
     <link rel="canonical" href="http://localhost:4000/talks.html">
 
-    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
 
 
 </head>
@@ -70,6 +81,28 @@
           
         
           
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
           <a class="page-link" href="/posts.html">Blog</a>
           
         
@@ -82,7 +115,9 @@
           
         
           
-          <a class="page-link" href="/teaching.html">Teaching & Supervising</a>
+          <a class="page-link" href="/nlp_course.html">NLP Course | For You</a>
+          
+        
           
         
 <!--        <a href="">
@@ -97,19 +132,38 @@
 
     <!-- JavaScript plugins (requires jQuery) -->
     <script src="http://code.jquery.com/jquery.js"></script>
-    <!-- Include all compiled plugins (below), or include individual files as needed --!>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="js/bootstrap.min.js"></script>
 
     <div class="page-content">
       <div class="row">
         <div class="wrapper">
           <h3 id="-service-"><span style="color:darkblue"> Service </span></h3>
+
+<p>Senior Area Chair:</p>
+<ul>
+  <li>ACL 2024</li>
+  <li>EACL 2024</li>
+  <li>AACL-IJCNLP 2022</li>
+</ul>
+
+<p>Area Chair:</p>
+<ul>
+  <li>ACL 2023</li>
+  <li>EMNLP 2022, 2023</li>
+  <li>EACL 2023</li>
+  <li>AACL-IJCNLP 2023</li>
+</ul>
+
 <p>Program committee:</p>
 <ul>
-  <li>EMNLP: 2019 (outstanding reviewer), 2020</li>
-  <li>ACL 2020 (+ <a href="https://sites.google.com/view/repl4nlp2020/home">RepL4NLP</a> + <a href="https://sites.google.com/view/deelio-ws/program-committee">DeeLIO</a>)</li>
-  <li>ICML 2020</li>
+  <li>EMNLP: 2019 <span style="color:#999">(outstanding reviewer)</span>, 2020, 2021</li>
+  <li>ACL 2020</li>
+  <li>NAACL 2021</li>
+  <li>ICML 2020 <span style="color:#999">(top-33% reviewer)</span></li>
   <li>NeurIPS 2020</li>
+  <li>ICLR 2021 <span style="color:#999">(outstanding reviewer)</span>, 2023</li>
+  <li>Workshops: <a href="https://sites.google.com/view/repl4nlp2020/home">RepL4NLP</a> 2020 <span style="font-size:0.9em">(at ACL)</span>, <a href="https://sites.google.com/view/deelio-ws/program-committee">DeeLIO</a> 2020 <span style="font-size:0.9em">(at EMNLP)</span></li>
 </ul>
 
 <h2 id="-selected-talks-"><span style="color:darkblue"> Selected Talks </span></h2>
@@ -119,26 +173,84 @@
 <h3 id="-speaker-"><span style="color:darkblue"> Speaker </span></h3>
 
 <ul>
-  <li>01/2020 <span style="color:#5a8f3b"><em>Evolution of Representations in the Transformer</em></span>, keynote at AI &amp; NLP track at <a href="https://appliedmldays.org/tracks/ai-nlp">Applied Machine Learning Days at EPFL</a>, <span style="font-size:0.9em">Lausanne, Switzerland</span> <a href="https://youtu.be/ZyWLrBGiEpI" class="label label-success">Video</a></li>
-  <li>08/2019 <span style="color:#5a8f3b"><em>Inside the Transformer</em></span>, <a href="https://yandex.com/promo/academy/yars_2019">Yandex Research Summit</a>, <span style="font-size:0.9em">Moscow, Russia (with David Talbot)</span></li>
-  <li>07/2019 <span style="color:#5a8f3b"><em>Machine translation: Analyzing multi-head self-attention</em></span>, keynote at <a href="http://aistconf.org">AIST 2019</a> <span style="font-size:0.9em">(8th International Conference - Analysis of Images, Social networks and Texts), Kazan, Russia</span></li>
-  <li>08/2018 <span style="color:#5a8f3b"><em>Does NMT learn to solve NLP?</em></span>,  <a href="https://yandex.com/promo/academy/yars_2019">Yandex Research Summit</a>, <span style="font-size:0.9em">Moscow, Russia (with David Talbot)</span></li>
+  <li>12/2022 <span class="talk-title"><em>The Two Viewpoints on the NMT Training Process</em></span> <span style="font-size:0.9em">(keynote)</span> 
+<br />      <a href="https://blackboxnlp.github.io">BlackBoxNLP workshop at EMNLP 2022</a></li>
+  <li>08/2021 <span class="talk-title"><em>Neural Machine Translation Inside Out</em></span> <span style="font-size:0.9em">(keynote)</span> 
+<br />      <a href="https://sites.google.com/view/repl4nlp-2021/home">RepL4NLP workshop at ACL 2021</a></li>
+  <li>06/2021 <span class="talk-title"><em>Neural Machine Translation Inside Out</em></span> <span style="font-size:0.9em">(keynote)</span> 
+<br />      <a href="https://sites.google.com/view/deelio-ws/">DeeLIO workshop at NAACL 2021</a></li>
+  <li>01/2020 <span class="talk-title"><em>Evolution of Representations in the Transformer</em></span> <span style="font-size:0.9em">(keynote)</span> <a href="https://drive.google.com/file/d/1bEiWUZDNbKAgMkt5PPF9sQl3x9AYNVoZ/view?usp=sharing" class="label slides">Slides</a> <a href="https://youtu.be/ZyWLrBGiEpI" class="label video">Video</a>
+<br />      AI &amp; NLP track at <a href="https://appliedmldays.org/tracks/ai-nlp">Applied Machine Learning Days at EPFL</a>, <span style="font-size:0.9em">Lausanne, Switzerland</span></li>
+  <li>08/2019 <span class="talk-title"><em>Inside the Transformer</em></span>
+<br />      <a href="https://yandex.com/promo/academy/yars_2019">Yandex Research Summit</a>, <span style="font-size:0.9em">Moscow, Russia (with David Talbot)</span></li>
+  <li>07/2019 <span class="talk-title"><em>Machine translation: Analyzing multi-head self-attention</em></span> <span style="font-size:0.9em">(keynote)</span> 
+<br />      <a href="http://aistconf.org">AIST 2019</a> <span style="font-size:0.9em">(8th International Conference - Analysis of Images, Social networks and Texts), Kazan, Russia</span></li>
+  <li>08/2018 <span class="talk-title"><em>Does NMT learn to solve NLP?</em></span>
+<br />      <a href="https://yandex.com/promo/academy/yars_2019">Yandex Research Summit</a>, <span style="font-size:0.9em">Moscow, Russia (with David Talbot)</span></li>
 </ul>
 
-<h3 id="-guest-talks-"><span style="color:darkblue"> Guest talks </span></h3>
+<h3 id="-invited-talks-"><span style="color:darkblue"> Invited talks </span></h3>
 
 <ul>
-  <li>01/2020 <a href="https://europe.naverlabs.com/research/seminars/analyzing-information-flow-in-transformers/">Seminar at Naver Labs Europe</a>, Grenoble, France</li>
-  <li>01/2020 Seminar at Google Research, Berlin, Germany</li>
-  <li>01/2020 <a href="https://www.meetup.com/ru-RU/Bots-Berlin-Build-better-conversational-interfaces-with-AI/events/267058207/">Meetup at Rasa</a>, Berlin, Germany <a href="https://youtu.be/h5N7sbAKBhA" class="label label-success">Video</a></li>
-  <li>11/2019 <a href="https://soundcloud.com/nlp-highlights">NLP Highlights</a> podcast</li>
+  <li>
+    <p>11/2022-01/2023 <span class="talk-title"><em>A Journey on Interpretability Methods in NLP</em></span>
+<br />      EPFL
+<br />      <a href="https://www.ttic.edu/young-researcher/">TTI Chicago</a>
+<br />      <a href="https://www.ri.se/en/learningmachinesseminars">RISE Learning Machines seminar</a>
+<br />      <a href="https://cis.unimelb.edu.au/research/artificial-intelligence/research/Natural-Language-Processing">University of Melbourne</a></p>
+  </li>
+  <li>
+    <p>07/2022 <span class="talk-title"><em>From Count-Based Methods to GPT-3: Main Developments in Natural Language Processing</em></span>
+<br />      <a href="https://sicss.io/2022/oxford/">SICSS-Oxford</a></p>
+  </li>
+  <li>
+    <p>10-11/2021 <span class="talk-title"><em>Neural Machine Translation Inside Out</em></span> 
+<br />      <a href="https://blogs.helsinki.fi/language-technology/research-seminar/">Helsinki LT Seminar</a>
+<br />      <a href="https://www.youtube.com/channel/UCjltmKOomhdXQELWi6asoBg">“Shannon meets Turing” Colloquium</a>
+<br />      Glasgow IR seminar
+<br />      “Young Innovators” talks (Austria)</p>
+  </li>
+  <li>
+    <p>03-06/2021 <span class="talk-title"><em>NMT Analysis: The Trade-Off Between Source and Target, and (a bit of) the Training Process</em></span> <a href="https://drive.google.com/file/d/1oBh9ajjFJ-VUJ_f8-VOTb9FZY4VcjxKf/view?usp=sharing" class="label slides">Slides</a>
+<br />      <a href="https://nlp.stanford.edu/seminar/">Stanford NLP Seminar</a>
+<br />      Cornell NLP
+<br />      <a href="https://mt.cs.upc.edu/seminars/">MT@UPC</a>
+<br />      Cambridge NLP</p>
+  </li>
+  <li>08-12/2020 <span class="talk-title"><em>Evaluating Source and Target Contributions to NMT Predictions</em></span> <a href="https://drive.google.com/file/d/1ZW51j6Eas7qONdHyLf59EY1bMNrvhOBQ/view?usp=sharing" class="label slides">Slides</a>
+<br />      Unbabel
+<br />      ENS Paris</li>
+  <li>
+    <p>06-10/2020 <span class="talk-title"><em>Information-Theoretic Probing with Minimum Description Length</em></span> <a href="https://drive.google.com/file/d/1iP7P0nld_O8op2SLEEX-q7WSFA1rKlfk/view?usp=sharing" class="label slides">Slides</a>
+<br />      MIT (Massachusetts Institute of Technology)
+<br />      DeepMind
+<br />      <a href="https://grammarly.ai/information-theoretic-probing-with-minimum-description-length/">Grammarly AI</a> <a href="https://www.youtube.com/watch?v=e1_PFc4b-4Y&amp;feature=youtu.be" class="label video">Video</a>
+<br />      <a href="https://nlpwithfriends.com">NLP with Friends</a>    <a href="https://drive.google.com/file/d/1owq2nenNOfh1u87M-ZxS_iHHtZLhBx5v/view?usp=sharing" class="label slides">Slides for Friends</a> <a href="https://youtu.be/27eWB8IYc1A" class="label video">Video</a>
+<br />      <a href="https://www.cs.cmu.edu/calendar/tue-2020-10-27-1100/language-technologies-institute-seminar">CMU (Carnegie Mellon University)</a>
+<br />      <a href="https://nlg.isi.edu/nl-seminar/">USC ISI</a> <a href="https://www.youtube.com/watch?v=CakeVH_svdo&amp;feature=youtu.be" class="label video">Video</a></p>
+  </li>
+  <li>01/2020 <span class="talk-title"><em>Analyzing Information Flow in Transformers</em></span> <a href="https://drive.google.com/file/d/1bEiWUZDNbKAgMkt5PPF9sQl3x9AYNVoZ/view?usp=sharing" class="label slides">Slides</a>
+<br />      <a href="https://europe.naverlabs.com/research/seminars/analyzing-information-flow-in-transformers/">Naver Labs Europe</a>, Grenoble, France
+<br />      Google Research, Berlin, Germany</li>
+  <li>01/2020 <span class="talk-title"><em>Evolution of Representations in the Transformer</em></span> <a href="https://drive.google.com/file/d/1bEiWUZDNbKAgMkt5PPF9sQl3x9AYNVoZ/view?usp=sharing" class="label slides">Slides</a> <a href="https://youtu.be/h5N7sbAKBhA" class="label video">Video</a> 
+<br />      <a href="https://www.meetup.com/ru-RU/Bots-Berlin-Build-better-conversational-interfaces-with-AI/events/267058207/">Rasa</a>, Berlin, Germany</li>
+</ul>
+
+<h3 id="-podcasts-"><span style="color:darkblue"> Podcasts </span></h3>
+
+<ul>
+  <li>01/2021 <a href="https://www.youtube.com/channel/UCMLtBahI5DMrt0NPvDSoIRQ">ML Street Talk</a></li>
+</ul>
+<iframe width="300" height="160" src="https://www.youtube.com/embed/Q0kN_ZHHDQY" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe>
+<ul>
+  <li>11/2019 <a href="https://soundcloud.com/nlp-highlights">NLP Highlights</a></li>
 </ul>
 <iframe width="100%" height="170" scrolling="no" frameborder="no" allow="autoplay" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/725286211&amp;color=%23ff5500&amp;auto_play=false&amp;hide_related=false&amp;show_comments=true&amp;show_user=true&amp;show_reposts=false&amp;show_teaser=false&amp;show_artwork=false&amp;visual=false"></iframe>
 
 <h3 id="-conference-talks-"><span style="color:darkblue"> Conference talks </span></h3>
 <ul>
-  <li><a href="http://www.acl2019.org/EN/index.xhtml">ACL 2019</a>: <span style="color:#5a8f3b"><em>Analyzing Multi-Head Self-Attention: Specialized Heads Do the Heavy Lifting, the Rest Can Be Pruned</em></span>, Florence, Italy <a href="https://vimeo.com/385434677" class="label label-success">Video</a></li>
-  <li><a href="https://acl2018.org">ACL 2018</a>: <span style="color:#5a8f3b"><em>Context-Aware Neural Machine Translation Learns Anaphora Resolution</em></span>, Melbourne, Australia <a href="https://vimeo.com/288152860" class="label label-success">Video</a></li>
+  <li><a href="http://www.acl2019.org/EN/index.xhtml">ACL 2019</a>: <span class="talk-title"><em>Analyzing Multi-Head Self-Attention: Specialized Heads Do the Heavy Lifting, the Rest Can Be Pruned</em></span>, Florence, Italy <a href="https://drive.google.com/file/d/15U64KJnn-g0Q3FFVblscZVX5_T-qhdvZ/view?usp=sharing" class="label slides">Slides</a> <a href="https://vimeo.com/385434677" class="label video">Video</a></li>
+  <li><a href="https://acl2018.org">ACL 2018</a>: <span class="talk-title"><em>Context-Aware Neural Machine Translation Learns Anaphora Resolution</em></span>, Melbourne, Australia <a href="https://drive.google.com/file/d/1PuEDrl-PqRJdlnEiHReLL7eyjbWd_JPu/view?usp=sharing" class="label slides">Slides</a> <a href="https://vimeo.com/288152860" class="label video">Video</a></li>
 </ul>
 
         </div>
@@ -146,7 +258,7 @@
     </div>
   <footer class="text-center text-muted">
     <hr/>
-    Last updated March 30, 2020.<br/>
+    Last updated June 11, 2025.<br/>
     <!--Created with
     Based on the code of <a href="https://github.com/alopez/alopez.github.com">Adam Lopez</a>.
     <a href="http://git-scm.com/">git</a>,

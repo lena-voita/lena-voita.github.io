@@ -2,13 +2,13 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Lena Voita</title>
-    <description>Hi! I'm Lena and here you will find what I do.
+    <description>Hi! I&apos;m Lena and here you will find what I do.
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Mon, 30 Mar 2020 06:26:13 +0300</pubDate>
-    <lastBuildDate>Mon, 30 Mar 2020 06:26:13 +0300</lastBuildDate>
-    <generator>Jekyll v3.8.5</generator>
+    <pubDate>Wed, 11 Jun 2025 12:39:32 +0200</pubDate>
+    <lastBuildDate>Wed, 11 Jun 2025 12:39:32 +0200</lastBuildDate>
+    <generator>Jekyll v3.9.0</generator>
     
   </channel>
 </rss>

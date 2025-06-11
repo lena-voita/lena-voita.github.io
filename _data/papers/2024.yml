@@ -1,0 +1,47 @@
+-
+  layout: paper
+  paper-type: inproceedings
+  selected: y
+  year: 2024
+  img: acl24_demo_lmtt-min.png
+  title: "LM Transparency Tool: Interactive Tool for Analyzing Transformer Language Models"
+  authors: "Igor Tufanov, Karen Hambardzumyan, Javier Ferrando, <u>Elena Voita</u>"
+  doc-url:
+  conf_name: ACL Demo
+  conf_year: 2024
+  url: "https://aclanthology.org/2024.acl-demos.6.pdf"
+  code:
+  blog:
+  abstract: " "
+
+-
+  layout: paper
+  paper-type: inproceedings
+  selected: y
+  year: 2024
+  img: emnlp24_routes-min.png
+  title: "Information Flow Routes: Automatically Interpreting Language Models at Scale"
+  authors: "Javier Ferrando, <u>Elena Voita</u>"
+  doc-url:
+  conf_name: EMNLP
+  conf_year: 2024
+  url: "https://aclanthology.org/2024.emnlp-main.965.pdf"
+  code:
+  blog:
+  abstract: " "
+
+-
+  layout: paper
+  paper-type: inproceedings
+  selected: y
+  year: 2024
+  img: neurons-min.png
+  title: "Neurons in Large Language Models: Dead, N-gram, Positional"
+  authors: "<u>Elena Voita</u>,  Javier Ferrando, Christoforos Nalmpantis"
+  doc-url:
+  conf_name: ACL
+  conf_year: 2024
+  url: "https://arxiv.org/pdf/2309.04827.pdf"
+  code:
+  blog: "https://lena-voita.github.io/posts/neurons_in_llms_dead_ngram_positional.html"
+  abstract: " "

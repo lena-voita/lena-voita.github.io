@@ -9,6 +9,8 @@ order: 3
 ### <span style="color:darkblue"> Service </span>
 
 Senior Area Chair:
+* ACL 2024
+* EACL 2024
 * AACL-IJCNLP 2022
 
 Area Chair:

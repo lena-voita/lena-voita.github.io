@@ -2,10 +2,29 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="761392bc-7f53-4674-a9c2-966e5c9edf64" name="Default" comment="fix">
-      <change afterPath="$PROJECT_DIR$/_data/papers/2020.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/posts/mdl_probes.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/_data/papers/2024.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/_site/img/paper/acl23_alti-min.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/_site/img/paper/acl23_alti.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/_site/img/paper/acl24_demo_lmtt-min.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/_site/img/paper/emnlp23_halomi-min.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/_site/img/paper/emnlp23_halomi.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/_site/img/paper/emnlp24_routes-min.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/_site/img/paper/emnlp24_routes.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/img/paper/acl23_alti-min.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/img/paper/acl23_alti.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/img/paper/acl24_demo_lmtt-min.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/img/paper/emnlp23_halomi-min.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/img/paper/emnlp23_halomi.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/img/paper/emnlp24_routes-min.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/img/paper/emnlp24_routes.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Gemfile" beforeDir="false" afterPath="$PROJECT_DIR$/Gemfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Gemfile.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Gemfile.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_data/papers/2022.yml" beforeDir="false" afterPath="$PROJECT_DIR$/_data/papers/2022.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_data/papers/2023.yml" beforeDir="false" afterPath="$PROJECT_DIR$/_data/papers/2023.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_site/Gemfile" beforeDir="false" afterPath="$PROJECT_DIR$/_site/Gemfile" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/_site/Gemfile.lock" beforeDir="false" afterPath="$PROJECT_DIR$/_site/Gemfile.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_site/assets/css/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/_site/assets/css/style.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/_site/feed.xml" beforeDir="false" afterPath="$PROJECT_DIR$/_site/feed.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/_site/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/index.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/_site/papers.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/papers.html" afterDir="false" />
@@ -13,110 +32,26 @@
       <change beforePath="$PROJECT_DIR$/_site/posts/acl19_context.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/posts/acl19_context.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/_site/posts/acl19_heads.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/posts/acl19_heads.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/_site/posts/emnlp19_evolution.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/posts/emnlp19_evolution.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_site/posts/mdl_probes.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/posts/mdl_probes.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_site/posts/nmt_training_through_smt_lens.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/posts/nmt_training_through_smt_lens.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_site/resources/posts/acl19_heads/position_head/wmt_en_de_next.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/_site/resources/posts/acl19_heads/position_head/wmt_en_fr_next.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/_site/resources/posts/acl19_heads/position_head/wmt_en_fr_prev.png" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/_site/talks.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/talks.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/_site/teaching.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/teaching.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/index.md" beforeDir="false" afterPath="$PROJECT_DIR$/index.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/posts.html" beforeDir="false" afterPath="$PROJECT_DIR$/posts.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/lectures/seq2seq/attention/bahdanau_examples.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/lectures/seq2seq/transformer/layer_norm.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/lectures/seq2seq/transformer/positional_encoding.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/posts/acl19_heads/position_head/wmt_en_de_next.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/posts/acl19_heads/position_head/wmt_en_fr_next.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/posts/acl19_heads/position_head/wmt_en_fr_prev.png" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/talks.md" beforeDir="false" afterPath="$PROJECT_DIR$/talks.md" afterDir="false" />
     </list>
-    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
-  </component>
-  <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/index.md">
-          <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
-            <state split_layout="SPLIT">
-              <first_editor relative-caret-position="270">
-                <caret line="18" selection-start-line="18" selection-end-line="18" />
-              </first_editor>
-              <second_editor />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/posts/mdl_probes.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="175">
-              <caret line="43" column="64" selection-start-line="43" selection-start-column="64" selection-end-line="43" selection-end-column="64" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/_data/papers/2020.yml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="165">
-              <caret line="11" column="41" lean-forward="true" selection-start-line="11" selection-start-column="41" selection-end-line="11" selection-end-column="41" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/posts.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="378">
-              <caret line="42" column="7" lean-forward="true" selection-start-line="42" selection-start-column="7" selection-end-line="42" selection-end-column="7" />
-              <folding>
-                <element signature="e#66#89#0" expanded="true" />
-                <element signature="e#247#332#0" expanded="true" />
-                <element signature="e#348#371#0" expanded="true" />
-                <element signature="e#529#552#0" expanded="true" />
-                <element signature="e#2409#2476#0" expanded="true" />
-                <element signature="e#2596#2619#0" expanded="true" />
-                <element signature="e#4574#4641#0" expanded="true" />
-                <element signature="e#4872#4892#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/posts/emnlp19_evolution.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="195">
-              <caret line="13" column="47" selection-start-line="13" selection-start-column="4" selection-end-line="13" selection-end-column="47" />
-              <folding>
-                <element signature="e#193#243#0" expanded="true" />
-                <element signature="e#259#282#0" expanded="true" />
-                <element signature="e#9255#9274#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/talks.md">
-          <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
-            <state split_layout="SPLIT">
-              <first_editor relative-caret-position="240">
-                <caret line="16" lean-forward="true" selection-start-line="16" selection-end-line="16" />
-              </first_editor>
-              <second_editor />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/posts/acl19_heads.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="4935">
-              <caret line="329" selection-start-line="329" selection-end-line="329" selection-end-column="8" />
-              <folding>
-                <element signature="e#127#177#0" expanded="true" />
-                <element signature="e#2118#2137#0" expanded="true" />
-                <element signature="e#20512#20585#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -151,6 +86,14 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
   </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
@@ -194,12 +137,16 @@
       </list>
     </option>
   </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
   <component name="ProjectFrameBounds">
     <option name="x" value="6" />
     <option name="y" value="39" />
     <option name="width" value="1258" />
     <option name="height" value="709" />
   </component>
+  <component name="ProjectId" id="27z4Vfj3ovO6FoVTxNK6Y2cF1u1" />
   <component name="ProjectView">
     <navigator proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
@@ -267,24 +214,17 @@
       <pane id="Scope" />
     </panes>
   </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
   <component name="PropertiesComponent">
     <property name="DefaultHtmlFileTemplate" value="HTML File" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
+    <property name="settings.editor.selected.configurable" value="vcs.Git" />
   </component>
-  <component name="RunDashboard">
-    <option name="ruleStates">
-      <list>
-        <RuleState>
-          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
-        </RuleState>
-        <RuleState>
-          <option name="name" value="StatusDashboardGroupingRule" />
-        </RuleState>
-      </list>
-    </option>
-  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="SvnConfiguration">
     <configuration />
   </component>
@@ -295,125 +235,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1555792211203</updated>
-    </task>
-    <task id="LOCAL-00028" summary="[github.io] add ysda">
-      <created>1556891173685</created>
-      <option name="number" value="00028" />
-      <option name="presentableId" value="LOCAL-00028" />
-      <option name="project" value="LOCAL" />
-      <updated>1556891173685</updated>
-    </task>
-    <task id="LOCAL-00029" summary="[github.io] add photo">
-      <created>1556891919049</created>
-      <option name="number" value="00029" />
-      <option name="presentableId" value="LOCAL-00029" />
-      <option name="project" value="LOCAL" />
-      <updated>1556891919049</updated>
-    </task>
-    <task id="LOCAL-00030" summary="[github.io] papers: initial">
-      <created>1556893192707</created>
-      <option name="number" value="00030" />
-      <option name="presentableId" value="LOCAL-00030" />
-      <option name="project" value="LOCAL" />
-      <updated>1556893192708</updated>
-    </task>
-    <task id="LOCAL-00031" summary="[github.io] papers">
-      <created>1556894126583</created>
-      <option name="number" value="00031" />
-      <option name="presentableId" value="LOCAL-00031" />
-      <option name="project" value="LOCAL" />
-      <updated>1556894126583</updated>
-    </task>
-    <task id="LOCAL-00032" summary="[github.io] fix">
-      <created>1556906025185</created>
-      <option name="number" value="00032" />
-      <option name="presentableId" value="LOCAL-00032" />
-      <option name="project" value="LOCAL" />
-      <updated>1556906025185</updated>
-    </task>
-    <task id="LOCAL-00033" summary="[github.io] fix">
-      <created>1556961129197</created>
-      <option name="number" value="00033" />
-      <option name="presentableId" value="LOCAL-00033" />
-      <option name="project" value="LOCAL" />
-      <updated>1556961129197</updated>
-    </task>
-    <task id="LOCAL-00034" summary="[github.io] fix">
-      <created>1556961408620</created>
-      <option name="number" value="00034" />
-      <option name="presentableId" value="LOCAL-00034" />
-      <option name="project" value="LOCAL" />
-      <updated>1556961408620</updated>
-    </task>
-    <task id="LOCAL-00035" summary="[github.io] remove some info">
-      <created>1557419957973</created>
-      <option name="number" value="00035" />
-      <option name="presentableId" value="LOCAL-00035" />
-      <option name="project" value="LOCAL" />
-      <updated>1557419957973</updated>
-    </task>
-    <task id="LOCAL-00036" summary="[github.io] acl19 news">
-      <created>1557988243175</created>
-      <option name="number" value="00036" />
-      <option name="presentableId" value="LOCAL-00036" />
-      <option name="project" value="LOCAL" />
-      <updated>1557988243175</updated>
-    </task>
-    <task id="LOCAL-00037" summary="[github.io] add link to arXiv version of the heads paper">
-      <created>1558965871405</created>
-      <option name="number" value="00037" />
-      <option name="presentableId" value="LOCAL-00037" />
-      <option name="project" value="LOCAL" />
-      <updated>1558965871405</updated>
-    </task>
-    <task id="LOCAL-00038" summary="[github.io] acl 19 papers">
-      <created>1559559256316</created>
-      <option name="number" value="00038" />
-      <option name="presentableId" value="LOCAL-00038" />
-      <option name="project" value="LOCAL" />
-      <updated>1559559256316</updated>
-    </task>
-    <task id="LOCAL-00039" summary="[github.io] fix acl19 papers">
-      <created>1559559525300</created>
-      <option name="number" value="00039" />
-      <option name="presentableId" value="LOCAL-00039" />
-      <option name="project" value="LOCAL" />
-      <updated>1559559525300</updated>
-    </task>
-    <task id="LOCAL-00040" summary="[github.io] fix">
-      <created>1559559678793</created>
-      <option name="number" value="00040" />
-      <option name="presentableId" value="LOCAL-00040" />
-      <option name="project" value="LOCAL" />
-      <updated>1559559678793</updated>
-    </task>
-    <task id="LOCAL-00041" summary="[github.io] acl19 blog post: initial commit">
-      <created>1560618992944</created>
-      <option name="number" value="00041" />
-      <option name="presentableId" value="LOCAL-00041" />
-      <option name="project" value="LOCAL" />
-      <updated>1560618992945</updated>
-    </task>
-    <task id="LOCAL-00042" summary="[github.io] draft">
-      <created>1560620456340</created>
-      <option name="number" value="00042" />
-      <option name="presentableId" value="LOCAL-00042" />
-      <option name="project" value="LOCAL" />
-      <updated>1560620456340</updated>
-    </task>
-    <task id="LOCAL-00043" summary="[github.io] true face of lena">
-      <created>1560622582801</created>
-      <option name="number" value="00043" />
-      <option name="presentableId" value="LOCAL-00043" />
-      <option name="project" value="LOCAL" />
-      <updated>1560622582801</updated>
-    </task>
-    <task id="LOCAL-00044" summary="[github.io] fix">
-      <created>1560622776718</created>
-      <option name="number" value="00044" />
-      <option name="presentableId" value="LOCAL-00044" />
-      <option name="project" value="LOCAL" />
-      <updated>1560622776718</updated>
     </task>
     <task id="LOCAL-00045" summary="[github.io] true face of lena">
       <created>1560624710264</created>
@@ -639,7 +460,126 @@
       <option name="project" value="LOCAL" />
       <updated>1584516482050</updated>
     </task>
-    <option name="localTasksCounter" value="77" />
+    <task id="LOCAL-00077" summary="fix typo (thanks to Polik Jikop!)">
+      <created>1651317034222</created>
+      <option name="number" value="00077" />
+      <option name="presentableId" value="LOCAL-00077" />
+      <option name="project" value="LOCAL" />
+      <updated>1651317034222</updated>
+    </task>
+    <task id="LOCAL-00078" summary="fix typos in the Seq2seq lecture (thanks to Artem Ryblov!)">
+      <created>1656335839783</created>
+      <option name="number" value="00078" />
+      <option name="presentableId" value="LOCAL-00078" />
+      <option name="project" value="LOCAL" />
+      <updated>1656335839783</updated>
+    </task>
+    <task id="LOCAL-00079" summary="update">
+      <created>1656679474994</created>
+      <option name="number" value="00079" />
+      <option name="presentableId" value="LOCAL-00079" />
+      <option name="project" value="LOCAL" />
+      <updated>1656679474994</updated>
+    </task>
+    <task id="LOCAL-00080" summary="update">
+      <created>1658496215260</created>
+      <option name="number" value="00080" />
+      <option name="presentableId" value="LOCAL-00080" />
+      <option name="project" value="LOCAL" />
+      <updated>1658496215260</updated>
+    </task>
+    <task id="LOCAL-00081" summary="update">
+      <created>1663247017179</created>
+      <option name="number" value="00081" />
+      <option name="presentableId" value="LOCAL-00081" />
+      <option name="project" value="LOCAL" />
+      <updated>1663247017179</updated>
+    </task>
+    <task id="LOCAL-00082" summary="update">
+      <created>1668692864308</created>
+      <option name="number" value="00082" />
+      <option name="presentableId" value="LOCAL-00082" />
+      <option name="project" value="LOCAL" />
+      <updated>1668692864309</updated>
+    </task>
+    <task id="LOCAL-00083" summary="update">
+      <created>1668695453775</created>
+      <option name="number" value="00083" />
+      <option name="presentableId" value="LOCAL-00083" />
+      <option name="project" value="LOCAL" />
+      <updated>1668695453775</updated>
+    </task>
+    <task id="LOCAL-00084" summary="update">
+      <created>1677251739856</created>
+      <option name="number" value="00084" />
+      <option name="presentableId" value="LOCAL-00084" />
+      <option name="project" value="LOCAL" />
+      <updated>1677251739856</updated>
+    </task>
+    <task id="LOCAL-00085" summary="update">
+      <created>1681044658132</created>
+      <option name="number" value="00085" />
+      <option name="presentableId" value="LOCAL-00085" />
+      <option name="project" value="LOCAL" />
+      <updated>1681044658132</updated>
+    </task>
+    <task id="LOCAL-00086" summary="Neurons in LLMs: Dead, N-gram, Positional">
+      <created>1694505478144</created>
+      <option name="number" value="00086" />
+      <option name="presentableId" value="LOCAL-00086" />
+      <option name="project" value="LOCAL" />
+      <updated>1694505478144</updated>
+    </task>
+    <task id="LOCAL-00087" summary="Neurons in LLMs: Dead, N-gram, Positional">
+      <created>1694507039489</created>
+      <option name="number" value="00087" />
+      <option name="presentableId" value="LOCAL-00087" />
+      <option name="project" value="LOCAL" />
+      <updated>1694507039489</updated>
+    </task>
+    <task id="LOCAL-00088" summary="NLP Course For You -&gt; Word Embeddings -&gt; fixes">
+      <created>1695307579851</created>
+      <option name="number" value="00088" />
+      <option name="presentableId" value="LOCAL-00088" />
+      <option name="project" value="LOCAL" />
+      <updated>1695307579852</updated>
+    </task>
+    <task id="LOCAL-00089" summary="NLP Course For You: Transfer Learning update + typos">
+      <created>1697047097557</created>
+      <option name="number" value="00089" />
+      <option name="presentableId" value="LOCAL-00089" />
+      <option name="project" value="LOCAL" />
+      <updated>1697047097557</updated>
+    </task>
+    <task id="LOCAL-00090" summary="NLP Course For You: Transfer Learning update + typos">
+      <created>1697047787293</created>
+      <option name="number" value="00090" />
+      <option name="presentableId" value="LOCAL-00090" />
+      <option name="project" value="LOCAL" />
+      <updated>1697047787293</updated>
+    </task>
+    <task id="LOCAL-00091" summary="general updates">
+      <created>1697632588706</created>
+      <option name="number" value="00091" />
+      <option name="presentableId" value="LOCAL-00091" />
+      <option name="project" value="LOCAL" />
+      <updated>1697632588706</updated>
+    </task>
+    <task id="LOCAL-00092" summary="fix">
+      <created>1699531336506</created>
+      <option name="number" value="00092" />
+      <option name="presentableId" value="LOCAL-00092" />
+      <option name="project" value="LOCAL" />
+      <updated>1699531336506</updated>
+    </task>
+    <task id="LOCAL-00093" summary="fix">
+      <created>1700179870519</created>
+      <option name="number" value="00093" />
+      <option name="presentableId" value="LOCAL-00093" />
+      <option name="project" value="LOCAL" />
+      <updated>1700179870519</updated>
+    </task>
+    <option name="localTasksCounter" value="94" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -665,13 +605,18 @@
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
     </layout>
   </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="[github.io] acl 19 papers" />
-    <MESSAGE value="[github.io] fix acl19 papers" />
-    <MESSAGE value="[github.io] acl19 blog post: initial commit" />
-    <MESSAGE value="[github.io] draft" />
-    <MESSAGE value="[github.io] fix" />
-    <MESSAGE value="[github.io] true face of lena" />
     <MESSAGE value="gem" />
     <MESSAGE value="add twitter button to the post" />
     <MESSAGE value="mention the &quot;16 heads&quot; paper :)" />
@@ -687,9 +632,15 @@
     <MESSAGE value="mention INTRUS" />
     <MESSAGE value="add talks" />
     <MESSAGE value="add podcast" />
-    <MESSAGE value="update" />
     <MESSAGE value="repl4nlp" />
     <MESSAGE value="update affiliations" />
+    <MESSAGE value="fix typo (thanks to Polik Jikop!)" />
+    <MESSAGE value="fix typos in the Seq2seq lecture (thanks to Artem Ryblov!)" />
+    <MESSAGE value="update" />
+    <MESSAGE value="Neurons in LLMs: Dead, N-gram, Positional" />
+    <MESSAGE value="NLP Course For You -&gt; Word Embeddings -&gt; fixes" />
+    <MESSAGE value="NLP Course For You: Transfer Learning update + typos" />
+    <MESSAGE value="general updates" />
     <MESSAGE value="fix" />
     <option name="LAST_COMMIT_MESSAGE" value="fix" />
   </component>
