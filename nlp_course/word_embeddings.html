@@ -262,7 +262,7 @@ for (i = 0; i < dropdown.length; i++) {
     <p>The way machine learning models "<font face="arial">see</font>" data is different from how we (humans) do. For example, we can easily
     understand the text <span class="data_text" style="font-weight:bold;">"I saw a cat"</span>,
         but our models can not - they need vectors of features.
-        Such vectors, or <font face="arial">word embeddings</font>, are representations of words which can be fed into your model.
+        Such vectors, or <font face="arial">word embeddings</font>, are representations of words that can be fed into your model.
     </p>
 
     <br>
@@ -278,7 +278,7 @@ for (i = 0; i < dropdown.length; i++) {
 
 <img height="70" src="../resources/lectures/word_emb/unk_in_voc-min.png"
          style="float:right; margin-left: 25px; max-width:60%"/>
-        <p>To account for unknown words (the ones which are not in the vocabulary), usually a vocabulary
+        <p>To account for unknown words (the ones which are not in the vocabulary), usually, a vocabulary
         contains a special token
         <span class="data_text" style="font-weight:bold;">UNK</span>. Alternatively, unknown tokens
         can be ignored
@@ -308,9 +308,9 @@ for (i = 0; i < dropdown.length; i++) {
             This is undesirable in practice, but this problem is not the most crucial one.</p>
 
         <p>What is really important, is that these vectors <font face="arial">know nothing</font>
-        about the words they represent. For example, one-hot vectors "think" that
-        <span class="data_text" style="font-weight:bold;">cat</span> is as close to
-        <span class="data_text" style="font-weight:bold;">dog</span> as it is to
+        about the words they represent. For example, one-hot vectors "think" that a
+        <span class="data_text" style="font-weight:bold;">cat</span> is as close to a
+        <span class="data_text" style="font-weight:bold;">dog</span> as it is to a
         <span class="data_text" style="font-weight:bold;">table!</span>
             We can say that <u>one-hot vectors do not capture <font face="arial">meaning.</font></u></p>
 
@@ -327,9 +327,9 @@ for (i = 0; i < dropdown.length; i++) {
 <div id="distributional_semantics">
         <h2>Distributional Semantics</h2>
 
-            <p>To capture meaning of words in their vectors, we first need to define
+            <p>To capture the meaning of words in their vectors, we first need to define
             the notion of meaning that can be used in practice.
-                For this, let us try to understand how we, humans, get to know which words have similar meaning.</p>
+                For this, let us try to understand how we, humans, get to know which words have a similar meaning.</p>
 
 
         <img height="20" src="../resources/lectures/ico/paw_empty.png" style="float:left; margin-top:-10px;"/>
@@ -384,13 +384,13 @@ for (i = 0; i < dropdown.length; i++) {
         <img height="20" src="../resources/lectures/ico/paw_empty.png" style="float:left; margin-top:-10px;"/>
 
 <br><br>
-        <p>Once you saw how the unknown word used in different contexts,
-            you were able to understand it's meaning.
+        <p>Once you saw how the unknown word was used in different contexts,
+            you were able to understand its meaning.
             How did you do this?</p>
 
             <p>The hypothesis is that your brain searched for other words
             that can be used in the same contexts, found some (e.g., <span class="data_text" style="font-weight:bold;">wine</span>), and
-            made a conclusion that <span class="data_text" style="font-weight:bold;">tezgüino</span> has meaning
+            made a conclusion that <span class="data_text" style="font-weight:bold;">tezgüino</span> has a meaning
                 similar to those other words.
 
             This is the <font face="arial">distributional hypothesis:</font></p>
@@ -448,9 +448,9 @@ for (i = 0; i < dropdown.length; i++) {
                     Put this information <strong>manually</strong> based on global corpus statistics.</p>
         </div>
 
-        <p>The general procedure is illustrated above and consists of the two steps: (1)
+        <p>The general procedure is illustrated above and consists of two steps: (1)
         construct a word-context matrix, (2) reduce its dimensionality. There are two reasons to reduce dimensionality.
-        First, a raw matrix is very large. Second, since a lot of words appear in only a few of possible contexts,
+        First, a raw matrix is very large. Second, since a lot of words appear in only a few possible contexts,
             this matrix potentially has a lot of uninformative elements (e.g., zeros).</p>
 
         <!--
@@ -468,7 +468,7 @@ for (i = 0; i < dropdown.length; i++) {
         </ul>-->
 
         <p>To estimate
-        similarity between words/contexts, usually you need to evaluate
+        the similarity between words/contexts, usually, you need to evaluate
             the dot-product of normalized word/context vectors (i.e., cosine similarity).</p>
 
 
@@ -536,7 +536,7 @@ for (i = 0; i < dropdown.length; i++) {
             <p><a href="http://lsa.colorado.edu/papers/JASIS.lsi.90.pdf">
                 Latent Semantic Analysis (LSA)</a> analyzes a collection of documents.
                 While in the previous approaches contexts served only to get word vectors
-                and were thrown away afterward, here we are also interested
+                and were thrown away afterwards, here we are also interested
                 in context, or, in this case, document vectors. LSA is one of the simplest topic models:
                 cosine similarity between document vectors can be used to measure similarity between documents.</p>
     <p>The term "LSA" sometimes refers to a more general approach of applying SVD to a term-document
@@ -584,7 +584,7 @@ for (i = 0; i < dropdown.length; i++) {
         <p>Word2Vec is an iterative method. Its main idea is as follows:</p>
         <ul>
             <li>take a huge text corpus;</li>
-            <li>go over the text with a sliding window, moving one word at a time. At each step, there is a central word
+            <li>go over the text with a sliding window, moving one word at a time. At each step, there are a central word
             and context words (other words in this window);</li>
             <li>for the central word, compute probabilities of context words;</li>
             <li>adjust the vectors to increase these probabilities.</li>
@@ -858,7 +858,7 @@ for (i = 0; i < dropdown.length; i++) {
     <p>But why do we have to consider <u>all</u> context vectors in the vocabulary at each step?
     For example, imagine that at the current step we consider context vectors not for all words,
     but only for the current target (<span class="data_text" style="font-weight:bold; color:#888">cute</span>)
-        and several randomly chosen words. The figure shows the intuition.</p>
+        and several randomly chosen words. The figure shows intuition.</p>
 
     <center>
         <img src="../resources/lectures/word_emb/w2v/negative_sampling-min.png"
@@ -979,7 +979,7 @@ for (i = 0; i < dropdown.length; i++) {
         when it is a context word. After training, context vectors are thrown away.</p>
 
 
-    <p>This is one of the tricks that made Word2Vec so simple. Look again at the loss function (for one step):
+    <p>This is one of the tricks that made Word2Vec so simple. Look again at the loss function (for a single step):
 \[ J_{t,j}(\theta)=
     -\color{#888}{u_{cute}^T}\color{#88bd33}{v_{cat}}\color{black} -
     \log \sum\limits_{w\in V}\exp{\color{#888}{u_w^T}\color{#88bd33}{v_{cat}}}\color{black}{.}
@@ -1251,7 +1251,7 @@ for (i = 0; i < dropdown.length; i++) {
         from the <a href="https://nlp.stanford.edu/projects/glove/" target="_blank">GloVe project page</a>.</span></p>
 
     <p>During your walk through semantic space, you probably noticed that the points (vectors) which are nearby
-    usually have close meaning. Sometimes, even rare words are understood very well. Look at the example:
+    usually have a close meaning. Sometimes, even rare words are understood very well. Look at the example:
         the model understood that words such as <span class="data_text" style="font-weight:bold;">leptodactylidae</span>
         or <span class="data_text" style="font-weight:bold;">litoria</span> are close to
         <span class="data_text" style="font-weight:bold;">frog</span>.</p>
@@ -1309,7 +1309,7 @@ for (i = 0; i < dropdown.length; i++) {
 
 
 
-        <p>Below are examples for the country-capital relation <!--(from
+        <p>Below are examples of the country-capital relation <!--(from
         <a href="https://papers.nips.cc/paper/5021-distributed-representations-of-words-and-phrases-and-their-compositionality.pdf"
         target="_blank">this Word2Vec paper</a>) -->
             and a couple of syntactic relations.</p>
@@ -1488,7 +1488,7 @@ We want to find a transformation matrix W such that \(W\color{#547dbf}{z_i}\) ap
                     until it works.</li>
             </ul>
 
-            <p class="data_text">It's well-known that you will learn something easier if you are not just given the answer right away,
+            <p class="data_text">It's well-known that you will learn something easier if you are not answered right away,
             but if you think about it first. Even if you don't want to be a researcher, this is still a good way
             to learn things!</p>
 </fieldset>
