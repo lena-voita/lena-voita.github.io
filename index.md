@@ -6,14 +6,14 @@ description: I'm Elena (Lena) Voita and I work on Natural Language Processing. M
 <!-- (comment) the image below can be found in img folder of this very project-->
 <!--![i_am_a_fox](./img/people/lena_large-min.png){: style="float: right; margin: 0px 20px; width: 180px;" name="fox"}-->
 <!--![i_am_a_fox](./img/people/orange_lena-min.jpg){: style="float: right; margin: 0px 20px; width: 180px;" name="fox"}-->
-![i_am_a_fox](./img/people/lena_blue.jpeg){: style="float: right; margin: 0px 20px; width: 250px; border-radius: 50%" name="fox"}
+![i_am_a_fox](./img/people/lena_mona.jpeg){: style="float: right; margin: 0px 20px; width: 250px; border-radius: 50%" name="fox"}
 
 
 <!-- <a href= onMouseOver="document.readmore_1.src='/img/people/foxie.jpeg';" onMouseOut="document.readmore_1.src='/img/people/orange_lena-min.jpg';">
 <img src="/img/people/orange_lena-min.jpg" name="readmore_1" width=204px height=240px></a> -->
 
 
-I am Elena (Lena) Voita, a __Research Scientist__ working on Analysis and Interpetability for NLP. 
+I am Elena (Lena) Voita, a __Research Scientist__ working on Analysis and Interpetability for NLP (i.e., LLMs); currently at [Nebius Research](https://nebius.com/research-and-development). 
 
 I am the author of the [__NLP Course__ <span style="color:#92bf32">__For You__</span>](https://lena-voita.github.io/nlp_course.html). 
 
@@ -30,8 +30,12 @@ while enjoying writing [blog posts](https://lena-voita.github.io/posts.html){:ta
 <!--<span style="color:red">__Blog-course:__</span>    NLP Course <span style="color:#92bf32">For You</span> - look [here](https://lena-voita.github.io/nlp_course.html).-->
 
 ## <span style="color:darkblue">News </span>
+__2026__
+* <span style="color:#7fa827">Area Chair:</span>  [ACL 2026](https://2026.aclweb.org) (Interpretability Track), [EACL 2027](https://2027.eacl.org) (Industry Track).
+* <span style="color:#7fa827">Job started:</span> Staff Research Scientist at [Nebius Research](https://nebius.com/research-and-development).
+
 __2025__
-* <span style="color:#c4483f">Currently on sabbatical</span>
+* <span style="color:#888">Sabbatical</span>
 
 __2024__
 * <span style="color:#7fa827">Senior Area Chair:</span>  [ACL 2024](https://2024.acl.org){:target="_blank"}.

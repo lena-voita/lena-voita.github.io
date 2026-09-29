@@ -1,30 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="761392bc-7f53-4674-a9c2-966e5c9edf64" name="Default" comment="fix">
-      <change afterPath="$PROJECT_DIR$/_data/papers/2024.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/_site/img/paper/acl23_alti-min.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/_site/img/paper/acl23_alti.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/_site/img/paper/acl24_demo_lmtt-min.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/_site/img/paper/emnlp23_halomi-min.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/_site/img/paper/emnlp23_halomi.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/_site/img/paper/emnlp24_routes-min.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/_site/img/paper/emnlp24_routes.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/img/paper/acl23_alti-min.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/img/paper/acl23_alti.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/img/paper/acl24_demo_lmtt-min.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/img/paper/emnlp23_halomi-min.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/img/paper/emnlp23_halomi.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/img/paper/emnlp24_routes-min.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/img/paper/emnlp24_routes.png" afterDir="false" />
+    <list default="true" id="761392bc-7f53-4674-a9c2-966e5c9edf64" name="Default" comment="update">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Gemfile" beforeDir="false" afterPath="$PROJECT_DIR$/Gemfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Gemfile.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Gemfile.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_data/papers/2022.yml" beforeDir="false" afterPath="$PROJECT_DIR$/_data/papers/2022.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_data/papers/2023.yml" beforeDir="false" afterPath="$PROJECT_DIR$/_data/papers/2023.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_site/Gemfile" beforeDir="false" afterPath="$PROJECT_DIR$/_site/Gemfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_site/Gemfile.lock" beforeDir="false" afterPath="$PROJECT_DIR$/_site/Gemfile.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_site/assets/css/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/_site/assets/css/style.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/_site/feed.xml" beforeDir="false" afterPath="$PROJECT_DIR$/_site/feed.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/_site/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/index.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/_site/papers.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/papers.html" afterDir="false" />
@@ -34,19 +12,10 @@
       <change beforePath="$PROJECT_DIR$/_site/posts/emnlp19_evolution.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/posts/emnlp19_evolution.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/_site/posts/mdl_probes.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/posts/mdl_probes.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/_site/posts/nmt_training_through_smt_lens.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/posts/nmt_training_through_smt_lens.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_site/resources/posts/acl19_heads/position_head/wmt_en_de_next.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/_site/resources/posts/acl19_heads/position_head/wmt_en_fr_next.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/_site/resources/posts/acl19_heads/position_head/wmt_en_fr_prev.png" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/_site/talks.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/talks.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/_site/teaching.html" beforeDir="false" afterPath="$PROJECT_DIR$/_site/teaching.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/index.md" beforeDir="false" afterPath="$PROJECT_DIR$/index.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/lectures/seq2seq/attention/bahdanau_examples.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/lectures/seq2seq/transformer/layer_norm.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/lectures/seq2seq/transformer/positional_encoding.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/posts/acl19_heads/position_head/wmt_en_de_next.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/posts/acl19_heads/position_head/wmt_en_fr_next.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/posts/acl19_heads/position_head/wmt_en_fr_prev.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/talks.md" beforeDir="false" afterPath="$PROJECT_DIR$/talks.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/nlp_course.html" beforeDir="false" afterPath="$PROJECT_DIR$/nlp_course.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -235,13 +204,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1555792211203</updated>
-    </task>
-    <task id="LOCAL-00045" summary="[github.io] true face of lena">
-      <created>1560624710264</created>
-      <option name="number" value="00045" />
-      <option name="presentableId" value="LOCAL-00045" />
-      <option name="project" value="LOCAL" />
-      <updated>1560624710264</updated>
     </task>
     <task id="LOCAL-00046" summary="gem">
       <created>1560626676410</created>
@@ -579,7 +541,14 @@
       <option name="project" value="LOCAL" />
       <updated>1700179870519</updated>
     </task>
-    <option name="localTasksCounter" value="94" />
+    <task id="LOCAL-00094" summary="update">
+      <created>1749638418946</created>
+      <option name="number" value="00094" />
+      <option name="presentableId" value="LOCAL-00094" />
+      <option name="project" value="LOCAL" />
+      <updated>1749638418947</updated>
+    </task>
+    <option name="localTasksCounter" value="95" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -636,13 +605,13 @@
     <MESSAGE value="update affiliations" />
     <MESSAGE value="fix typo (thanks to Polik Jikop!)" />
     <MESSAGE value="fix typos in the Seq2seq lecture (thanks to Artem Ryblov!)" />
-    <MESSAGE value="update" />
     <MESSAGE value="Neurons in LLMs: Dead, N-gram, Positional" />
     <MESSAGE value="NLP Course For You -&gt; Word Embeddings -&gt; fixes" />
     <MESSAGE value="NLP Course For You: Transfer Learning update + typos" />
     <MESSAGE value="general updates" />
     <MESSAGE value="fix" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix" />
+    <MESSAGE value="update" />
+    <option name="LAST_COMMIT_MESSAGE" value="update" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/resources/posts/concrete.html" />
